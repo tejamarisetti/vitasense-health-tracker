@@ -1,0 +1,84 @@
+{
+  "artifacts": [
+    {
+      "model_id": "vitasense_rf_prototype_v0",
+      "artifact_file": "vitasense_rf_model.joblib",
+      "status": "prototype, superseded",
+      "algorithm": "RandomForestClassifier",
+      "split_method": "single_holdout_80_20",
+      "random_seed": 42,
+      "missing_handling": "global_dropna_listwise",
+      "scaling_applied": false,
+      "limitations": [
+        "Superseded by paper-grade Repeated Stratified K-Fold pipeline.",
+        "Used global dropna rather than train-fold imputation.",
+        "No continuous feature scaling.",
+        "Single split with single random seed."
+      ],
+      "training_eligible": false
+    }
+  ],
+  "v0.2.0": {
+    "version": "v0.2.0",
+    "release_date": "2026-10-16",
+    "task": "tabular_heart_disease_baseline",
+    "label": "clinical tabular baseline, not wearable data, no clinical validity",
+    "dataset_source": "UCI Heart Disease (Cleveland Database, ID 45)",
+    "instances": 303,
+    "evaluation_protocol": "5x10 Repeated Stratified K-Fold (50 folds) with 95% Bootstrap CIs",
+    "artifacts": [
+      {
+        "model_id": "vitasense_lr_v0.2.0",
+        "artifact_file": "models/v0.2.0/logistic_regression_pipeline.joblib",
+        "status": "active_benchmark",
+        "algorithm": "LogisticRegression(lbfgs, max_iter=1000)",
+        "auroc_mean": 0.9144930204826038,
+        "auroc_ci": [
+          0.9005734279472821,
+          0.9217874723841534
+        ],
+        "f1_mean": 0.8337961657948115,
+        "brier_score_mean": 0.11520569969421764
+      },
+      {
+        "model_id": "vitasense_rf_v0.2.0",
+        "artifact_file": "models/v0.2.0/random_forest_pipeline.joblib",
+        "status": "active_benchmark",
+        "algorithm": "RandomForestClassifier(n_estimators=100, max_depth=5)",
+        "auroc_mean": 0.9100803421115922,
+        "auroc_ci": [
+          0.8963041265382801,
+          0.9175634611541076
+        ],
+        "f1_mean": 0.8093752866598904,
+        "brier_score_mean": 0.12404444462243931
+      },
+      {
+        "model_id": "vitasense_gb_v0.2.0",
+        "artifact_file": "models/v0.2.0/gradient_boosting_pipeline.joblib",
+        "status": "active_benchmark",
+        "algorithm": "GradientBoostingClassifier(n_estimators=100, learning_rate=0.05, max_depth=3)",
+        "auroc_mean": 0.8809029656685905,
+        "auroc_ci": [
+          0.8650357313127265,
+          0.889719570801946
+        ],
+        "f1_mean": 0.7839977930086112,
+        "brier_score_mean": 0.1412579792315446
+      },
+      {
+        "model_id": "vitasense_fixed_threshold_rule_v0.2.0",
+        "artifact_file": "models/v0.2.0/fixed_threshold_rule_pipeline.joblib",
+        "status": "active_benchmark",
+        "algorithm": "FixedThresholdRuleClassifier(clinical_heuristic_threshold=2)",
+        "auroc_mean": 0.8704560485810485,
+        "auroc_ci": [
+          0.8577800399504909,
+          0.8815087025949437
+        ],
+        "f1_mean": 0.764145645597551,
+        "brier_score_mean": 0.155360218579235
+      }
+    ]
+  }
+}

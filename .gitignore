@@ -1,0 +1,52 @@
+# Logs
+logs
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Node / Frontend
+node_modules
+dist
+dist-ssr
+*.local
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+.idea
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Python / Environments
+__pycache__/
+*.py[cod]
+*$py.class
+*.env
+*.env.*
+.venv/
+env/
+venv/
+ENV/
+
+# Kaggle & API Credentials (PRD Section 24.2)
+kaggle.json
+access_token
+.kaggle/
+.credentials/
+
+# Datasets and Models
+data/raw/
+data/interim/
+data/processed/
+models/*.joblib
+models/*.pkl
+models/*.pt
+models/*.onnx
+.pytest_cache/

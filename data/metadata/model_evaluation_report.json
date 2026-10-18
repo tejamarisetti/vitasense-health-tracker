@@ -1,0 +1,56 @@
+{
+  "task": "tabular_heart_disease_baseline",
+  "dataset": "UCI Heart Disease (ID 45)",
+  "sample_size": 303,
+  "features": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal"
+  ],
+  "metrics": {
+    "logistic_regression": {
+      "model": "LogisticRegression_Baseline",
+      "accuracy": 0.8333333333333334,
+      "precision": 0.8461538461538461,
+      "recall": 0.7857142857142857,
+      "f1": 0.8148148148148148,
+      "auroc": 0.9486607142857143,
+      "brier_score": 0.09509916590342911
+    },
+    "random_forest": {
+      "model": "RandomForest_Classifier",
+      "accuracy": 0.8166666666666667,
+      "precision": 0.84,
+      "recall": 0.75,
+      "f1": 0.7924528301886793,
+      "auroc": 0.9408482142857143,
+      "brier_score": 0.10701661209653969,
+      "feature_importances": {
+        "age": 0.07596590249172364,
+        "sex": 0.02785468727712922,
+        "cp": 0.1647958026782429,
+        "trestbps": 0.06104606993810192,
+        "chol": 0.054598062146205835,
+        "fbs": 0.007907921892498383,
+        "restecg": 0.017025778753202957,
+        "thalach": 0.11529109988155593,
+        "exang": 0.044874846904071765,
+        "oldpeak": 0.1100961764025135,
+        "slope": 0.05836500234809423,
+        "ca": 0.1196159908466599,
+        "thal": 0.14256265843999968
+      }
+    }
+  },
+  "disclaimer": "Educational and research prototype. Not intended as medical diagnosis or device."
+}

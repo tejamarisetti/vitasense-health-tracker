@@ -1,0 +1,53 @@
+{
+  "dataset_name": "UCI Heart Disease (Cleveland Database)",
+  "dataset_id": "uci_heart_disease",
+  "uci_repo_id": 45,
+  "source_url": "https://archive.ics.uci.edu/dataset/45/heart+disease",
+  "citation": "Detrano, R., Janosi, A., Steinbrunn, W., Pfisterer, M., Schmid, J., Sandhu, S., Gopalakrishna, K., Belle, C., & Detre, K. (1989). International application of a new probability algorithm for the diagnosis of coronary artery disease. The American Journal of Cardiology, 64(5), 304-310.",
+  "licence": "Creative Commons Attribution 4.0 International (CC BY 4.0)",
+  "licence_reviewed": true,
+  "date_accessed": "2026-10-16",
+  "sha256": "548eaf3b9d47152c9e0d25c167dc629740e8a4a13366a9be8fbd789ac3d2ebae",
+  "raw_file": "data/raw/uci_heart_disease/uci_heart_disease.csv",
+  "instances": 303,
+  "features_count": 13,
+  "target_column": "num",
+  "target_binarisation": {
+    "original_classes": [0, 1, 2, 3, 4],
+    "mapping": "y = (num > 0).astype(int)",
+    "class_0_definition": "Absence of coronary heart disease (<50% diameter narrowing in any major vessel)",
+    "class_1_definition": "Presence of coronary heart disease (>50% diameter narrowing in at least one major vessel)",
+    "class_distribution": {
+      "0 (negative)": 164,
+      "1 (positive)": 139
+    }
+  },
+  "features": {
+    "continuous": ["age", "trestbps", "chol", "thalach", "oldpeak"],
+    "categorical": ["sex", "cp", "fbs", "restecg", "exang", "slope", "ca", "thal"]
+  },
+  "missingness": {
+    "ca": 4,
+    "thal": 2,
+    "total_missing_cells": 6,
+    "handling_protocol": "No global row dropping (no global dropna). Categorical missing cells are imputed with training-fold most frequent value via SimpleImputer within a scikit-learn Pipeline fit strictly on training folds."
+  },
+  "preprocessing_protocol": {
+    "continuous": "Median imputation + StandardScaler, fit on train folds only",
+    "categorical": "Most-frequent imputation + OneHotEncoder(handle_unknown='ignore', sparse_output=False), fit on train folds only",
+    "leakage_prevention": "All transformations fit strictly inside cross-validation loops on training splits only."
+  },
+  "demographics": {
+    "males": 206,
+    "females": 97,
+    "age_range": "29 - 77 years (mean 54.4)"
+  },
+  "limitations": [
+    "Small sample size (N=303).",
+    "Clinical tabular data collected at medical center; not time-series or wearable sensor telemetry.",
+    "Demographic skew toward older males (68% male).",
+    "Single-center population (Cleveland Clinic)."
+  ],
+  "intended_use": "Benchmark evaluation for clinical tabular disease-risk classification baselines in academic research.",
+  "forbidden_use": "Direct clinical diagnostic use, autonomous medical treatment decisions, or claiming physical sensor validation from tabular records."
+}

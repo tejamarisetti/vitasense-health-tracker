@@ -1,0 +1,44 @@
+{
+  "file": "data\\raw\\kaggle_heart_disease\\heart.csv",
+  "row_count": 1025,
+  "col_count": 14,
+  "columns": [
+    "age",
+    "sex",
+    "cp",
+    "trestbps",
+    "chol",
+    "fbs",
+    "restecg",
+    "thalach",
+    "exang",
+    "oldpeak",
+    "slope",
+    "ca",
+    "thal",
+    "target"
+  ],
+  "dtypes": {
+    "age": "int64",
+    "sex": "int64",
+    "cp": "int64",
+    "trestbps": "int64",
+    "chol": "int64",
+    "fbs": "int64",
+    "restecg": "int64",
+    "thalach": "int64",
+    "exang": "int64",
+    "oldpeak": "float64",
+    "slope": "int64",
+    "ca": "int64",
+    "thal": "int64",
+    "target": "int64"
+  },
+  "missing_counts": {},
+  "duplicate_rows": 723,
+  "summary": {},
+  "target_distribution": {
+    "1": 526,
+    "0": 499
+  }
+}

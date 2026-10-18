@@ -1,0 +1,22 @@
+{
+  "dataset_name": "Kaggle Heart Disease Dataset (Duplicate Mirror)",
+  "dataset_id": "kaggle_heart_disease_mirror",
+  "kaggle_slug": "johnsmith88/heart-disease-dataset",
+  "source_url": "https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset",
+  "licence": "Database Contents License (DbCL) v1.0",
+  "licence_reviewed": true,
+  "date_accessed": "2026-10-16",
+  "sha256": "ddb2996b2f4db2e00aad13f4518200179ff69f79093838e3c21ffa672ebec0f1",
+  "raw_file": "data/raw/kaggle_heart_disease/heart.csv",
+  "total_rows": 1025,
+  "unique_rows": 302,
+  "duplicate_rows": 723,
+  "duplicate_percentage": 70.54,
+  "provenance_audit": "Audit against the official UCI Cleveland Clinic repository demonstrates that this 1,025-row dataset was constructed by replicating rows from the original 303-row UCI dataset. Out of 1,025 rows, 723 are exact duplicates.",
+  "data_leakage_risk": "Severe risk of data leakage: if random train/test splits are applied without deduplication, identical patient instances appear in both training and test partitions, creating artificially inflated accuracy (e.g. >98%) and AUROC that fail to reflect real-world generalization.",
+  "governance_status": "quarantined",
+  "training_eligible": false,
+  "designated_role": "Demonstration benchmark for data-quality audits and duplicate-detection algorithms ONLY.",
+  "intended_use": "Demonstrating the necessity of data-quality checks, duplicate-detection rules, and leakage audits in medical machine learning pipelines.",
+  "forbidden_use": "Model training, model evaluation, benchmarking clinical accuracy, or claiming improved model performance."
+}

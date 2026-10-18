@@ -1,0 +1,83 @@
+# VitaSense AI Dataset Manifest (PRD Sections 23 - 25)
+# Allowed status values: approved | proposed | disabled | rejected
+
+datasets:
+  # 1. Clinical Tabular Baseline (Approved for Experiment A)
+  - id: uci_heart_disease
+    status: approved
+    enabled: true
+    source: ucimlrepo
+    uci_id: 45
+    task: tabular_heart_disease_baseline
+    licence: "Creative Commons Attribution 4.0 International (CC BY 4.0)"
+    licence_reviewed: true
+    destination: data/raw/uci_heart_disease
+    expected_file: uci_heart_disease.csv
+    sha256: 548eaf3b9d47152c9e0d25c167dc629740e8a4a13366a9be8fbd789ac3d2ebae
+    citation_url: https://archive.ics.uci.edu/dataset/45/heart+disease
+    notes: "Official Cleveland Clinic heart disease dataset (303 instances, 14 attributes). Used exclusively for clinical risk model benchmarking. Target binarised (0 = absence, >=1 = presence)."
+
+  # 2. Kaggle Mirror (Quarantined: Duplicate Detection Example ONLY)
+  - id: kaggle_heart_disease_mirror
+    status: disabled
+    enabled: false
+    source: kaggle
+    dataset_slug: johnsmith88/heart-disease-dataset
+    task: duplicate_leakage_audit_benchmark
+    role: duplicate_detection_example_only
+    training_eligible: false
+    licence: "Database Contents License (DbCL) v1.0 / Public Domain"
+    licence_reviewed: true
+    destination: data/raw/kaggle_heart_disease
+    expected_file: heart.csv
+    sha256: ddb2996b2f4db2e00aad13f4518200179ff69f79093838e3c21ffa672ebec0f1
+    citation_url: https://www.kaggle.com/datasets/johnsmith88/heart-disease-dataset
+    notes: "Contains 1,025 rows, of which 723 are exact duplicate copies of the 303-row UCI Cleveland dataset. Strictly quarantined from model training and evaluation to prevent synthetic score inflation and subject leakage."
+
+  # 3. Wearable Dataset 1 (Approved for Benchmark & Stress/Exercise Telemetry)
+  - id: physionet_wearable_stress_exercise
+    status: COMPLETE-VERIFIED
+    verification_scope: data_files_only
+    enabled: true
+    source: physionet
+    version: "1.0.1"
+    url: https://physionet.org/content/wearable-device-dataset/1.0.1/
+    task: wearable_fault_injection_and_personal_baseline
+    licence: "Open Data Commons Attribution License v1.0 (ODC-By v1.0)"
+    licence_reviewed: true
+    access_policy: "Open Access (anyone can access conforming to license terms)"
+    destination: data/raw/physionet_wearable
+    retrieval_date: "2026-10-18"
+    verification_summary: "707/708 files verified against official SHA256SUMS.txt (all 36 subjects' raw sensor data: ACC, BVP, EDA, TEMP, HR, IBI, tags). Wearable_Dataset.ipynb (34MB tutorial notebook) is excluded from verification."
+    notes: "36 healthy volunteers (18 in V1 cohort, 18 in V2 cohort) performing acute stress, aerobic exercise (30 sessions), and anaerobic exercise (31 sessions). Recorded via Empatica E4 wristband (BVP 64Hz, EDA 4Hz, TEMP 4Hz, HR 1Hz, ACC 32Hz). Limitation: HR.csv is Empatica-derived onboard algorithm output, not an ECG reference."
+
+  # 4. Candidate Wearable Dataset 2 (Proposed: Licence Unverified on Primary Page)
+  - id: wesad_stress_affect
+    status: proposed
+    enabled: false
+    source: university_of_siegen / uci
+    uci_id: 465
+    url: https://archive.ics.uci.edu/dataset/465/wesad+wearable+stress+and+affect+detection
+    task: wearable_signal_and_reference_validation
+    licence: "unverified (UCI official page states: 'See linked dataset for licensing information.')"
+    licence_reviewed: false
+    access_policy: "Open Access via UCI ID 465"
+    destination: data/raw/wesad
+    notes: "15 subjects during laboratory stress protocol with synchronized Chest RespiBAN (700Hz ECG, Respiration, EMG, EDA, TEMP, ACC) and Wrist Empatica E4 (BVP 64Hz, EDA 4Hz, TEMP 4Hz, ACC 32Hz). Retained as proposed per user directive; download disabled."
+
+  # 5. Wearable Dataset 3 (Approved for Trust-Score vs Reference ECG Error Validation)
+  - id: ppg_dalia
+    status: approved
+    enabled: true
+    source: ucimlrepo
+    uci_id: 495
+    version: "2019"
+    url: https://archive.ics.uci.edu/dataset/495/ppg+dalia
+    task: wearable_motion_artifact_and_reference_validation
+    licence: "Creative Commons Attribution 4.0 International (CC BY 4.0)"
+    licence_reviewed: true
+    access_policy: "Open Access via UCI ID 495"
+    destination: data/raw/ppg_dalia
+    expected_file: ppg+dalia.zip
+    retrieval_date: "2026-10-16"
+    notes: "15 subjects performing 8 daily living activities with synchronized Chest RespiBAN (700Hz ECG gold-standard reference, respiration, 3D ACC) and Wrist Empatica E4 (64Hz PPG/BVP, 32Hz ACC, EDA, TEMP). Primary dataset for Paper Component C: validating whether software trust score correlates with measurement error against reference ECG."
