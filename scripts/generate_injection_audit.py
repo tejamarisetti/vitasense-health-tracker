@@ -203,6 +203,7 @@ def main():
 
     for i in range(1, 16):
         sid = f"S{i}"
+        print(f"Auditing {sid}...", flush=True)
         s_data = audit_subject(sid, injector)
         subject_summaries.append(s_data)
         all_records.extend(s_data["records"])

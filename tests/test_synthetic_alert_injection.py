@@ -11,10 +11,18 @@ Tests:
 6. reproducibility (deterministic seeded output)
 7. natural events are untouched
 8. tag enforcement (SYNTHETIC / SYNTHETIC_RESTING_TACHYCARDIA)
+9. minimum inter-episode gap (>= 60.0s across all 15 subjects)
 """
 
+import pickle
+from pathlib import Path
 import numpy as np
 import pytest
+from vitasense.quality.event_prevalence import (
+    compute_enmo,
+    align_activity_to_windows,
+    RESTING_ACTIVITY_CODES,
+)
 from vitasense.benchmarks.synthetic_alert_injection import (
     SyntheticTachycardiaInjector,
     SyntheticTachycardiaResult,
@@ -203,3 +211,76 @@ def test_error_when_no_resting_blocks():
 
     with pytest.raises(ValueError, match="No resting blocks of duration"):
         injector.inject(hr, resting, tau_i=100.0)
+
+
+def test_min_inter_episode_gap_on_all_15_subjects():
+    """
+    Protocol Amendment 3: Assert minimum inter-episode gap >= 60.0s between
+    all consecutive injected episodes across all 15 subjects.
+    Also verifies cohort total episode count is exactly 112.
+    """
+    data_dir = Path(__file__).resolve().parents[1] / "data" / "raw" / "ppg_dalia" / "extracted" / "PPG_FieldStudy"
+    if not data_dir.exists():
+        pytest.skip("PPG-DaLiA raw data directory not found.")
+
+    injector = SyntheticTachycardiaInjector(seed=42)
+    assert injector.min_inter_event_gap_sec == 60.0
+
+    total_episodes = 0
+    per_subject_counts = {}
+
+    for i in range(1, 16):
+        sid = f"S{i}"
+        pkl_path = data_dir / sid / f"{sid}.pkl"
+        if not pkl_path.exists():
+            pytest.skip(f"Subject data {pkl_path} not found.")
+
+        with open(pkl_path, "rb") as f:
+            data = pickle.load(f, encoding="latin1")
+
+        labels = np.asarray(data["label"]).flatten()
+        activity = np.asarray(data["activity"]).flatten()
+        acc = data["signal"]["wrist"]["ACC"]
+        del data
+        n_windows = len(labels)
+
+        _, enmo_10s = compute_enmo(acc, n_windows=n_windows)
+        del acc
+        act_aligned = align_activity_to_windows(activity, n_windows=n_windows)
+        del activity
+
+        baseline_mask = (act_aligned == 1)
+        if np.sum(baseline_mask) >= 10:
+            mu_rest = float(np.mean(labels[baseline_mask]))
+            std_rest = float(np.std(labels[baseline_mask], ddof=1))
+        else:
+            mu_rest = 70.0
+            std_rest = 5.0
+        tau_i = max(100.0, mu_rest + 2.5 * std_rest)
+
+        is_resting = np.isin(act_aligned, list(RESTING_ACTIVITY_CODES)) & (enmo_10s <= 0.05)
+
+        res = injector.inject(labels, is_resting, tau_i, subject_id=sid)
+        episodes = res.episodes
+        per_subject_counts[sid] = len(episodes)
+        total_episodes += len(episodes)
+
+        # Assert minimum inter-episode gap >= 60.0s between all consecutive episodes
+        for k in range(len(episodes) - 1):
+            ep_curr = episodes[k]
+            ep_next = episodes[k + 1]
+            gap_sec = ep_next.start_time_sec - ep_curr.end_time_sec
+            gap_win = ep_next.start_window - ep_curr.end_window
+            assert gap_sec >= 60.0, (
+                f"{sid}: Gap between Episode {ep_curr.episode_id} (ends {ep_curr.end_time_sec}s) "
+                f"and Episode {ep_next.episode_id} (starts {ep_next.start_time_sec}s) is {gap_sec:.1f}s < 60s"
+            )
+            assert gap_win >= 30, (
+                f"{sid}: Gap windows between Episode {ep_curr.episode_id} and {ep_next.episode_id} is {gap_win} < 30"
+            )
+
+    # Subject-specific episode counts under T_gap = 60s
+    assert per_subject_counts["S5"] == 4, f"Expected 4 episodes for S5, got {per_subject_counts['S5']}"
+    assert per_subject_counts["S6"] == 4, f"Expected 4 episodes for S6, got {per_subject_counts['S6']}"
+    assert total_episodes == 112, f"Expected 112 total episodes across 15 subjects under T_gap=60s, got {total_episodes}"
+

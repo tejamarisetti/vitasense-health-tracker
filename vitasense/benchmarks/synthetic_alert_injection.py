@@ -74,7 +74,7 @@ class SyntheticTachycardiaInjector:
         hr_max: float = 135.0,
         ramp_min: float = 2.0,
         ramp_max: float = 4.0,
-        min_inter_event_gap_sec: float = 20.0,
+        min_inter_event_gap_sec: float = 60.0,
         edge_buffer_sec: float = 4.0,
     ):
         self.seed = seed
@@ -240,9 +240,14 @@ class SyntheticTachycardiaInjector:
             edge_win = int(np.ceil(self.edge_buffer_sec / self.step_sec))
             gap_win = int(np.ceil(self.min_inter_event_gap_sec / self.step_sec))
             cur_win = b_start + edge_win
+            if episodes:
+                min_next_win = episodes[-1].end_window + 1 + gap_win
+                cur_win = max(cur_win, min_next_win)
 
             # Available duration per episode
-            total_block_win = (b_end - b_start + 1) - 2 * edge_win
+            total_block_win = (b_end - cur_win + 1) - edge_win
+            if total_block_win <= 0:
+                continue
             avg_win_per_ep = (total_block_win - (n_in_block - 1) * gap_win) // n_in_block
             avg_dur_per_ep = avg_win_per_ep * self.step_sec
 
