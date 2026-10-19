@@ -244,12 +244,22 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
   5. **Primary Hypothesis and Pre-Specified Hypothesis Test:**
      - **Primary Hypothesis ($H_1$):** Quality-gated personal alerting (Arm 3b) achieves a statistically significant reduction in False Alerts per Hour relative to kinematic-only gating (Arm 3a) under sensor fault injection ($F_1\text{--}F_7$), with target reduction $\ge 60\%$, while maintaining recall $\ge 85\%$ on genuine synthetic alert events.
      - **Pre-Specified Test:** Paired two-sided Wilcoxon signed-rank test comparing subject-level FA/hr between Arm 3b and Arm 3a at significance level $\alpha_{\text{stat}} = 0.01$.
-- **Section 3: Synthetic Injection Parameter Reconciliation:**
-  - Formal reconciliation of the mathematical coupling between onset ramp rate ($+2\text{ to } +4\text{ bpm/s}$ over $15\text{s}$) and target peak HR ($105\text{ to } 135\text{ bpm}$) given wide participant baseline heart rate variability ($\mu_{i,\text{rest}} \in [44.9, 92.8]\text{ bpm}$):
-    - *Adaptive Ramp Bounds:* For low baseline HR ($< 75\text{ bpm}$), $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$ to guarantee peak $\ge 105\text{ bpm}$. For higher baseline HR ($> 75\text{ bpm}$), $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$ to guarantee peak $\le 135\text{ bpm}$.
-    - *Ceiling Clamping:* Instantaneous baseline HR fluctuations exceeding $135.0\text{ bpm}$ during the plateau are clamped at $135.0\text{ bpm}$.
-    - *Block-Constrained Plateau Sampling:* In participants with limited resting block durations (S5: 582s; S6: 634s), the upper bound of plateau sampling is constrained to ~50–62s to accommodate 5–6 non-overlapping episodes with 20s inter-event buffers.
-    - All ratified text in Amendment 2 remains strictly unchanged.
+- **Section 3: Synthetic Injection Parameter Reconciliation (Deviation from Ratified Amendment 2):**
+  - *Explicit Deviation Statement:* The adaptive ramp bounding rule implemented in `SyntheticTachycardiaInjector` **deviates from Amendment 2 as ratified**. In Amendment 2, onset ramp rate ($+2\text{ to } +4\text{ bpm/s}$ over $15\text{s}$) and target peak HR ($105\text{ to } 135\text{ bpm}$) were ratified as independent uniform draws. However, over a fixed 15-second ramp, $\Delta HR = r_{\text{ramp}} \times 15\text{s} \in [30, 60]\text{ bpm}$. For participants with baseline HR below 75 bpm (e.g., S12, S15 with baseline ~45–53 bpm), an independent draw of $r = 2.0\text{ bpm/s}$ yields a peak of only ~75–83 bpm, violating the 105 bpm tachycardia floor. Conversely, for participants with baseline HR above 75 bpm (e.g., S5, S6 with baseline ~85–93 bpm), an independent draw of $r = 4.0\text{ bpm/s}$ yields a peak of ~145–153 bpm, violating the 135 bpm ceiling.
+  - *Adaptive Rule & Rationale (Proposed in Draft Amendment 3):* To ensure every episode satisfies both clinical tachycardia ($\ge 105\text{ bpm}$) and safety bounds ($\le 135\text{ bpm}$):
+    - Lower ramp bound is adaptively raised to $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$.
+    - Upper ramp bound is adaptively lowered to $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$.
+    - Plateau Ceiling & Floor Clamping: Any instantaneous sample during the plateau exceeding 135.0 bpm due to baseline variability is clamped at 135.0 bpm; any plateau below 105.0 bpm is clamped at 105.0 bpm.
+    - Plateau Range Bounding: In short resting blocks (S5: 582s; S6: 634s), the upper bound of plateau sampling is bounded to ~50–62s to accommodate 5–6 non-overlapping episodes with inter-event buffers.
+- **Section 4: Inter-Episode Gap Specification (Proposed 60s vs Current 20s):**
+  - *Current Implementation:* Minimum gap between consecutive injected episodes is $T_{\text{gap}} = 20\text{ seconds}$.
+  - *Proposed Modification:* Propose increasing minimum inter-episode gap to $T_{\text{gap}} = 60\text{ seconds}$ to ensure post-event hemodynamic stability and clear separation between distinct clinical alert episodes.
+  - *Impact Analysis Across Cohort:*
+    - In 13 of 15 subjects (S1–S4, S7–S15), resting time is extensive (40–73 minutes across multiple blocks), and all target episodes fit without loss at a 60s gap.
+    - In S5 (single 582s block), fitting episodes with a 60s gap reduces maximum packable episodes from 5 to 4.
+    - In S6 (single 634s block), fitting episodes with a 60s gap reduces maximum packable episodes from 6 to 4.
+    - Across the entire 15-subject cohort, exactly 3 episodes are affected (115 total episodes at 20s gap $\to$ 112 total episodes at 60s gap).
+    - *Decision Hold:* The injector code is kept strictly at 20s until the user ratifies this amendment.
 
 ---
 

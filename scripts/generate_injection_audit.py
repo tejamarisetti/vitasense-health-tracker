@@ -132,14 +132,24 @@ def audit_subject(sid: str, injector: SyntheticTachycardiaInjector):
         clamped_str = "; ".join(flags) if flags else "NONE"
         reason_str = "; ".join(reasons) if reasons else "Nominal sampling within ratified bounds"
 
+        # Unconstrained draws from ratified Amendment 2 ranges:
+        # Plateau in [45, 120]s, Ramp in [2.0, 4.0] bpm/s, Peak in [105.0, 135.0] bpm
+        # Using a shadow unconstrained generator with the same episode seed offset
+        ep_seed = (injector._get_subject_seed(sid) + ep.episode_id * 10007) % (2**31 - 1)
+        ep_rng = np.random.default_rng(ep_seed)
+        req_plat = float(ep_rng.uniform(45.0, 120.0))
+        req_ramp = float(ep_rng.uniform(2.0, 4.0))
+        req_peak = float(ep_rng.uniform(105.0, 135.0))
+
+        # Check differences
+        ramp_diff = not np.isclose(ep.ramp_rate_bpm_s, req_ramp, atol=0.05)
+        peak_diff = not np.isclose(ep.peak_hr, req_peak, atol=0.5)
+        plat_diff = not np.isclose(ep.plateau_duration_sec, req_plat, atol=1.0)
+
         jump_size = ep.peak_hr - mu_rest
         mm = int(ep.start_time_sec // 60)
         ss = int(ep.start_time_sec % 60)
         time_str = f"{mm:02d}:{ss:02d}"
-
-        # In our implementation, actual plateau equals requested plateau from the block distribution
-        req_plat = ep.plateau_duration_sec
-        act_plat = ep.plateau_duration_sec
 
         episode_records.append({
             "subject": sid,
@@ -149,11 +159,16 @@ def audit_subject(sid: str, injector: SyntheticTachycardiaInjector):
             "start_time_str": time_str,
             "duration_sec": ep.duration_sec,
             "requested_plateau_sec": req_plat,
-            "actual_plateau_sec": act_plat,
-            "ramp_rate_bpm_s": ep.ramp_rate_bpm_s,
-            "peak_hr": ep.peak_hr,
+            "actual_plateau_sec": ep.plateau_duration_sec,
+            "requested_ramp_rate_bpm_s": req_ramp,
+            "actual_ramp_rate_bpm_s": ep.ramp_rate_bpm_s,
+            "requested_peak_hr": req_peak,
+            "actual_peak_hr": ep.peak_hr,
             "resting_mean": mu_rest,
             "jump_size_bpm": jump_size,
+            "ramp_differed": "YES" if ramp_diff else "NO",
+            "peak_differed": "YES" if peak_diff else "NO",
+            "plateau_differed": "YES" if plat_diff else "NO",
             "clamped_flag": clamped_str,
             "clamped_reason": reason_str,
             "host_block": host_block,
@@ -202,10 +217,15 @@ def main():
         "duration_sec",
         "requested_plateau_sec",
         "actual_plateau_sec",
-        "ramp_rate_bpm_s",
-        "peak_hr",
+        "requested_ramp_rate_bpm_s",
+        "actual_ramp_rate_bpm_s",
+        "requested_peak_hr",
+        "actual_peak_hr",
         "resting_mean",
         "jump_size_bpm",
+        "ramp_differed",
+        "peak_differed",
+        "plateau_differed",
         "clamped_flag",
         "clamped_reason",
     ]
@@ -224,10 +244,15 @@ def main():
                     "duration_sec": f"{r['duration_sec']:.1f}",
                     "requested_plateau_sec": f"{r['requested_plateau_sec']:.1f}",
                     "actual_plateau_sec": f"{r['actual_plateau_sec']:.1f}",
-                    "ramp_rate_bpm_s": f"{r['ramp_rate_bpm_s']:.2f}",
-                    "peak_hr": f"{r['peak_hr']:.1f}",
+                    "requested_ramp_rate_bpm_s": f"{r['requested_ramp_rate_bpm_s']:.2f}",
+                    "actual_ramp_rate_bpm_s": f"{r['actual_ramp_rate_bpm_s']:.2f}",
+                    "requested_peak_hr": f"{r['requested_peak_hr']:.1f}",
+                    "actual_peak_hr": f"{r['actual_peak_hr']:.1f}",
                     "resting_mean": f"{r['resting_mean']:.1f}",
                     "jump_size_bpm": f"{r['jump_size_bpm']:.1f}",
+                    "ramp_differed": r["ramp_differed"],
+                    "peak_differed": r["peak_differed"],
+                    "plateau_differed": r["plateau_differed"],
                     "clamped_flag": r["clamped_flag"],
                     "clamped_reason": r["clamped_reason"],
                 })
