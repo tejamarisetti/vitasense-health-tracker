@@ -12,8 +12,12 @@ import pytest
 from vitasense.benchmarks.alerting_arms import (
     Arm1FixedThreshold,
     Arm2PersonalBaselineShrinkage,
+    Arm3aKinematicGate,
+    Arm3bTrustScoreGate,
+    Arm3bNoMotionGate,
     validate_arm_inputs,
 )
+
 
 
 def test_validate_arm_inputs_quarantine():
@@ -126,6 +130,76 @@ def test_arm2_causality_future_spike_does_not_affect_past_tau():
         err_msg="Future spike corrupted past or current threshold values! Violates causal baseline rule.",
     )
 
-    # Window spike_idx + 1 may update because window spike_idx has now entered the causal history
-    # Verify that tau at spike_idx + 1 is updated (higher due to the 180 bpm reading entering calibration)
     assert tau_spiked[spike_idx + 1] > tau_clean[spike_idx + 1]
+
+
+def test_arm3a_quarantine():
+    """Arm 3a must reject prohibited inputs during constructor and predict."""
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        Arm3aKinematicGate(theta_rest=0.05, tau_i=105.0)
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        Arm3aKinematicGate(theta_rest=0.05, activity=np.ones(10))
+
+    arm = Arm3aKinematicGate(theta_rest=0.05)
+    hr = np.full(50, 80.0)
+    enmo = np.full(50, 0.02)
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        arm.predict(hr, enmo, is_resting=np.ones(50, dtype=bool))
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        arm.predict(hr, enmo, episodes=[])
+
+    # Valid execution must succeed
+    out = arm.predict(hr, enmo)
+    assert len(out.alert_mask) == 50
+
+
+def test_arm3b_quarantine():
+    """Arm 3b must reject prohibited inputs during constructor and predict."""
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        Arm3bTrustScoreGate(theta_trust=0.70, tau_i=105.0)
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        Arm3bTrustScoreGate(theta_trust=0.70, activity=np.ones(10))
+
+    arm = Arm3bTrustScoreGate(theta_trust=0.70)
+    hr = np.full(50, 80.0)
+    enmo = np.full(50, 0.02)
+    trust = np.full(50, 0.85)
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        arm.predict(hr, enmo, trust, is_resting=np.ones(50, dtype=bool))
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        arm.predict(hr, enmo, trust, episodes=[])
+
+    # Valid execution must succeed
+    out = arm.predict(hr, enmo, trust)
+    assert len(out.alert_mask) == 50
+
+
+def test_arm3b_nomotion_quarantine():
+    """Arm 3b-noMotion must reject prohibited inputs during constructor and predict."""
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        Arm3bNoMotionGate(theta_trust=0.70, tau_i=105.0)
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        Arm3bNoMotionGate(theta_trust=0.70, activity=np.ones(10))
+
+    arm = Arm3bNoMotionGate(theta_trust=0.70)
+    hr = np.full(50, 80.0)
+    enmo = np.full(50, 0.02)
+    trust_nomot = np.full(50, 0.85)
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        arm.predict(hr, enmo, trust_nomot, is_resting=np.ones(50, dtype=bool))
+
+    with pytest.raises(TypeError, match="Prohibited input detected"):
+        arm.predict(hr, enmo, trust_nomot, episodes=[])
+
+    # Valid execution must succeed
+    out = arm.predict(hr, enmo, trust_nomot)
+    assert len(out.alert_mask) == 50
+
