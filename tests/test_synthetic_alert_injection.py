@@ -213,6 +213,7 @@ def test_error_when_no_resting_blocks():
         injector.inject(hr, resting, tau_i=100.0)
 
 
+@pytest.mark.slow
 def test_min_inter_episode_gap_on_all_15_subjects():
     """
     Protocol Amendment 3: Assert minimum inter-episode gap >= 60.0s between
