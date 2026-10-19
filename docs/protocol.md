@@ -207,6 +207,52 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 
 ---
 
+### Draft Amendment 3: Alerting Benchmark Evaluation Design, Leakage Enforcement, and Injection Parameter Reconciliation
+- **Date:** 2026-10-19
+- **Status:** DRAFT (Submitted for user review and approval only; not ratified).
+- **Reason for Amendment:**
+  Establish non-negotiable architectural boundaries preventing data leakage into alerting ablation arms; pre-specify fixed development/test subject splits, candidate hyperparameter grids, tuning protocols, and evaluation metrics prior to running any alerting algorithms; and formally reconcile the mathematical coupling of synthetic injection parameters observed during the 115-episode audit.
+- **Section 1: Strict Leakage Enforcement Rule (Blinded Evaluation Boundary):**
+  1. **Arm Input Quarantine:** Alerting arms (Arms 1 through 4) receive exclusively:
+     - The ambulatory heart rate time series (with synthetic tachycardia injected during benchmark evaluation).
+     - Raw sensor signals available at runtime in wearable deployment: wrist 64 Hz optical BVP and wrist 32 Hz triaxial accelerometer.
+     - Derived software signal quality indices and trust inputs ($S_{\text{trust}}$) computed strictly from the above deployment signals.
+  2. **Prohibited Inputs:** Alerting arms must **NEVER** receive or inspect:
+     - The synthetic injector's resting mask (`is_resting`).
+     - Ground-truth protocol activity tags (`activity` / `act_aligned`).
+     - Ground-truth event indicators, onset times, or durations (`synthetic_mask`, `event_type`, `InjectedEpisode`).
+  3. **Activity Label Role:** Protocol activity labels are strictly restricted to ground-truth performance evaluation and scoring; they may **NEVER** serve as an arm input, feature, or conditioning variable.
+- **Section 2: Pre-Specified Evaluation Design & LOSO Cross-Validation:**
+  1. **Fixed Development / Test Cohort Split:**
+     - **Development Cohort (Calibration / Smoke-Testing):** Participants $\{S1, S2, S3\}$. Used exclusively for preliminary pipeline sanity checks and runtime assertions.
+     - **Primary Benchmark Cohort:** Participants $\{S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, S14, S15\}$ (12 subjects), plus full 15-subject cohort reporting.
+  2. **Strict LOSO Partitioning:** In every cross-validation fold, the test subject is completely held out. All hyperparameter tuning is conducted strictly inside the training folds ($N-1$ subjects). Zero test-subject data is used for threshold selection.
+  3. **Fixed Candidate Hyperparameter Grids:**
+     - **Arm 1 (Fixed Threshold):** Population threshold $\tau_{\text{pop}} \in \{100, 110, 120\}\text{ bpm}$.
+     - **Arm 2 (Personal Baseline with Shrinkage):** Outlier multiplier $k \in \{2.0, 2.5, 3.0\}$; Empirical Bayes shrinkage strength $\kappa \in \{0.5, 1.0, 2.0\}\text{ hours}$.
+     - **Arm 3a (Kinematic Gate Only):** Motion rest threshold $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}g$ (nominal $0.05g$).
+     - **Arm 3b (Multi-Attribute Trust Score Gate):** Trust gate threshold $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$.
+     - **Arm 4 (Conformal Abstention):** Miscoverage significance $\alpha \in \{0.05, 0.10, 0.15\}$; uncertainty threshold $\theta_{\text{unc}} \in \{0.15, 0.20, 0.25\}$.
+  4. **Pre-Specified Metrics List:**
+     - **Detection Delay (seconds):** Mean and median time from synthetic event onset ($t_{\text{event\_onset}}$) to emitted alert ($t_{\text{alert}}$).
+     - **Event-Level Precision:** $\frac{TP}{TP + FP_{\text{event}}}$.
+     - **Event-Level Recall:** $\frac{TP}{TP + FN}$.
+     - **F1-Score:** Harmonic mean of precision and recall.
+     - **False Alerts per Hour (FA/hr):** Evaluated over all non-event monitoring time (natural background + fault-injected background).
+     - **Decision Coverage (%):** Percentage of monitoring intervals where the system provides a definitive classification (not abstained under Arm 4).
+     - **Dual Outlier Reporting:** Evaluated both with S5 and without S5; sensitivity checks with/without S6 and S11.
+  5. **Primary Hypothesis and Pre-Specified Hypothesis Test:**
+     - **Primary Hypothesis ($H_1$):** Quality-gated personal alerting (Arm 3b) achieves a statistically significant reduction in False Alerts per Hour relative to kinematic-only gating (Arm 3a) under sensor fault injection ($F_1\text{--}F_7$), with target reduction $\ge 60\%$, while maintaining recall $\ge 85\%$ on genuine synthetic alert events.
+     - **Pre-Specified Test:** Paired two-sided Wilcoxon signed-rank test comparing subject-level FA/hr between Arm 3b and Arm 3a at significance level $\alpha_{\text{stat}} = 0.01$.
+- **Section 3: Synthetic Injection Parameter Reconciliation:**
+  - Formal reconciliation of the mathematical coupling between onset ramp rate ($+2\text{ to } +4\text{ bpm/s}$ over $15\text{s}$) and target peak HR ($105\text{ to } 135\text{ bpm}$) given wide participant baseline heart rate variability ($\mu_{i,\text{rest}} \in [44.9, 92.8]\text{ bpm}$):
+    - *Adaptive Ramp Bounds:* For low baseline HR ($< 75\text{ bpm}$), $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$ to guarantee peak $\ge 105\text{ bpm}$. For higher baseline HR ($> 75\text{ bpm}$), $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$ to guarantee peak $\le 135\text{ bpm}$.
+    - *Ceiling Clamping:* Instantaneous baseline HR fluctuations exceeding $135.0\text{ bpm}$ during the plateau are clamped at $135.0\text{ bpm}$.
+    - *Block-Constrained Plateau Sampling:* In participants with limited resting block durations (S5: 582s; S6: 634s), the upper bound of plateau sampling is constrained to ~50–62s to accommodate 5–6 non-overlapping episodes with 20s inter-event buffers.
+    - All ratified text in Amendment 2 remains strictly unchanged.
+
+---
+
 ## 9. CHANGELOG
 
 | Revision / Amendment | Date | Description & Reason | Status |
@@ -216,8 +262,10 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 | **Amendment 2** | 2026-10-18 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects. Option (a) adopted as primary benchmark injection architecture into resting segments only with seed 42, tagging every episode SYNTHETIC; validates alert logic only. Natural events in S5, S6, S7, S11 treated descriptively only. Refined after viewing ground-truth prevalence only (no alerting or algorithm results); incorporates outlier handling rule (S5 dual reporting and minutes-based evaluation, S6/S11 sensitivity checks). | **Ratified by user, 2026-10-19** |
 | **Outlier Handling Rule** | 2026-10-18 | Dual reporting with/without S5; sensitivity checks with/without S6 and S11; non-independence of natural events; precision/recall restricted to synthetic events; S5 evaluated strictly in minutes above threshold. | **Ratified by user, 2026-10-19** |
 | **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added dual physical unit checks (range and median gravity baseline); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence and sensitivity tables. | **Implementation Correction** |
+| **Draft Amendment 3** | 2026-10-19 | Alerting benchmark evaluation design, strict leakage enforcement rule (quarantining activity tags and resting masks from arm inputs), pre-specified hyperparameter grids for Arms 1–4, metrics specification with Wilcoxon hypothesis test ($H_1$), and formal injection parameter reconciliation following the 115-episode audit. | **DRAFT (For user review only)** |
 
-*(Note: Ratified by user on 2026-10-19; git tag `protocol-freeze-v2` created. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`.)*
+*(Note: Ratified Amendments 1 & 2 frozen under tag `protocol-freeze-v2`. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`.)*
+
 
 
 
