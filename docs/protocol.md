@@ -207,59 +207,133 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 
 ---
 
-### Draft Amendment 3: Alerting Benchmark Evaluation Design, Leakage Enforcement, and Injection Parameter Reconciliation
+### Draft Amendment 3: Alerting Benchmark Evaluation Design, Leakage Enforcement, and Synthetic Injection Parameter Reconciliation
 - **Date:** 2026-10-19
 - **Status:** DRAFT (Submitted for user review and approval only; not ratified).
+- **Study Classification:** **Exploratory Study**. All statistical inferences, effect sizes, and p-values are pre-specified as an exploratory investigation of wearable alerting under synthetic fault injection and Option (a) rate elevation.
 - **Reason for Amendment:**
-  Establish non-negotiable architectural boundaries preventing data leakage into alerting ablation arms; pre-specify fixed development/test subject splits, candidate hyperparameter grids, tuning protocols, and evaluation metrics prior to running any alerting algorithms; and formally reconcile the mathematical coupling of synthetic injection parameters observed during the 115-episode audit.
-- **Section 1: Strict Leakage Enforcement Rule (Blinded Evaluation Boundary):**
-  1. **Arm Input Quarantine:** Alerting arms (Arms 1 through 4) receive exclusively:
-     - The ambulatory heart rate time series (with synthetic tachycardia injected during benchmark evaluation).
-     - Raw sensor signals available at runtime in wearable deployment: wrist 64 Hz optical BVP and wrist 32 Hz triaxial accelerometer.
-     - Derived software signal quality indices and trust inputs ($S_{\text{trust}}$) computed strictly from the above deployment signals.
-  2. **Prohibited Inputs:** Alerting arms must **NEVER** receive or inspect:
-     - The synthetic injector's resting mask (`is_resting`).
-     - Ground-truth protocol activity tags (`activity` / `act_aligned`).
-     - Ground-truth event indicators, onset times, or durations (`synthetic_mask`, `event_type`, `InjectedEpisode`).
-  3. **Activity Label Role:** Protocol activity labels are strictly restricted to ground-truth performance evaluation and scoring; they may **NEVER** serve as an arm input, feature, or conditioning variable.
-- **Section 2: Pre-Specified Evaluation Design & LOSO Cross-Validation:**
-  1. **Fixed Development / Test Cohort Split:**
-     - **Development Cohort (Calibration / Smoke-Testing):** Participants $\{S1, S2, S3\}$. Used exclusively for preliminary pipeline sanity checks and runtime assertions.
-     - **Primary Benchmark Cohort:** Participants $\{S4, S5, S6, S7, S8, S9, S10, S11, S12, S13, S14, S15\}$ (12 subjects), plus full 15-subject cohort reporting.
-  2. **Strict LOSO Partitioning:** In every cross-validation fold, the test subject is completely held out. All hyperparameter tuning is conducted strictly inside the training folds ($N-1$ subjects). Zero test-subject data is used for threshold selection.
-  3. **Fixed Candidate Hyperparameter Grids:**
-     - **Arm 1 (Fixed Threshold):** Population threshold $\tau_{\text{pop}} \in \{100, 110, 120\}\text{ bpm}$.
-     - **Arm 2 (Personal Baseline with Shrinkage):** Outlier multiplier $k \in \{2.0, 2.5, 3.0\}$; Empirical Bayes shrinkage strength $\kappa \in \{0.5, 1.0, 2.0\}\text{ hours}$.
-     - **Arm 3a (Kinematic Gate Only):** Motion rest threshold $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}g$ (nominal $0.05g$).
-     - **Arm 3b (Multi-Attribute Trust Score Gate):** Trust gate threshold $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$.
-     - **Arm 4 (Conformal Abstention):** Miscoverage significance $\alpha \in \{0.05, 0.10, 0.15\}$; uncertainty threshold $\theta_{\text{unc}} \in \{0.15, 0.20, 0.25\}$.
-  4. **Pre-Specified Metrics List:**
-     - **Detection Delay (seconds):** Mean and median time from synthetic event onset ($t_{\text{event\_onset}}$) to emitted alert ($t_{\text{alert}}$).
-     - **Event-Level Precision:** $\frac{TP}{TP + FP_{\text{event}}}$.
-     - **Event-Level Recall:** $\frac{TP}{TP + FN}$.
-     - **F1-Score:** Harmonic mean of precision and recall.
-     - **False Alerts per Hour (FA/hr):** Evaluated over all non-event monitoring time (natural background + fault-injected background).
-     - **Decision Coverage (%):** Percentage of monitoring intervals where the system provides a definitive classification (not abstained under Arm 4).
-     - **Dual Outlier Reporting:** Evaluated both with S5 and without S5; sensitivity checks with/without S6 and S11.
-  5. **Primary Hypothesis and Pre-Specified Hypothesis Test:**
-     - **Primary Hypothesis ($H_1$):** Quality-gated personal alerting (Arm 3b) achieves a statistically significant reduction in False Alerts per Hour relative to kinematic-only gating (Arm 3a) under sensor fault injection ($F_1\text{--}F_7$), with target reduction $\ge 60\%$, while maintaining recall $\ge 85\%$ on genuine synthetic alert events.
-     - **Pre-Specified Test:** Paired two-sided Wilcoxon signed-rank test comparing subject-level FA/hr between Arm 3b and Arm 3a at significance level $\alpha_{\text{stat}} = 0.01$.
-- **Section 3: Synthetic Injection Parameter Reconciliation (Deviation from Ratified Amendment 2):**
-  - *Explicit Deviation Statement:* The adaptive ramp bounding rule implemented in `SyntheticTachycardiaInjector` **deviates from Amendment 2 as ratified**. In Amendment 2, onset ramp rate ($+2\text{ to } +4\text{ bpm/s}$ over $15\text{s}$) and target peak HR ($105\text{ to } 135\text{ bpm}$) were ratified as independent uniform draws. However, over a fixed 15-second ramp, $\Delta HR = r_{\text{ramp}} \times 15\text{s} \in [30, 60]\text{ bpm}$. For participants with baseline HR below 75 bpm (e.g., S12, S15 with baseline ~45–53 bpm), an independent draw of $r = 2.0\text{ bpm/s}$ yields a peak of only ~75–83 bpm, violating the 105 bpm tachycardia floor. Conversely, for participants with baseline HR above 75 bpm (e.g., S5, S6 with baseline ~85–93 bpm), an independent draw of $r = 4.0\text{ bpm/s}$ yields a peak of ~145–153 bpm, violating the 135 bpm ceiling.
-  - *Adaptive Rule & Rationale (Proposed in Draft Amendment 3):* To ensure every episode satisfies both clinical tachycardia ($\ge 105\text{ bpm}$) and safety bounds ($\le 135\text{ bpm}$):
-    - Lower ramp bound is adaptively raised to $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$.
-    - Upper ramp bound is adaptively lowered to $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$.
-    - Plateau Ceiling & Floor Clamping: Any instantaneous sample during the plateau exceeding 135.0 bpm due to baseline variability is clamped at 135.0 bpm; any plateau below 105.0 bpm is clamped at 105.0 bpm.
-    - Plateau Range Bounding: In short resting blocks (S5: 582s; S6: 634s), the upper bound of plateau sampling is bounded to ~50–62s to accommodate 5–6 non-overlapping episodes with inter-event buffers.
-- **Section 4: Inter-Episode Gap Specification (Proposed 60s vs Current 20s):**
-  - *Current Implementation:* Minimum gap between consecutive injected episodes is $T_{\text{gap}} = 20\text{ seconds}$.
-  - *Proposed Modification:* Propose increasing minimum inter-episode gap to $T_{\text{gap}} = 60\text{ seconds}$ to ensure post-event hemodynamic stability and clear separation between distinct clinical alert episodes.
-  - *Impact Analysis Across Cohort:*
-    - In 13 of 15 subjects (S1–S4, S7–S15), resting time is extensive (40–73 minutes across multiple blocks), and all target episodes fit without loss at a 60s gap.
-    - In S5 (single 582s block), fitting episodes with a 60s gap reduces maximum packable episodes from 5 to 4.
-    - In S6 (single 634s block), fitting episodes with a 60s gap reduces maximum packable episodes from 6 to 4.
-    - Across the entire 15-subject cohort, exactly 3 episodes are affected (115 total episodes at 20s gap $\to$ 112 total episodes at 60s gap).
-    - *Decision Hold:* The injector code is kept strictly at 20s until the user ratifies this amendment.
+  Establish non-negotiable architectural boundaries preventing data leakage into alerting ablation arms; restate core hypothesis $H_1$ as an estimation question; pre-specify fixed candidate hyperparameter grids, tuning protocols, and evaluation metrics prior to running any alerting algorithms; define concrete false alert boundaries and conformal prediction mechanisms; specify a deterministic fault schedule with clean baselines; formally reconcile adaptive injection bounding and ceiling clamping; adopt $T_{\text{gap}} = 60\text{s}$; and establish reporting caveats for S5/S6 baseline clustering and jump-size stratification.
+
+#### Section 1: Core Hypothesis Formulation and Statistical Comparison
+1. **Estimation-Based Hypothesis ($H_1$):**
+   - The primary research question is formulated as an **estimation question**:
+     $$\text{"What is the difference in False Alerts per Hour between Arm 3b and Arm 3a } (\Delta\text{FA/hr} = \text{FA/hr}_{\text{Arm 3b}} - \text{FA/hr}_{\text{Arm 3a}}), \text{ quantified with a 95\% subject-bootstrap confidence interval?"}$$
+   - The previously stated targets ($\ge 60\%$ reduction in false alerts per hour relative to kinematic-only gating, and $\ge 85\%$ recall on genuine synthetic alert events) are explicitly maintained as **stated targets** (aspirational engineering and clinical design goals), **not as rigid pass/fail criteria**.
+2. **ACC Signal Sharing and Attribution Note:**
+   - Both Arm 3a (kinematic gate only) and Arm 3b (multi-attribute trust score gate) share the **exact same 3D wrist accelerometer (ACC) kinematic gating signal** ($\overline{\text{ENMO}}_{10\text{s}} \le \theta_{\text{rest}}$).
+   - Therefore, the comparison between Arm 3b and Arm 3a directly isolates and tests **whether the software trust score $S_{\text{trust}}$ adds anything beyond motion** (kinematic gating alone).
+3. **Statistical Inference & Effect Sizes (Exploratory Study):**
+   - Paired two-sided Wilcoxon signed-rank test on per-subject FA/hr between Arm 3b and Arm 3a evaluated at significance level $\alpha_{\text{stat}} = 0.05$.
+   - Effect size reporting: Paired rank-biserial correlation $r_{\text{rb}}$ and Hodges-Lehmann median difference estimator.
+   - Confidence intervals: 95% Subject-Level Bootstrap Confidence Intervals (1,000 resamples).
+   - Labeled explicitly as exploratory.
+
+#### Section 2: Subject Partitioning, LOSO Cross-Validation, and Reporting Strata
+1. **Full 15-Subject LOSO Evaluation:**
+   - All 15 PPG-DaLiA subjects ($S1$ through $S15$) are evaluated under Leave-One-Subject-Out (LOSO) cross-validation.
+   - The previously proposed S1–S3 "development" role is **completely removed**.
+   - Hyperparameter selection and threshold tuning are conducted **strictly inside the training folds** ($N-1$ subjects) of each LOSO split. Zero test-fold data is ever used for tuning.
+2. **Stratified Reporting Strata:**
+   - **All-15 Cohort:** All 15 subjects pooled.
+   - **Without-S5 Cohort:** 14 subjects, excluding the sustained elevated baseline outlier S5.
+   - **Outlier Disclosures:** S5, S6, and S11 reported separately in dedicated individual rows/disclosures.
+
+#### Section 3: Rigorous False Alert and Natural Event Accounting
+1. **False Alert Definition:**
+   An emitted alert at time $t$ is defined as a **False Alert** if and only if:
+   - $t$ falls outside every injected synthetic tachycardia episode window ($[t_{\text{start}}, t_{\text{end}}]$), **AND**
+   - $t$ falls outside all natural Amendment 1 event windows expanded by a **$\pm 30\text{ s}$ temporal buffer** ($[t_{\text{nat\_start}} - 30\text{s}, t_{\text{nat\_end}} + 30\text{s}]$), preventing physiological transition delays or boundary jitter from being counted as false alarms.
+2. **Natural Event Accounting:**
+   - Alerts emitted during natural Amendment 1 event windows (or their $\pm 30\text{s}$ buffers) are tracked and **reported separately as a distinct natural alert count/rate**.
+   - Natural alerts are strictly excluded from the clean false alert count and do not enter the FA/hr denominator.
+3. **Metric Formulas:**
+   - $\text{FA/hr} = \frac{\text{Clean False Alerts}}{\text{Total Evaluated Non-Event Hours}}$.
+   - Non-event time excludes both injected synthetic episodes and natural events ($\pm 30\text{s}$).
+
+#### Section 4: Strict Leakage Enforcement Rule (Blinded Evaluation Boundary)
+1. **Arm Input Quarantine:** Alerting arms (Arms 1 through 4) receive exclusively:
+   - The ambulatory heart rate time series (with synthetic tachycardia injected during benchmark evaluation).
+   - Raw sensor signals available at runtime in wearable deployment: wrist 64 Hz optical BVP and wrist 32 Hz triaxial accelerometer.
+   - Derived software signal quality indices and trust inputs ($S_{\text{trust}}$) computed strictly from the above deployment signals.
+2. **Prohibited Inputs:** Alerting arms must **NEVER** receive or inspect:
+   - The synthetic injector's resting mask (`is_resting`).
+   - Ground-truth protocol activity tags (`activity` / `act_aligned`).
+   - Ground-truth event indicators, onset times, or durations (`synthetic_mask`, `event_type`, `InjectedEpisode`).
+3. **Activity Label Role:** Protocol activity labels are strictly restricted to ground-truth performance evaluation and scoring; they may **NEVER** serve as an arm input, feature, or conditioning variable.
+
+#### Section 5: Deterministic Fault-Injection Schedule and Overlap Rules
+All injected faults are seeded deterministically (`seed = 42`), specified before any run, and applied strictly to non-event background monitoring time:
+1. **Condition 0 (Clean Baseline / No-Fault):** Real-world ambulatory signal with zero injected faults.
+2. **Tier 1 (Applied to Derived HR Stream):**
+   - **$F_1$ (Missing Gaps):** Contiguous NaN blocks, length $T_{\text{gap}} = 30\text{s}$, duty cycle = 10% of non-event time.
+   - **$F_2$ (Frozen / Stale):** Zero-variance constant value repeating previous estimate, length $T_{\text{freeze}} = 30\text{s}$, duty cycle = 5% of non-event time.
+   - **$F_3$ (Duplicates):** Duplicated packets ($\Delta t = 0$), duty cycle = 5% of packets.
+   - **$F_4$ (Transient Spikes):** Impulsive $+50\text{ bpm}$ spike lasting 1 sample ($2\text{s}$), rate = 1 spike per 5 minutes ($0.0033\text{ Hz}$).
+   - **$F_5$ (Baseline Drift):** Linear ramp $+0.15\text{ bpm/s}$ sustained over $60\text{s}$ (maximum $+9\text{ bpm}$), duty cycle = 5% of non-event time.
+   - **$F_6$ (Unit / Scale Error):** Multiplicative scale factor $\times 1.5$ applied to $60\text{s}$ blocks, duty cycle = 5% of non-event time.
+3. **Tier 2 (Applied to Raw Optical BVP Stream):**
+   - **$F_7$ (High-Motion Noise):** Additive colored in-band motion artifact noise scaled by wrist ACC dynamic energy ($\text{SNR} = +5\text{ dB}$ relative to raw BVP waveform), applied for end-to-end evaluation of Component C spectral estimator.
+4. **Fault Overlap Rule:**
+   - In the primary benchmark, faults are injected exclusively into **non-event background time**.
+   - Faults **NEVER overlap active synthetic tachycardia episodes**, ensuring detection delay and recall reflect genuine event physics without artificial distortion.
+5. **Pre-Run Fixation:** The fault schedule (timing, indices, values) is generated and frozen prior to executing any alerting algorithm.
+
+#### Section 6: Uncertainty Measure, Conformal Procedure, and Hyperparameter Grids (Arm 4)
+1. **Concrete Predictive Uncertainty Metric:**
+   - For each window $t$, the personal baseline model estimates predictive mean $\hat{\mu}_i(t)$ and standard deviation $\hat{\sigma}_i(t)$ via Empirical Bayes shrinkage towards the population mean across training folds.
+   - Normalized predictive uncertainty: $U(t) = \frac{\hat{\sigma}_i(t)}{\hat{\mu}_i(t)}$.
+   - Augmented uncertainty metric incorporating trust score defect:
+     $$U_{\text{total}}(t) = U(t) + \lambda (1 - S_{\text{trust}}(t))$$
+     where $\lambda \ge 0$ is the trust penalty weight.
+2. **Concrete Conformal Calibration Protocol:**
+   - The calibration set $\mathcal{T}_{\text{calib}}$ is formed strictly from non-event resting windows in the LOSO training folds ($N-1$ subjects).
+   - Nonconformity score: normalized absolute residual on calibration windows:
+     $$s(t) = \frac{|HR(t) - \hat{\mu}_i(t)|}{\hat{\sigma}_i(t)}$$
+   - Conformal threshold: compute $(1 - \alpha)$-quantile $\hat{q}_{1-\alpha}$ on calibration scores:
+     $$\hat{q}_{1-\alpha} = \text{Quantile}_{1-\alpha}\left(\{s(t) : t \in \mathcal{T}_{\text{calib}}\}\right)$$
+   - Conformal prediction band:
+     $$\mathcal{C}_{1-\alpha}(t) = \left[\hat{\mu}_i(t) - \hat{q}_{1-\alpha}\hat{\sigma}_i(t), \; \hat{\mu}_i(t) + \hat{q}_{1-\alpha}\hat{\sigma}_i(t)\right]$$
+3. **Abstention Decision Rule:**
+   - The system outputs `"ABSTAIN / UNABLE TO ASSESS"` if:
+     a) The conformal prediction band spans the alert threshold: $\hat{\mu}_i(t) - \hat{q}_{1-\alpha}\hat{\sigma}_i(t) \le \tau_i(t) \le \hat{\mu}_i(t) + \hat{q}_{1-\alpha}\hat{\sigma}_i(t)$, OR
+     b) Augmented uncertainty $U_{\text{total}}(t) > \theta_{\text{unc}}$.
+4. **Pre-Specified Candidate Grids (Undefined Entries Removed):**
+   - Any informal, heuristic, or undefined candidate grid dimensions from earlier discussions are explicitly removed.
+   - **Arm 1 (Fixed Threshold):** $\tau_{\text{pop}} \in \{100, 110, 120\}\text{ bpm}$.
+   - **Arm 2 (Personal Baseline with Shrinkage):** Outlier multiplier $k \in \{2.0, 2.5, 3.0\}$; shrinkage strength $\kappa \in \{0.5, 1.0, 2.0\}\text{ hours}$.
+   - **Arm 3a (Kinematic Gate Only):** Motion rest threshold $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}g$ (nominal $0.05g$).
+   - **Arm 3b (Multi-Attribute Trust Score Gate):** Trust gate threshold $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$.
+   - **Arm 4 (Conformal Abstention):** Miscoverage significance $\alpha \in \{0.05, 0.10\}$; trust penalty weight $\lambda \in \{0.5, 1.0\}$; uncertainty threshold $\theta_{\text{unc}} \in \{0.20, 0.30\}$.
+
+#### Section 7: Inter-Episode Gap Specification (Adopt $T_{\text{gap}} = 60\text{s}$)
+1. **Adoption of $T_{\text{gap}} = 60\text{s}$:**
+   - Adopt minimum inter-episode gap $T_{\text{gap}} = 60\text{ seconds}$ in Draft Amendment 3.
+2. **Exact Episode Impact Across Cohort (3 Episodes Lost):**
+   - **Subject S5 (582s block):** Drops from 5 episodes to 4 episodes (1 episode lost: Episode #5 at $t = 552\text{s}$).
+   - **Subject S6 (634s block):** Drops from 6 episodes to 4 episodes (2 episodes lost: Episode #5 at $t = 494\text{s}$ and Episode #6 at $t = 594\text{s}$).
+   - **Subjects S1–S4, S7–S15 (13 subjects):** 0 episodes lost.
+   - **Cohort Total:** Drops from 115 episodes to 112 episodes.
+3. **Decision Hold:** The injector code remains strictly at $T_{\text{gap}} = 20\text{s}$ until this amendment is ratified.
+
+#### Section 8: S5/S6 Baseline-Only Caveat & Jump-Size Stratification
+1. **S5 and S6 Initial Baseline Clustering Caveat:**
+   - In subjects S5 and S6, **100% of injected synthetic episodes lie exclusively within the initial `BASELINE` protocol block ($t < 600\text{s}$)**.
+   - Performance metrics for S5 and S6 must be reported separately in dedicated rows and must **never be pooled into cross-subject summary aggregates without that explicit caveat**.
+2. **Jump-Size Stratification:**
+   In addition to aggregate metrics, report recall and detection delay stratified by physiological jump size ($\Delta HR = HR_{\text{peak}} - \mu_{i,\text{rest}}$):
+   - *Small Jump ($+15\text{ to } +30\text{ bpm}$ above baseline)*: subtle resting elevation.
+   - *Moderate Jump ($+30\text{ to } +50\text{ bpm}$ above baseline)*: typical clinical tachycardia onset.
+   - *Large Jump ($> +50\text{ bpm}$ above baseline)*: acute resting surge.
+
+#### Section 9: Synthetic Injection Parameter Reconciliation (Deviation from Ratified Amendment 2)
+1. **Explicit Statement of Protocol Deviation:**
+   - The adaptive ramp bounding rule implemented in `SyntheticTachycardiaInjector` **deviates from Amendment 2 as ratified**.
+   - In ratified Amendment 2, onset ramp rate ($+2.0\text{ to } +4.0\text{ bpm/s}$ over $15\text{s}$) and target peak HR ($105.0\text{ to } 135.0\text{ bpm}$) were specified as independent uniform draws. However, over a fixed 15-second ramp, $\Delta HR = r_{\text{ramp}} \times 15\text{s} \in [30.0, 60.0]\text{ bpm}$. For participants with baseline HR below 75 bpm (e.g., S12 at 45 bpm), an independent draw of $r = 2.0\text{ bpm/s}$ yields a peak of only 75 bpm (violating the 105 bpm floor). For participants with baseline HR above 75 bpm (e.g., S5 at 93 bpm), an independent draw of $r = 4.0\text{ bpm/s}$ yields a peak of 153 bpm (violating the 135 bpm ceiling).
+2. **Adaptive Rule & Rationale (Proposed in Draft Amendment 3):**
+   - Lower ramp bound is adaptively raised to $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$.
+   - Upper ramp bound is adaptively lowered to $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$.
+   - Plateau Ceiling & Floor Clamping: Values during the plateau exceeding 135.0 bpm due to baseline variability are clamped at 135.0 bpm; values below 105.0 bpm are clamped at 105.0 bpm.
+   - Plateau Sampling Range Bounding: In short blocks (S5: 582s; S6: 634s), plateau sampling is bounded to ~45–62s to accommodate non-overlapping episodes with inter-event buffers.
 
 ---
 
@@ -272,9 +346,10 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 | **Amendment 2** | 2026-10-18 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects. Option (a) adopted as primary benchmark injection architecture into resting segments only with seed 42, tagging every episode SYNTHETIC; validates alert logic only. Natural events in S5, S6, S7, S11 treated descriptively only. Refined after viewing ground-truth prevalence only (no alerting or algorithm results); incorporates outlier handling rule (S5 dual reporting and minutes-based evaluation, S6/S11 sensitivity checks). | **Ratified by user, 2026-10-19** |
 | **Outlier Handling Rule** | 2026-10-18 | Dual reporting with/without S5; sensitivity checks with/without S6 and S11; non-independence of natural events; precision/recall restricted to synthetic events; S5 evaluated strictly in minutes above threshold. | **Ratified by user, 2026-10-19** |
 | **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added dual physical unit checks (range and median gravity baseline); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence and sensitivity tables. | **Implementation Correction** |
-| **Draft Amendment 3** | 2026-10-19 | Alerting benchmark evaluation design, strict leakage enforcement rule (quarantining activity tags and resting masks from arm inputs), pre-specified hyperparameter grids for Arms 1–4, metrics specification with Wilcoxon hypothesis test ($H_1$), and formal injection parameter reconciliation following the 115-episode audit. | **DRAFT (For user review only)** |
+| **Draft Amendment 3** | 2026-10-19 | Alerting benchmark evaluation design: restated $H_1$ as estimation question with 95% bootstrap CI and exploratory label, ACC sharing note for Arms 3a/3b, full 15-subject LOSO evaluation, rigorous false alert definition ($\pm 30\text{s}$ buffer around natural events), fixed F1–F7 fault schedule with clean baseline and non-overlapping injection, concrete Arm 4 conformal procedure with undefined grid entries removed, adopted $T_{\text{gap}} = 60\text{s}$ with 3 lost episodes listed (injector held at 20s pending ratification), S5/S6 baseline clustering caveat, jump-size stratification, and formal adaptive ramp reconciliation. | **DRAFT (For user review only)** |
 
 *(Note: Ratified Amendments 1 & 2 frozen under tag `protocol-freeze-v2`. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`.)*
+
 
 
 
