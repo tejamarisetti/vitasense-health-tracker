@@ -270,11 +270,13 @@ def query_gemini_llm(user_message: str, ctx: AssistantContext) -> Tuple[Optional
     last_reason = "model unavailable"
 
     import httpx
+    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
     for model in candidate_models:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
         try:
             resp = httpx.post(
                 url,
+                headers=headers,
                 json={"contents": [{"parts": [{"text": prompt}]}]},
                 timeout=5.0,
             )
@@ -320,10 +322,12 @@ def check_assistant_health() -> Dict[str, Any]:
         }
 
     import httpx
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent?key={api_key}"
+    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
+    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
     try:
         r = httpx.post(
             url,
+            headers=headers,
             json={"contents": [{"parts": [{"text": "ping"}]}], "generationConfig": {"maxOutputTokens": 1}},
             timeout=4.0,
         )

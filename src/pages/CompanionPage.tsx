@@ -188,7 +188,7 @@ export function CompanionPage() {
               </span>
             )}
 
-            <div>
+            <div className="message-content-bubble">
               <p>{m.text}</p>
 
               {/* Cards render ONLY when explicitly requested by user */}
@@ -224,7 +224,11 @@ export function CompanionPage() {
               )}
             </div>
 
-            {m.sender === 'user' && <span className="avatar">AM</span>}
+            {m.sender === 'user' && (
+              <span className="chat-avatar user-avatar" title="You">
+                AM
+              </span>
+            )}
           </div>
         ))}
 
@@ -233,50 +237,56 @@ export function CompanionPage() {
             <span className="chat-avatar">
               <Icon name="sparkles" />
             </span>
-            <div className="loading-dots">
-              <span>Thinking…</span>
+            <div className="message-content-bubble loading-bubble">
+              <div className="loading-dots">
+                <span>Thinking…</span>
+              </div>
             </div>
           </div>
         )}
       </div>
 
-      {/* Quick Prompts */}
-      <div className="prompt-row">
-        {quickPrompts.map((prompt) => (
-          <button
-            key={prompt}
-            onClick={() => handleSend(prompt)}
-            type="button"
-            disabled={isLoading}
-          >
-            {prompt}
-            <Icon name="arrow" />
-          </button>
-        ))}
-      </div>
+      {/* Sticky Bottom Area: Quick Prompts + Composer */}
+      <div className="companion-bottom-bar">
+        <div className="prompt-row">
+          {quickPrompts.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => handleSend(prompt)}
+              type="button"
+              disabled={isLoading}
+            >
+              <span>{prompt}</span>
+              <Icon name="arrow" size={14} />
+            </button>
+          ))}
+        </div>
 
-      {/* Message Composer */}
-      <form
-        className="composer"
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSend(input);
-        }}
-      >
-        <button type="button" aria-label="Add attachment">
-          ＋
-        </button>
-        <input
-          value={input}
-          onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask about your heart rate, trust score, or signal quality…"
-          disabled={isLoading}
-        />
-        <span>AI companion for research telemetry. Verify important data.</span>
-        <button className="send" type="submit" aria-label="Send" disabled={isLoading || !input.trim()}>
-          <Icon name="send" />
-        </button>
-      </form>
+        <form
+          className="composer"
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSend(input);
+          }}
+        >
+          <button type="button" aria-label="Add attachment" className="attach-button">
+            ＋
+          </button>
+          <input
+            value={input}
+            onChange={(e) => setInput(e.target.value)}
+            placeholder="Ask about your heart rate, trust score, or signal quality…"
+            disabled={isLoading}
+          />
+          <button className="send" type="submit" aria-label="Send" disabled={isLoading || !input.trim()}>
+            <Icon name="send" />
+          </button>
+        </form>
+
+        <p className="composer-footnote">
+          AI companion for research telemetry · Educational & research tool · Not medical advice
+        </p>
+      </div>
     </div>
   );
 }
