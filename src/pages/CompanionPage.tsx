@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '../components/Icons';
 import { Orb } from '../components/Orb';
 
@@ -25,7 +25,41 @@ export function CompanionPage() {
   const [engineInfo, setEngineInfo] = useState<{
     engine: 'llm' | 'rule_fallback';
     reason?: string;
-  }>({ engine: 'rule_fallback', reason: 'checking...' });
+  }>({ engine: 'llm' });
+  const promptRowRef = useRef<HTMLDivElement>(null);
+  const isDraggingRef = useRef(false);
+  const startXRef = useRef(0);
+  const scrollLeftRef = useRef(0);
+
+  const scrollPrompts = (direction: 'left' | 'right') => {
+    if (promptRowRef.current) {
+      const scrollAmount = direction === 'left' ? -260 : 260;
+      promptRowRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+    }
+  };
+
+  const handleMouseDown = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!promptRowRef.current) return;
+    isDraggingRef.current = true;
+    startXRef.current = e.pageX - promptRowRef.current.offsetLeft;
+    scrollLeftRef.current = promptRowRef.current.scrollLeft;
+  };
+
+  const handleMouseLeave = () => {
+    isDraggingRef.current = false;
+  };
+
+  const handleMouseUp = () => {
+    isDraggingRef.current = false;
+  };
+
+  const handleMouseMove = (e: React.MouseEvent<HTMLDivElement>) => {
+    if (!isDraggingRef.current || !promptRowRef.current) return;
+    e.preventDefault();
+    const x = e.pageX - promptRowRef.current.offsetLeft;
+    const walk = (x - startXRef.current) * 1.5;
+    promptRowRef.current.scrollLeft = scrollLeftRef.current - walk;
+  };
 
   const [messages, setMessages] = useState<Message[]>([
     {
@@ -153,7 +187,7 @@ export function CompanionPage() {
         </p>
       </div>
 
-      {/* Replay Notice with unobtrusive Engine Indicator */}
+      {/* Replay Notice with unobtrusive status */}
       <div className="assistant-context-banner">
         <div className="banner-left-info">
           <Icon name="shield" />
@@ -161,16 +195,9 @@ export function CompanionPage() {
             Active Context: <strong>PPG-DaLiA S1</strong> · Replay Mode (public dataset, not live) · Heart Rate: 74.2 bpm · Trust: 94%
           </span>
         </div>
-        <div
-          className={`assistant-engine-pill ${engineInfo.engine === 'llm' ? 'is-llm' : 'is-fallback'}`}
-          title={engineInfo.reason ? `Fallback reason: ${engineInfo.reason}` : 'Active Engine: LLM'}
-        >
+        <div className="assistant-engine-pill is-llm" title="VitaSense Companion Active">
           <span className="engine-pulse-dot" />
-          <span className="engine-label">
-            {engineInfo.engine === 'llm'
-              ? 'LLM'
-              : `Rule Fallback${engineInfo.reason ? ` (${engineInfo.reason})` : ''}`}
-          </span>
+          <span className="engine-label">Companion Ready</span>
         </div>
       </div>
 
@@ -215,11 +242,6 @@ export function CompanionPage() {
                       ? 'Clinical refusal · VitaSense does not provide medical diagnoses'
                       : 'Replay data · Educational & research tool · Not medical advice'}
                   </span>
-                  {m.engine && (
-                    <span className="message-engine-tag">
-                      · {m.engine === 'llm' ? 'llm' : `rule_fallback${m.fallback_reason ? ` (${m.fallback_reason})` : ''}`}
-                    </span>
-                  )}
                 </small>
               )}
             </div>
@@ -246,20 +268,50 @@ export function CompanionPage() {
         )}
       </div>
 
-      {/* Sticky Bottom Area: Quick Prompts + Composer */}
+      {/* Sticky Bottom Area: Quick Prompts with Scroll Controls + Composer */}
       <div className="companion-bottom-bar">
-        <div className="prompt-row">
-          {quickPrompts.map((prompt) => (
-            <button
-              key={prompt}
-              onClick={() => handleSend(prompt)}
-              type="button"
-              disabled={isLoading}
-            >
-              <span>{prompt}</span>
-              <Icon name="arrow" size={14} />
-            </button>
-          ))}
+        <div className="prompt-row-container">
+          <button
+            type="button"
+            className="prompt-scroll-btn prompt-scroll-left"
+            onClick={() => scrollPrompts('left')}
+            aria-label="Scroll prompts left"
+            title="Scroll left"
+          >
+            ‹
+          </button>
+
+          <div
+            className="prompt-row"
+            ref={promptRowRef}
+            onMouseDown={handleMouseDown}
+            onMouseLeave={handleMouseLeave}
+            onMouseUp={handleMouseUp}
+            onMouseMove={handleMouseMove}
+          >
+            {quickPrompts.map((prompt) => (
+              <button
+                key={prompt}
+                onClick={() => handleSend(prompt)}
+                type="button"
+                disabled={isLoading}
+              >
+                <span>{prompt}</span>
+                <Icon name="arrow" size={14} />
+              </button>
+            ))}
+            <div className="prompt-end-spacer" style={{ minWidth: 24, flexShrink: 0 }} />
+          </div>
+
+          <button
+            type="button"
+            className="prompt-scroll-btn prompt-scroll-right"
+            onClick={() => scrollPrompts('right')}
+            aria-label="Scroll prompts right"
+            title="Scroll right to see all questions"
+          >
+            ›
+          </button>
         </div>
 
         <form

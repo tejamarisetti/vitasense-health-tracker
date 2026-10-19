@@ -36,7 +36,14 @@ export function LandingPage({ go, theme, setTheme }: LandingPageProps) {
             onClick={() => go('login')}
             type="button"
           >
-            Open app
+            Sign in
+          </button>
+          <button
+            className="button button-soft"
+            onClick={() => go('create-account')}
+            type="button"
+          >
+            Create account
           </button>
         </div>
       </header>
@@ -60,10 +67,10 @@ export function LandingPage({ go, theme, setTheme }: LandingPageProps) {
           <div className="hero-actions">
             <button
               className="button button-primary"
-              onClick={() => go('login')}
+              onClick={() => go('create-account')}
               type="button"
             >
-              Explore Your Health <Icon name="arrow" />
+              Get Started <Icon name="arrow" />
             </button>
             <a className="text-link" href="#science">
               <span className="play">▶</span> Discover the technology

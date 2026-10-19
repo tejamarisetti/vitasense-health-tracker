@@ -19,9 +19,10 @@ export const navItems: NavItem[] = [
 interface SidebarProps {
   page: string;
   go: (page: string) => void;
+  onProfileClick?: () => void;
 }
 
-export function Sidebar({ page, go }: SidebarProps) {
+export function Sidebar({ page, go, onProfileClick }: SidebarProps) {
   return (
     <aside className="sidebar">
       <button
@@ -53,7 +54,10 @@ export function Sidebar({ page, go }: SidebarProps) {
           <span>Health History</span>
         </button>
 
-        <button title="Profile" onClick={() => go('overview')}>
+        <button
+          title="Personal Health Profile"
+          onClick={() => (onProfileClick ? onProfileClick() : go('overview'))}
+        >
           <Icon name="user" />
           <span>Profile</span>
         </button>

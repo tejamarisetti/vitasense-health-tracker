@@ -3,6 +3,7 @@ import React from 'react';
 export type IconName =
   | 'activity'
   | 'ai'
+  | 'apple'
   | 'arrow'
   | 'bell'
   | 'check'
@@ -10,8 +11,11 @@ export type IconName =
   | 'clock'
   | 'command'
   | 'drop'
+  | 'edit'
+  | 'google'
   | 'history'
   | 'home'
+  | 'logout'
   | 'moon'
   | 'more'
   | 'pulse'
@@ -33,6 +37,12 @@ const iconDefs: Record<IconName, React.ReactNode> = {
       <circle cx="12" cy="12" r="2" />
     </>
   ),
+  apple: (
+    <>
+      <path d="M12 20.94c1.5 0 2.75-.81 4-0.81 1.2 0 2.24.78 3.7.78 2.05 0 3.65-2.02 4.6-3.48-2.18-1.25-2.52-4.41-.33-5.74-.95-1.55-2.45-2.4-4.14-2.4-1.42 0-2.57.8-3.66.8-1.12 0-2.44-.83-3.95-.83-2.54 0-4.97 1.88-4.97 5.75 0 3.85 2.72 9.93 4.75 9.93z" />
+      <path d="M14.5 2c0 1.66-1.34 3-3 3 0-1.66 1.34-3 3-3z" />
+    </>
+  ),
   arrow: <path d="M5 12h14M14 7l5 5-5 5" />,
   bell: <path d="M18 8a6 6 0 0 0-12 0c0 7-3 7-3 8h18c0-1-3-1-3-8M10 20h4" />,
   check: <path d="m5 12 4 4L19 6" />,
@@ -50,6 +60,18 @@ const iconDefs: Record<IconName, React.ReactNode> = {
     </>
   ),
   drop: <path d="M12 3s6 6.6 6 11a6 6 0 0 1-12 0c0-4.4 6-11 6-11Z" />,
+  edit: (
+    <>
+      <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7" />
+      <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
+    </>
+  ),
+  google: (
+    <>
+      <circle cx="12" cy="12" r="10" />
+      <path d="M12 8a4 4 0 0 0-4 4 4 4 0 0 0 4 4c2.2 0 3.8-1.5 3.8-3.7H12" />
+    </>
+  ),
   history: (
     <>
       <path d="M4 12a8 8 0 1 0 2.3-5.7L4 9" />
@@ -57,6 +79,13 @@ const iconDefs: Record<IconName, React.ReactNode> = {
     </>
   ),
   home: <path d="m3 11 9-8 9 8M5 10v10h14V10M9 20v-6h6v6" />,
+  logout: (
+    <>
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4" />
+      <polyline points="16 17 21 12 16 7" />
+      <line x1="21" y1="12" x2="9" y2="12" />
+    </>
+  ),
   moon: <path d="M20 15a8 8 0 0 1-11-11 8.5 8.5 0 1 0 11 11Z" />,
   more: (
     <>

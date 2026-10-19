@@ -1,20 +1,35 @@
 import React from 'react';
 import { Logo } from './Logo';
 import { Icon } from './Icons';
+import { UserProfile } from '../types';
 
 interface AppHeaderProps {
   theme: 'dark' | 'light';
   setTheme: (theme: 'dark' | 'light') => void;
+  userProfile?: UserProfile;
   onSearchClick?: () => void;
   onNotificationsClick?: () => void;
+  onProfileClick?: () => void;
 }
 
 export function AppHeader({
   theme,
   setTheme,
+  userProfile,
   onSearchClick,
-  onNotificationsClick
+  onNotificationsClick,
+  onProfileClick,
 }: AppHeaderProps) {
+  const initials = userProfile?.name
+    ? userProfile.name
+        .split(' ')
+        .map((n) => n[0])
+        .filter(Boolean)
+        .slice(0, 2)
+        .join('')
+        .toUpperCase()
+    : 'AM';
+
   return (
     <header className="app-header">
       <div className="mobile-logo">
@@ -51,9 +66,17 @@ export function AppHeader({
           <i />
         </button>
 
-        <div className="avatar" title="Alex Morgan">
-          AM
-        </div>
+        <button
+          className="avatar-btn"
+          onClick={onProfileClick}
+          title={`Profile: ${userProfile?.name || 'Alex Morgan'} (Click to view/edit details)`}
+          aria-label="Open personal profile"
+          type="button"
+        >
+          <div className="avatar">
+            {initials}
+          </div>
+        </button>
       </div>
     </header>
   );

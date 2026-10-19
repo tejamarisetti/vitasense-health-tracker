@@ -1,21 +1,41 @@
 import React, { useState } from 'react';
 import { Logo } from '../components/Logo';
 import { Icon } from '../components/Icons';
+import { SocialAuthModal } from '../components/SocialAuthModal';
+import { UserProfile, saveUserProfile } from '../types';
 
 interface LoginPageProps {
   go: (page: string) => void;
   theme: 'dark' | 'light';
   setTheme: (theme: 'dark' | 'light') => void;
+  onLoginSuccess?: (profile: UserProfile) => void;
 }
 
-export function LoginPage({ go, theme, setTheme }: LoginPageProps) {
+export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProps) {
   const [focusField, setFocusField] = useState<'email' | 'password' | null>(null);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
+  const [socialProvider, setSocialProvider] = useState<'google' | 'apple' | null>(null);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
+    const updatedProfile: UserProfile = {
+      name: email.split('@')[0] || 'Alex Morgan',
+      email: email || 'alex@example.com',
+      age: 29,
+      sex: 'Male',
+      height: '178 cm',
+      weight: '72 kg',
+      restingHr: 64,
+      activityLevel: 'Moderately Active',
+      healthGoal: 'Cardiovascular Wellness',
+      provider: 'email',
+    };
+    saveUserProfile(updatedProfile);
+    if (onLoginSuccess) {
+      onLoginSuccess(updatedProfile);
+    }
     go('overview');
   };
 
@@ -209,16 +229,29 @@ export function LoginPage({ go, theme, setTheme }: LoginPageProps) {
           </div>
 
           <div className="social-login">
-            <button type="button" onClick={() => go('overview')}>
-              <b>G</b> Google
+            <button
+              type="button"
+              className="social-btn google-btn"
+              onClick={() => setSocialProvider('google')}
+            >
+              <Icon name="google" size={17} />
+              <span>Google</span>
             </button>
-            <button type="button" onClick={() => go('overview')}>
-              <b>⌘</b> Apple
+            <button
+              type="button"
+              className="social-btn apple-btn"
+              onClick={() => setSocialProvider('apple')}
+            >
+              <Icon name="apple" size={17} />
+              <span>Apple</span>
             </button>
           </div>
 
           <p className="signup-copy">
-            New to VitaSense? <button type="button" onClick={() => go('overview')}>Create an account</button>
+            New to VitaSense?{' '}
+            <button type="button" onClick={() => go('create-account')}>
+              Create an account
+            </button>
           </p>
 
           <div className="login-demo">
@@ -227,11 +260,24 @@ export function LoginPage({ go, theme, setTheme }: LoginPageProps) {
             </span>
             <p>
               <b>Exploring the concept?</b>
-              Any details will open the research demo.
+              Any details or social sign-in will calibrate your research profile.
             </p>
           </div>
         </div>
       </section>
+
+      {/* Social Auth Modal */}
+      <SocialAuthModal
+        provider={socialProvider}
+        onClose={() => setSocialProvider(null)}
+        onSuccess={(profile) => {
+          setSocialProvider(null);
+          if (onLoginSuccess) {
+            onLoginSuccess(profile);
+          }
+          go('overview');
+        }}
+      />
     </main>
   );
 }
