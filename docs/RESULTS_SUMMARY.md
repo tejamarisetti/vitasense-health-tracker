@@ -1,6 +1,6 @@
 # VitaSense AI - Benchmark Results Summary
 
-**Document Version:** 1.0.0  
+**Document Version:** 1.1.0  
 **Date:** 2026-10-19  
 **Status:** Complete Benchmark Evaluation (Protocol Amendments 1–4)  
 **Evaluated Arms:**
@@ -94,11 +94,9 @@ Per Protocol Amendment 3, metrics are reported pooled across all 15 subjects, wi
 
 ## 4. Disaggregated FA/hr per Fault Type
 
-**Rule:** Every cell presents alert counts and exposure hours alongside FA/hr. Any cell with fewer than 10 alerts OR under 1.0 hour of total exposure is explicitly marked with `*` (*Insufficient data: <10 alerts or <1.0h exposure*). No rates are presented without alert counts.
+**Rule:** Every cell presents alert counts and exposure hours alongside FA/hr. Any cell with fewer than 10 alerts OR under 1.0 hour of total exposure is explicitly marked with `*` (*Insufficient data: <10 alerts or <1.0h exposure*). No rates are presented without alert counts. Total monitoring exposure across 15 subjects = 31.25 hours.
 
 ### 4.1 Regime A: Low Duty (~10% Faulted Time)
-*Total Monitoring Exposure = 31.25 hours.*
-
 | Fault Type | Exposure | Arm 1 (Fixed) | Arm 2 (Personal) | Arm 3a (+Kinematic) | Arm 3b (+Trust) | Arm 3b-noMotion |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **F0_CLEAN** | 28.09h | 3.20 (90 FA, 28.09h) | 5.87 (165 FA, 28.09h) | 1.53 (43 FA, 28.09h) | 1.78 (50 FA, 28.09h) | 2.95 (83 FA, 28.09h) |
@@ -112,8 +110,6 @@ Per Protocol Amendment 3, metrics are reported pooled across all 15 subjects, wi
 *(\*) Marked [Insufficient data: < 10 alerts or < 1.0h exposure].*
 
 ### 4.2 Regime B: Nominal Duty (~25–30% Faulted Time)
-*Total Monitoring Exposure = 31.25 hours.*
-
 | Fault Type | Exposure | Arm 1 (Fixed) | Arm 2 (Personal) | Arm 3a (+Kinematic) | Arm 3b (+Trust) | Arm 3b-noMotion |
 | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
 | **F0_CLEAN** | 21.67h | 3.51 (76 FA, 21.67h) | 5.77 (125 FA, 21.67h) | 1.62 (35 FA, 21.67h) | 1.85 (40 FA, 21.67h) | 2.91 (63 FA, 21.67h) |
@@ -244,19 +240,57 @@ Every comparison presents per-subject event recall alongside Clean FA/hr, the di
   - 95% Bootstrap CI on HL Median: $[-1.43, +0.23]\text{ FA/hr}$
   - **Conclusion:** Not Statistically Significant ($p \ge 0.05$).
 
+### 5.5 Detailed Analysis of F7 Subject-Level Heterogeneity (Post-Hoc Exploratory)
+1. **Drivers of F7 Recall Degradation in Arm 3b:**
+   - The pooled recall deficit in Arm 3b relative to Arm 3a ($58.0\%$ vs $64.3\%$, a $-6.3\text{ percentage point}$ drop) is driven almost entirely by **two specific subjects**:
+     - **S9:** Recall falls by **$-44.4\text{ percentage points}$** (from $66.7\%$ in 3a down to $22.2\%$ in 3b).
+     - **S12:** Recall falls by **$-40.0\text{ percentage points}$** (from $80.0\%$ in 3a down to $40.0\%$ in 3b).
+     - In 11 of the remaining 13 subjects, Arm 3b and Arm 3a achieve identical recall.
+   - Mechanism: Under optical corruption, the front-end spectral SQI drops sharply during true episodes in S9 and S12, driving $S_{\text{trust}}$ below $\theta_{\text{trust}} = 0.60$ even though wrist motion is low, thereby suppressing genuine alerts that Arm 3a's pure kinematic gate passes.
+2. **Subject-Level Heterogeneity in False Alert Rates:**
+   - **Where Arm 3b outperforms Arm 3a:** In subjects with severe motion artifact (the S5/S6/S11 stratum), the trust score gate blocks substantial false alerts that slip past the kinematic gate:
+     - **S5:** $3.78\text{ FA/hr}$ (3b) vs $8.83\text{ FA/hr}$ (3a), a reduction of **$-5.05\text{ FA/hr}$** (recall 100% in both).
+     - **S6:** $6.64\text{ FA/hr}$ (3b) vs $9.96\text{ FA/hr}$ (3a), a reduction of **$-3.32\text{ FA/hr}$** (recall 100% in both).
+     - **S11:** Identical at $1.42\text{ FA/hr}$ (recall 80% in both).
+   - **Where Arm 3a outperforms Arm 3b:** In other subjects, Arm 3a maintains a lower false alert rate:
+     - **S7:** $2.91\text{ FA/hr}$ (3b) vs $1.25\text{ FA/hr}$ (3a), difference $+1.67\text{ FA/hr}$.
+     - **S13:** $3.46\text{ FA/hr}$ (3b) vs $0.43\text{ FA/hr}$ (3a), difference $+3.02\text{ FA/hr}$.
+     - **S14:** $1.83\text{ FA/hr}$ (3b) vs $1.38\text{ FA/hr}$ (3a), difference $+0.46\text{ FA/hr}$.
+3. **Scientific Classification:**
+   - **Crucial note:** All subgroup analyses and subject-level breakdowns (S9/S12 recall vulnerability, S5/S6 vs S7/S13/S14 divergence) are **strictly post-hoc exploratory**. They were not formulated as a priori hypotheses and must not be used to assert general superiority in specific patient subgroups without prospective validation.
+
 ---
 
 ## 6. Implementation of F7 (Tier 2 Optical BVP Noise)
 
-1. **Protocol Specifications:**
-   - Evaluated as a **separate, standalone condition** (`data/processed/f7_cache/`), completely distinct from the clean cache and from Regimes A/B.
-   - Fault domain: **Tier 2 raw optical sensor signal** (raw 64 Hz PPG BVP).
-   - Noise model: Motion-correlated additive Gaussian noise injected at **$\text{SNR} = +5\text{ dB}$** during active wrist motion epochs ($\text{ENMO} \ge 0.10g$).
-2. **Re-estimation of PPG Estimator:**
-   - The Step 3a front-end spectral peak PPG HR estimator (`vitasense.ppg.estimator.estimate_hr_spectral_peak`) was re-run from scratch across the contaminated 64 Hz BVP signal for all 15 subjects.
-   - Spectral SQI and derived wrist HR estimates were recomputed over 8-second sliding windows with a 2-second step.
-3. **Distinction from Combined Regime:**
-   - **Crucial scientific note:** F7 was tested strictly in isolation to evaluate the resilience of the spectral front-end estimator to physical motion artifacts. It **differs from a combined regime** where Tier 1 derived faults (F1–F6) and Tier 2 optical noise (F7) co-occur simultaneously.
+### 6.1 Code Implementation and Exact Parameters
+- **Noise Injection Function:** `FaultInjector.inject_noise`
+- **Source File:** `vitasense/benchmarks/fault_injection.py` (lines 382–446)
+- **Invocation Context:** `scripts/build_f7_cache.py` (`build_f7_cache_for_subject`, lines 57–63)
+- **Input Signal:** Raw 64 Hz optical photoplethysmogram (`signal = data["signal"]["wrist"]["BVP"].flatten()`).
+- **Parameters:**
+  - `severity = FaultSeverity.MED` $\implies$ Target Signal-to-Noise Ratio: **$\text{SNR} = +5.0\text{ dB}$**.
+  - `motion_acc`: Interpolated 64 Hz wrist 3D accelerometer magnitude (`np.repeat(np.linalg.norm(acc_32hz, axis=1), 2)[:len(bvp)]`).
+- **Mathematical Formulation:**
+  $$\sigma^2_{\text{noise}} = \frac{\sigma^2_{\text{clean}}}{10^{(\text{SNR}_{\text{dB}}/10)}} = \frac{\sigma^2_{\text{clean}}}{10^{0.5}} \approx \frac{\sigma^2_{\text{clean}}}{3.1623}$$
+  $$\epsilon(t) \sim \mathcal{N}(0, \sigma^2_{\text{noise}})$$
+  $$E_{\text{norm}}(t) = \frac{|\mathbf{a}(t)|}{\frac{1}{N}\sum_{\tau} |\mathbf{a}(\tau)| + 10^{-6}}$$
+  $$BVP_{\text{corrupted}}(t) = BVP(t) + \epsilon(t) \cdot E_{\text{norm}}(t)$$
+- **Motion Modulation Mechanism:**
+  - The additive zero-mean Gaussian noise is scaled continuously sample-by-sample by the normalized 3D accelerometer magnitude ($E_{\text{norm}}(t)$).
+- **Estimator Re-run:**
+  - Estimator Class: `WristPPGHREstimator`
+  - Source File: `vitasense/estimators/ppg_hr_estimator.py` (lines 20–30 in `scripts/build_f7_cache.py`), window length 8.0 s, step 2.0 s.
+  - Generates derived heart rate estimates (`hr_ppg`), spectral signal quality index (`spectral_sqi`), and dominant frequency (`dominant_freq_hz`) across all 15 subjects.
+- **Cache File Paths and Names:**
+  - Cached flat in: `data/processed/{sid}_f7_ppg_cache.npz` (files: `S1_f7_ppg_cache.npz` through `S15_f7_ppg_cache.npz`).
+  - Completely preserves the clean no-fault cache: `data/processed/{sid}_ppg_cache.npz`.
+
+### 6.2 Correction of Erroneous Prior Report Descriptions
+- **Correction 1 (Motion Gating vs Continuous Modulation):** An earlier draft report stated that F7 noise was *"injected during active motion epochs ($\text{ENMO} \ge 0.10g$)"*. **That description was incorrect.** In the actual code, there is no discrete ENMO thresholding or binary gating inside `FaultInjector.inject_noise`. Instead, Gaussian noise at target SNR $+5\text{ dB}$ is continuously multiplied across the entire session by normalized accelerometer magnitude $E_{\text{norm}}(t)$.
+- **Correction 2 (Estimator Module Path):** The earlier draft report cited `vitasense/ppg/estimator.py`. **That path was incorrect.** The actual class used in cache generation is `WristPPGHREstimator` from `vitasense/estimators/ppg_hr_estimator.py`.
+- **Correction 3 (Cache Directory Path):** An earlier mention referenced `data/processed/f7_cache/`. The cache files are stored directly in `data/processed/` with the `{sid}_f7_ppg_cache.npz` naming pattern.
+- **Scientific Distinction:** F7 was evaluated strictly as a standalone condition to isolate front-end spectral estimator breakdown under optical noise. It **differs from a combined regime** where Tier 1 telemetry faults (F1–F6) and Tier 2 raw optical noise (F7) co-occur simultaneously.
 
 ---
 
@@ -313,7 +347,42 @@ Hyperparameters were tuned inside the training folds of the 15 Leave-One-Subject
 
 ---
 
-## 8. Scientific Limitations & Threats to Validity
+## 8. Protocol Deviations and Post-Result Decisions
+
+To maintain scientific integrity, this section catalogues every formal amendment, pipeline defect correction, and post-result hyperparameter or design decision along with its date and git commit hash:
+
+1. **Protocol Amendment 1 (Resting Window Definition & Natural Event Prevalence):**
+   - **Date:** 2026-10-19 14:05:51 / Ratified 2026-10-19 14:56:41
+   - **Commits:** `75f10d4`, ratified in `3b1f2f6` (tag `protocol-freeze-v2`).
+   - **Decision:** Natural events in PPG-DaLiA were found to be predominantly exercise-induced (0 resting tachycardia events). Defined resting baseline windows using activity labels (`activity == 1`) and ENMO motion gating to enable resting baseline calibration.
+2. **ENMO Acceleration Unit Discrepancy & Sanity Check Bug Fix:**
+   - **Date:** 2026-10-19 14:24:11 / 14:48:31
+   - **Commits:** `3a5ccc2`, `1dd80b2`.
+   - **Deviation/Fix:** PPG-DaLiA accelerometer data were stored in units of $g$ ($\text{norm} \approx 1.0$), whereas early calculation scripts assumed $\text{m/s}^2$ ($9.81\text{ m/s}^2$). Enforced explicit sanity check `0.80g <= median(|ACC|) <= 1.20g` and calibrated ENMO calculation.
+3. **Protocol Amendment 2 (Synthetic Tachycardia Injection Engine):**
+   - **Date:** 2026-10-19 14:56:41
+   - **Commit:** `3b1f2f6` (tag `protocol-freeze-v2`), implementation in `696fd00` (2026-10-19 15:18:44).
+   - **Decision:** Added Step 3b-i synthetic tachycardia injection across clean resting periods in all 15 subjects to create ground-truth acute distress episodes under controlled physiological parameters.
+4. **Adaptive Ramp Rule & 60s Minimum Inter-Episode Gap (Protocol Amendment 3):**
+   - **Date:** 2026-10-19 16:25:29 (ratification) / 2026-10-19 17:01:22 (gap enforcement)
+   - **Commits:** `a0d682a` (tag `protocol-freeze-v3`), `0bf4ca4`.
+   - **Decision:** The injector ramp duration was adaptively shortened when resting block duration was insufficient to prevent truncating episodes; enforced a strict minimum inter-episode gap of $60\text{s}$ (reducing episodes from 115 to 112) to prevent overlapping refractory periods. Ratified pulse sensing limitation and added Arm 3b-noMotion ablation.
+5. **Preliminary Arms 1–2 Results & Grid Widening Decision:**
+   - **Date:** 2026-10-19 17:42:25 (draft) / 2026-10-19 17:46:25 (ratification)
+   - **Commits:** `cad4c7f`, ratified in `a9ce657` (tag `protocol-freeze-v4`).
+   - **Decision:** Preliminary evaluation of raw thresholding showed unacceptably high false alert rates ($\sim 100\text{ FA/hr}$) and persistent boundary selections. The candidate search grids were widened: Arm 1 threshold $\tau_{\text{pop}}$ expanded from $\{100, 110, 120\}$ to include $\{125, 130\}\text{ bpm}$; Arm 2 multiplier $k$ expanded from $\{2.0, 2.5, 3.0\}$ to include $\{3.5, 4.0\}$.
+6. **Refractory Period Choice ($R = 60\text{s}$):**
+   - **Date:** 2026-10-19 17:46:25 / 17:53:55
+   - **Commits:** `a9ce657`, `d55d432`.
+   - **Decision:** Proposed $R = 120\text{s}$ was rejected because 5 of 112 injected episodes started within $120\text{s}$ of the previous episode. Chose $R = 60\text{s}$ to exactly match the minimum inter-episode gap, guaranteeing zero true episodes are suppressed by refractory hold-off.
+7. **Invocation of Fallback Selection Rule for Arm 2:**
+   - **Date:** 2026-10-19 17:46:25 / 18:09:13
+   - **Commits:** `a9ce657`, `f92ca8d`.
+   - **Decision:** Pre-specified tuning protocol required candidate combinations to reach $\ge 85\%$ recall on the training set. When Arm 2 failed to reach $85\%$ on any training fold (maximum achieved $\approx 80.4\%$), the fallback rule (maximize recall) was triggered across 100% of folds, locking Arm 2 to $k = 2.0, P = 10\text{s}$.
+
+---
+
+## 9. Scientific Limitations & Threats to Validity
 
 1. **Synthetic Alert Injection:**
    - Injected tachycardia episodes were synthetically added to the derived ambulatory wrist-PPG HR stream rather than occurring naturally. Consequently, absolute recall values are intrinsically tied to the synthetic injection distribution (plateau HRs sampled from 105–135 bpm).
