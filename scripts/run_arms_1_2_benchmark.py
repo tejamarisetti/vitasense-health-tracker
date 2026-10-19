@@ -1,18 +1,18 @@
 """
 VitaSense AI - Benchmark Runner for Arms 1 and 2 under LOSO Cross-Validation
-Protocol Section 4 (Frozen v1.0.0) & Amendment 3 (Sections 2, 4, 6)
+Protocol Section 4 (Frozen v1.0.0) & Amendments 3 and 4
 
 Evaluates:
-- Arm 1: Fixed Threshold (tau_pop in {100, 110, 120} bpm)
-- Arm 2: Personal Baseline with Shrinkage (k in {2.0, 2.5, 3.0}, kappa in {0.5, 1.0, 2.0} hours)
+- Arm 1: Fixed Threshold (tau_pop in {100, 110, 120, 125, 130} bpm, P in {10, 20, 30}s, R = 60s)
+- Arm 2: Personal Baseline with Shrinkage (k in {2.0, 2.5, 3.0, 3.5, 4.0}, kappa in {0.5, 1.0, 2.0}h, P in {10, 20, 30}s, R = 60s)
 
-LOSO Tuning Protocol:
+LOSO Tuning Protocol (Amendment 4):
 - Full 15-subject Leave-One-Subject-Out cross-validation.
-- Hyperparameter selection is conducted strictly inside the training folds (N-1 subjects).
+- Hyperparameter selection (tau, P) and (k, kappa, P) is conducted strictly inside the training folds (N-1 subjects).
 - Selection rule: Choose candidate achieving pooled training Recall >= 85% with minimum FA/hr;
-  if none achieves 85%, maximize recall.
+  if none achieves 85%, maximize recall (Amendment 4 Section 2).
 - Evaluated on test fold; reported per subject and pooled (All-15, Without-S5, and S5/S6/S11).
-- Labeled: "preliminary, Arms 1-2, no faults".
+- Labeled: "preliminary, Arms 1-2, no faults, Amendment 4".
 """
 
 import sys
@@ -25,6 +25,7 @@ ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
     sys.path.insert(0, str(ROOT))
 
+from vitasense.benchmarks.alert_emitter import StandardAlertEmitter
 from vitasense.benchmarks.alerting_arms import (
     Arm1FixedThreshold,
     Arm2PersonalBaselineShrinkage,
@@ -94,71 +95,31 @@ def compute_pop_priors(train_sids: List[str], subjects_data: Dict[str, Any], the
     return mu_pop, sigma_pop
 
 
-def tune_arm1(train_sids: List[str], subjects_data: Dict[str, Any]) -> Tuple[float, Dict[str, Any]]:
-    """Tunes Arm 1 tau_pop in {100, 110, 120} bpm strictly inside training folds."""
-    grid = [100.0, 110.0, 120.0]
-    candidate_results = []
+def tune_arm1(train_sids: List[str], subjects_data: Dict[str, Any]) -> Tuple[Tuple[float, float], Dict[str, Any]]:
+    """
+    Tunes Arm 1 (tau_pop in {100, 110, 120, 125, 130} bpm, P in {10, 20, 30}s, R=60s)
+    strictly inside training folds per Amendment 4.
+    """
+    tau_grid = [100.0, 110.0, 120.0, 125.0, 130.0]
+    p_grid = [10.0, 20.0, 30.0]
+    r_sec = 60.0
+    step_sec = 2.0
 
-    for tau in grid:
+    # Precompute raw conditions for each tau across training subjects
+    raw_conditions: Dict[float, Dict[str, np.ndarray]] = {}
+    for tau in tau_grid:
+        raw_conditions[tau] = {}
         arm = Arm1FixedThreshold(tau_pop=tau)
-        total_tp = 0
-        total_episodes = 0
-        total_fa = 0
-        total_non_event_h = 0.0
-
         for sid in train_sids:
             d = subjects_data[sid]
             out = arm.predict(d["hr_eval"])
-            res = score_alert_stream(
-                alert_mask=out.alert_mask,
-                injected_episodes=d["injected_episodes"],
-                natural_events=d["natural_events"],
-                step_sec=d["step_sec"],
-                subject_id=sid,
-            )
-            total_tp += res.event_scoring.true_positives
-            total_episodes += res.event_scoring.n_injected_episodes
-            total_fa += res.alert_rate.false_alerts
-            total_non_event_h += res.alert_rate.non_event_hours
+            raw_conditions[tau][sid] = out.raw_alert_mask
 
-        recall = total_tp / total_episodes if total_episodes > 0 else 0.0
-        fa_per_hour = total_fa / total_non_event_h if total_non_event_h > 0 else 0.0
-
-        candidate_results.append({
-            "tau_pop": tau,
-            "recall": recall,
-            "fa_per_hour": fa_per_hour,
-        })
-
-    # Selection: Recall >= 0.85 with lowest FA/hr; else highest recall
-    valid_candidates = [c for c in candidate_results if c["recall"] >= 0.85]
-    if valid_candidates:
-        best = min(valid_candidates, key=lambda c: c["fa_per_hour"])
-    else:
-        best = max(candidate_results, key=lambda c: c["recall"])
-
-    return best["tau_pop"], best
-
-
-def tune_arm2(
-    train_sids: List[str],
-    subjects_data: Dict[str, Any],
-    mu_pop: float,
-    sigma_pop: float,
-) -> Tuple[Tuple[float, float], Dict[str, Any]]:
-    """Tunes Arm 2 (k, kappa) strictly inside training folds."""
-    k_grid = [2.0, 2.5, 3.0]
-    kappa_grid = [0.5, 1.0, 2.0]
     candidate_results = []
 
-    for k in k_grid:
-        for kappa in kappa_grid:
-            arm = Arm2PersonalBaselineShrinkage(
-                k=k,
-                kappa_hours=kappa,
-                mu_pop=mu_pop,
-                sigma_pop=sigma_pop,
-            )
+    for tau in tau_grid:
+        for p in p_grid:
+            emitter = StandardAlertEmitter(p_persist_sec=p, r_refractory_sec=r_sec, step_sec=step_sec)
             total_tp = 0
             total_episodes = 0
             total_fa = 0
@@ -166,9 +127,10 @@ def tune_arm2(
 
             for sid in train_sids:
                 d = subjects_data[sid]
-                out = arm.predict(d["hr_eval"], d["enmo_10s"])
+                raw_mask = raw_conditions[tau][sid]
+                alert_mask = emitter.emit(raw_mask)
                 res = score_alert_stream(
-                    alert_mask=out.alert_mask,
+                    alert_mask=alert_mask,
                     injected_episodes=d["injected_episodes"],
                     natural_events=d["natural_events"],
                     step_sec=d["step_sec"],
@@ -183,18 +145,102 @@ def tune_arm2(
             fa_per_hour = total_fa / total_non_event_h if total_non_event_h > 0 else 0.0
 
             candidate_results.append({
-                "params": (k, kappa),
-                "k": k,
-                "kappa": kappa,
+                "params": (tau, p),
+                "tau_pop": tau,
+                "p_persist": p,
                 "recall": recall,
                 "fa_per_hour": fa_per_hour,
             })
 
+    # Selection Rule (Amendment 4 Section 2):
+    # Recall >= 0.85 with lowest FA/hr (tie-break higher recall); else max recall (tie-break lowest FA/hr)
     valid_candidates = [c for c in candidate_results if c["recall"] >= 0.85]
     if valid_candidates:
-        best = min(valid_candidates, key=lambda c: c["fa_per_hour"])
+        best = min(valid_candidates, key=lambda c: (c["fa_per_hour"], -c["recall"]))
     else:
-        best = max(candidate_results, key=lambda c: c["recall"])
+        best = max(candidate_results, key=lambda c: (c["recall"], c["fa_per_hour"]))
+
+    return best["params"], best
+
+
+def tune_arm2(
+    train_sids: List[str],
+    subjects_data: Dict[str, Any],
+    mu_pop: float,
+    sigma_pop: float,
+) -> Tuple[Tuple[float, float, float], Dict[str, Any]]:
+    """
+    Tunes Arm 2 (k in {2.0, 2.5, 3.0, 3.5, 4.0}, kappa in {0.5, 1.0, 2.0}h, P in {10, 20, 30}s, R=60s)
+    strictly inside training folds per Amendment 4.
+    """
+    k_grid = [2.0, 2.5, 3.0, 3.5, 4.0]
+    kappa_grid = [0.5, 1.0, 2.0]
+    p_grid = [10.0, 20.0, 30.0]
+    r_sec = 60.0
+    step_sec = 2.0
+
+    # Precompute raw conditions for each (k, kappa) across training subjects
+    raw_conditions: Dict[Tuple[float, float], Dict[str, np.ndarray]] = {}
+    for k in k_grid:
+        for kappa in kappa_grid:
+            pair = (k, kappa)
+            raw_conditions[pair] = {}
+            arm = Arm2PersonalBaselineShrinkage(
+                k=k,
+                kappa_hours=kappa,
+                mu_pop=mu_pop,
+                sigma_pop=sigma_pop,
+            )
+            for sid in train_sids:
+                d = subjects_data[sid]
+                out = arm.predict(d["hr_eval"], d["enmo_10s"])
+                raw_conditions[pair][sid] = out.raw_alert_mask
+
+    candidate_results = []
+
+    for k in k_grid:
+        for kappa in kappa_grid:
+            pair = (k, kappa)
+            for p in p_grid:
+                emitter = StandardAlertEmitter(p_persist_sec=p, r_refractory_sec=r_sec, step_sec=step_sec)
+                total_tp = 0
+                total_episodes = 0
+                total_fa = 0
+                total_non_event_h = 0.0
+
+                for sid in train_sids:
+                    d = subjects_data[sid]
+                    raw_mask = raw_conditions[pair][sid]
+                    alert_mask = emitter.emit(raw_mask)
+                    res = score_alert_stream(
+                        alert_mask=alert_mask,
+                        injected_episodes=d["injected_episodes"],
+                        natural_events=d["natural_events"],
+                        step_sec=d["step_sec"],
+                        subject_id=sid,
+                    )
+                    total_tp += res.event_scoring.true_positives
+                    total_episodes += res.event_scoring.n_injected_episodes
+                    total_fa += res.alert_rate.false_alerts
+                    total_non_event_h += res.alert_rate.non_event_hours
+
+                recall = total_tp / total_episodes if total_episodes > 0 else 0.0
+                fa_per_hour = total_fa / total_non_event_h if total_non_event_h > 0 else 0.0
+
+                candidate_results.append({
+                    "params": (k, kappa, p),
+                    "k": k,
+                    "kappa": kappa,
+                    "p_persist": p,
+                    "recall": recall,
+                    "fa_per_hour": fa_per_hour,
+                })
+
+    valid_candidates = [c for c in candidate_results if c["recall"] >= 0.85]
+    if valid_candidates:
+        best = min(valid_candidates, key=lambda c: (c["fa_per_hour"], -c["recall"]))
+    else:
+        best = max(candidate_results, key=lambda c: (c["recall"], c["fa_per_hour"]))
 
     return best["params"], best
 
@@ -204,23 +250,24 @@ def run_benchmark():
     all_sids = [f"S{i}" for i in range(1, 16)]
 
     results_arm1: Dict[str, BenchmarkScoringResult] = {}
-    selected_arm1: Dict[str, float] = {}
+    selected_arm1: Dict[str, Tuple[float, float]] = {}
 
     results_arm2: Dict[str, BenchmarkScoringResult] = {}
-    selected_arm2: Dict[str, Tuple[float, float]] = {}
+    selected_arm2: Dict[str, Tuple[float, float, float]] = {}
 
-    print("\nRunning LOSO Cross-Validation across 15 subjects...")
+    print("\nRunning LOSO Cross-Validation across 15 subjects (Amendment 4)...")
 
     for test_sid in all_sids:
         train_sids = [s for s in all_sids if s != test_sid]
 
         # 1. Arm 1 Tuning & Evaluation
-        best_tau, a1_tune_info = tune_arm1(train_sids, subjects_data)
-        selected_arm1[test_sid] = best_tau
+        (best_tau, best_p1), a1_tune = tune_arm1(train_sids, subjects_data)
+        selected_arm1[test_sid] = (best_tau, best_p1)
 
+        emitter1 = StandardAlertEmitter(p_persist_sec=best_p1, r_refractory_sec=60.0, step_sec=2.0)
         arm1 = Arm1FixedThreshold(tau_pop=best_tau)
         d_test = subjects_data[test_sid]
-        out1 = arm1.predict(d_test["hr_eval"])
+        out1 = arm1.predict(d_test["hr_eval"], emitter=emitter1)
         res1 = score_alert_stream(
             alert_mask=out1.alert_mask,
             injected_episodes=d_test["injected_episodes"],
@@ -232,16 +279,17 @@ def run_benchmark():
 
         # 2. Arm 2 Tuning & Evaluation
         mu_pop, sigma_pop = compute_pop_priors(train_sids, subjects_data)
-        best_params, a2_tune_info = tune_arm2(train_sids, subjects_data, mu_pop, sigma_pop)
-        selected_arm2[test_sid] = best_params
+        (best_k, best_kappa, best_p2), a2_tune = tune_arm2(train_sids, subjects_data, mu_pop, sigma_pop)
+        selected_arm2[test_sid] = (best_k, best_kappa, best_p2)
 
+        emitter2 = StandardAlertEmitter(p_persist_sec=best_p2, r_refractory_sec=60.0, step_sec=2.0)
         arm2 = Arm2PersonalBaselineShrinkage(
-            k=best_params[0],
-            kappa_hours=best_params[1],
+            k=best_k,
+            kappa_hours=best_kappa,
             mu_pop=mu_pop,
             sigma_pop=sigma_pop,
         )
-        out2 = arm2.predict(d_test["hr_eval"], d_test["enmo_10s"])
+        out2 = arm2.predict(d_test["hr_eval"], d_test["enmo_10s"], emitter=emitter2)
         res2 = score_alert_stream(
             alert_mask=out2.alert_mask,
             injected_episodes=d_test["injected_episodes"],
@@ -253,8 +301,8 @@ def run_benchmark():
 
         print(
             f"  {test_sid} evaluated: "
-            f"Arm 1 (tau={best_tau:.0f}) -> Rec={res1.event_scoring.recall*100:.1f}%, FA/hr={res1.alert_rate.false_alerts_per_hour:.2f} | "
-            f"Arm 2 (k={best_params[0]:.1f}, kap={best_params[1]:.1f}h) -> Rec={res2.event_scoring.recall*100:.1f}%, FA/hr={res2.alert_rate.false_alerts_per_hour:.2f}"
+            f"Arm 1 (tau={best_tau:.0f}, P={best_p1:.0f}s) -> Rec={res1.event_scoring.recall*100:.1f}%, FA/hr={res1.alert_rate.false_alerts_per_hour:.2f} | "
+            f"Arm 2 (k={best_k:.1f}, kap={best_kappa:.1f}h, P={best_p2:.0f}s) -> Rec={res2.event_scoring.recall*100:.1f}%, FA/hr={res2.alert_rate.false_alerts_per_hour:.2f}"
         )
 
     return subjects_data, results_arm1, selected_arm1, results_arm2, selected_arm2
@@ -299,18 +347,18 @@ def format_table(results_arm1, sel1, results_arm2, sel2):
     without_s5 = [s for s in all_sids if s != "S5"]
     stratum_s5_s6_s11 = ["S5", "S6", "S11"]
 
-    print("\n" + "=" * 125)
-    print("TABLE: preliminary, Arms 1-2, no faults")
-    print("Protocol Section 4 & Amendment 3 - Leave-One-Subject-Out (LOSO) Alerting Benchmark (Condition 0: Clean Background)")
-    print("=" * 125)
+    print("\n" + "=" * 140)
+    print("TABLE: preliminary, Arms 1-2, no faults, Amendment 4")
+    print("Protocol Section 4 & Amendment 4: LOSO Alerting Benchmark (Condition 0: Clean Background, R=60s Refractory Hold-off)")
+    print("=" * 140)
 
     header = (
         f"{'Subject':<8} | "
-        f"{'Arm 1 Selected':<14} {'Rec %':>7} {'Delay(TP)':>9} {'FA/hr':>8} {'FA':>5} {'NatA':>5} | "
-        f"{'Arm 2 Selected':<16} {'Rec %':>7} {'Delay(TP)':>9} {'FA/hr':>8} {'FA':>5} {'NatA':>5}"
+        f"{'Arm 1 Selected':<18} {'Rec %':>7} {'Delay(TP)':>9} {'FA/hr':>8} {'FA':>5} {'NatA':>5} | "
+        f"{'Arm 2 Selected (k, kappa)':<26} {'Rec %':>7} {'Delay(TP)':>9} {'FA/hr':>8} {'FA':>5} {'NatA':>5}"
     )
     print(header)
-    print("-" * 125)
+    print("-" * 140)
 
     for sid in all_sids:
         r1 = results_arm1[sid]
@@ -321,23 +369,23 @@ def format_table(results_arm1, sel1, results_arm2, sel2):
         r1_fa_hr = r1.alert_rate.false_alerts_per_hour
         r1_fa = r1.alert_rate.false_alerts
         r1_nata = r1.alert_rate.natural_alerts
-        p1 = f"tau={sel1[sid]:.0f}"
+        p1 = f"tau={sel1[sid][0]:.0f}, P={sel1[sid][1]:.0f}s"
 
         r2_rec = r2.event_scoring.recall * 100.0
         r2_delay = f"{r2.event_scoring.median_delay_sec:.1f}s" if r2.event_scoring.median_delay_sec is not None else "N/A"
         r2_fa_hr = r2.alert_rate.false_alerts_per_hour
         r2_fa = r2.alert_rate.false_alerts
         r2_nata = r2.alert_rate.natural_alerts
-        p2 = f"k={sel2[sid][0]:.1f},k={sel2[sid][1]:.1f}h"
+        p2 = f"k={sel2[sid][0]:.1f}, kap={sel2[sid][1]:.1f}h, P={sel2[sid][2]:.0f}s"
 
         row = (
             f"{sid:<8} | "
-            f"{p1:<14} {r1_rec:>6.1f}% {r1_delay:>9} {r1_fa_hr:>8.2f} {r1_fa:>5} {r1_nata:>5} | "
-            f"{p2:<16} {r2_rec:>6.1f}% {r2_delay:>9} {r2_fa_hr:>8.2f} {r2_fa:>5} {r2_nata:>5}"
+            f"{p1:<18} {r1_rec:>6.1f}% {r1_delay:>9} {r1_fa_hr:>8.2f} {r1_fa:>5} {r1_nata:>5} | "
+            f"{p2:<26} {r2_rec:>6.1f}% {r2_delay:>9} {r2_fa_hr:>8.2f} {r2_fa:>5} {r2_nata:>5}"
         )
         print(row)
 
-    print("-" * 125)
+    print("-" * 140)
 
     # Pooled strata
     for name, sids in [
@@ -349,18 +397,19 @@ def format_table(results_arm1, sel1, results_arm2, sel2):
         p2 = pool_metrics(sids, results_arm2)
 
         row = (
-            f"{name:<25} "
+            f"{name:<29} "
             f"{p1['recall']:>6.1f}% {p1['med_delay']:>8.1f}s {p1['fa_per_hour']:>8.2f} {p1['false_alerts']:>5} {p1['natural_alerts']:>5} | "
-            f"{'':<16} {p2['recall']:>6.1f}% {p2['med_delay']:>8.1f}s {p2['fa_per_hour']:>8.2f} {p2['false_alerts']:>5} {p2['natural_alerts']:>5}"
+            f"{'':<26} {p2['recall']:>6.1f}% {p2['med_delay']:>8.1f}s {p2['fa_per_hour']:>8.2f} {p2['false_alerts']:>5} {p2['natural_alerts']:>5}"
         )
         print(row)
-    print("=" * 125)
+    print("=" * 140)
     print("Notes:")
     print("  1. Rec %: Event-level recall on injected synthetic tachycardia episodes.")
     print("  2. Delay(TP): Median onset detection delay (seconds) evaluated strictly over detected true-positive episodes.")
     print("  3. FA: Clean false alerts outside all injected episodes AND outside natural Amendment 1 events (+/-30s buffer).")
-    print("  4. NatA: Alerts occurring inside natural Amendment 1 event buffers (+/-30s), reported separately (S5: 185, S6: 3 in Arm 1; S5: 2, S6: 0 in Arm 2).")
+    print("  4. NatA: Alerts occurring inside natural Amendment 1 event buffers (+/-30s), reported separately.")
     print("  5. FA/hr: Clean False Alerts / Total Non-Event Monitoring Hours.")
+    print("  6. Arm 2 Selected: Outlier multiplier k and shrinkage strength kappa (kap) are tuned and reported separately.")
 
 
 if __name__ == "__main__":

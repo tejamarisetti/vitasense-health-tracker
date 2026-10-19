@@ -29,6 +29,8 @@ from dataclasses import dataclass, field
 from typing import Any, Dict, List, Optional, Sequence, Tuple, Set
 import numpy as np
 
+from vitasense.benchmarks.alert_emitter import StandardAlertEmitter
+
 
 PROHIBITED_INPUT_KEYS: Set[str] = {
     "activity",
@@ -66,6 +68,7 @@ def validate_arm_inputs(**kwargs: Any) -> None:
 class ArmOutput:
     """Standardized output of an alerting arm."""
     alert_mask: np.ndarray
+    raw_alert_mask: Optional[np.ndarray] = None
     threshold_series: Optional[np.ndarray] = None
     abstain_mask: Optional[np.ndarray] = None
     metadata: Dict[str, Any] = field(default_factory=dict)
@@ -74,32 +77,38 @@ class ArmOutput:
 class Arm1FixedThreshold:
     """
     Arm 1: Fixed Population Threshold Alerting (Clinical Guideline Baseline).
-    Protocol Section 4.1 & Amendment 3 Section 6.5.
-    Grid: tau_pop in {100.0, 110.0, 120.0} bpm.
+    Protocol Section 4.1, Amendment 3 Section 6.5 & Amendment 4 Section 3.
+    Grid: tau_pop in {100.0, 110.0, 120.0, 125.0, 130.0} bpm.
     """
 
     def __init__(self, tau_pop: float = 100.0, **kwargs: Any):
         validate_arm_inputs(**kwargs)
-        if tau_pop not in {100.0, 110.0, 120.0}:
-            # Allow any float if requested, but validate nominal values
-            pass
         self.tau_pop = float(tau_pop)
 
-    def predict(self, hr_series: np.ndarray, **kwargs: Any) -> ArmOutput:
+    def predict(
+        self,
+        hr_series: np.ndarray,
+        emitter: Optional[StandardAlertEmitter] = None,
+        **kwargs: Any,
+    ) -> ArmOutput:
         """
-        Emits alert when hr_series > tau_pop.
+        Emits alert when hr_series > tau_pop, filtered through standardized emitter.
 
         Parameters
         ----------
         hr_series : np.ndarray
             Evaluated wrist-PPG heart rate time series (bpm).
+        emitter : StandardAlertEmitter, optional
+            Shared alert emitter enforcing persistence P and refractory R.
         """
         validate_arm_inputs(**kwargs)
         hr_arr = np.asarray(hr_series, dtype=float)
-        alert_mask = (hr_arr > self.tau_pop) & np.isfinite(hr_arr)
+        raw_mask = (hr_arr > self.tau_pop) & np.isfinite(hr_arr)
+        alert_mask = emitter.emit(raw_mask) if emitter is not None else raw_mask
         thresh = np.full(len(hr_arr), self.tau_pop, dtype=float)
         return ArmOutput(
             alert_mask=alert_mask,
+            raw_alert_mask=raw_mask,
             threshold_series=thresh,
             abstain_mask=None,
             metadata={"arm": "Arm1_FixedThreshold", "tau_pop": self.tau_pop},
@@ -153,10 +162,11 @@ class Arm2PersonalBaselineShrinkage:
         self,
         hr_series: np.ndarray,
         enmo_10s: np.ndarray,
+        emitter: Optional[StandardAlertEmitter] = None,
         **kwargs: Any,
     ) -> ArmOutput:
         """
-        Emits alert when hr_series > tau_i(t).
+        Emits alert when hr_series > tau_i(t), filtered through standardized emitter.
 
         Parameters
         ----------
@@ -164,6 +174,8 @@ class Arm2PersonalBaselineShrinkage:
             Evaluated wrist-PPG heart rate series (bpm).
         enmo_10s : np.ndarray
             Smoothed 10-second wrist ENMO dynamic acceleration (g).
+        emitter : StandardAlertEmitter, optional
+            Shared alert emitter enforcing persistence P and refractory R.
         """
         validate_arm_inputs(**kwargs)
         hr_arr = np.asarray(hr_series, dtype=float)
@@ -205,10 +217,12 @@ class Arm2PersonalBaselineShrinkage:
 
         # Dynamic personal threshold
         tau_series = np.maximum(self.tau_floor, mu_hat + self.k * std_hat)
-        alert_mask = (hr_arr > tau_series) & np.isfinite(hr_arr)
+        raw_mask = (hr_arr > tau_series) & np.isfinite(hr_arr)
+        alert_mask = emitter.emit(raw_mask) if emitter is not None else raw_mask
 
         return ArmOutput(
             alert_mask=alert_mask,
+            raw_alert_mask=raw_mask,
             threshold_series=tau_series,
             abstain_mask=None,
             metadata={
@@ -219,3 +233,4 @@ class Arm2PersonalBaselineShrinkage:
                 "sigma_pop": self.sigma_pop,
             },
         )
+
