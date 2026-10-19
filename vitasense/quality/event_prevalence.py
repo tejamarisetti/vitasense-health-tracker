@@ -66,7 +66,17 @@ def compute_enmo(
             f"Data must be in units of g (as provided in PPG-DaLiA SX.pkl), not raw unscaled integer counts."
         )
 
+    # Second explicit check:
+    # Median acceleration magnitude over the recording must be near 1.0g (0.8g to 1.2g),
+    # corresponding to stationary Earth gravity. Raw counts (~64g) or double-scaled data (~0.016g) are invalid.
     norms = np.linalg.norm(acc, axis=1)
+    med_norm = float(np.nanmedian(norms))
+    if not (0.8 <= med_norm <= 1.2):
+        raise ValueError(
+            f"Median wrist ACC magnitude {med_norm:.4f}g outside expected physical baseline [0.8, 1.2]g. "
+            f"Data must be in units of g. Raw integer counts (~64) or double-scaled data (~0.016) are invalid."
+        )
+
     enmo_instant = np.maximum(0.0, norms - 1.0)
 
     samples_per_step = int(round(step_sec * fs_acc))

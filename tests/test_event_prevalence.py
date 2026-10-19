@@ -25,13 +25,13 @@ def test_compute_enmo_stationary_and_moving():
     assert np.allclose(step_vals, 0.0, atol=1e-6)
     assert np.allclose(ma_vals, 0.0, atol=1e-6)
 
-    # 2. Moving wrist (1.5g magnitude, should give ENMO = 0.5g)
+    # 2. Moving wrist (60% stationary 1.0g, 40% moving 1.5g -> median = 1.0g, moving windows ENMO = 0.5g)
     acc_moving = np.zeros((320, 3))
-    acc_moving[:, 2] = 1.5
-
-    step_moving, ma_moving = compute_enmo(acc_moving, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
-    assert np.allclose(step_moving, 0.5, atol=1e-6)
-    assert np.allclose(ma_moving, 0.5, atol=1e-6)
+    acc_moving[:192, 2] = 1.0   # first 3 windows (6.0s) stationary 1.0g
+    acc_moving[192:, 2] = 1.5   # last 2 windows (4.0s) moving 1.5g
+    step_moving, _ = compute_enmo(acc_moving, fs_acc=32.0, step_sec=2.0, ma_sec=2.0)
+    assert np.allclose(step_moving[:3], 0.0, atol=1e-6)
+    assert np.allclose(step_moving[3:], 0.5, atol=1e-6)
 
     # 3. Explicit check: wrong units (raw 1/64g integers such as 64.0) must raise ValueError
     acc_raw_64 = np.zeros((320, 3))
@@ -44,6 +44,22 @@ def test_compute_enmo_stationary_and_moving():
     acc_below[:, 0] = -3.5
     with pytest.raises(ValueError, match="outside expected physical range"):
         compute_enmo(acc_below, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
+
+    # 5. Explicit check (b): double-scaled data (~0.016g, i.e., divided by 64 twice)
+    # Range is within [-2, +2], but median magnitude fails [0.8, 1.2]g baseline
+    acc_double_scaled = np.zeros((320, 3))
+    acc_double_scaled[:, 2] = 1.0 / 64.0  # 0.015625g
+    with pytest.raises(ValueError, match="outside expected physical baseline"):
+        compute_enmo(acc_double_scaled, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
+
+    # 6. Explicit check (c): correct data (~1.0g stationary gravity) executes cleanly
+    acc_correct = np.zeros((320, 3))
+    acc_correct[:, 0] = 0.577
+    acc_correct[:, 1] = 0.577
+    acc_correct[:, 2] = 0.577  # norm = sqrt(3 * 0.577^2) = 0.9994g
+    step_c, ma_c = compute_enmo(acc_correct, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
+    assert len(step_c) == 5
+    assert np.allclose(step_c, 0.0, atol=1e-3)
 
 
 def test_align_activity_to_windows():
