@@ -207,14 +207,14 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 
 ---
 
-### Draft Amendment 3: Alerting Benchmark Evaluation Design, Leakage Enforcement, Conformal Calibration, and Synthetic Injection Parameter Reconciliation
+### Amendment 3: Alerting Benchmark Evaluation Design, Leakage Enforcement, Conformal Calibration, and Synthetic Injection Parameter Reconciliation
 - **Date:** 2026-10-19
-- **Status:** DRAFT (Submitted for user review and approval only; not ratified).
+- **Status:** **Ratified by user, 2026-10-19**.
 - **Study Classification:** **Exploratory Study**. All statistical inferences, effect sizes, and p-values are pre-specified as an exploratory investigation of wearable alerting under synthetic fault injection and Option (a) rate elevation.
 - **Reason for Amendment:**
-  Establish non-negotiable architectural boundaries preventing data leakage into alerting ablation arms; specify the arm input stream as the real motion-corrupted wrist-PPG HR estimate from Step 3a; restate core hypothesis $H_1$ as an estimation question; count fault-window alerts as false alarms and disaggregate per fault type; rewrite Arm 4 conformal calibration to use strictly deployment-available signals (low-ENMO windows); freeze trust-score weights to `vitasense.quality.trust_score` v1.0.0; specify dual fault-duty regimes (~10% and ~25–30%); add F7 raw BVP noise before the estimator; adopt $T_{\text{gap}} = 60\text{s}$ with a post-ratification commit requirement; and establish reporting caveats for S5/S6 baseline clustering and jump-size stratification.
+  Establish non-negotiable architectural boundaries preventing data leakage into alerting ablation arms; specify the arm input stream as the real motion-corrupted wrist-PPG HR estimate from Step 3a; explicitly document the benchmark scope limitation (tests alert logic on noisy stream, not pulse sensing); quarantine ECG-derived $\tau_i$ and resting blocks strictly to harness placement and scoring; add ablation arm 3b-noMotion (trust score without motion); restate core hypothesis $H_1$ as an estimation question; count fault-window alerts as false alarms and disaggregate per fault type; rewrite Arm 4 conformal calibration to use strictly deployment-available signals (low-ENMO windows); freeze trust-score weights to `vitasense.quality.trust_score` v1.0.0; specify dual fault-duty regimes (~10% and ~25–30%); add F7 raw BVP noise before the estimator; adopt $T_{\text{gap}} = 60\text{s}$ with a post-ratification commit requirement; and establish reporting caveats for S5/S6 baseline clustering and jump-size stratification.
 
-#### Section 1: Core Hypothesis Formulation and Statistical Comparison
+#### Section 1: Core Hypothesis Formulation, Attribution, and Ablation Arms
 1. **Estimation-Based Hypothesis ($H_1$):**
    - The primary research question is formulated as an **estimation question**:
      $$\text{"What is the difference in False Alerts per Hour between Arm 3b and Arm 3a } (\Delta\text{FA/hr} = \text{FA/hr}_{\text{Arm 3b}} - \text{FA/hr}_{\text{Arm 3a}}), \text{ quantified with a 95\% subject-bootstrap confidence interval?"}$$
@@ -222,7 +222,11 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 2. **ACC Signal Sharing and Attribution Note:**
    - Both Arm 3a (kinematic gate only) and Arm 3b (multi-attribute trust score gate) share the **exact same 3D wrist accelerometer (ACC) kinematic gating signal** ($\overline{\text{ENMO}}_{10\text{s}} \le \theta_{\text{rest}}$).
    - Therefore, the comparison between Arm 3b and Arm 3a directly isolates and tests **whether the software trust score $S_{\text{trust}}$ adds anything beyond motion** (kinematic gating alone).
-3. **Statistical Inference & Effect Sizes (Exploratory Study):**
+3. **Ablation Arm "3b-noMotion":**
+   - To dissect the independent contribution of non-kinematic trust score components, evaluate **Arm 3b-noMotion**: the multi-attribute trust score evaluated **without the motion term** ($S_{\text{trust, noMotion}} = S_{\text{gap}} \cdot S_{\text{stale}} \cdot S_{\text{phys}}$).
+   - Comparing Arm 3b-noMotion against Arm 2 and Arm 3b directly isolates whether software quality attributes (missing gap detection, flatline/stale detection, and physiological jump bounds) provide false alert protection independent of accelerometer motion gating.
+   - Arm 3b-noMotion is formally added to all headline metric reporting tables (FA/hr under no-fault, Regime A, Regime B, per-fault $F_1\text{--}F_7$, recall, and detection delay).
+4. **Statistical Inference & Effect Sizes (Exploratory Study):**
    - Paired two-sided Wilcoxon signed-rank test on per-subject FA/hr between Arm 3b and Arm 3a evaluated at significance level $\alpha_{\text{stat}} = 0.05$.
    - Effect size reporting: Paired rank-biserial correlation $r_{\text{rb}}$ and Hodges-Lehmann median difference estimator.
    - Confidence intervals: 95% Subject-Level Bootstrap Confidence Intervals (1,000 resamples).
@@ -266,13 +270,19 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
    - For every injected synthetic episode $k$, the rate elevation profile $\Delta HR_k(t) = HR_{\text{synth},k}(t) - HR_{\text{base},k}$ generated by `SyntheticTachycardiaInjector` (computed during verified resting periods) is mirrored directly into the wrist-PPG estimate stream:
      $$HR_{\text{eval}}(t) = HR_{\text{ppg}}(t) + \Delta HR_k(t) \quad \text{for } t \in [t_{\text{start},k}, t_{\text{end},k}]$$
    - This superimposes the deterministic rate acceleration directly onto the real-world baseline and motion-corrupted estimator noise without artificial smoothing.
-3. **Scoring Window Rule:**
+3. **Scope Limitation Disclosure:**
+   - Because synthetic tachycardia $\Delta HR(t)$ is added directly to the derived wrist-PPG heart rate estimate, **this benchmark tests alert decision logic on a realistic noisy stream, not the optical sensor's physical or front-end ability to detect an increased pulse rate from raw waveforms**.
+4. **Strict Quarantine of ECG-Derived Thresholds and Placement Variables:**
+   - The personal baseline threshold $\tau_i$ (computed from the ECG label stream during `BASELINE`) and the clean-resting-block selection mask (`is_resting`) are used **strictly and exclusively by the benchmark test harness for injector placement and for scoring**.
+   - Evaluated alerting arms **NEVER receive $\tau_i$ or the resting mask**. If an arm requires a personal baseline (e.g. Arm 2, Arm 3, Arm 4), it must compute its own threshold from its permitted input stream.
+5. **Scoring Window Rule:**
    - Event detection scoring (True Positives, False Negatives, recall, and detection delay) uses **injected-episode times only** ($[t_{\text{start},k}, t_{\text{end},k}]$).
-4. **Prohibited Inputs:** Alerting arms must **NEVER** receive or inspect:
+6. **Prohibited Inputs:** Alerting arms must **NEVER** receive or inspect:
    - The synthetic injector's resting mask (`is_resting`).
    - Ground-truth protocol activity tags (`activity` / `act_aligned`).
    - Ground-truth event indicators, onset times, or durations (`synthetic_mask`, `event_type`, `InjectedEpisode`).
-5. **Activity Label Role:** Protocol activity labels are strictly restricted to ground-truth performance evaluation and scoring; they may **NEVER** serve as an arm input, feature, or conditioning variable.
+   - ECG reference label arrays (`label`) or ECG-derived personal thresholds ($\tau_i$).
+7. **Activity Label Role:** Protocol activity labels are strictly restricted to ground-truth performance evaluation and scoring; they may **NEVER** serve as an arm input, feature, or conditioning variable.
 
 #### Section 5: Deterministic Fault-Injection Schedule, Dual-Duty Regimes, and F7 Optical Noise
 All injected faults are seeded deterministically (`seed = 42`), specified before any run, and applied strictly to non-event background monitoring time:
@@ -340,19 +350,19 @@ All injected faults are seeded deterministically (`seed = 42`), specified before
    - **Arm 2 (Personal Baseline with Shrinkage):** Outlier multiplier $k \in \{2.0, 2.5, 3.0\}$; shrinkage strength $\kappa \in \{0.5, 1.0, 2.0\}\text{ hours}$.
    - **Arm 3a (Kinematic Gate Only):** Motion rest threshold $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}g$ (nominal $0.05g$).
    - **Arm 3b (Multi-Attribute Trust Score Gate):** Trust gate threshold $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$.
+   - **Arm 3b-noMotion (Trust Gate without Motion):** $S_{\text{trust, noMotion}} \ge \theta_{\text{trust}}$ with $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$.
    - **Arm 4 (Conformal Abstention):** Miscoverage significance $\alpha \in \{0.05, 0.10\}$; trust penalty weight $\lambda \in \{0.5, 1.0\}$; uncertainty threshold $\theta_{\text{unc}} \in \{0.20, 0.30\}$.
 
 #### Section 7: Inter-Episode Gap Specification and Post-Ratification Implementation Requirement
 1. **Adoption of $T_{\text{gap}} = 60\text{s}$:**
-   - Adopt minimum inter-episode gap $T_{\text{gap}} = 60\text{ seconds}$ in Draft Amendment 3.
+   - Adopt minimum inter-episode gap $T_{\text{gap}} = 60\text{ seconds}$ in Amendment 3.
 2. **Exact Episode Impact Across Cohort (3 Episodes Lost):**
    - **Subject S5 (582s block):** Drops from 5 episodes to 4 episodes (1 episode lost: Episode #5 at $t = 552\text{s}$).
    - **Subject S6 (634s block):** Drops from 6 episodes to 4 episodes (2 episodes lost: Episode #5 at $t = 494\text{s}$ and Episode #6 at $t = 594\text{s}$).
    - **Subjects S1–S4, S7–S15 (13 subjects):** 0 episodes lost.
    - **Cohort Total:** Drops from 115 episodes to 112 episodes.
-3. **Decision Hold & Post-Ratification Implementation Requirement:**
-   - The injector code remains strictly at $T_{\text{gap}} = 20\text{s}$ until this amendment is ratified.
-   - **Mandatory Post-Ratification Commit:** Immediately following user ratification of Amendment 3, a dedicated commit must:
+3. **Post-Ratification Implementation Requirement:**
+   - **Mandatory Post-Ratification Commit:** Immediately following ratification of Amendment 3, a dedicated commit must:
      a) Update `min_inter_event_gap_sec = 60.0` in `SyntheticTachycardiaInjector` (`vitasense/benchmarks/synthetic_alert_injection.py`).
      b) Add a dedicated unit test in `tests/test_synthetic_alert_injection.py` asserting that the minimum inter-episode gap between every pair of consecutive injected episodes across all 15 subjects is $\ge 60.0\text{ seconds}$.
      c) Re-generate and commit the updated 112-episode audit CSV files (`docs/synthetic_injection_audit.csv` and `results/synthetic_injection_audit.csv`).
@@ -371,7 +381,7 @@ All injected faults are seeded deterministically (`seed = 42`), specified before
 1. **Explicit Statement of Protocol Deviation:**
    - The adaptive ramp bounding rule implemented in `SyntheticTachycardiaInjector` **deviates from Amendment 2 as ratified**.
    - In ratified Amendment 2, onset ramp rate ($+2.0\text{ to } +4.0\text{ bpm/s}$ over $15\text{s}$) and target peak HR ($105.0\text{ to } 135.0\text{ bpm}$) were specified as independent uniform draws. However, over a fixed 15-second ramp, $\Delta HR = r_{\text{ramp}} \times 15\text{s} \in [30.0, 60.0]\text{ bpm}$. For participants with baseline HR below 75 bpm (e.g., S12 at 45 bpm), an independent draw of $r = 2.0\text{ bpm/s}$ yields a peak of only 75 bpm (violating the 105 bpm floor). For participants with baseline HR above 75 bpm (e.g., S5 at 93 bpm), an independent draw of $r = 4.0\text{ bpm/s}$ yields a peak of 153 bpm (violating the 135 bpm ceiling).
-2. **Adaptive Rule & Rationale (Proposed in Draft Amendment 3):**
+2. **Adaptive Rule & Rationale (Ratified in Amendment 3):**
    - Lower ramp bound is adaptively raised to $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$.
    - Upper ramp bound is adaptively lowered to $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$.
    - Plateau Ceiling & Floor Clamping: Values during the plateau exceeding 135.0 bpm due to baseline variability are clamped at 135.0 bpm; values below 105.0 bpm are clamped at 105.0 bpm.
@@ -388,9 +398,9 @@ All injected faults are seeded deterministically (`seed = 42`), specified before
 | **Amendment 2** | 2026-10-18 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects. Option (a) adopted as primary benchmark injection architecture into resting segments only with seed 42, tagging every episode SYNTHETIC; validates alert logic only. Natural events in S5, S6, S7, S11 treated descriptively only. Refined after viewing ground-truth prevalence only (no alerting or algorithm results); incorporates outlier handling rule (S5 dual reporting and minutes-based evaluation, S6/S11 sensitivity checks). | **Ratified by user, 2026-10-19** |
 | **Outlier Handling Rule** | 2026-10-18 | Dual reporting with/without S5; sensitivity checks with/without S6 and S11; non-independence of natural events; precision/recall restricted to synthetic events; S5 evaluated strictly in minutes above threshold. | **Ratified by user, 2026-10-19** |
 | **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added dual physical unit checks (range and median gravity baseline); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence and sensitivity tables. | **Implementation Correction** |
-| **Draft Amendment 3** | 2026-10-19 | Alerting benchmark evaluation design: restated $H_1$ as estimation question with 95% bootstrap CI and exploratory label, ACC sharing note for Arms 3a/3b, full 15-subject LOSO evaluation, wrist-PPG HR input stream with real motion errors from Step 3a estimator, fault-window alerts counted as false alarms with disaggregated FA/hr reporting per fault type and no-fault, deployment-only low-ENMO conformal calibration, fixed trust-score weights (`vitasense.quality.trust_score` v1.0.0), dual fault-duty regimes (~10% and ~25–30%), F7 raw BVP noise before estimator with SNR levels, adopted $T_{\text{gap}} = 60\text{s}$ with 3 lost episodes listed and post-ratification commit requirement, S5/S6 baseline clustering caveat, jump-size stratification, and adaptive ramp reconciliation. | **DRAFT (For user review only)** |
+| **Amendment 3** | 2026-10-19 | Alerting benchmark evaluation design: restated $H_1$ as estimation question with 95% bootstrap CI and exploratory label, ACC sharing note for Arms 3a/3b, full 15-subject LOSO evaluation, wrist-PPG HR input stream with real motion errors from Step 3a estimator, explicit scope limitation (tests alert logic on noisy stream, not pulse sensing), strict quarantine of ECG-derived $\tau_i$ and resting blocks, inclusion of ablation arm 3b-noMotion (trust score without motion term), fault-window alerts counted as false alarms with disaggregated FA/hr reporting per fault type and no-fault, deployment-only low-ENMO conformal calibration, fixed trust-score weights (`vitasense.quality.trust_score` v1.0.0), dual fault-duty regimes (~10% and ~25–30%), F7 raw BVP noise before estimator with SNR levels, adopted $T_{\text{gap}} = 60\text{s}$ with 3 lost episodes listed and post-ratification commit requirement, S5/S6 baseline clustering caveat, jump-size stratification, and adaptive ramp reconciliation. | **Ratified by user, 2026-10-19** |
 
-*(Note: Ratified Amendments 1 & 2 frozen under tag `protocol-freeze-v2`. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`.)*
+*(Note: Ratified Amendments 1, 2, and 3 frozen under tag `protocol-freeze-v3`. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`; tag `protocol-freeze-v2` remains permanently unmoved at commit `3b1f2f6`.)*
 
 
 
