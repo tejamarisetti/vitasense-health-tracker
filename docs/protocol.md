@@ -123,8 +123,8 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 ## 8. Protocol Amendments
 
 ### Amendment 1: Activity-Contextualized Alert Ground Truth
-- **Date:** 2026-10-18
-- **Status:** Pending user ratification (formulated strictly *a priori* before any wearable alerting experiment or evaluation).
+- **Date:** 2026-10-18 (Ratified by user, 2026-10-19)
+- **Status:** Ratified by user, 2026-10-19 (formulated strictly *a priori* before any wearable alerting experiment or evaluation).
 - **Affected Section:** Section 3.1 (PPG-DaLiA Alert Ground Truth).
 - **Reason for Amendment:**
   In real-world free-living datasets such as PPG-DaLiA (UCI ID 495), participants engage in daily physical exertion including stair climbing, outdoor cycling, walking, and table soccer. Normal human physiology elevates heart rate above 100 bpm during physical exercise to meet metabolic demands (physiological exercise-induced sinus tachycardia).
@@ -134,7 +134,7 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
   1. **Physiological Reference Criterion:**
      $$HR_{\text{ref, ECG}}(t) > \tau_i$$
      where $\tau_i = \max(100\text{ bpm}, \mu_{i,\text{rest}} + 2.5\sigma_{i,\text{rest}})$, computed directly from the chest ECG reference signal during authenticated resting/baseline intervals.
-  2. **Kinematic Resting Context Criterion (Draft Conjunctive Wording, Status: Pending User Ratification):**
+  2. **Kinematic Resting Context Criterion (Conjunctive Wording, Status: Ratified by user, 2026-10-19):**
      Wrist 3D accelerometer dynamic energy (Euclidean Norm Minus One, ENMO):
      $$\text{ENMO}(t) = \max\left(0, \sqrt{a_x^2(t) + a_y^2(t) + a_z^2(t)} - 1.0g\right)$$
      averaged over a 10-second moving window satisfies:
@@ -162,9 +162,9 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 
 ---
 
-### Draft Amendment 2: Labelled-SYNTHETIC Resting Tachycardia Injection Protocol
-- **Date:** 2026-10-18
-- **Status:** DRAFT (Submitted for user review and approval only; not ratified).
+### Amendment 2: Labelled-SYNTHETIC Resting Tachycardia Injection Protocol
+- **Date:** 2026-10-18 (Ratified by user, 2026-10-19)
+- **Status:** Ratified by user, 2026-10-19.
 - **Honest Disclosure:**
   *This amendment was drafted strictly after inspecting per-subject ground-truth event counts across the complete 15-subject PPG-DaLiA cohort (ground truth only, zero algorithm or model results). In the complete 15-subject cohort under the unified canonical implementation, natural resting tachycardia under Amendment 1 is observed in S5 (30 events, 36.5 min), S6 (5 events, 4.3 min), and S11 (2 events, 4.2 min) — with 2 additional brief episodes observed in S7 during un-filtered resting activity tags without kinematic gating. The remaining 11 to 12 subjects exhibit zero events. All natural events are reported descriptively only.*
   *Prevalence Sensitivity Grid Findings:* Across the full sensitivity grid ($\theta_{\text{rest}} \in \{0.03, 0.05, 0.10\}g$ and $T_{\text{persist}} \in \{15, 30, 60\}\text{s}$), total natural-event time across the 15 subjects ranges from 19.0 to 88.8 minutes (about 19 to 89 minutes), demonstrating that natural event totals and event counts are highly definition-dependent. Consequently, headline benchmark metrics (cross-subject precision, recall, detection delay, and F1) are computed strictly on injected synthetic events where event ground truth is deterministic and reproducible.
@@ -198,7 +198,7 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 
 ---
 
-### Natural Event and Outlier Handling Rule (Draft, Pending User Ratification)
+### Natural Event and Outlier Handling Rule (Ratified by user, 2026-10-19)
 1. **Dual Reporting:** All alerting benchmark results (false alert rate, detection delay, F1) will be reported both **with S5** and **without S5** to preserve transparency regarding single-subject sensitivity.
 2. **S5 Metrics Specification (Minutes Above Threshold):** Subject S5 is reported strictly in total minutes above threshold, not in event counts, because its events fragment one continuous elevated physiological state rather than representing discrete independent episodes.
 3. **Sensitivity Checks for S6 and S11:** In addition to S5 dual reporting, sensitivity checks reporting performance **with and without S6 and S11** will be provided in the appendix/supplementary results.
@@ -212,12 +212,13 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 | Revision / Amendment | Date | Description & Reason | Status |
 | :--- | :---: | :--- | :--- |
 | **Protocol v1.0.0 (Freeze)** | 2026-10-16 | Initial frozen experimental protocol defining core hypotheses $H_1\text{--}H_3$, fault taxonomy F1–F7, and LOSO cross-validation. | **FROZEN (Tag: `protocol-freeze-v1`)** |
-| **Amendment 1** | 2026-10-18 | Activity-contextualized alert ground truth ($HR > \tau_i$ during rest only) to prevent benign exercise from being counted as false alert events. Thresholds relabeled as design choices with sensitivity analysis following web fetch verification check. Honest disclosure of S1 inspection added. | **Pending user ratification** |
-| **Draft Amendment 2** | 2026-10-18 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects. Natural events in S5, S6, S7, S11 treated descriptively only. Details two injection architectures with pros/cons. Explicitly notes Option (a) validates alert logic only. | **DRAFT (For user review only)** |
-| **Outlier Handling Rule** | 2026-10-18 | Dual reporting with/without S5; sensitivity checks with/without S6 and S11; non-independence of natural events; precision/recall restricted to synthetic events. | **DRAFT (For user review only)** |
-| **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence table. | **Implementation Correction** |
+| **Amendment 1** | 2026-10-18 | Activity-contextualized alert ground truth ($HR > \tau_i$ during rest only) to prevent benign exercise from being counted as false alert events. Thresholds relabeled as design choices with sensitivity analysis following web fetch verification check. Honest disclosure of S1 inspection added. Refined after viewing ground-truth prevalence only (no alerting or algorithm results); fixes made: corrected redundant /64 accelerometer scaling bug, unified implementation in `vitasense.quality.event_prevalence`, and added explicit dual unit checks (physical range $[-3, +3]g$ and median norm $[0.8, 1.2]g$). | **Ratified by user, 2026-10-19** |
+| **Amendment 2** | 2026-10-18 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects. Option (a) adopted as primary benchmark injection architecture into resting segments only with seed 42, tagging every episode SYNTHETIC; validates alert logic only. Natural events in S5, S6, S7, S11 treated descriptively only. Refined after viewing ground-truth prevalence only (no alerting or algorithm results); incorporates outlier handling rule (S5 dual reporting and minutes-based evaluation, S6/S11 sensitivity checks). | **Ratified by user, 2026-10-19** |
+| **Outlier Handling Rule** | 2026-10-18 | Dual reporting with/without S5; sensitivity checks with/without S6 and S11; non-independence of natural events; precision/recall restricted to synthetic events; S5 evaluated strictly in minutes above threshold. | **Ratified by user, 2026-10-19** |
+| **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added dual physical unit checks (range and median gravity baseline); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence and sensitivity tables. | **Implementation Correction** |
 
-*(Note: When ratified by the user, git tag `protocol-freeze-v2` will be created. Tag `protocol-freeze-v1` remains permanently unmoved.)*
+*(Note: Ratified by user on 2026-10-19; git tag `protocol-freeze-v2` created. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`.)*
+
 
 
 
