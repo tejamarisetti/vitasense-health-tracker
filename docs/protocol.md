@@ -115,6 +115,9 @@ To validate that the software trust score is an effective monitor of signal fide
 
 This protocol is frozen as of 2026-10-16. No modifications to hypotheses, metric definitions, or ablation arms may be made after viewing experimental results. Any post-hoc analyses must be explicitly noted as "exploratory" and recorded in `docs/protocol_amendments.md`.
 
+### 7.1 Multi-Subject Verification Prerequisite
+Wearable alerting experiments (Step 3b) will execute **only after all 15 subjects are verified** from the complete PPG-DaLiA archive. Any baseline or component evaluations computed on the current subset of 11 subjects are strictly designated and labeled **"interim, 11/15 subjects"**.
+
 ---
 
 ## 8. Protocol Amendments
@@ -127,7 +130,7 @@ This protocol is frozen as of 2026-10-16. No modifications to hypotheses, metric
   In real-world free-living datasets such as PPG-DaLiA (UCI ID 495), participants engage in daily physical exertion including stair climbing, outdoor cycling, walking, and table soccer. Normal human physiology elevates heart rate above 100 bpm during physical exercise to meet metabolic demands (physiological exercise-induced sinus tachycardia).
   A naive, uncontextualized alerting rule ($HR > 100\text{ bpm}$) triggers continuous, spurious "alerts" throughout benign physical exercise. In clinical practice, wearable personal alerting systems target *unexpected* or *inappropriate* tachycardia occurring when the user is sedentary or at rest. Evaluating alerting algorithms without conditioning on motion context would improperly count benign exercise as true alert events and would unfairly penalize quality-gated suppression during movement as false negatives.
 - **A Priori Ground Truth Definition:**
-  An authentic **Inappropriate / At-Rest Tachycardia Alert Event** ground truth is defined strictly by the joint fulfillment of physiological and kinematic criteria continuously for at least $T_{\text{persist}} = 30\text{ seconds}$:
+  An authentic **At-Rest Tachycardia Alert Event** ground truth is defined strictly by the joint fulfillment of physiological and kinematic criteria continuously for at least $T_{\text{persist}} = 30\text{ seconds}$:
   1. **Physiological Reference Criterion:**
      $$HR_{\text{ref, ECG}}(t) > \tau_i$$
      where $\tau_i = \max(100\text{ bpm}, \mu_{i,\text{rest}} + 2.5\sigma_{i,\text{rest}})$, computed directly from the chest ECG reference signal during authenticated resting/baseline intervals.
@@ -137,15 +140,19 @@ This protocol is frozen as of 2026-10-16. No modifications to hypotheses, metric
      averaged over a 10-second moving window satisfies:
      $$\overline{\text{ENMO}}_{10\text{s}}(t) \le \theta_{\text{rest}} = 0.05g$$
      Alternatively, where ground-truth protocol activity tags are present, the concurrent activity state must be among resting/sedentary states (`BASELINE`, `WORKING`, `LUNCH`, `DRIVING`) and not active exercise (`STAIRS`, `SOCCER`, `CYCLING`, `WALKING`).
+  - **Proposed Clarification on Resting Context Ambiguity (Draft Only, Pending Ratification):**
+    *Ambiguity Identified:* The phrasing "Alternatively..." in Criterion 2 could be read as either (a) an *OR/replacement* condition (activity tags instead of ENMO), or (b) an *AND/conjunctive* condition (activity tag $\in \{1, 5, 6, 8\}$ AND $\overline{\text{ENMO}}_{10\text{s}} \le 0.05g$).
+    *Proposed Precise Wording:* "When protocol activity tags are available, the resting context criterion requires both conditions conjunctively: $\text{Activity}(t) \in \{1, 5, 6, 8\}$ AND $\overline{\text{ENMO}}_{10\text{s}}(t) \le 0.05g$. When activity tags are absent (e.g. unconstrained wearable deployment), the kinematic threshold $\overline{\text{ENMO}}_{10\text{s}}(t) \le 0.05g$ serves as the sole resting detector."
 - **Literature and Design Justifications:**
-  - **$\tau_i \ge 100\text{ bpm}$ (Literature Verified):**
-    - *Citation:* Page RL, et al. *2015 ACC/AHA/HRS Guideline for the Management of Adult Patients With Supraventricular Tachycardia.* J Am Coll Cardiol. 2016;67(13):e27–e115. DOI: [10.1016/j.jacc.2015.08.856](https://doi.org/10.1016/j.jacc.2015.08.856).
-    - *Paper Content:* Section 7.1 explicitly defines Inappropriate Sinus Tachycardia (IST) as a persistent resting heart rate $> 100\text{ bpm}$ (or mean 24-hour heart rate $> 90\text{ bpm}$) in the absence of physiological stress or physical exertion.
+  - **$\tau_i \ge 100\text{ bpm}$ (Unverified via automated web fetch; treated as Design Choice):**
+    - *Publisher Page Check:* Automated HTTP fetch of `https://doi.org/10.1016/j.jacc.2015.08.856` returned client-side JavaScript redirect / 403 Forbidden on the direct JACC page, preventing independent automated verification of text passages.
+    - *Relabeling:* Classified as **unverified**. Treated strictly as an engineering **design choice with sensitivity analysis** across $\tau_i \in \{100, 110, 120\}\text{ bpm}$ or personalized $\mu_{i,\text{rest}} + k \cdot \sigma_{i,\text{rest}}$ ($k \in \{2.0, 2.5, 3.0\}$).
   - **$\mu_{i,\text{rest}} + 2.5\sigma_{i,\text{rest}}$ (Statistical Baseline):** Standard individual outlier detection threshold, corresponding to the upper $0.6\%$ tail ($p < 0.006$) of personal resting fluctuations under Gaussian assumptions, preventing alerts on normal baseline variability.
   - **$T_{\text{persist}}$ (Design Choice with Sensitivity Analysis):**
-    - Relabeled as an engineering design choice with prescribed sensitivity analysis across $T_{\text{persist}} \in \{15, 30, 60\}\text{ seconds}$ (nominal baseline $30\text{s}$) to filter out instantaneous respiratory sinus arrhythmia and transient postural shifts before raising an alert.
-  - **$\theta_{\text{rest}}$ (Design Choice with Sensitivity Analysis):**
-    - Relabeled as an engineering design choice with prescribed sensitivity analysis across $\theta_{\text{rest}} \in \{0.03, 0.05, 0.10\}g$ (nominal baseline $0.05g$, informed by physical activity epidemiology where wrist ENMO $< 45\text{ mg}$ indicates sedentary behavior; Hildebrand et al., *Med Sci Sports Exerc* 2014, DOI: [10.1249/MSS.0000000000000289](https://doi.org/10.1249/MSS.0000000000000289)).
+    - Engineering design choice with prescribed sensitivity analysis across $T_{\text{persist}} \in \{15, 30, 60\}\text{ seconds}$ (nominal baseline $30\text{s}$) to filter out instantaneous respiratory sinus arrhythmia and transient postural shifts before raising an alert.
+  - **$\theta_{\text{rest}}$ (Unverified via automated web fetch; treated as Design Choice):**
+    - *Publisher Page Check:* Automated HTTP fetch of `https://doi.org/10.1249/MSS.0000000000000289` (Hildebrand 2014) landed on publisher paywalled shell without the full text tables, preventing automated extraction of text quotes.
+    - *Relabeling:* Classified as **unverified**. Treated strictly as an engineering **design choice with sensitivity analysis** across $\theta_{\text{rest}} \in \{0.03, 0.05, 0.10\}g$ (nominal baseline $0.05g$).
 - **Honest Disclosure:**
   *S1 heart rate range, wrist accelerometer magnitude, and protocol activity labels were inspected prior to drafting this amendment.*
 - **Scientific Integrity Guarantee:**
@@ -156,16 +163,57 @@ This protocol is frozen as of 2026-10-16. No modifications to hypotheses, metric
 ### Draft Amendment 2: Labelled-SYNTHETIC Resting Tachycardia Injection Protocol
 - **Date:** 2026-10-18
 - **Status:** DRAFT (Submitted for user review and approval only; not ratified).
-- **Reason for Proposed Amendment:**
-  Empirical ground-truth evaluation across all 11 intact PPG-DaLiA subjects revealed that authentic resting tachycardia events under Amendment 1 are extremely sparse in healthy young volunteers: 9 of 11 subjects had zero natural events, and 30 of the 32 total events occurred in a single subject (`S5`). Under Leave-One-Subject-Out (LOSO) cross-validation, testing alerting precision, recall, and detection delay on test subjects with zero ground-truth events is statistically invalid (recall is undefined $0/0$).
-- **Proposed Protocol:**
-  1. For each subject during authenticated resting/sedentary periods (activity in `BASELINE`, `WORKING`, `LUNCH`, `DRIVING` with $\overline{\text{ENMO}}_{10\text{s}} \le 0.05g$), inject $N_{\text{tachy}} = 5$ to $10$ physiologically plausible tachycardia episodes.
-  2. Episode parameters:
-     - Peak heart rate: $HR_{\text{tachy}} \sim \mathcal{U}(105, 135)\text{ bpm}$.
-     - Onset dynamics: physiologically gradual ramp ($+2\text{ to } +4\text{ bpm/s}$ over $15\text{s}$).
-     - Sustained duration: $T_{\text{event}} \in [45, 120]\text{ seconds}$.
-     - Resolution: gradual exponential decay back to personal resting baseline.
-  3. Signal Injection: Applied identically to the ground-truth ECG reference stream and the derived wrist HR stream, with full labelling:
-     `is_synthetic: True`, `event_type: "SYNTHETIC_RESTING_TACHYCARDIA"`.
-  4. This guarantees a balanced evaluation of sensitivity, specificity, and detection delay across all 15 LOSO cross-validation folds without distorting natural resting background noise.
+- **Honest Disclosure:**
+  *This amendment was drafted strictly after inspecting per-subject ground-truth event counts across the complete 15-subject PPG-DaLiA cohort (ground truth only, zero algorithm or model results). In the complete 15-subject cohort under the unified canonical implementation, natural resting tachycardia under Amendment 1 is observed in S5 (30 events, 36.5 min), S6 (5 events, 4.3 min), and S11 (2 events, 4.2 min) — with 2 additional brief episodes observed in S7 during un-filtered resting activity tags without kinematic gating. The remaining 11 to 12 subjects exhibit zero events. All natural events are reported descriptively only.*
+  *Subject S5 exhibits a **sustained elevated resting heart rate of unknown cause; ECG R-peaks verified clean** ($MAE = 0.06\text{ bpm}$, $r = 0.9999$ vs label array; $0.010\%$ RR outside 35–200 bpm). S5's data show ~90% of the entire monitoring session above $\tau_i$, meaning its Amendment 1 events represent one continuous elevated physiological state, not 30 independent alert episodes. Therefore, natural events cannot be treated as independent test samples, and LOSO cross-validation of alerting precision, recall, and detection delay on natural events is statistically undefined ($0/0$ across 11–12 of 15 folds).*
+- **Two Injection Architectures (Trade-Off Analysis):**
+  1. **Option (a): Injection into the Derived HR Series Only:**
+     - *Mechanism:* Add synthetic tachycardia elevation profile $\Delta HR(t)$ directly to the 0.5–1.0 Hz ambulatory HR stream during resting segments ($\overline{\text{ENMO}}_{10\text{s}}(t) \le 0.05g$), mirrored identically in the reference ECG stream and the evaluated wrist HR stream.
+     - *Scope Boundary:* **Option (a) tests the alert logic only, not the sensor acquisition or front-end extraction chain; the paper will claim nothing beyond alert logic validation.**
+     - *Pros:* Mathematically transparent, deterministic, exact control of onset dynamics, instantaneous ground-truth synchronization, computationally light across extensive sensitivity sweeps.
+     - *Cons:* Bypasses front-end optical pulse extraction and spectral peak tracking under acceleration; assumes the upstream estimator outputs an elevated estimate.
+  2. **Option (b): Full-Chain Injection via Time-Warping Real BVP Segments:**
+     - *Mechanism:* Extract resting optical BVP segments, time-warp (resample) the raw 64 Hz optical waveform by local dilation factor $\alpha(t) = HR_{\text{target}}(t) / HR_{\text{orig}}(t)$ so that systolic pulse rate accelerates to the target tachycardia HR, while keeping the concurrent 3D accelerometer stream completely unchanged (pure resting motion), and regenerate matching ECG R-peaks.
+     - *Pros:* Fully exercises the entire algorithmic pipeline (raw BVP $\to$ spectral SQI $\to$ peak estimator $\to$ trust score $\to$ alerting gate); preserves realistic morphology, pulse amplitude, and dicrotic notch variations.
+     - *Cons:* Substantially higher computational burden; time-warping optical waveforms can introduce spectral interpolation artifacts; risk of unnatural pulse morphology distortion.
+  3. **Recommendation:**
+     - **Adopt Option (a) as the primary benchmark architecture** for validating alerting ablation arms (Arms 1–4, personal baselines, quality gating, conformal abstention) to ensure rigorous, artifact-free mathematical reproducibility.
+     - **Retain Option (b) as a targeted secondary validation probe** specifically for Component C front-end spectral estimator evaluation under rate acceleration.
+- **Protocol Specifications (Fixed Prior to Results):**
+  - **Random Seed:** Fixed deterministic seed (`seed = 42`) for event timing, duration jitter, and episode placement.
+  - **Injection Domain:** Exclusively during verified resting periods ($\overline{\text{ENMO}}_{10\text{s}}(t) \le 0.05g$ and activity in `BASELINE`, `WORKING`, `LUNCH`, `DRIVING`).
+  - **Subject-Independent Episode Parameters:**
+     - Episode count: $N_{\text{tachy}} = 5\text{ to } 10$ episodes per subject.
+     - Target peak HR: $HR_{\text{tachy}} \sim \mathcal{U}(105, 135)\text{ bpm}$.
+     - Onset ramp rate: $+2\text{ to } +4\text{ bpm/s}$ over $15\text{s}$.
+     - Sustained plateau: $T_{\text{event}} \in [45, 120]\text{ seconds}$.
+     - Resolution: Exponential decay back to personal resting baseline over $20\text{s}$.
+  - **Labelling:** All injected episodes are strictly labelled `is_synthetic: True`, `event_type: "SYNTHETIC_RESTING_TACHYCARDIA"`.
+- **Evaluation Metrics:**
+  - **Detection Delay, Precision, Recall:** Evaluated strictly on injected synthetic tachycardia events across all test folds.
+  - **False Alerts per Hour (FA/hr):** Evaluated across all non-event time (natural background + fault-injected background) for every subject.
+
+---
+
+### Natural Event and Outlier Handling Rule (Draft, Pending User Ratification)
+1. **Dual Reporting:** All alerting benchmark results (false alert rate, detection delay, F1) will be reported both **with S5** and **without S5** to preserve transparency regarding single-subject sensitivity.
+2. **Sensitivity Checks for S6 and S11:** In addition to S5 dual reporting, sensitivity checks reporting performance **with and without S6 and S11** will be provided in the appendix/supplementary results.
+3. **Sample Independence:** Natural events (from S5, S6, S7, S11) are never counted as independent test samples and are reported descriptively only in a dedicated observational summary.
+4. **Primary Benchmark Metric:** Cross-subject precision and recall will be computed strictly on injected synthetic events.
+
+---
+
+## 9. CHANGELOG
+
+| Revision / Amendment | Date | Description & Reason | Status |
+| :--- | :---: | :--- | :--- |
+| **Protocol v1.0.0 (Freeze)** | 2026-10-16 | Initial frozen experimental protocol defining core hypotheses $H_1\text{--}H_3$, fault taxonomy F1–F7, and LOSO cross-validation. | **FROZEN (Tag: `protocol-freeze-v1`)** |
+| **Amendment 1** | 2026-10-18 | Activity-contextualized alert ground truth ($HR > \tau_i$ during rest only) to prevent benign exercise from being counted as false alert events. Thresholds relabeled as design choices with sensitivity analysis following web fetch verification check. Honest disclosure of S1 inspection added. | **Pending user ratification** |
+| **Draft Amendment 2** | 2026-10-18 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects. Natural events in S5, S6, S7, S11 treated descriptively only. Details two injection architectures with pros/cons. Explicitly notes Option (a) validates alert logic only. | **DRAFT (For user review only)** |
+| **Outlier Handling Rule** | 2026-10-18 | Dual reporting with/without S5; sensitivity checks with/without S6 and S11; non-independence of natural events; precision/recall restricted to synthetic events. | **DRAFT (For user review only)** |
+| **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence table. | **Implementation Correction** |
+
+*(Note: When ratified by the user, git tag `protocol-freeze-v2` will be created. Tag `protocol-freeze-v1` remains permanently unmoved.)*
+
+
 
