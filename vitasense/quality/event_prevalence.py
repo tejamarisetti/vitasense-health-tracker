@@ -54,11 +54,19 @@ def compute_enmo(
     if acc.ndim != 2 or acc.shape[1] != 3:
         raise ValueError(f"acc_wrist must have shape (N, 3), got {acc.shape}")
 
-    norms = np.linalg.norm(acc, axis=1)
-    # Unit safety: Empatica E4 raw ACC is in 1/64g; in SX.pkl it is already normalized to g.
-    if np.nanmedian(norms) > 10.0:
-        norms = norms / 64.0
+    # Explicit check against dataset specifications:
+    # Per PPG-DaLiA readme.pdf (Section III.2 and Section III.3), wrist ACC in SX.pkl is provided
+    # in units of g with Empatica E4 hardware sensor range [-2.0, +2.0]g (raw ACC.csv is in 1/64g).
+    acc_min = float(np.nanmin(acc))
+    acc_max = float(np.nanmax(acc))
+    if acc_min < -3.0 or acc_max > 3.0:
+        raise ValueError(
+            f"Wrist accelerometer values outside expected physical range [-2.0, +2.0]g: "
+            f"min={acc_min:.2f}g, max={acc_max:.2f}g. "
+            f"Data must be in units of g (as provided in PPG-DaLiA SX.pkl), not raw unscaled integer counts."
+        )
 
+    norms = np.linalg.norm(acc, axis=1)
     enmo_instant = np.maximum(0.0, norms - 1.0)
 
     samples_per_step = int(round(step_sec * fs_acc))

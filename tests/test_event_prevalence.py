@@ -33,11 +33,17 @@ def test_compute_enmo_stationary_and_moving():
     assert np.allclose(step_moving, 0.5, atol=1e-6)
     assert np.allclose(ma_moving, 0.5, atol=1e-6)
 
-    # 3. Unit safety check: raw Empatica 1/64g format (stationary = 64.0)
+    # 3. Explicit check: wrong units (raw 1/64g integers such as 64.0) must raise ValueError
     acc_raw_64 = np.zeros((320, 3))
     acc_raw_64[:, 2] = 64.0
-    step_raw, ma_raw = compute_enmo(acc_raw_64, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
-    assert np.allclose(step_raw, 0.0, atol=1e-4)
+    with pytest.raises(ValueError, match="outside expected physical range"):
+        compute_enmo(acc_raw_64, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
+
+    # 4. Values outside [-3.0, +3.0]g must raise ValueError
+    acc_below = np.zeros((320, 3))
+    acc_below[:, 0] = -3.5
+    with pytest.raises(ValueError, match="outside expected physical range"):
+        compute_enmo(acc_below, fs_acc=32.0, step_sec=2.0, ma_sec=10.0)
 
 
 def test_align_activity_to_windows():

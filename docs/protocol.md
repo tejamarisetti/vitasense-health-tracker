@@ -134,16 +134,18 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
   1. **Physiological Reference Criterion:**
      $$HR_{\text{ref, ECG}}(t) > \tau_i$$
      where $\tau_i = \max(100\text{ bpm}, \mu_{i,\text{rest}} + 2.5\sigma_{i,\text{rest}})$, computed directly from the chest ECG reference signal during authenticated resting/baseline intervals.
-  2. **Kinematic Resting Context Criterion:**
+  2. **Kinematic Resting Context Criterion (Draft Conjunctive Wording, Status: Pending User Ratification):**
      Wrist 3D accelerometer dynamic energy (Euclidean Norm Minus One, ENMO):
      $$\text{ENMO}(t) = \max\left(0, \sqrt{a_x^2(t) + a_y^2(t) + a_z^2(t)} - 1.0g\right)$$
      averaged over a 10-second moving window satisfies:
      $$\overline{\text{ENMO}}_{10\text{s}}(t) \le \theta_{\text{rest}} = 0.05g$$
-     Alternatively, where ground-truth protocol activity tags are present, the concurrent activity state must be among resting/sedentary states (`BASELINE`, `WORKING`, `LUNCH`, `DRIVING`) and not active exercise (`STAIRS`, `SOCCER`, `CYCLING`, `WALKING`).
-  - **Proposed Clarification on Resting Context Ambiguity (Draft Only, Pending Ratification):**
-    *Ambiguity Identified:* The phrasing "Alternatively..." in Criterion 2 could be read as either (a) an *OR/replacement* condition (activity tags instead of ENMO), or (b) an *AND/conjunctive* condition (activity tag $\in \{1, 5, 6, 8\}$ AND $\overline{\text{ENMO}}_{10\text{s}} \le 0.05g$).
-    *Proposed Precise Wording:* "When protocol activity tags are available, the resting context criterion requires both conditions conjunctively: $\text{Activity}(t) \in \{1, 5, 6, 8\}$ AND $\overline{\text{ENMO}}_{10\text{s}}(t) \le 0.05g$. When activity tags are absent (e.g. unconstrained wearable deployment), the kinematic threshold $\overline{\text{ENMO}}_{10\text{s}}(t) \le 0.05g$ serves as the sole resting detector."
+     Where ground-truth protocol activity tags are present, the resting context criterion requires both conditions **conjunctively**:
+     $$\text{Activity}(t) \in \{\text{BASELINE}, \text{DRIVING}, \text{LUNCH}, \text{WORKING}\} \quad \mathbf{AND} \quad \overline{\text{ENMO}}_{10\text{s}}(t) \le \theta_{\text{rest}}$$
+     When activity tags are absent (e.g., unconstrained ambulatory deployment), the kinematic threshold $\overline{\text{ENMO}}_{10\text{s}}(t) \le \theta_{\text{rest}}$ serves as the sole resting detector.
 - **Literature and Design Justifications:**
+  - **Wrist Accelerometer Units (Citation: PPG-DaLiA `readme.pdf` Section III.2 & III.3):**
+    - *Official Documentation:* Section III.2 ("Data from Empatica E4") states: `"ACC.csv: sampled at 32 Hz. The 3 data columns refer to the 3 accelerometer channels. Data is provided in units of 1/64g."` Section III.3 ("Data synchronisation and labelling") states: `"Within SX.pkl, 'data' -> 'signal' -> 'wrist' -> 'ACC' includes the ACC-signal. The sampling rate is 32 Hz."`
+    - *Implementation Verification:* In `SX.pkl`, the data has already been scaled from 1/64g integer counts to units of $g$ (range: $[-2.0, +1.984]g$, verified across all 15 subjects). Code checks enforce this range and reject unscaled data.
   - **$\tau_i \ge 100\text{ bpm}$ (Unverified via automated web fetch; treated as Design Choice):**
     - *Publisher Page Check:* Automated HTTP fetch of `https://doi.org/10.1016/j.jacc.2015.08.856` returned client-side JavaScript redirect / 403 Forbidden on the direct JACC page, preventing independent automated verification of text passages.
     - *Relabeling:* Classified as **unverified**. Treated strictly as an engineering **design choice with sensitivity analysis** across $\tau_i \in \{100, 110, 120\}\text{ bpm}$ or personalized $\mu_{i,\text{rest}} + k \cdot \sigma_{i,\text{rest}}$ ($k \in \{2.0, 2.5, 3.0\}$).
@@ -197,9 +199,10 @@ Wearable alerting experiments (Step 3b) will execute **only after all 15 subject
 
 ### Natural Event and Outlier Handling Rule (Draft, Pending User Ratification)
 1. **Dual Reporting:** All alerting benchmark results (false alert rate, detection delay, F1) will be reported both **with S5** and **without S5** to preserve transparency regarding single-subject sensitivity.
-2. **Sensitivity Checks for S6 and S11:** In addition to S5 dual reporting, sensitivity checks reporting performance **with and without S6 and S11** will be provided in the appendix/supplementary results.
-3. **Sample Independence:** Natural events (from S5, S6, S7, S11) are never counted as independent test samples and are reported descriptively only in a dedicated observational summary.
-4. **Primary Benchmark Metric:** Cross-subject precision and recall will be computed strictly on injected synthetic events.
+2. **S5 Metrics Specification (Minutes Above Threshold):** Subject S5 is reported strictly in total minutes above threshold, not in event counts, because its events fragment one continuous elevated physiological state rather than representing discrete independent episodes.
+3. **Sensitivity Checks for S6 and S11:** In addition to S5 dual reporting, sensitivity checks reporting performance **with and without S6 and S11** will be provided in the appendix/supplementary results.
+4. **Sample Independence:** Natural events (from S5, S6, S7, S11) are never counted as independent test samples and are reported descriptively only in a dedicated observational summary.
+5. **Primary Benchmark Metric:** Cross-subject precision and recall will be computed strictly on injected synthetic events.
 
 ---
 
