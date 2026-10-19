@@ -86,3 +86,46 @@ def test_arm2_quarantine_predict():
     # Permitted prediction must succeed
     out = arm.predict(hr, enmo)
     assert len(out.alert_mask) == 50
+
+
+def test_arm2_causality_future_spike_does_not_affect_past_tau():
+    """
+    Protocol Amendment 3 & 4 Verification:
+    Assert that Arm 2's personal baseline threshold at time t uses strictly and exclusively
+    windows strictly before t (indices 0 .. t-1).
+    Feeding an acute future spike at window T_spike must NOT alter tau_i for any window t <= T_spike.
+    """
+    n_windows = 100
+    hr_clean = np.full(n_windows, 70.0)
+    enmo_clean = np.full(n_windows, 0.02)  # Low motion (calibrates)
+
+    arm = Arm2PersonalBaselineShrinkage(
+        k=2.5,
+        kappa_hours=1.0,
+        mu_pop=75.0,
+        sigma_pop=15.0,
+        tau_floor=100.0,
+    )
+
+    out_clean = arm.predict(hr_clean, enmo_clean)
+    tau_clean = out_clean.threshold_series
+
+    # Inject an acute spike of 180 bpm at window 40
+    spike_idx = 40
+    hr_spiked = hr_clean.copy()
+    hr_spiked[spike_idx] = 180.0
+
+    out_spiked = arm.predict(hr_spiked, enmo_clean)
+    tau_spiked = out_spiked.threshold_series
+
+    # Windows 0 through spike_idx MUST be bitwise identical
+    # Window spike_idx uses windows 0..spike_idx-1, so it cannot be affected by hr_spiked[spike_idx]
+    np.testing.assert_array_equal(
+        tau_spiked[:spike_idx + 1],
+        tau_clean[:spike_idx + 1],
+        err_msg="Future spike corrupted past or current threshold values! Violates causal baseline rule.",
+    )
+
+    # Window spike_idx + 1 may update because window spike_idx has now entered the causal history
+    # Verify that tau at spike_idx + 1 is updated (higher due to the 180 bpm reading entering calibration)
+    assert tau_spiked[spike_idx + 1] > tau_clean[spike_idx + 1]

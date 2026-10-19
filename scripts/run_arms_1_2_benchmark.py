@@ -306,8 +306,8 @@ def format_table(results_arm1, sel1, results_arm2, sel2):
 
     header = (
         f"{'Subject':<8} | "
-        f"{'Arm 1 Selected':<14} {'Rec %':>7} {'Delay':>7} {'FA/hr':>8} {'FA':>5} {'NatA':>5} | "
-        f"{'Arm 2 Selected':<16} {'Rec %':>7} {'Delay':>7} {'FA/hr':>8} {'FA':>5} {'NatA':>5}"
+        f"{'Arm 1 Selected':<14} {'Rec %':>7} {'Delay(TP)':>9} {'FA/hr':>8} {'FA':>5} {'NatA':>5} | "
+        f"{'Arm 2 Selected':<16} {'Rec %':>7} {'Delay(TP)':>9} {'FA/hr':>8} {'FA':>5} {'NatA':>5}"
     )
     print(header)
     print("-" * 125)
@@ -332,8 +332,8 @@ def format_table(results_arm1, sel1, results_arm2, sel2):
 
         row = (
             f"{sid:<8} | "
-            f"{p1:<14} {r1_rec:>6.1f}% {r1_delay:>7} {r1_fa_hr:>8.2f} {r1_fa:>5} {r1_nata:>5} | "
-            f"{p2:<16} {r2_rec:>6.1f}% {r2_delay:>7} {r2_fa_hr:>8.2f} {r2_fa:>5} {r2_nata:>5}"
+            f"{p1:<14} {r1_rec:>6.1f}% {r1_delay:>9} {r1_fa_hr:>8.2f} {r1_fa:>5} {r1_nata:>5} | "
+            f"{p2:<16} {r2_rec:>6.1f}% {r2_delay:>9} {r2_fa_hr:>8.2f} {r2_fa:>5} {r2_nata:>5}"
         )
         print(row)
 
@@ -350,11 +350,17 @@ def format_table(results_arm1, sel1, results_arm2, sel2):
 
         row = (
             f"{name:<25} "
-            f"{p1['recall']:>6.1f}% {p1['med_delay']:>6.1f}s {p1['fa_per_hour']:>8.2f} {p1['false_alerts']:>5} {p1['natural_alerts']:>5} | "
-            f"{'':<16} {p2['recall']:>6.1f}% {p2['med_delay']:>6.1f}s {p2['fa_per_hour']:>8.2f} {p2['false_alerts']:>5} {p2['natural_alerts']:>5}"
+            f"{p1['recall']:>6.1f}% {p1['med_delay']:>8.1f}s {p1['fa_per_hour']:>8.2f} {p1['false_alerts']:>5} {p1['natural_alerts']:>5} | "
+            f"{'':<16} {p2['recall']:>6.1f}% {p2['med_delay']:>8.1f}s {p2['fa_per_hour']:>8.2f} {p2['false_alerts']:>5} {p2['natural_alerts']:>5}"
         )
         print(row)
     print("=" * 125)
+    print("Notes:")
+    print("  1. Rec %: Event-level recall on injected synthetic tachycardia episodes.")
+    print("  2. Delay(TP): Median onset detection delay (seconds) evaluated strictly over detected true-positive episodes.")
+    print("  3. FA: Clean false alerts outside all injected episodes AND outside natural Amendment 1 events (+/-30s buffer).")
+    print("  4. NatA: Alerts occurring inside natural Amendment 1 event buffers (+/-30s), reported separately (S5: 185, S6: 3 in Arm 1; S5: 2, S6: 0 in Arm 2).")
+    print("  5. FA/hr: Clean False Alerts / Total Non-Event Monitoring Hours.")
 
 
 if __name__ == "__main__":

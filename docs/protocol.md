@@ -390,6 +390,61 @@ All injected faults are seeded deterministically (`seed = 42`), specified before
 
 ---
 
+### Draft Amendment 4: Standardized Alert-Emission Persistence ($P$) and Refractory Hold-off ($R$) Rules
+- **Date:** 2026-10-19
+- **Status:** DRAFT (Submitted for user review and approval only; not ratified).
+- **Reason for Amendment & Empirical Disclosure:**
+  This amendment is drafted strictly following inspection of preliminary evaluation results for Arm 1 (Fixed Threshold) and Arm 2 (Personal Baseline with Shrinkage) under Condition 0 (Clean Background / No-Fault). Without an alert-emission rule, evaluating instantaneous single-window (2-second) threshold crossings produces unsustainable false alarm rates of approximately 100 FA/hr across the cohort (Arm 1: 111.61 FA/hr, 3,490 clean false alerts; Arm 2: 96.42 FA/hr, 3,015 clean false alerts), driven predominantly by transient ambulatory optical motion artifacts and momentary estimator tracking errors during daytime activity.
+  
+  *Preliminary Benchmark Results (Condition 0: Clean Background, Instantaneous 2s Threshold Crossing):*
+  - **Arm 1 (Fixed Threshold, tuned to $\tau_{\text{pop}} = 120\text{ bpm}$ across all 15 folds):**
+    - Pooled All-15: Event Recall = 88.4% (99/112 episodes), Median Delay (detected episodes only) = 16.0s, Clean False Alerts = 3,490, Clean FA/hr = 111.61, Natural Alerts = 188 (S5: 185, S6: 3).
+    - Pooled Without-S5 (14 subjects): Recall = 88.0% (95/108 episodes), Median Delay = 16.0s, Clean FA = 2,918, Clean FA/hr = 98.30, Natural Alerts = 3.
+    - S5/S6/S11 Stratum (3 subjects): Recall = 100.0% (18/18 episodes), Median Delay = 14.0s, Clean FA = 1,748, Clean FA/hr = 356.86, Natural Alerts = 188.
+  - **Arm 2 (Personal Baseline with Shrinkage, predominantly tuned to $k = 2.5, \kappa = 2.0\text{h}$):**
+    - Pooled All-15: Event Recall = 85.7% (96/112 episodes), Median Delay (detected episodes only) = 16.0s, Clean False Alerts = 3,015 (reduction of 475 false alarms vs Arm 1), Clean FA/hr = 96.42, Natural Alerts = 2 (S5: 2, S6: 0).
+    - Pooled Without-S5 (14 subjects): Recall = 85.2% (92/108 episodes), Median Delay = 16.0s, Clean FA = 2,700, Clean FA/hr = 90.96, Natural Alerts = 0.
+    - S5/S6/S11 Stratum (3 subjects): Recall = 88.9% (16/18 episodes), Median Delay = 15.0s, Clean FA = 1,137 (35% reduction vs Arm 1), Clean FA/hr = 232.12, Natural Alerts = 2.
+    - Subject S5 alone: Clean false alerts fell from 572 (Arm 1) to 315 (Arm 2), dropping FA/hr from 360.76 to 198.67.
+
+#### Section 1: Standardized Alert-Emission Rule ($P$-Persistence & $R$-Refractory)
+1. **Temporal Persistence Requirement ($P$):**
+   - An alert is emitted if and only if the arm's specific alert condition holds continuously for at least $P$ consecutive seconds ($P \in \{10, 20, 30\}\text{ seconds}$, corresponding to $\{5, 10, 15\}$ contiguous 2-second windows).
+   - Momentary threshold excursions shorter than $P$ seconds are suppressed as transient artifacts.
+2. **Refractory Hold-off Period ($R$):**
+   - Following any emitted alert, an alarm refractory period of $R = 120\text{ seconds}$ is enforced.
+   - During the refractory period, subsequent alert triggers are suppressed to avoid duplicate alerts and notification fatigue from the same ongoing physiological surge or prolonged artifact.
+3. **Universal Application Across All Arms:**
+   - The persistence ($P$) and refractory ($R$) rules apply equally and identically across all evaluation arms (Arm 1, Arm 2, Arm 3a, Arm 3b, Arm 3b-noMotion, and Arm 4).
+   - Standardizing emission logic across arms ensures that differences in false alert reduction reflect genuine algorithmic capabilities (motion gating, trust scoring, conformal abstention) rather than differences in emission smoothing.
+
+#### Section 2: Cross-Validation Hyperparameter Selection Rule & Fallback Specification
+1. **Primary Selection Rule (Within Training Folds Only):**
+   - In each Leave-One-Subject-Out (LOSO) fold, candidate hyperparameter combinations are evaluated on the pooled $N-1$ training subjects.
+   - The parameter set that achieves pooled training **Event Recall $\ge 85\%$ ($0.85$) while minimizing pooled training False Alerts per Hour ($\text{FA/hr}$)** is selected:
+     $$\theta^* = \arg\min_{\theta \in \Theta \,:\, \text{Recall}_{\text{train}}(\theta) \ge 0.85} \text{FA/hr}_{\text{train}}(\theta)$$
+2. **Fallback Rule (When No Candidate Reaches 85% Recall):**
+   - If no candidate parameter setting achieves $\ge 85\%$ recall on the training folds, the harness automatically falls back to selecting the candidate that **maximizes pooled training recall**:
+     $$\theta^* = \arg\max_{\theta \in \Theta} \text{Recall}_{\text{train}}(\theta)$$
+     (with ties broken by lowest training $\text{FA/hr}$).
+   - This ensures deterministic, robust parameter selection even under severe fault degradation or conservative candidate sets.
+
+#### Section 3: Candidate Grid Analysis, Proposed Widening, and Edge-of-Grid Rationale
+1. **Observed Edge Selection in Preliminary Arm 1:**
+   - In the preliminary un-gated evaluation, Arm 1 selected $\tau_{\text{pop}} = 120\text{ bpm}$ across all 15 folds, hitting the upper boundary of the candidate grid $\{100, 110, 120\}\text{ bpm}$.
+   - Lower thresholds ($100$ and $110\text{ bpm}$) produced intolerable false alarm rates due to ambulatory motion artifacts, while $120\text{ bpm}$ suppressed substantial noise while still achieving 88.4% recall on injected episodes (which plateau in $[105, 135]\text{ bpm}$).
+2. **Proposed Widened Candidate Grids:**
+   - **Arm 1 (Fixed Threshold):** $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}\text{ bpm}$.
+   - **Arm 2 (Personal Baseline with Shrinkage):** Outlier multiplier $k \in \{2.0, 2.5, 3.0, 3.5, 4.0\}$; shrinkage strength $\kappa \in \{0.5, 1.0, 2.0\}\text{ hours}$.
+3. **Scientific Justification for Edge-of-Grid Selection ($120\text{ bpm}$):**
+   - Even without grid widening, selecting $120\text{ bpm}$ at the edge of $\{100, 110, 120\}\text{ bpm}$ is scientifically and clinically justified:
+     a) **Clinical Guideline Validity:** In cardiovascular medicine (AHA/ACC guidelines), resting tachycardia is defined as $HR > 100\text{ bpm}$. A threshold of $120\text{ bpm}$ is already 20 bpm above clinical resting tachycardia. Raising $\tau_{\text{pop}} > 120\text{ bpm}$ (e.g. 130 or 140 bpm) would render the monitoring system clinically insensitive to low-grade or moderate tachycardia.
+     b) **Synthetic Episode Physics:** Synthetic injected episodes have target plateaus sampled uniformly in $[105, 135]\text{ bpm}$. Raising $\tau_{\text{pop}}$ above $125\text{ bpm}$ mechanically guarantees false negatives on all episodes with plateaus in $[105, 125]\text{ bpm}$, violating the $H_1$ target recall $\ge 85\%$.
+     c) **Paper Objective:** The primary paper hypothesis ($H_1$) is NOT that un-gated fixed thresholds can be arbitrarily raised to eliminate motion noise, but rather that **quality-gated personal alerting (Arm 3b/4) suppresses motion noise at standard physiological thresholds ($100\text{--}120\text{ bpm}$) where un-gated baselines (Arms 1 and 2) fail**.
+4. **Strict Testing Freeze:** Zero evaluations on test subjects will be run with the new widened grids until formally ratified by the user.
+
+---
+
 ## 9. CHANGELOG
 
 | Revision / Amendment | Date | Description & Reason | Status |
@@ -401,6 +456,7 @@ All injected faults are seeded deterministically (`seed = 42`), specified before
 | **Implementation Correction** | 2026-10-19 | Unified Event Prevalence Module (`vitasense.quality.event_prevalence`). Corrected redundant `/64` accelerometer scaling in rerun prototype that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added dual physical unit checks (range and median gravity baseline); added synthetic test coverage (`test_event_prevalence.py`). Regenerated 15-subject prevalence and sensitivity tables. | **Implementation Correction** |
 | **Amendment 3** | 2026-10-19 | Alerting benchmark evaluation design: restated $H_1$ as estimation question with 95% bootstrap CI and exploratory label, ACC sharing note for Arms 3a/3b, full 15-subject LOSO evaluation, wrist-PPG HR input stream with real motion errors from Step 3a estimator, explicit scope limitation (tests alert logic on noisy stream, not pulse sensing), strict quarantine of ECG-derived $\tau_i$ and resting blocks, inclusion of ablation arm 3b-noMotion (trust score without motion term), fault-window alerts counted as false alarms with disaggregated FA/hr reporting per fault type and no-fault, deployment-only low-ENMO conformal calibration, fixed trust-score weights (`vitasense.quality.trust_score` v1.0.0), dual fault-duty regimes (~10% and ~25–30%), F7 raw BVP noise before estimator with SNR levels, adopted $T_{\text{gap}} = 60\text{s}$ with 3 lost episodes listed and post-ratification commit requirement, S5/S6 baseline clustering caveat, jump-size stratification, and adaptive ramp reconciliation. | **Ratified by user, 2026-10-19** |
 | **Protocol Update** | 2026-10-19 | Updated synthetic injection audit figures to ratified 112 episodes and 20 clamped ceiling (from 115 episodes and 16 clamped); the 60 s gap enforcement fixed a cross-block gap bug found while implementing the unit test. | **Updated** |
+| **Draft Amendment 4** | 2026-10-19 | Draft alert-emission rule: persistence P in {10, 20, 30}s, refractory R = 120s across all arms; documented selection rule (recall >= 85% then min FA/hr) and fallback; listed preliminary Arms 1-2 results; candidate widened grids with edge-of-grid rationale. | **DRAFT (For user review only)** |
 
 *(Note: Ratified Amendments 1, 2, and 3 frozen under tag `protocol-freeze-v3`. Tag `protocol-freeze-v1` remains permanently unmoved at commit `41eff1e`; tag `protocol-freeze-v2` remains permanently unmoved at commit `3b1f2f6`.)*
 
