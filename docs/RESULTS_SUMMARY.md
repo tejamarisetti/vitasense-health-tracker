@@ -349,36 +349,19 @@ Hyperparameters were tuned inside the training folds of the 15 Leave-One-Subject
 
 ## 8. Protocol Deviations and Post-Result Decisions
 
-To maintain scientific integrity, this section catalogues every formal amendment, pipeline defect correction, and post-result hyperparameter or design decision along with its date and git commit hash:
+To maintain scientific integrity, this table catalogues every formal amendment, pipeline defect correction, and post-result hyperparameter or design decision strictly using commit hashes and dates copied from `git log --format="%h | %ci | %s"` and descriptions copied from the protocol text and CHANGELOG:
 
-1. **Protocol Amendment 1 (Resting Window Definition & Natural Event Prevalence):**
-   - **Date:** 2026-10-19 14:05:51 / Ratified 2026-10-19 14:56:41
-   - **Commits:** `75f10d4`, ratified in `3b1f2f6` (tag `protocol-freeze-v2`).
-   - **Decision:** Natural events in PPG-DaLiA were found to be predominantly exercise-induced (0 resting tachycardia events). Defined resting baseline windows using activity labels (`activity == 1`) and ENMO motion gating to enable resting baseline calibration.
-2. **ENMO Acceleration Unit Discrepancy & Sanity Check Bug Fix:**
-   - **Date:** 2026-10-19 14:24:11 / 14:48:31
-   - **Commits:** `3a5ccc2`, `1dd80b2`.
-   - **Deviation/Fix:** PPG-DaLiA accelerometer data were stored in units of $g$ ($\text{norm} \approx 1.0$), whereas early calculation scripts assumed $\text{m/s}^2$ ($9.81\text{ m/s}^2$). Enforced explicit sanity check `0.80g <= median(|ACC|) <= 1.20g` and calibrated ENMO calculation.
-3. **Protocol Amendment 2 (Synthetic Tachycardia Injection Engine):**
-   - **Date:** 2026-10-19 14:56:41
-   - **Commit:** `3b1f2f6` (tag `protocol-freeze-v2`), implementation in `696fd00` (2026-10-19 15:18:44).
-   - **Decision:** Added Step 3b-i synthetic tachycardia injection across clean resting periods in all 15 subjects to create ground-truth acute distress episodes under controlled physiological parameters.
-4. **Adaptive Ramp Rule & 60s Minimum Inter-Episode Gap (Protocol Amendment 3):**
-   - **Date:** 2026-10-19 16:25:29 (ratification) / 2026-10-19 17:01:22 (gap enforcement)
-   - **Commits:** `a0d682a` (tag `protocol-freeze-v3`), `0bf4ca4`.
-   - **Decision:** The injector ramp duration was adaptively shortened when resting block duration was insufficient to prevent truncating episodes; enforced a strict minimum inter-episode gap of $60\text{s}$ (reducing episodes from 115 to 112) to prevent overlapping refractory periods. Ratified pulse sensing limitation and added Arm 3b-noMotion ablation.
-5. **Preliminary Arms 1–2 Results & Grid Widening Decision:**
-   - **Date:** 2026-10-19 17:42:25 (draft) / 2026-10-19 17:46:25 (ratification)
-   - **Commits:** `cad4c7f`, ratified in `a9ce657` (tag `protocol-freeze-v4`).
-   - **Decision:** Preliminary evaluation of raw thresholding showed unacceptably high false alert rates ($\sim 100\text{ FA/hr}$) and persistent boundary selections. The candidate search grids were widened: Arm 1 threshold $\tau_{\text{pop}}$ expanded from $\{100, 110, 120\}$ to include $\{125, 130\}\text{ bpm}$; Arm 2 multiplier $k$ expanded from $\{2.0, 2.5, 3.0\}$ to include $\{3.5, 4.0\}$.
-6. **Refractory Period Choice ($R = 60\text{s}$):**
-   - **Date:** 2026-10-19 17:46:25 / 17:53:55
-   - **Commits:** `a9ce657`, `d55d432`.
-   - **Decision:** Proposed $R = 120\text{s}$ was rejected because 5 of 112 injected episodes started within $120\text{s}$ of the previous episode. Chose $R = 60\text{s}$ to exactly match the minimum inter-episode gap, guaranteeing zero true episodes are suppressed by refractory hold-off.
-7. **Invocation of Fallback Selection Rule for Arm 2:**
-   - **Date:** 2026-10-19 17:46:25 / 18:09:13
-   - **Commits:** `a9ce657`, `f92ca8d`.
-   - **Decision:** Pre-specified tuning protocol required candidate combinations to reach $\ge 85\%$ recall on the training set. When Arm 2 failed to reach $85\%$ on any training fold (maximum achieved $\approx 80.4\%$), the fallback rule (maximize recall) was triggered across 100% of folds, locking Arm 2 to $k = 2.0, P = 10\text{s}$.
+| Revision / Event | Commit Hash | Date (from git) | Description (copied from Protocol text & CHANGELOG) |
+| :--- | :---: | :---: | :--- |
+| **Protocol v1.0.0 (Freeze)** | `41eff1e` | 2026-10-18 19:28:01 +0530 | Initial frozen experimental protocol defining core hypotheses $H_1\text{--}H_3$, fault taxonomy F1–F7, and LOSO cross-validation. (Protocol CHANGELOG line 453). |
+| **Amendment 1** | `75f10d4` (ratified `3b1f2f6`) | 2026-10-19 14:05:51 +0530 (ratified 14:56:41) | Activity-contextualized alert ground truth ($HR > \tau_i$ during rest only) to prevent benign exercise from being counted as false alert events; thresholds relabeled as design choices with sensitivity analysis following web fetch verification check. (Protocol CHANGELOG line 454). |
+| **Implementation Correction** | `3a5ccc2`, `1dd80b2` | 2026-10-19 14:24:11 +0530, 14:48:31 +0530 | Corrected redundant `/64` accelerometer scaling (double division by 64 in `rerun_15_subjects.py` prototype) that disabled the kinematic filter; standardized window alignment to 8s window midpoint ($t = 2i+4$s); added dual physical unit checks (physical range $[-3, +3]g$ and median norm $[0.8, 1.2]g$). (Protocol CHANGELOG line 457). |
+| **Amendment 2** | `3b1f2f6`, `696fd00` | 2026-10-19 14:56:41 +0530, 15:18:44 +0530 | Labelled-SYNTHETIC resting tachycardia injection protocol formulated after observing extreme sparsity in healthy subjects; Option (a) adopted as primary benchmark injection architecture into resting segments only with seed 42, tagging every episode SYNTHETIC to validate alert logic only; incorporates outlier handling rule (S5 dual reporting and minutes-based evaluation, S6/S11 sensitivity checks). (Protocol CHANGELOG line 455). |
+| **Adaptive Ramp Deviation** | `e358bf1` (ratified `a0d682a`) | 2026-10-19 15:52:29 +0530 (ratified 16:25:29) | Independent uniform draws of 15s ramp rate and target peak HR violate the 105 bpm floor for low-baseline participants or the 135 bpm ceiling for high-baseline participants, so lower and upper ramp bounds were adaptively adjusted to baseline HR ($r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$, $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$) with plateau clamping to $[105.0, 135.0]\text{ bpm}$. (Protocol Section 9, lines 381–389). |
+| **Amendment 3** | `a0d682a` | 2026-10-19 16:25:29 +0530 | Alerting benchmark evaluation design: restated $H_1$ as estimation question with 95% bootstrap CI and exploratory label, full 15-subject LOSO evaluation, wrist-PPG HR input stream with real motion errors from Step 3a estimator, strict quarantine of ECG-derived $\tau_i$, inclusion of ablation arm 3b-noMotion, fault-window alerts counted as false alarms with disaggregated FA/hr reporting per fault type and no-fault, dual fault regimes (~10% and ~25–30%), and F7 raw BVP noise before estimator. (Protocol CHANGELOG line 458). |
+| **Gap Enforcement Update** | `0bf4ca4` | 2026-10-19 17:01:22 +0530 | Updated synthetic injection audit figures to ratified 112 episodes and 20 clamped ceiling (from 115 episodes and 16 clamped); the 60 s gap enforcement fixed a cross-block gap bug found while implementing the unit test. (Protocol CHANGELOG line 459). |
+| **Amendment 4 (Alert Emitter & Grid Widening)** | `cad4c7f`, `a9ce657`, `d55d432` | 2026-10-19 17:42:25 +0530, 17:46:25, 17:53:55 | Ratified alert-emission rule: persistence P in {10, 20, 30}s, refractory R = 60s across all arms (R=60s justified by 56 consecutive episodes starting within 120s of previous end); widened grids (tau in {100, 110, 120, 125, 130} bpm, k in {2.0, 2.5, 3.0, 3.5, 4.0}) adopted after observing edge-of-grid picks in preliminary run; documented that Arm 1 recall is inherently tied to synthetic peak HR distribution [105, 135] bpm. (Protocol CHANGELOG line 460). |
+| **Fallback Selection Rule Execution for Arm 2** | `f92ca8d` | 2026-10-19 18:09:13 +0530 | If no candidate parameter setting achieves $\ge 85\%$ recall on the training folds, the harness automatically falls back to selecting the candidate that maximizes pooled training recall ($\theta^* = \arg\max_{\theta \in \Theta} \text{Recall}_{\text{train}}(\theta)$); Arm 2 never achieved $\ge 85\%$ recall on any training fold across any condition (maximum training recall achieved was $\approx 80.4\%$), invoking the fallback rule in 100% of folds. (Protocol Section 2, lines 430–432; Section 7.2, lines 342–346). |
 
 ---
 
