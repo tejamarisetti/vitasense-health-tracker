@@ -6,6 +6,7 @@ import { CompanionPage } from './pages/CompanionPage';
 import { SignalsPage } from './pages/SignalsPage';
 import { TrendsPage } from './pages/TrendsPage';
 import { AlertsPage } from './pages/AlertsPage';
+import { BenchmarkPage } from './pages/BenchmarkPage';
 import { Sidebar, navItems } from './components/Sidebar';
 import { AppHeader } from './components/AppHeader';
 import { Icon } from './components/Icons';
@@ -41,6 +42,7 @@ export function App() {
               {page === 'overview' && <OverviewPage go={go} />}
               {page === 'companion' && <CompanionPage />}
               {page === 'signals' && <SignalsPage />}
+              {page === 'benchmark' && <BenchmarkPage />}
               {page === 'trends' && <TrendsPage />}
               {page === 'alerts' && <AlertsPage go={go} />}
             </main>
@@ -48,7 +50,7 @@ export function App() {
 
           {/* Mobile Bottom Navigation */}
           <nav className="mobile-nav">
-            {navItems.slice(0, 5).map((n) => (
+            {navItems.map((n) => (
               <button
                 key={n.page}
                 className={page === n.page ? 'active' : ''}

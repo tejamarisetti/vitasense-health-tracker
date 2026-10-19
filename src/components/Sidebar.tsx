@@ -12,7 +12,8 @@ export const navItems: NavItem[] = [
   { page: 'overview', label: 'Overview', icon: 'home' },
   { page: 'companion', label: 'AI Companion', icon: 'ai' },
   { page: 'trends', label: 'Health Trends', icon: 'trend' },
-  { page: 'signals', label: 'Signal Validation', icon: 'activity' },
+  { page: 'signals', label: 'Signal Lab', icon: 'activity' },
+  { page: 'benchmark', label: 'Benchmarks', icon: 'command' },
   { page: 'alerts', label: 'Alerts', icon: 'bell' }
 ];
 

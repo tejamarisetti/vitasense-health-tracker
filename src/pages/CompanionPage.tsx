@@ -2,100 +2,127 @@ import React, { useState } from 'react';
 import { Icon } from '../components/Icons';
 import { Orb } from '../components/Orb';
 
+interface DataCard {
+  title: string;
+  value: string;
+  badge?: string;
+  description?: string;
+}
+
 interface Message {
   sender: 'ai' | 'user';
   text: string;
-  context?: { icon: 'pulse' | 'drop' | 'shield'; text: string }[];
+  intent?: string;
+  show_cards?: boolean;
+  cards?: DataCard[];
 }
 
 export function CompanionPage() {
   const [input, setInput] = useState('');
+  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'ai',
-      text: 'Good morning, Alex. Your latest demo readings are available. I can help you understand what changed, review the supporting data, or check signal quality.',
-      context: [
-        { icon: 'pulse', text: '72 BPM' },
-        { icon: 'drop', text: '97% estimated SpO₂' },
-        { icon: 'shield', text: '96% quality' }
-      ]
-    }
+      text: "Hi! How can I help you? I can answer questions about your heart rate readings, trust scores, or signal validation from PPG-DaLiA replay recordings.",
+      intent: 'greeting',
+      show_cards: false,
+      cards: [],
+    },
   ]);
 
+  // Current session context passed to POST /api/assistant
+  const activeContext = {
+    latest_reading: { hr: 74.2, unit: 'bpm' },
+    timestamp: '2026-10-19T10:30:00Z',
+    source: 'PPG-DaLiA S1 (REPLAY: public dataset, not live)',
+    trust_score: 0.94,
+    flags: ['motion_detected'],
+    alerts: [],
+  };
+
   const quickPrompts = [
-    'Explain my latest trend',
-    'What changed this week?',
-    'Review my measurement history',
-    'Explain my data-quality report'
+    'Hi',
+    'What is my latest heart rate?',
+    'What is my trust score?',
+    'Show me my data cards',
+    'Do I have tachycardia?',
+    'What is the capital of France?',
   ];
 
-  const handleSend = (userText: string) => {
-    if (!userText.trim()) return;
+  const handleSend = async (userText: string) => {
+    if (!userText.trim() || isLoading) return;
 
     const newMessages: Message[] = [
       ...messages,
-      { sender: 'user', text: userText }
+      { sender: 'user', text: userText },
     ];
     setMessages(newMessages);
     setInput('');
+    setIsLoading(true);
 
-    // Generate intelligent contextual response
-    setTimeout(() => {
-      let aiReply = '';
-      let replyContext: { icon: 'pulse' | 'drop' | 'shield'; text: string }[] = [];
+    try {
+      const res = await fetch('/api/assistant', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          message: userText,
+          context: activeContext,
+        }),
+      });
 
-      if (userText.includes('trend') || userText.includes('week')) {
-        aiReply =
-          'Over the past 7 days, your resting heart rate maintained a stable average of 71 BPM (baseline 70–73 BPM). A brief elevation to 86 BPM occurred on Thursday at 2:40 PM, which coincided with physical activity. Signal quality was verified at 96% throughout.';
-        replyContext = [
-          { icon: 'pulse', text: '71 BPM 7-day avg' },
-          { icon: 'shield', text: 'Verified baseline' }
-        ];
-      } else if (userText.includes('data-quality') || userText.includes('quality')) {
-        aiReply =
-          'Your overall signal integrity score is 96% (High integrity). Software validation flagged 2 minor motion artifacts on today’s 10:37 AM reading during brisk movement. Out-of-range sensor values were zero.';
-        replyContext = [
-          { icon: 'shield', text: '96% Integrity' },
-          { icon: 'pulse', text: '2 motion flags' }
-        ];
-      } else if (userText.includes('history')) {
-        aiReply =
-          'Your measurement history spans 12,400 signal points across 7 days. Completeness is 98.4%, and SpO₂ saturation has remained optimal between 96% and 98%.';
-        replyContext = [
-          { icon: 'drop', text: '97% SpO₂ avg' },
-          { icon: 'shield', text: '98.4% completeness' }
-        ];
-      } else {
-        aiReply = `I've analyzed your bio-signals related to "${userText}". All recorded telemetry aligns with your established personal baseline. No anomalous sustained tachycardia or hypoxia detected.`;
-        replyContext = [
-          { icon: 'pulse', text: 'Stable vitals' },
-          { icon: 'shield', text: 'Context aware' }
-        ];
+      if (!res.ok) {
+        throw new Error(`Server returned HTTP ${res.status}`);
       }
 
+      const data = await res.json();
       setMessages((prev) => [
         ...prev,
         {
           sender: 'ai',
-          text: aiReply,
-          context: replyContext
-        }
+          text: data.reply,
+          intent: data.intent,
+          show_cards: Boolean(data.show_cards),
+          cards: data.cards || [],
+        },
       ]);
-    }, 450);
+    } catch (err) {
+      console.error('Assistant API request failed:', err);
+      // Fallback response with strict anti-card compliance
+      setMessages((prev) => [
+        ...prev,
+        {
+          sender: 'ai',
+          text: "I'm having trouble connecting to the backend right now. Please verify that the API server is running on port 8000.",
+          intent: 'error',
+          show_cards: false,
+          cards: [],
+        },
+      ]);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   return (
     <div className="companion-page">
       <div className="companion-intro">
         <Orb small />
-        <span className="app-kicker">VITASENSE COMPANION</span>
+        <span className="app-kicker">VITASENSE AI COMPANION</span>
         <h1>
-          Let's understand <em>your health.</em>
+          Let's understand <em>your health data.</em>
         </h1>
         <p>
-          Ask about your measurements, trends, and data quality. I’ll show my
-          sources and limitations.
+          Ask about your measurements, trust scores, and data quality.
+          Telemetry is strictly educational replay; clinical diagnoses are never provided.
         </p>
+      </div>
+
+      {/* Replay Notice */}
+      <div className="assistant-context-banner">
+        <Icon name="shield" />
+        <span>
+          Active Context: <strong>PPG-DaLiA S1</strong> · Replay Mode (public dataset, not live) · Heart Rate: 74.2 bpm · Trust: 94%
+        </span>
       </div>
 
       <div className="chat-space">
@@ -114,18 +141,29 @@ export function CompanionPage() {
 
             <div>
               <p>{m.text}</p>
-              {m.context && (
-                <div className="message-context">
-                  {m.context.map((c, cIdx) => (
-                    <span key={cIdx}>
-                      <Icon name={c.icon} /> {c.text}
-                    </span>
+
+              {/* Cards render ONLY when explicitly requested by user */}
+              {m.show_cards && m.cards && m.cards.length > 0 && (
+                <div className="assistant-cards-grid">
+                  {m.cards.map((c, cIdx) => (
+                    <div key={cIdx} className="assistant-metric-card">
+                      <div className="card-top">
+                        <small>{c.title}</small>
+                        {c.badge && <span className="card-badge">{c.badge}</span>}
+                      </div>
+                      <strong>{c.value}</strong>
+                      {c.description && <small className="card-desc">{c.description}</small>}
+                    </div>
                   ))}
                 </div>
               )}
+
               {m.sender === 'ai' && (
-                <small>
-                  <Icon name="shield" /> Demo measurements · Not medical advice
+                <small className="ai-disclaimer">
+                  <Icon name="shield" />
+                  {m.intent === 'diagnosis_refusal'
+                    ? 'Clinical refusal · VitaSense does not provide medical diagnoses'
+                    : 'Replay data · Educational & research tool · Not medical advice'}
                 </small>
               )}
             </div>
@@ -133,6 +171,17 @@ export function CompanionPage() {
             {m.sender === 'user' && <span className="avatar">AM</span>}
           </div>
         ))}
+
+        {isLoading && (
+          <div className="chat-message ai-message">
+            <span className="chat-avatar">
+              <Icon name="sparkles" />
+            </span>
+            <div className="loading-dots">
+              <span>Thinking…</span>
+            </div>
+          </div>
+        )}
       </div>
 
       {/* Quick Prompts */}
@@ -142,6 +191,7 @@ export function CompanionPage() {
             key={prompt}
             onClick={() => handleSend(prompt)}
             type="button"
+            disabled={isLoading}
           >
             {prompt}
             <Icon name="arrow" />
@@ -163,10 +213,11 @@ export function CompanionPage() {
         <input
           value={input}
           onChange={(e) => setInput(e.target.value)}
-          placeholder="Ask VitaSense about your health data…"
+          placeholder="Ask about your heart rate, trust score, or signal quality…"
+          disabled={isLoading}
         />
-        <span>AI can make mistakes. Verify important information.</span>
-        <button className="send" type="submit" aria-label="Send">
+        <span>AI companion for research telemetry. Verify important data.</span>
+        <button className="send" type="submit" aria-label="Send" disabled={isLoading || !input.trim()}>
           <Icon name="send" />
         </button>
       </form>

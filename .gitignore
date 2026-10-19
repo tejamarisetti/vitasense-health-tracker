@@ -28,8 +28,10 @@ dist-ssr
 __pycache__/
 *.py[cod]
 *$py.class
+.env
 *.env
 *.env.*
+!.env.example
 .venv/
 env/
 venv/

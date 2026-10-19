@@ -22,7 +22,7 @@ This document explicitly catalogues the scientific, methodological, and experime
 
 ## 2. Small Cohort Size ($N = 15$ Subjects)
 - The entire wearable evaluation is based on 15 individuals ($S_1$ to $S_{15}$).
-- All participants were healthy, young volunteers (mean age $30.6 \pm 9.6$ years, range 21–55; 8 male, 7 female).
+- All participants were healthy volunteers verified from individual questionnaire records (15 subjects: 7 male, 8 female, age range 21–55 years, mean age 30.6 ± 9.6 years [ddof=0] / sample std 9.9 years; S1: 34m, S2: 28m, S3: 25m, S4: 25m, S5: 21f, S6: 37f, S7: 21f, S8: 43m, S9: 28f, S10: 55f, S11: 24f, S12: 43m, S13: 21f, S14: 26f, S15: 28m).
 - Statistical comparisons between alerting arms (e.g. Wilcoxon signed-rank tests) rely on $N = 15$ pairs, giving limited power to detect subtle effect sizes between closely related gating algorithms.
 
 ---
@@ -96,7 +96,7 @@ Multiple methodological decisions were formulated or refined *after* inspecting 
 
 ---
 
-## 11. Arm 4 (Conformal Abstention) Was Never Implemented
-- Arm 4 (uncertainty-aware conformal alerting with abstention), which served as the cornerstone of the original hypothesis $H_1$, was placed on indefinite experimental hold.
-- **Arm 4 was never built, calibrated, or evaluated in this benchmark suite.**
-- Consequently, hypothesis $H_1$ as originally conceived (evaluating conformal prediction sets for false alarm suppression) remains entirely untested in this work.
+## 11. Arm 4 (Conformal Abstention) Not Built and Evaluation of $H_1$
+- Under ratified Protocol Amendment 3, hypothesis $H_1$ was formulated as an estimation question testing whether Arm 3b (+Trust Score) significantly reduces false alerts per hour over Arm 3a (+Kinematic Gating alone) with 95% bootstrap CI and Wilcoxon signed-rank test.
+- Hypothesis $H_1$ was fully evaluated across all 4 experimental conditions and was **NOT SUPPORTED**: Arm 3b showed no statistically significant reduction in false alerts per hour over Arm 3a (Wilcoxon $p$-values 0.28 to 0.98; all 95% bootstrap CIs span zero).
+- Arm 4 (conformal prediction set calibration with abstention), which was originally conceived in Protocol v1 prior to Amendment 3, was placed on indefinite experimental hold and **was never built, calibrated, or evaluated in this benchmark suite**.
