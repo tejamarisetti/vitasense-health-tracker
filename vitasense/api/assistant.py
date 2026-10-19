@@ -189,6 +189,61 @@ def build_cards_from_context(ctx: Optional[AssistantContext]) -> List[DataCard]:
     return cards
 
 
+def query_gemini_llm(user_message: str, ctx: AssistantContext) -> Optional[str]:
+    """
+    Attempts to query Gemini API if GEMINI_API_KEY is configured in .env.
+    Injects context and strictly enforces system instructions.
+    Returns generated text or None if error/unavailable.
+    """
+    api_key = os.getenv("GEMINI_API_KEY") or os.getenv("VITASENSE_LLM_API_KEY")
+    if not api_key or not api_key.strip():
+        return None
+
+    # Context representation
+    context_str = (
+        f"Source: {ctx.source}\n"
+        f"Timestamp: {ctx.timestamp}\n"
+        f"Latest Reading: {ctx.latest_reading}\n"
+        f"Trust Score: {ctx.trust_score}\n"
+        f"Flags: {ctx.flags}\n"
+        f"Alerts: {ctx.alerts}\n"
+    )
+
+    system_instruction = (
+        "You are VitaSense Assistant, an educational and research AI for wearable physiological telemetry.\n"
+        "STRICT SAFETY & PRIVACY RULES:\n"
+        "1. Answer ONLY using the facts present in the provided Telemetry Context. If asked about a vital or metric not in context, reply 'I don't have that data.'\n"
+        "2. NEVER provide clinical diagnoses, medical advice, or prescribe medications.\n"
+        "3. Always label data as replay or demonstration data ('REPLAY: public dataset, not live').\n"
+        "4. Do NOT output markdown card containers or visual blocks.\n"
+        "5. Keep responses concise, objective, and polite.\n"
+    )
+
+    prompt = f"{system_instruction}\nTelemetry Context:\n{context_str}\n\nUser Question: {user_message}"
+
+    candidate_models = ["gemini-robotics-er-2-preview", "gemini-flash-latest", "gemini-2.5-flash"]
+    for model in candidate_models:
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
+        try:
+            import httpx
+            resp = httpx.post(
+                url,
+                json={"contents": [{"parts": [{"text": prompt}]}]},
+                timeout=5.0,
+            )
+            if resp.status_code == 200:
+                data = resp.json()
+                candidates = data.get("candidates", [])
+                if candidates:
+                    parts = candidates[0].get("content", {}).get("parts", [])
+                    if parts and "text" in parts[0]:
+                        return parts[0]["text"].strip()
+        except Exception:
+            continue
+
+    return None
+
+
 def process_assistant_message(req: AssistantRequest) -> AssistantResponse:
     """
     Main entry point for POST /api/assistant.
@@ -260,7 +315,17 @@ def process_assistant_message(req: AssistantRequest) -> AssistantResponse:
         )
 
     # intent == "data_inquiry"
-    # User asks a question about data. Answer ONLY from context values.
+    # 1. Try Gemini LLM if API key is present
+    gemini_reply = query_gemini_llm(req.message, ctx)
+    if gemini_reply:
+        return AssistantResponse(
+            reply=gemini_reply,
+            intent="data_inquiry",
+            show_cards=False,
+            cards=[],
+        )
+
+    # 2. Deterministic rule-based engine fallback (docs/ASSISTANT_SPEC.md)
     msg_lower = req.message.lower()
 
     # Check for specific metrics requested
