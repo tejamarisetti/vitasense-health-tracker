@@ -1097,66 +1097,25 @@
   border-top: 1px solid rgba(0, 0, 0, 0.06);
 }
 
-.prompt-row-container {
-  display: flex;
-  align-items: center;
-  gap: 6px;
-  width: 100%;
-  position: relative;
-}
-
-.prompt-scroll-btn {
-  background: var(--panel);
-  border: 1px solid var(--line);
-  color: var(--muted);
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  display: grid;
-  place-items: center;
-  cursor: pointer;
-  flex-shrink: 0;
-  font-size: 16px;
-  font-weight: bold;
-  line-height: 1;
-  transition: all 0.2s;
-  user-select: none;
-}
-.prompt-scroll-btn:hover {
-  color: var(--mint);
-  border-color: var(--mint);
-  background: var(--panel-2);
-  transform: scale(1.08);
-}
-
 .prompt-row {
   display: flex;
   gap: 8px;
   overflow-x: auto;
   scroll-behavior: smooth;
   -webkit-overflow-scrolling: touch;
-  padding: 4px 4px 6px;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(139, 255, 209, 0.3) transparent;
+  padding: 4px 2px 6px;
   cursor: grab;
   user-select: none;
-  flex: 1;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 .prompt-row:active {
   cursor: grabbing;
 }
 .prompt-row::-webkit-scrollbar {
-  height: 4px;
-}
-.prompt-row::-webkit-scrollbar-track {
-  background: transparent;
-}
-.prompt-row::-webkit-scrollbar-thumb {
-  background: rgba(139, 255, 209, 0.25);
-  border-radius: 4px;
-}
-.prompt-row::-webkit-scrollbar-thumb:hover {
-  background: var(--mint);
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 .prompt-row button {
   white-space: nowrap;
@@ -1293,18 +1252,13 @@
   animation: modalSlideUp 0.25s cubic-bezier(0.16, 1, 0.3, 1);
   display: flex;
   flex-direction: column;
-  scrollbar-width: thin;
-  scrollbar-color: rgba(139, 255, 209, 0.25) transparent;
+  scrollbar-width: none !important;
+  -ms-overflow-style: none !important;
 }
 .profile-modal-window::-webkit-scrollbar {
-  width: 5px;
-}
-.profile-modal-window::-webkit-scrollbar-track {
-  background: transparent;
-}
-.profile-modal-window::-webkit-scrollbar-thumb {
-  background: rgba(139, 255, 209, 0.25);
-  border-radius: 4px;
+  display: none !important;
+  width: 0 !important;
+  height: 0 !important;
 }
 .profile-modal-topbar {
   display: flex;
@@ -1965,3 +1919,31 @@
   from { opacity: 0; }
   to { opacity: 1; }
 }
+
+/* ==========================================================================
+   Global Invisible Scrollbars (Normal scrolling preserved, scrollbars hidden)
+   ========================================================================== */
+html,
+body,
+#root,
+.workspace,
+.app-shell,
+.app-main,
+* {
+  scrollbar-width: none !important; /* Firefox */
+  -ms-overflow-style: none !important; /* IE & Edge */
+}
+
+*::-webkit-scrollbar,
+html::-webkit-scrollbar,
+body::-webkit-scrollbar,
+div::-webkit-scrollbar,
+main::-webkit-scrollbar,
+section::-webkit-scrollbar,
+aside::-webkit-scrollbar {
+  display: none !important; /* Chrome, Safari, Edge, Opera */
+  width: 0 !important;
+  height: 0 !important;
+  background: transparent !important;
+}
+

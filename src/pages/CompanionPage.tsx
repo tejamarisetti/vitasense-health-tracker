@@ -31,10 +31,10 @@ export function CompanionPage() {
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
 
-  const scrollPrompts = (direction: 'left' | 'right') => {
-    if (promptRowRef.current) {
-      const scrollAmount = direction === 'left' ? -260 : 260;
-      promptRowRef.current.scrollBy({ left: scrollAmount, behavior: 'smooth' });
+  const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
+    if (!promptRowRef.current) return;
+    if (Math.abs(e.deltaY) > Math.abs(e.deltaX)) {
+      promptRowRef.current.scrollLeft += e.deltaY;
     }
   };
 
@@ -268,50 +268,29 @@ export function CompanionPage() {
         )}
       </div>
 
-      {/* Sticky Bottom Area: Quick Prompts with Scroll Controls + Composer */}
+      {/* Sticky Bottom Area: Quick Prompts (Smoothly scrollable, invisible scrollbars, no symbols) + Composer */}
       <div className="companion-bottom-bar">
-        <div className="prompt-row-container">
-          <button
-            type="button"
-            className="prompt-scroll-btn prompt-scroll-left"
-            onClick={() => scrollPrompts('left')}
-            aria-label="Scroll prompts left"
-            title="Scroll left"
-          >
-            ‹
-          </button>
-
-          <div
-            className="prompt-row"
-            ref={promptRowRef}
-            onMouseDown={handleMouseDown}
-            onMouseLeave={handleMouseLeave}
-            onMouseUp={handleMouseUp}
-            onMouseMove={handleMouseMove}
-          >
-            {quickPrompts.map((prompt) => (
-              <button
-                key={prompt}
-                onClick={() => handleSend(prompt)}
-                type="button"
-                disabled={isLoading}
-              >
-                <span>{prompt}</span>
-                <Icon name="arrow" size={14} />
-              </button>
-            ))}
-            <div className="prompt-end-spacer" style={{ minWidth: 24, flexShrink: 0 }} />
-          </div>
-
-          <button
-            type="button"
-            className="prompt-scroll-btn prompt-scroll-right"
-            onClick={() => scrollPrompts('right')}
-            aria-label="Scroll prompts right"
-            title="Scroll right to see all questions"
-          >
-            ›
-          </button>
+        <div
+          className="prompt-row"
+          ref={promptRowRef}
+          onWheel={handleWheel}
+          onMouseDown={handleMouseDown}
+          onMouseLeave={handleMouseLeave}
+          onMouseUp={handleMouseUp}
+          onMouseMove={handleMouseMove}
+        >
+          {quickPrompts.map((prompt) => (
+            <button
+              key={prompt}
+              onClick={() => handleSend(prompt)}
+              type="button"
+              disabled={isLoading}
+            >
+              <span>{prompt}</span>
+              <Icon name="arrow" size={14} />
+            </button>
+          ))}
+          <div className="prompt-end-spacer" style={{ minWidth: 32, flexShrink: 0 }} />
         </div>
 
         <form
