@@ -7,6 +7,7 @@ import { SignalsPage } from './pages/SignalsPage';
 import { TrendsPage } from './pages/TrendsPage';
 import { AlertsPage } from './pages/AlertsPage';
 import { BenchmarkPage } from './pages/BenchmarkPage';
+import { SettingsPage } from './pages/SettingsPage';
 import { Sidebar, navItems } from './components/Sidebar';
 import { AppHeader } from './components/AppHeader';
 import { Icon } from './components/Icons';
@@ -45,6 +46,7 @@ export function App() {
               {page === 'benchmark' && <BenchmarkPage />}
               {page === 'trends' && <TrendsPage />}
               {page === 'alerts' && <AlertsPage go={go} />}
+              {page === 'settings' && <SettingsPage go={go} theme={theme} setTheme={setTheme} />}
             </main>
           </div>
 
@@ -61,6 +63,14 @@ export function App() {
                 <span>{n.label.split(' ')[0]}</span>
               </button>
             ))}
+            <button
+              className={page === 'settings' ? 'active' : ''}
+              onClick={() => go('settings')}
+              type="button"
+            >
+              <Icon name="settings" />
+              <span>Settings</span>
+            </button>
           </nav>
         </div>
       )}

@@ -9,6 +9,7 @@ from typing import Optional
 
 from vitasense.api.assistant import (
     process_assistant_message,
+    check_assistant_health,
     AssistantRequest,
     AssistantResponse,
 )
@@ -72,6 +73,12 @@ def api_replay_stream(
 def api_benchmark_summary():
     """Returns verified benchmark results from docs/RESULTS_SUMMARY.md."""
     return get_benchmark_summary()
+
+
+@app.get("/api/assistant/health")
+def api_assistant_health():
+    """Reports LLM operational status or fallback error category without exposing keys."""
+    return check_assistant_health()
 
 
 @app.post("/api/assistant", response_model=AssistantResponse)

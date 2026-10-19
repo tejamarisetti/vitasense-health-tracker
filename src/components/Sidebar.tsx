@@ -13,7 +13,6 @@ export const navItems: NavItem[] = [
   { page: 'companion', label: 'AI Companion', icon: 'ai' },
   { page: 'trends', label: 'Health Trends', icon: 'trend' },
   { page: 'signals', label: 'Signal Lab', icon: 'activity' },
-  { page: 'benchmark', label: 'Benchmarks', icon: 'command' },
   { page: 'alerts', label: 'Alerts', icon: 'bell' }
 ];
 
@@ -60,7 +59,11 @@ export function Sidebar({ page, go }: SidebarProps) {
         </button>
       </nav>
 
-      <button className="side-settings" title="Settings" onClick={() => go('signals')}>
+      <button
+        className={`side-settings ${page === 'settings' ? 'active' : ''}`}
+        title="Settings"
+        onClick={() => go('settings')}
+      >
         <Icon name="settings" />
         <span>Settings</span>
       </button>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { Orb } from '../components/Orb';
 
@@ -15,11 +15,18 @@ interface Message {
   intent?: string;
   show_cards?: boolean;
   cards?: DataCard[];
+  engine?: 'llm' | 'rule_fallback';
+  fallback_reason?: string;
 }
 
 export function CompanionPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [engineInfo, setEngineInfo] = useState<{
+    engine: 'llm' | 'rule_fallback';
+    reason?: string;
+  }>({ engine: 'rule_fallback', reason: 'checking...' });
+
   const [messages, setMessages] = useState<Message[]>([
     {
       sender: 'ai',
@@ -27,8 +34,27 @@ export function CompanionPage() {
       intent: 'greeting',
       show_cards: false,
       cards: [],
+      engine: 'rule_fallback',
     },
   ]);
+
+  useEffect(() => {
+    fetch('/api/assistant/health')
+      .then((r) => r.json())
+      .then((data) => {
+        if (data.status === 'ok') {
+          setEngineInfo({ engine: 'llm' });
+        } else {
+          setEngineInfo({
+            engine: 'rule_fallback',
+            reason: data.category || 'fallback',
+          });
+        }
+      })
+      .catch(() => {
+        setEngineInfo({ engine: 'rule_fallback', reason: 'offline' });
+      });
+  }, []);
 
   // Current session context passed to POST /api/assistant
   const activeContext = {
@@ -75,6 +101,12 @@ export function CompanionPage() {
       }
 
       const data = await res.json();
+      if (data.engine) {
+        setEngineInfo({
+          engine: data.engine,
+          reason: data.fallback_reason,
+        });
+      }
       setMessages((prev) => [
         ...prev,
         {
@@ -83,6 +115,8 @@ export function CompanionPage() {
           intent: data.intent,
           show_cards: Boolean(data.show_cards),
           cards: data.cards || [],
+          engine: data.engine,
+          fallback_reason: data.fallback_reason,
         },
       ]);
     } catch (err) {
@@ -96,6 +130,8 @@ export function CompanionPage() {
           intent: 'error',
           show_cards: false,
           cards: [],
+          engine: 'rule_fallback',
+          fallback_reason: 'connection error',
         },
       ]);
     } finally {
@@ -117,12 +153,25 @@ export function CompanionPage() {
         </p>
       </div>
 
-      {/* Replay Notice */}
+      {/* Replay Notice with unobtrusive Engine Indicator */}
       <div className="assistant-context-banner">
-        <Icon name="shield" />
-        <span>
-          Active Context: <strong>PPG-DaLiA S1</strong> · Replay Mode (public dataset, not live) · Heart Rate: 74.2 bpm · Trust: 94%
-        </span>
+        <div className="banner-left-info">
+          <Icon name="shield" />
+          <span>
+            Active Context: <strong>PPG-DaLiA S1</strong> · Replay Mode (public dataset, not live) · Heart Rate: 74.2 bpm · Trust: 94%
+          </span>
+        </div>
+        <div
+          className={`assistant-engine-pill ${engineInfo.engine === 'llm' ? 'is-llm' : 'is-fallback'}`}
+          title={engineInfo.reason ? `Fallback reason: ${engineInfo.reason}` : 'Active Engine: LLM'}
+        >
+          <span className="engine-pulse-dot" />
+          <span className="engine-label">
+            {engineInfo.engine === 'llm'
+              ? 'LLM'
+              : `Rule Fallback${engineInfo.reason ? ` (${engineInfo.reason})` : ''}`}
+          </span>
+        </div>
       </div>
 
       <div className="chat-space">
@@ -161,9 +210,16 @@ export function CompanionPage() {
               {m.sender === 'ai' && (
                 <small className="ai-disclaimer">
                   <Icon name="shield" />
-                  {m.intent === 'diagnosis_refusal'
-                    ? 'Clinical refusal · VitaSense does not provide medical diagnoses'
-                    : 'Replay data · Educational & research tool · Not medical advice'}
+                  <span>
+                    {m.intent === 'diagnosis_refusal'
+                      ? 'Clinical refusal · VitaSense does not provide medical diagnoses'
+                      : 'Replay data · Educational & research tool · Not medical advice'}
+                  </span>
+                  {m.engine && (
+                    <span className="message-engine-tag">
+                      · {m.engine === 'llm' ? 'llm' : `rule_fallback${m.fallback_reason ? ` (${m.fallback_reason})` : ''}`}
+                    </span>
+                  )}
                 </small>
               )}
             </div>
