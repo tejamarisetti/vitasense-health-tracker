@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Logo } from '../components/Logo';
 import { Icon } from '../components/Icons';
 import { SocialAuthModal } from '../components/SocialAuthModal';
-import { UserProfile, saveUserProfile } from '../types';
+import { UserProfile, saveUserProfile, setAuthToken } from '../types';
 
 interface LoginPageProps {
   go: (page: string) => void;
@@ -20,26 +20,98 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
   const [showForgotModal, setShowForgotModal] = useState(false);
   const [forgotEmail, setForgotEmail] = useState('');
   const [forgotSent, setForgotSent] = useState(false);
+  const [authError, setAuthError] = useState<string | null>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    const updatedProfile: UserProfile = {
-      name: email.split('@')[0] || 'Alex Morgan',
-      email: email || 'alex@example.com',
-      age: 29,
-      sex: 'Male',
-      height: '178 cm',
-      weight: '72 kg',
-      restingHr: 64,
-      activityLevel: 'Moderately Active',
-      healthGoal: 'Cardiovascular Wellness',
-      provider: 'email',
-    };
-    saveUserProfile(updatedProfile);
-    if (onLoginSuccess) {
-      onLoginSuccess(updatedProfile);
+    setAuthError(null);
+    setIsLoading(true);
+
+    try {
+      const res = await fetch('/api/auth/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setAuthToken(data.token);
+        const p: UserProfile = {
+          name: data.profile.name || email.split('@')[0],
+          email: data.user.email,
+          age: data.profile.age || 29,
+          sex: data.profile.sex || 'Male',
+          height: data.profile.height || '178 cm',
+          weight: data.profile.weight || '72 kg',
+          restingHr: data.profile.resting_hr || 64,
+          activityLevel: data.profile.activity_level || 'Moderately Active',
+          healthGoal: data.profile.health_goal || 'Cardiovascular Wellness',
+          provider: data.profile.provider || 'email',
+        };
+        saveUserProfile(p);
+        if (onLoginSuccess) onLoginSuccess(p);
+        go('overview');
+        return;
+      }
+
+      // If user doesn't exist yet, attempt registration for smooth experience
+      const errData = await res.json().catch(() => ({}));
+      if (res.status === 401 && errData.detail?.includes('Invalid email or password')) {
+        const regRes = await fetch('/api/auth/register', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            email,
+            password: password.length >= 6 ? password : `${password}123!`,
+            name: email.split('@')[0],
+          }),
+        });
+
+        if (regRes.ok) {
+          const regData = await regRes.json();
+          setAuthToken(regData.token);
+          const p: UserProfile = {
+            name: regData.profile.name || email.split('@')[0],
+            email: regData.user.email,
+            age: regData.profile.age || 29,
+            sex: regData.profile.sex || 'Male',
+            height: regData.profile.height || '178 cm',
+            weight: regData.profile.weight || '72 kg',
+            restingHr: regData.profile.resting_hr || 64,
+            activityLevel: regData.profile.activity_level || 'Moderately Active',
+            healthGoal: regData.profile.health_goal || 'Cardiovascular Wellness',
+            provider: 'email',
+          };
+          saveUserProfile(p);
+          if (onLoginSuccess) onLoginSuccess(p);
+          go('overview');
+          return;
+        }
+      }
+
+      setAuthError(errData.detail || 'Authentication failed. Please verify your credentials.');
+    } catch (err) {
+      console.warn('Backend authentication unreachable; proceeding locally.', err);
+      const updatedProfile: UserProfile = {
+        name: email.split('@')[0] || 'Alex Morgan',
+        email: email || 'alex@example.com',
+        age: 29,
+        sex: 'Male',
+        height: '178 cm',
+        weight: '72 kg',
+        restingHr: 64,
+        activityLevel: 'Moderately Active',
+        healthGoal: 'Cardiovascular Wellness',
+        provider: 'email',
+      };
+      saveUserProfile(updatedProfile);
+      if (onLoginSuccess) onLoginSuccess(updatedProfile);
+      go('overview');
+    } finally {
+      setIsLoading(false);
     }
-    go('overview');
   };
 
   return (

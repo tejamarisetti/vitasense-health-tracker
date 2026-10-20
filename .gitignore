@@ -52,3 +52,10 @@ models/*.pkl
 models/*.pt
 models/*.onnx
 .pytest_cache/
+
+# SQLite Databases & Vite build temp files
+*.db
+*.sqlite
+*.sqlite3
+data/*.db
+*.timestamp-*.mjs

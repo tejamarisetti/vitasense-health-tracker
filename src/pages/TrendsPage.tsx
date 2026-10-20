@@ -1,17 +1,135 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
-import { loadUserProfile } from '../types';
+import { loadUserProfile, getAuthToken, MeasurementRecord } from '../types';
 
 export function TrendsPage() {
   const [activeRange, setActiveRange] = useState('7D');
   const [showExportModal, setShowExportModal] = useState(false);
   const [toastMessage, setToastMessage] = useState<string | null>(null);
 
+  // Phase 2 Telemetry & Quality Engine State
+  const [measurements, setMeasurements] = useState<MeasurementRecord[]>([]);
+  const [loadingMeas, setLoadingMeas] = useState(false);
+  const [expandedId, setExpandedId] = useState<number | null>(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [addType, setAddType] = useState<'heart_rate' | 'spo2' | 'respiratory_rate' | 'hrv'>('heart_rate');
+  const [addValue, setAddValue] = useState<number>(72);
+  const [addUnit, setAddUnit] = useState('bpm');
+  const [addSource, setAddSource] = useState<'manual' | 'import' | 'demo'>('manual');
+  const [addError, setAddError] = useState<string | null>(null);
+
   const profile = loadUserProfile();
 
   const showToast = (msg: string) => {
     setToastMessage(msg);
-    setTimeout(() => setToastMessage(null), 3500);
+    setTimeout(() => setToastMessage(null), 4000);
+  };
+
+  const fetchMeasurements = async () => {
+    const token = getAuthToken();
+    if (!token) return;
+    setLoadingMeas(true);
+    try {
+      const res = await fetch('/api/measurements?limit=50', {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setMeasurements(data);
+        // If empty, auto-seed demo data for immediate visual experience
+        if (data.length === 0) {
+          await fetch('/api/measurements/demo/reset', {
+            method: 'POST',
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          const reRes = await fetch('/api/measurements?limit=50', {
+            headers: { Authorization: `Bearer ${token}` },
+          });
+          if (reRes.ok) {
+            setMeasurements(await reRes.json());
+          }
+        }
+      }
+    } catch (err) {
+      console.warn('Could not load telemetry measurements', err);
+    } finally {
+      setLoadingMeas(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchMeasurements();
+  }, []);
+
+  const handleResetDemoData = async () => {
+    const token = getAuthToken();
+    if (!token) {
+      showToast('⚠️ Please log in to manage telemetry data.');
+      return;
+    }
+    try {
+      const res = await fetch('/api/measurements/demo/reset', {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        showToast(`✓ ${data.message}`);
+        fetchMeasurements();
+      } else {
+        const err = await res.json();
+        showToast(`⚠️ Error resetting demo data: ${err.detail || 'Failed'}`);
+      }
+    } catch (err) {
+      showToast('⚠️ Network error resetting demo data.');
+    }
+  };
+
+  const handleAddMeasurementSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setAddError(null);
+    const token = getAuthToken();
+    if (!token) {
+      setAddError('Authentication token missing. Please log in.');
+      return;
+    }
+
+    try {
+      const res = await fetch('/api/measurements', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          type: addType,
+          value: Number(addValue),
+          unit: addUnit,
+          timestamp: new Date().toISOString(),
+          source: addSource,
+        }),
+      });
+
+      if (res.ok) {
+        setShowAddModal(false);
+        showToast(`✓ Added ${addType} reading (${addValue} ${addUnit}) successfully.`);
+        fetchMeasurements();
+      } else {
+        const err = await res.json();
+        setAddError(err.detail || 'Validation failed. Please verify inputs.');
+      }
+    } catch (err) {
+      setAddError('Network error submitting measurement.');
+    }
+  };
+
+  // Adjust default unit when measurement type changes
+  const handleTypeChange = (t: 'heart_rate' | 'spo2' | 'respiratory_rate' | 'hrv') => {
+    setAddType(t);
+    if (t === 'heart_rate') setAddUnit('bpm');
+    else if (t === 'spo2') setAddUnit('%');
+    else if (t === 'respiratory_rate') setAddUnit('brpm');
+    else if (t === 'hrv') setAddUnit('ms');
   };
 
   const generateReportData = () => {
@@ -131,15 +249,17 @@ export function TrendsPage() {
             Compare signals with your historical baseline and inspect every deviation.
           </p>
         </div>
-        <button
-          className="button button-soft"
-          type="button"
-          onClick={() => setShowExportModal(true)}
-          id="export-report-btn"
-          aria-label="Export health report"
-        >
-          Export report <Icon name="arrow" />
-        </button>
+        <div style={{ display: 'flex', gap: '10px' }}>
+          <button
+            className="button button-soft"
+            type="button"
+            onClick={() => setShowExportModal(true)}
+            id="export-report-btn"
+            aria-label="Export health report"
+          >
+            Export report <Icon name="arrow" />
+          </button>
+        </div>
       </div>
 
       <article className="analysis-card">
@@ -178,36 +298,333 @@ export function TrendsPage() {
             <defs>
               <linearGradient id="trendfill" x1="0" y1="0" x2="0" y2="1">
                 <stop stopColor="#35e6d3" stopOpacity=".25" />
-                <stop offset="1" stopColor="#35e6d3" stopOpacity="0" />
+                <stop stopColor="#35e6d3" stopOpacity="0" offset="1" />
               </linearGradient>
             </defs>
+
             <path
-              className="trend-area"
-              d="M0 260 C80 270 95 180 170 205 S267 285 340 225 440 90 510 160 615 280 690 190 820 95 1000 110 V360H0Z"
+              className="cursor-line"
+              d="M 520,30 L 520,330"
+              stroke="#adcde233"
+              strokeWidth="1"
             />
             <path
               className="baseline"
-              d="M0 230 C170 206 270 239 400 207 S700 222 1000 188"
+              d="M 40,240 Q 250,230 500,245 T 960,235"
+              fill="none"
+              stroke="#a78bfa"
+              strokeWidth="2"
+            />
+            <path
+              className="trend-area"
+              d="M 40,270 Q 150,250 260,220 T 520,130 T 740,240 T 960,210 L 960,340 L 40,340 Z"
             />
             <path
               className="trend-line"
-              d="M0 260 C80 270 95 180 170 205 S267 285 340 225 440 90 510 160 615 280 690 190 820 95 1000 110"
+              d="M 40,270 Q 150,250 260,220 T 520,130 T 740,240 T 960,210"
+              fill="none"
+              stroke="#35e6d3"
+              strokeWidth="3"
             />
-            <line className="cursor-line" x1="510" y1="0" x2="510" y2="360" />
-            <circle cx="510" cy="160" r="7" />
+            <circle cx="520" cy="130" r="6" />
           </svg>
+
+          <div className="y-labels">
+            <span>120</span>
+            <span>100</span>
+            <span>80</span>
+            <span>60</span>
+            <span>40</span>
+          </div>
         </div>
 
-        <div className="chart-labels">
-          <span>MON 20</span>
-          <span>TUE 21</span>
-          <span>WED 22</span>
-          <span>THU 23</span>
-          <span>FRI 24</span>
-          <span>SAT 25</span>
-          <span>SUN 26</span>
+        <div className="x-labels">
+          <span>MON</span>
+          <span>TUE</span>
+          <span>WED</span>
+          <span>THU</span>
+          <span>FRI</span>
+          <span>SAT</span>
+          <span>SUN</span>
         </div>
       </article>
+
+      {/* ====================================================================
+          Phase 2: Physiological Telemetry & Quality Engine (FR-02 & FR-03)
+          ==================================================================== */}
+      <section className="telemetry-section">
+        <div className="telemetry-header">
+          <div>
+            <span className="app-kicker">PRD PHASE 2 · FR-01 · FR-02 · FR-03</span>
+            <h2>Physiological Telemetry & Quality Engine</h2>
+            <p>
+              Per-user isolated time-series with deterministic quality flags (missing, stale, duplicate, implausible, sudden change) and component checks.
+            </p>
+          </div>
+
+          <div className="telemetry-actions">
+            <button
+              className="button button-soft"
+              onClick={() => setShowAddModal(true)}
+              type="button"
+            >
+              <Icon name="check" size={14} /> Add Measurement
+            </button>
+            <button
+              className="button button-quiet"
+              onClick={handleResetDemoData}
+              title="Resets DEMO data only. Real user measurements are never deleted."
+              type="button"
+            >
+              <Icon name="history" size={14} /> Reset Demo Data (DEMO)
+            </button>
+          </div>
+        </div>
+
+        <div className="telemetry-table-wrap">
+          {loadingMeas ? (
+            <div style={{ padding: '24px', textAlign: 'center', color: 'var(--muted)' }}>
+              Loading telemetry observations...
+            </div>
+          ) : measurements.length === 0 ? (
+            <div style={{ padding: '24px', textAlign: 'center', color: 'var(--muted)' }}>
+              No telemetry records found. Click <strong>Add Measurement</strong> or <strong>Reset Demo Data</strong> to populate.
+            </div>
+          ) : (
+            <table className="telemetry-table">
+              <thead>
+                <tr>
+                  <th>Timestamp</th>
+                  <th>Metric Type</th>
+                  <th>Value</th>
+                  <th>Source</th>
+                  <th>Trust Score</th>
+                  <th>Quality Flags</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                {measurements.map((m) => {
+                  const isExpanded = expandedId === m.id;
+                  const flags = m.quality_flags || [];
+                  const dateStr = new Date(m.timestamp).toLocaleTimeString([], {
+                    hour: '2-digit',
+                    minute: '2-digit',
+                    second: '2-digit',
+                  });
+
+                  return (
+                    <React.Fragment key={m.id}>
+                      <tr
+                        className="telemetry-row"
+                        onClick={() => setExpandedId(isExpanded ? null : m.id)}
+                      >
+                        <td>
+                          <strong>{dateStr}</strong>
+                          <div style={{ fontSize: '9px', color: 'var(--faint)' }}>
+                            {new Date(m.timestamp).toLocaleDateString()}
+                          </div>
+                        </td>
+                        <td style={{ textTransform: 'capitalize' }}>
+                          {m.type.replace('_', ' ')}
+                        </td>
+                        <td>
+                          <strong>
+                            {m.value.toFixed(1)} <small>{m.unit}</small>
+                          </strong>
+                        </td>
+                        <td>
+                          <span className={`badge-source ${m.source}`}>
+                            {m.source}
+                          </span>
+                        </td>
+                        <td>
+                          <strong
+                            style={{
+                              color:
+                                m.trust_score >= 0.8
+                                  ? 'var(--mint)'
+                                  : m.trust_score > 0.4
+                                  ? '#f59e0b'
+                                  : '#f87171',
+                            }}
+                          >
+                            {(m.trust_score * 100).toFixed(0)}%
+                          </strong>
+                        </td>
+                        <td>
+                          {flags.length === 0 ? (
+                            <span className="quality-flag-tag nominal">Nominal</span>
+                          ) : (
+                            flags.map((f) => (
+                              <span key={f} className={`quality-flag-tag ${f}`}>
+                                {f.replace('_', ' ')}
+                              </span>
+                            ))
+                          )}
+                        </td>
+                        <td>
+                          <span style={{ color: 'var(--aqua)', fontSize: '10px' }}>
+                            {isExpanded ? 'Hide Checks ▲' : 'Inspect Checks ▼'}
+                          </span>
+                        </td>
+                      </tr>
+
+                      {/* Expandable Component Checks Drawer */}
+                      {isExpanded && (
+                        <tr>
+                          <td colSpan={7} style={{ padding: 0 }}>
+                            <div className="component-checks-drawer">
+                              <span className="app-kicker">
+                                vitasense.quality · RULE-BASED COMPONENT CHECKS (RECORD #{m.id})
+                              </span>
+                              <div className="component-checks-grid">
+                                {Object.entries(m.component_checks || {}).map(
+                                  ([chkKey, chkVal]) => (
+                                    <div key={chkKey} className="component-check-item">
+                                      <div className="check-head">
+                                        <span className="check-title">
+                                          {chkKey.replace('_', ' ')}
+                                        </span>
+                                        <span className={`check-status ${chkVal.status}`}>
+                                          {chkVal.status.toUpperCase()} ({(chkVal.score * 100).toFixed(0)}%)
+                                        </span>
+                                      </div>
+                                      <p className="check-details">{chkVal.details}</p>
+                                    </div>
+                                  )
+                                )}
+                              </div>
+                            </div>
+                          </td>
+                        </tr>
+                      )}
+                    </React.Fragment>
+                  );
+                })}
+              </tbody>
+            </table>
+          )}
+        </div>
+      </section>
+
+      {/* Add Measurement Modal */}
+      {showAddModal && (
+        <div className="add-meas-modal-backdrop" onClick={() => setShowAddModal(false)}>
+          <div className="add-meas-modal" onClick={(e) => e.stopPropagation()}>
+            <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '18px' }}>
+              <div>
+                <span className="app-kicker">SERVER-SIDE VALIDATION</span>
+                <h3 style={{ margin: '4px 0 0', fontSize: '18px' }}>Add Physiological Measurement</h3>
+              </div>
+              <button
+                className="export-dialog-close"
+                onClick={() => setShowAddModal(false)}
+                type="button"
+              >
+                ✕
+              </button>
+            </div>
+
+            {addError && (
+              <div
+                style={{
+                  background: 'rgba(239,68,68,0.12)',
+                  border: '1px solid rgba(239,68,68,0.3)',
+                  color: '#f87171',
+                  borderRadius: '8px',
+                  padding: '10px 12px',
+                  fontSize: '11px',
+                  marginBottom: '16px',
+                }}
+              >
+                {addError}
+              </div>
+            )}
+
+            <form onSubmit={handleAddMeasurementSubmit}>
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                  Measurement Type
+                </label>
+                <select
+                  value={addType}
+                  onChange={(e) => handleTypeChange(e.target.value as any)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--line-strong)',
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                  }}
+                >
+                  <option value="heart_rate">Heart Rate (bpm)</option>
+                  <option value="spo2">Oxygen Saturation SpO₂ (%)</option>
+                  <option value="respiratory_rate">Respiratory Rate (brpm)</option>
+                  <option value="hrv">Heart Rate Variability HRV (ms)</option>
+                </select>
+              </div>
+
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                  Value ({addUnit})
+                </label>
+                <input
+                  type="number"
+                  step="0.1"
+                  value={addValue}
+                  onChange={(e) => setAddValue(Number(e.target.value))}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--line-strong)',
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                  Source Tag
+                </label>
+                <select
+                  value={addSource}
+                  onChange={(e) => setAddSource(e.target.value as any)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--line-strong)',
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                  }}
+                >
+                  <option value="manual">Manual Entry</option>
+                  <option value="import">Imported Dataset</option>
+                  <option value="demo">Demo Wearable</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <button
+                  type="button"
+                  className="button button-quiet"
+                  onClick={() => setShowAddModal(false)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="button button-primary">
+                  Submit & Validate
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
 
       {/* Export Report Modal */}
       {showExportModal && (

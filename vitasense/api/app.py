@@ -18,6 +18,8 @@ from vitasense.api.replay import (
     get_replay_stream,
 )
 from vitasense.api.benchmark import get_benchmark_summary
+from vitasense.api.auth import router as auth_router
+from vitasense.api.measurements import router as measurements_router
 
 app = FastAPI(
     title="VitaSense AI Telemetry & Benchmark API",
@@ -33,6 +35,10 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+# Mount Phase 2 Authentication & Measurement Ingestion Routers
+app.include_router(auth_router)
+app.include_router(measurements_router)
 
 
 @app.get("/api/health")

@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Icon } from './Icons';
-import { UserProfile, saveUserProfile } from '../types';
+import { UserProfile, saveUserProfile, getAuthToken, clearAuthToken } from '../types';
 
 interface ProfileModalProps {
   isOpen: boolean;
@@ -38,13 +38,56 @@ export function ProfileModal({
     .join('')
     .toUpperCase() || 'U';
 
-  const handleSave = (e: React.FormEvent) => {
+  const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     saveUserProfile(formData);
     onUpdateProfile(formData);
+
+    const token = getAuthToken();
+    if (token) {
+      try {
+        await fetch('/api/auth/profile', {
+          method: 'PUT',
+          headers: {
+            'Content-Type': 'application/json',
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            name: formData.name,
+            age: Number(formData.age),
+            sex: formData.sex,
+            height: formData.height,
+            weight: formData.weight,
+            resting_hr: Number(formData.restingHr),
+            activity_level: formData.activityLevel,
+            health_goal: formData.healthGoal,
+            provider: formData.provider,
+          }),
+        });
+      } catch (err) {
+        console.warn('Could not sync profile to backend', err);
+      }
+    }
+
     setSaveSuccess(true);
     setIsEditing(false);
     setTimeout(() => setSaveSuccess(false), 2500);
+  };
+
+  const handleLogoutClick = async () => {
+    const token = getAuthToken();
+    if (token) {
+      try {
+        await fetch('/api/auth/logout', {
+          method: 'POST',
+          headers: { Authorization: `Bearer ${token}` },
+        });
+      } catch (err) {
+        console.warn('Backend logout failed', err);
+      }
+      clearAuthToken();
+    }
+    onLogout();
   };
 
   return (
@@ -108,7 +151,7 @@ export function ProfileModal({
             <button
               type="button"
               className="profile-action-btn logout-btn"
-              onClick={onLogout}
+              onClick={handleLogoutClick}
               title="Log out of VitaSense"
               aria-label="Log out"
             >

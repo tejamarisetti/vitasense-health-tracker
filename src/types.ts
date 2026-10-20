@@ -24,7 +24,52 @@ export const defaultUserProfile: UserProfile = {
   provider: 'email',
 };
 
+export interface ComponentCheckResult {
+  status: 'pass' | 'fail' | 'warning';
+  score: number;
+  details: string;
+}
+
+export interface MeasurementRecord {
+  id: number;
+  user_id: number;
+  type: 'heart_rate' | 'spo2' | 'respiratory_rate' | 'hrv';
+  value: number;
+  unit: string;
+  timestamp: string;
+  source: 'manual' | 'import' | 'demo';
+  trust_score: number;
+  quality_flags: string[];
+  component_checks: Record<string, ComponentCheckResult>;
+  created_at: string;
+}
+
 const STORAGE_KEY = 'vitasense_user_profile';
+const TOKEN_KEY = 'vitasense_auth_token';
+
+export function getAuthToken(): string | null {
+  try {
+    return localStorage.getItem(TOKEN_KEY);
+  } catch (err) {
+    return null;
+  }
+}
+
+export function setAuthToken(token: string): void {
+  try {
+    localStorage.setItem(TOKEN_KEY, token);
+  } catch (err) {
+    console.warn('Could not save auth token to localStorage', err);
+  }
+}
+
+export function clearAuthToken(): void {
+  try {
+    localStorage.removeItem(TOKEN_KEY);
+  } catch (err) {
+    console.warn('Could not remove auth token from localStorage', err);
+  }
+}
 
 export function loadUserProfile(): UserProfile {
   try {

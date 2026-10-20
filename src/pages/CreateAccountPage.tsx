@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Logo } from '../components/Logo';
 import { Icon } from '../components/Icons';
 import { SocialAuthModal } from '../components/SocialAuthModal';
-import { UserProfile, saveUserProfile } from '../types';
+import { UserProfile, saveUserProfile, setAuthToken } from '../types';
 
 interface CreateAccountPageProps {
   go: (page: string) => void;
@@ -49,9 +49,14 @@ export function CreateAccountPage({
 
   // Social Auth Modal state
   const [socialProvider, setSocialProvider] = useState<'google' | 'apple' | null>(null);
+  const [errorMsg, setErrorMsg] = useState<string | null>(null);
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setErrorMsg(null);
+    setIsSubmitting(true);
+
     const newProfile: UserProfile = {
       name: name.trim() || 'Health Explorer',
       email: email.trim() || 'user@example.com',
@@ -64,9 +69,61 @@ export function CreateAccountPage({
       healthGoal,
       provider: 'email',
     };
-    saveUserProfile(newProfile);
-    onAccountCreated(newProfile);
-    go('overview');
+
+    try {
+      const res = await fetch('/api/auth/register', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          email: newProfile.email,
+          password: password || 'SecurePass123!',
+          name: newProfile.name,
+          age: newProfile.age,
+          sex: newProfile.sex,
+          height: newProfile.height,
+          weight: newProfile.weight,
+          resting_hr: newProfile.restingHr,
+          activity_level: newProfile.activityLevel,
+          health_goal: newProfile.healthGoal,
+          provider: 'email',
+        }),
+      });
+
+      if (res.ok) {
+        const data = await res.json();
+        setAuthToken(data.token);
+        saveUserProfile(newProfile);
+        onAccountCreated(newProfile);
+        go('overview');
+        return;
+      }
+
+      const err = await res.json().catch(() => ({}));
+      if (err.detail?.includes('already exists')) {
+        // Attempt login if already registered
+        const loginRes = await fetch('/api/auth/login', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ email: newProfile.email, password: password || 'SecurePass123!' }),
+        });
+        if (loginRes.ok) {
+          const loginData = await loginRes.json();
+          setAuthToken(loginData.token);
+          saveUserProfile(newProfile);
+          onAccountCreated(newProfile);
+          go('overview');
+          return;
+        }
+      }
+      setErrorMsg(err.detail || 'Registration failed. Please check inputs.');
+    } catch (err) {
+      console.warn('Backend unavailable, saving locally', err);
+      saveUserProfile(newProfile);
+      onAccountCreated(newProfile);
+      go('overview');
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   const getMascotThought = () => {
