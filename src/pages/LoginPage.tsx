@@ -17,6 +17,9 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
   const [password, setPassword] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [socialProvider, setSocialProvider] = useState<'google' | 'apple' | null>(null);
+  const [showForgotModal, setShowForgotModal] = useState(false);
+  const [forgotEmail, setForgotEmail] = useState('');
+  const [forgotSent, setForgotSent] = useState(false);
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
@@ -191,7 +194,16 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
             <label className={focusField === 'password' ? 'field-active' : ''}>
               <span>
                 Password{' '}
-                <button type="button">Forgot password?</button>
+                <button
+                  type="button"
+                  onClick={() => {
+                    setForgotEmail(email || '');
+                    setForgotSent(false);
+                    setShowForgotModal(true);
+                  }}
+                >
+                  Forgot password?
+                </button>
               </span>
               <div className="input-shell">
                 <Icon name="shield" />
@@ -278,6 +290,79 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
           go('overview');
         }}
       />
+
+      {/* Forgot Password Recovery Modal */}
+      {showForgotModal && (
+        <div className="forgot-dialog-backdrop" onClick={() => setShowForgotModal(false)}>
+          <div className="forgot-dialog" onClick={(e) => e.stopPropagation()}>
+            <div className="forgot-dialog-header">
+              <div>
+                <span className="app-kicker">ACCOUNT SECURITY</span>
+                <h3>Reset Password</h3>
+                <p>Enter your email to receive recovery instructions.</p>
+              </div>
+              <button
+                className="forgot-dialog-close"
+                onClick={() => setShowForgotModal(false)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {forgotSent ? (
+              <div style={{ textAlign: 'center', padding: '16px 0' }}>
+                <div style={{ fontSize: '36px', marginBottom: '12px' }}>✉️</div>
+                <h4 style={{ fontSize: '16px', marginBottom: '6px' }}>Recovery Link Dispatched</h4>
+                <p style={{ color: 'var(--muted)', fontSize: '12px', marginBottom: '20px' }}>
+                  We sent password reset instructions to <strong>{forgotEmail}</strong>.
+                </p>
+                <button
+                  type="button"
+                  className="button button-primary"
+                  style={{ width: '100%' }}
+                  onClick={() => setShowForgotModal(false)}
+                >
+                  Return to Sign In
+                </button>
+              </div>
+            ) : (
+              <form
+                onSubmit={(e) => {
+                  e.preventDefault();
+                  if (forgotEmail.trim()) {
+                    setForgotSent(true);
+                  }
+                }}
+              >
+                <label style={{ display: 'block', marginBottom: '16px' }}>
+                  <span style={{ fontSize: '11px', display: 'block', marginBottom: '6px' }}>
+                    Registered Email Address
+                  </span>
+                  <div className="input-shell">
+                    <Icon name="shield" />
+                    <input
+                      type="email"
+                      value={forgotEmail}
+                      onChange={(e) => setForgotEmail(e.target.value)}
+                      placeholder="alex@example.com"
+                      required
+                      autoFocus
+                    />
+                  </div>
+                </label>
+                <button
+                  type="submit"
+                  className="button button-primary"
+                  style={{ width: '100%', height: '46px', fontWeight: 600 }}
+                >
+                  Send Recovery Link <Icon name="arrow" />
+                </button>
+              </form>
+            )}
+          </div>
+        </div>
+      )}
     </main>
   );
 }

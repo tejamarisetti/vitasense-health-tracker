@@ -22,6 +22,8 @@ interface Message {
 export function CompanionPage() {
   const [input, setInput] = useState('');
   const [isLoading, setIsLoading] = useState(false);
+  const [attachedFile, setAttachedFile] = useState<{ name: string; size: string } | null>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
   const [engineInfo, setEngineInfo] = useState<{
     engine: 'llm' | 'rule_fallback';
     reason?: string;
@@ -30,6 +32,14 @@ export function CompanionPage() {
   const isDraggingRef = useRef(false);
   const startXRef = useRef(0);
   const scrollLeftRef = useRef(0);
+
+  const handleFileSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (file) {
+      const sizeKb = (file.size / 1024).toFixed(1);
+      setAttachedFile({ name: file.name, size: `${sizeKb} KB` });
+    }
+  };
 
   const handleWheel = (e: React.WheelEvent<HTMLDivElement>) => {
     if (!promptRowRef.current) return;
@@ -110,14 +120,22 @@ export function CompanionPage() {
   ];
 
   const handleSend = async (userText: string) => {
-    if (!userText.trim() || isLoading) return;
+    const textToSend = userText.trim();
+    if ((!textToSend && !attachedFile) || isLoading) return;
+
+    const fullMessage = attachedFile
+      ? textToSend
+        ? `${textToSend} [Attached: ${attachedFile.name} (${attachedFile.size})]`
+        : `Attached telemetry log: ${attachedFile.name} (${attachedFile.size})`
+      : textToSend;
 
     const newMessages: Message[] = [
       ...messages,
-      { sender: 'user', text: userText },
+      { sender: 'user', text: fullMessage },
     ];
     setMessages(newMessages);
     setInput('');
+    setAttachedFile(null);
     setIsLoading(true);
 
     try {
@@ -300,7 +318,35 @@ export function CompanionPage() {
             handleSend(input);
           }}
         >
-          <button type="button" aria-label="Add attachment" className="attach-button">
+          {attachedFile && (
+            <div className="composer-attachment-pill">
+              <span>📎 {attachedFile.name} ({attachedFile.size})</span>
+              <button
+                type="button"
+                onClick={() => setAttachedFile(null)}
+                aria-label="Remove attachment"
+                title="Remove attachment"
+              >
+                ✕
+              </button>
+            </div>
+          )}
+
+          <input
+            type="file"
+            ref={fileInputRef}
+            onChange={handleFileSelect}
+            accept=".csv,.json,.txt"
+            style={{ display: 'none' }}
+          />
+
+          <button
+            type="button"
+            aria-label="Add attachment"
+            className="attach-button"
+            onClick={() => fileInputRef.current?.click()}
+            title="Attach telemetry CSV or JSON file"
+          >
             ＋
           </button>
           <input
@@ -309,7 +355,12 @@ export function CompanionPage() {
             placeholder="Ask about your heart rate, trust score, or signal quality…"
             disabled={isLoading}
           />
-          <button className="send" type="submit" aria-label="Send" disabled={isLoading || !input.trim()}>
+          <button
+            className="send"
+            type="submit"
+            aria-label="Send"
+            disabled={isLoading || (!input.trim() && !attachedFile)}
+          >
             <Icon name="send" />
           </button>
         </form>

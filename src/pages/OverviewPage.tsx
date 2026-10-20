@@ -95,7 +95,12 @@ export function OverviewPage({ go }: OverviewPageProps) {
               <small>VITASENSE INTELLIGENCE</small>
               <strong>AI Insight</strong>
             </div>
-            <button type="button" aria-label="More options">
+            <button
+              type="button"
+              aria-label="More options"
+              onClick={() => go('companion')}
+              title="Open in AI Companion"
+            >
               <Icon name="more" />
             </button>
           </div>
@@ -261,7 +266,12 @@ export function OverviewPage({ go }: OverviewPageProps) {
               <span className="app-kicker">ACTIVITY</span>
               <h3>Recent events</h3>
             </div>
-            <button type="button" aria-label="More options">
+            <button
+              type="button"
+              aria-label="More options"
+              onClick={() => go('alerts')}
+              title="View recent event alerts"
+            >
               <Icon name="more" />
             </button>
           </div>
@@ -308,7 +318,13 @@ export function OverviewPage({ go }: OverviewPageProps) {
             All measurements shown are illustrative demo data and are not intended
             for diagnosis or medical decisions.
           </span>
-          <button type="button">Learn more</button>
+          <button
+            type="button"
+            onClick={() => go('benchmark')}
+            title="Inspect verified benchmark results"
+          >
+            Learn more
+          </button>
         </div>
       </div>
     </div>

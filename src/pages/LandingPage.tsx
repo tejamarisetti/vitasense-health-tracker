@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Logo } from '../components/Logo';
 import { Icon } from '../components/Icons';
 import { Orb } from '../components/Orb';
@@ -11,6 +11,8 @@ interface LandingPageProps {
 }
 
 export function LandingPage({ go, theme, setTheme }: LandingPageProps) {
+  const [baselineRange, setBaselineRange] = useState('7D');
+
   return (
     <main className="landing">
       {/* Site Header */}
@@ -151,7 +153,12 @@ export function LandingPage({ go, theme, setTheme }: LandingPageProps) {
               <span>
                 <i className="live-dot" /> LIVE SIGNAL
               </span>
-              <button type="button" aria-label="More options">
+              <button
+                type="button"
+                aria-label="More options"
+                onClick={() => go('signals')}
+                title="Inspect real-time signal telemetry"
+              >
                 <Icon name="more" />
               </button>
             </div>
@@ -294,11 +301,18 @@ export function LandingPage({ go, theme, setTheme }: LandingPageProps) {
                 <small>WEEKLY BASELINE</small>
                 <strong>Your rhythm, over time</strong>
               </div>
-              <span className="range-tabs">
-                <b>7D</b>
-                <i>30D</i>
-                <i>90D</i>
-              </span>
+              <div className="range-tabs">
+                {['7D', '30D', '90D'].map((r) => (
+                  <button
+                    key={r}
+                    type="button"
+                    className={baselineRange === r ? 'selected' : ''}
+                    onClick={() => setBaselineRange(r)}
+                  >
+                    {r}
+                  </button>
+                ))}
+              </div>
             </div>
             <svg viewBox="0 0 700 250" preserveAspectRatio="none">
               <defs>

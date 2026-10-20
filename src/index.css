@@ -1081,20 +1081,22 @@
   position: sticky;
   bottom: 0;
   z-index: 25;
-  background: rgba(8, 13, 24, 0.65);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid rgba(255, 255, 255, 0.05);
-  padding: 12px 0 10px 0;
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
+  padding: 8px 0 10px 0;
   display: flex;
   flex-direction: column;
   gap: 10px;
 }
 .theme-light .companion-bottom-bar {
-  background: rgba(245, 248, 250, 0.85);
-  backdrop-filter: blur(14px);
-  -webkit-backdrop-filter: blur(14px);
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  background: transparent !important;
+  backdrop-filter: none !important;
+  -webkit-backdrop-filter: none !important;
+  border: none !important;
+  box-shadow: none !important;
 }
 
 .prompt-row {
@@ -1119,9 +1121,11 @@
 }
 .prompt-row button {
   white-space: nowrap;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  color: var(--muted);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+  color: var(--text);
   cursor: pointer;
   border-radius: 9px;
   align-items: center;
@@ -1135,8 +1139,13 @@
 }
 .prompt-row button:hover {
   color: var(--mint);
-  border-color: rgba(139, 255, 209, 0.4);
-  background: rgba(139, 255, 209, 0.05);
+  border-color: rgba(139, 255, 209, 0.5);
+  background: rgba(139, 255, 209, 0.12);
+}
+.theme-light .prompt-row button {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text);
 }
 
 .composer {
@@ -1946,4 +1955,194 @@ aside::-webkit-scrollbar {
   height: 0 !important;
   background: transparent !important;
 }
+
+/* ==========================================================================
+   Composer Attachment Badge
+   ========================================================================== */
+.composer-attachment-pill {
+  grid-column: 1 / -1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 8px;
+  background: rgba(139, 255, 209, 0.1);
+  border: 1px solid rgba(139, 255, 209, 0.3);
+  color: var(--mint);
+  padding: 5px 12px;
+  border-radius: 8px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+.composer-attachment-pill button {
+  background: none;
+  border: none;
+  color: var(--muted);
+  cursor: pointer;
+  font-size: 14px;
+  line-height: 1;
+  padding: 0 4px;
+}
+.composer-attachment-pill button:hover {
+  color: #ff6b6b;
+}
+
+/* ==========================================================================
+   Export Telemetry Report Dialog & Toast
+   ========================================================================== */
+.export-dialog-backdrop,
+.forgot-dialog-backdrop {
+  position: fixed;
+  inset: 0;
+  background: rgba(4, 7, 13, 0.75);
+  backdrop-filter: blur(8px);
+  -webkit-backdrop-filter: blur(8px);
+  z-index: 120;
+  display: grid;
+  place-items: center;
+  padding: 20px;
+  animation: fadeIn 0.2s ease;
+}
+
+.export-dialog,
+.forgot-dialog {
+  background: var(--panel);
+  border: 1px solid var(--line-strong);
+  border-radius: 18px;
+  width: min(520px, 100%);
+  padding: 28px;
+  box-shadow: 0 25px 60px rgba(0, 0, 0, 0.55);
+  animation: modalSlideUp 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+  position: relative;
+}
+
+.export-dialog-header,
+.forgot-dialog-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 18px;
+}
+.export-dialog-header h3,
+.forgot-dialog-header h3 {
+  font-size: 20px;
+  margin: 4px 0 0;
+  font-weight: 600;
+}
+.export-dialog-header p,
+.forgot-dialog-header p {
+  color: var(--muted);
+  font-size: 12px;
+  margin: 4px 0 0;
+}
+.export-dialog-close,
+.forgot-dialog-close {
+  background: none;
+  border: none;
+  color: var(--muted);
+  font-size: 18px;
+  cursor: pointer;
+  padding: 4px 8px;
+  border-radius: 6px;
+  transition: all 0.2s;
+}
+.export-dialog-close:hover,
+.forgot-dialog-close:hover {
+  color: var(--text);
+  background: rgba(255, 255, 255, 0.08);
+}
+
+.export-preview-box {
+  background: var(--panel-2);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+}
+.export-preview-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 12px;
+  margin-top: 10px;
+}
+.export-stat-item small {
+  color: var(--faint);
+  font-size: 10px;
+  display: block;
+}
+.export-stat-item strong {
+  font-size: 16px;
+  font-family: 'Space Grotesk', sans-serif;
+  color: var(--mint);
+}
+
+.export-options-list {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin: 18px 0;
+}
+.export-option-card {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  padding: 13px 16px;
+  border: 1px solid var(--line);
+  background: var(--panel-2);
+  border-radius: 12px;
+  cursor: pointer;
+  text-align: left;
+  transition: all 0.2s;
+  color: inherit;
+  width: 100%;
+}
+.export-option-card:hover {
+  border-color: var(--mint);
+  background: rgba(139, 255, 209, 0.06);
+  transform: translateY(-1px);
+}
+.export-option-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 10px;
+  display: grid;
+  place-items: center;
+  background: rgba(139, 255, 209, 0.15);
+  color: var(--mint);
+  flex-shrink: 0;
+}
+.export-option-info {
+  flex: 1;
+}
+.export-option-info strong {
+  display: block;
+  font-size: 13px;
+  margin-bottom: 2px;
+}
+.export-option-info small {
+  color: var(--muted);
+  font-size: 11px;
+}
+
+.export-toast {
+  position: fixed;
+  bottom: 24px;
+  right: 24px;
+  z-index: 150;
+  background: #0d1e1c;
+  border: 1px solid var(--mint);
+  color: var(--text);
+  padding: 12px 20px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  box-shadow: 0 12px 40px rgba(0, 0, 0, 0.45);
+  animation: modalSlideUp 0.3s ease;
+  font-size: 13px;
+}
+.export-toast .icon {
+  color: var(--mint);
+}
+
 

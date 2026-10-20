@@ -38,7 +38,14 @@ export function AlertsPage({ go }: AlertsPageProps) {
               </p>
               <small>Today · 10:37 AM · Supporting data available</small>
             </div>
-            <button type="button" aria-label="Inspect alert">
+            <button
+              type="button"
+              aria-label="Inspect alert"
+              onClick={(e) => {
+                e.stopPropagation();
+                go?.('signals');
+              }}
+            >
               <Icon name="chevron" />
             </button>
           </article>
@@ -60,7 +67,14 @@ export function AlertsPage({ go }: AlertsPageProps) {
               </p>
               <small>Today · 9:18 AM · Not a diagnosis</small>
             </div>
-            <button type="button" aria-label="Inspect observation">
+            <button
+              type="button"
+              aria-label="Inspect observation"
+              onClick={(e) => {
+                e.stopPropagation();
+                go?.('trends');
+              }}
+            >
               <Icon name="chevron" />
             </button>
           </article>
