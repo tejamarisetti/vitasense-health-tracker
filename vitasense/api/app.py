@@ -40,6 +40,14 @@ app.add_middleware(
 app.include_router(auth_router)
 app.include_router(measurements_router)
 
+from vitasense.api.auth import submit_contact_inquiry, ContactRequest
+from fastapi import Request
+
+@app.post("/api/contact", status_code=201)
+def api_contact(req: ContactRequest, request: Request):
+    """FR-11: Public contact endpoint with rate-limiting."""
+    return submit_contact_inquiry(req, request)
+
 
 @app.get("/api/health")
 def api_health():

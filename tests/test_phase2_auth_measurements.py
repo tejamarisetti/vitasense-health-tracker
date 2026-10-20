@@ -20,8 +20,12 @@ client = TestClient(app)
 
 @pytest.fixture(autouse=True)
 def setup_clean_db():
-    """Ensure schema is initialized prior to test execution."""
+    """Ensure schema is initialized prior to test execution and reset rate limiters."""
     init_db()
+    from vitasense.api.auth import register_limiter, login_limiter, contact_limiter
+    register_limiter.reset()
+    login_limiter.reset()
+    contact_limiter.reset()
 
 
 def test_registration_and_login_flow():
@@ -380,27 +384,28 @@ def test_demo_data_reset_never_deletes_real_data():
     assert get_imp.json()["source"] == "import"
 
 
-def test_simulated_ui_interaction_flow():
+def test_simulated_client_api_interaction_flow():
     """
-    Simulates the exact UI client flow:
-    1. Sign up on CreateAccountPage.
-    2. Edit profile on ProfileModal.
-    3. Add manual measurement on Overview/Trends.
+    Simulates the multi-step client API interaction flow:
+    (Note: This is an API-level integration test, NOT end-to-end browser UI coverage).
+    1. Sign up on /api/auth/register.
+    2. Edit profile on /api/auth/profile.
+    3. Add manual measurement on /api/measurements.
     4. Fetch measurements and render component checks.
-    5. Verify User B executing identical UI flow cannot access User A's data.
+    5. Verify User B executing identical client calls cannot access User A's data.
     """
-    email_a = f"ui_a_{datetime.now().timestamp()}@vitasense.io"
+    email_a = f"api_a_{datetime.now().timestamp()}@vitasense.io"
     res_a = client.post(
         "/api/auth/register",
-        json={"email": email_a, "password": "PasswordA123!", "name": "Alice UI"},
+        json={"email": email_a, "password": "PasswordA123!", "name": "Alice API"},
     )
     token_a = res_a.json()["token"]
 
-    # ProfileModal update
+    # Profile update
     client.put(
         "/api/auth/profile",
         json={
-            "name": "Alice UI Updated",
+            "name": "Alice API Updated",
             "age": 30,
             "sex": "Female",
             "height": "165 cm",
@@ -423,18 +428,153 @@ def test_simulated_ui_interaction_flow():
     m_id = m_res.json()["id"]
 
     # User B registers
-    email_b = f"ui_b_{datetime.now().timestamp()}@vitasense.io"
+    email_b = f"api_b_{datetime.now().timestamp()}@vitasense.io"
     res_b = client.post(
         "/api/auth/register",
-        json={"email": email_b, "password": "PasswordB123!", "name": "Bob UI"},
+        json={"email": email_b, "password": "PasswordB123!", "name": "Bob API"},
     )
     token_b = res_b.json()["token"]
 
-    # User B checks their UI measurements list
+    # User B checks their measurements list
     b_list = client.get("/api/measurements", headers={"Authorization": f"Bearer {token_b}"})
     assert b_list.status_code == 200
     assert len(b_list.json()) == 0
 
-    # User B directly tries to access Alice's measurement
+    # User B directly tries to access Alice's measurement -> 404 Not Found
     b_direct = client.get(f"/api/measurements/{m_id}", headers={"Authorization": f"Bearer {token_b}"})
     assert b_direct.status_code == 404
+
+
+def test_expired_and_invalid_session_tokens():
+    """
+    FR-01 Security: Verifies rejection of malformed, invalid, or expired session tokens.
+    """
+    from vitasense.api.auth import hash_token
+
+    # 1. Reject malformed / missing header
+    res_missing = client.get("/api/auth/me")
+    assert res_missing.status_code == 401
+
+    res_malformed = client.get("/api/auth/me", headers={"Authorization": "Token 12345"})
+    assert res_malformed.status_code == 401
+
+    # 2. Reject non-existent token
+    res_fake = client.get("/api/auth/me", headers={"Authorization": "Bearer deadbeef1234567890abcdef"})
+    assert res_fake.status_code == 401
+
+    # 3. Reject explicitly expired token in database
+    email = f"expired_{datetime.now().timestamp()}@vitasense.io"
+    reg_res = client.post("/api/auth/register", json={"email": email, "password": "Password123!"})
+    token = reg_res.json()["token"]
+    token_h = hash_token(token)
+
+    # Force expiration date into the past in the database
+    past_iso = (datetime.now(timezone.utc) - timedelta(days=1)).isoformat()
+    with get_db_connection() as conn:
+        conn.execute(
+            "UPDATE sessions SET expires_at = ? WHERE token_hash = ?",
+            (past_iso, token_h),
+        )
+
+    res_expired = client.get("/api/auth/me", headers={"Authorization": f"Bearer {token}"})
+    assert res_expired.status_code == 401
+    assert "expired" in res_expired.json()["detail"].lower()
+
+
+def test_token_reuse_after_logout():
+    """
+    FR-01 & FR-13 Security: Verifies that session tokens are completely revoked on logout
+    and cannot be reused for any subsequent authenticated endpoints.
+    """
+    email = f"reuse_{datetime.now().timestamp()}@vitasense.io"
+    reg_res = client.post("/api/auth/register", json={"email": email, "password": "Password123!"})
+    token = reg_res.json()["token"]
+    headers = {"Authorization": f"Bearer {token}"}
+
+    # Verify active session works
+    me_res = client.get("/api/auth/me", headers=headers)
+    assert me_res.status_code == 200
+
+    # Perform logout
+    logout_res = client.post("/api/auth/logout", headers=headers)
+    assert logout_res.status_code == 200
+
+    # Subsequent access to /api/auth/me with revoked token must fail with 401
+    me_revoked = client.get("/api/auth/me", headers=headers)
+    assert me_revoked.status_code == 401
+
+    # Attempt to post a measurement with revoked token must also fail with 401
+    meas_revoked = client.post(
+        "/api/measurements",
+        json={
+            "type": "heart_rate",
+            "value": 72.0,
+            "unit": "bpm",
+            "timestamp": datetime.now(timezone.utc).isoformat(),
+            "source": "manual",
+        },
+        headers=headers,
+    )
+    assert meas_revoked.status_code == 401
+
+
+def test_auth_and_contact_rate_limiting():
+    """
+    FR-01, FR-11: Verifies rate limiting on registration, login, and contact endpoints.
+    Exceeding 5 requests per 60s triggers HTTP 429 Too Many Requests with Retry-After header.
+    """
+    from vitasense.api.auth import register_limiter, login_limiter, contact_limiter
+
+    # 1. Test register rate limiting
+    register_limiter.reset()
+    for i in range(5):
+        unique_email = f"ratelim_{i}_{datetime.now().timestamp()}@vitasense.io"
+        res = client.post("/api/auth/register", json={"email": unique_email, "password": "Password123!"})
+        assert res.status_code == 201
+
+    # 6th request should hit 429
+    blocked_email = f"ratelim_blocked_{datetime.now().timestamp()}@vitasense.io"
+    res_blocked = client.post("/api/auth/register", json={"email": blocked_email, "password": "Password123!"})
+    assert res_blocked.status_code == 429
+    assert "Retry-After" in res_blocked.headers
+    register_limiter.reset()
+
+    # 2. Test login rate limiting
+    login_limiter.reset()
+    for _ in range(5):
+        res = client.post("/api/auth/login", json={"email": "nobody@example.com", "password": "wrong"})
+        assert res.status_code == 401
+
+    # 6th login attempt hits 429
+    res_login_blocked = client.post("/api/auth/login", json={"email": "nobody@example.com", "password": "wrong"})
+    assert res_login_blocked.status_code == 429
+    assert "Retry-After" in res_login_blocked.headers
+    login_limiter.reset()
+
+    # 3. Test contact rate limiting (FR-11)
+    contact_limiter.reset()
+    for i in range(5):
+        c_res = client.post(
+            "/api/contact",
+            json={
+                "name": f"Tester {i}",
+                "email": "test@example.com",
+                "subject": f"Inquiry {i}",
+                "message": "Testing rate limit",
+            },
+        )
+        assert c_res.status_code == 201
+
+    # 6th contact request hits 429
+    c_blocked = client.post(
+        "/api/contact",
+        json={
+            "name": "Tester 6",
+            "email": "test@example.com",
+            "subject": "Inquiry 6",
+            "message": "Testing rate limit exceed",
+        },
+    )
+    assert c_blocked.status_code == 429
+    assert "Retry-After" in c_blocked.headers
+    contact_limiter.reset()

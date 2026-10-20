@@ -1,49 +1,114 @@
 """
 VitaSense AI - Authentication & Profile Management Module
-Handles user registration, login, logout, password hashing (PBKDF2-HMAC-SHA256),
-session management, profile CRUD, and per-user identity resolution.
+Hardened per PRD Section 13, FR-01, FR-02, FR-11, FR-13:
+1. PBKDF2-HMAC-SHA256 password hashing with 600,000 iterations (OWASP guidance).
+2. Hashed session tokens at rest: database stores SHA-256 hash of tokens; plaintext tokens never persisted.
+3. In-memory sliding-window rate limiting on registration, login, and contact endpoints.
+4. Privacy guarantee: passwords, tokens, and raw credentials are never logged or echoed.
 """
 
 import os
+import time
 import hashlib
 import secrets
 import re
+import logging
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Literal
+from collections import defaultdict
+from threading import Lock
 from pydantic import BaseModel, Field, field_validator
-from fastapi import APIRouter, Depends, HTTPException, Header, status
+from fastapi import APIRouter, Depends, HTTPException, Header, Request, status
 
 from vitasense.api.db import get_db_connection
 
+logger = logging.getLogger("vitasense.auth")
 router = APIRouter(prefix="/api/auth", tags=["auth"])
 
 EMAIL_REGEX = re.compile(r"^[^@\s]+@[^@\s]+\.[^@\s]+$")
+PBKDF2_ITERATIONS = 600_000  # OWASP current recommended cost for PBKDF2-HMAC-SHA256
+
+
+# --- Sliding Window Rate Limiter ---
+
+class SlidingWindowRateLimiter:
+    """Thread-safe sliding-window rate limiter for brute-force and abuse protection."""
+    def __init__(self, max_requests: int, window_seconds: float):
+        self.max_requests = max_requests
+        self.window_seconds = window_seconds
+        self.requests = defaultdict(list)
+        self.lock = Lock()
+
+    def check(self, key: str) -> bool:
+        now = time.time()
+        with self.lock:
+            cutoff = now - self.window_seconds
+            self.requests[key] = [t for t in self.requests[key] if t > cutoff]
+            if len(self.requests[key]) >= self.max_requests:
+                return False
+            self.requests[key].append(now)
+            return True
+
+    def reset(self):
+        with self.lock:
+            self.requests.clear()
+
+
+# Rate limiters: 5 requests per 60 seconds per client key
+register_limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=60.0)
+login_limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=60.0)
+contact_limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=60.0)
+
+
+def get_client_ip(request: Request) -> str:
+    """Extracts client IP address safely from request headers or direct client."""
+    forwarded = request.headers.get("X-Forwarded-For")
+    if forwarded:
+        return forwarded.split(",")[0].strip()
+    if request.client:
+        return request.client.host
+    return "127.0.0.1"
 
 
 # --- Security Utilities ---
 
 def hash_password(password: str, salt: Optional[str] = None) -> tuple[str, str]:
-    """Hashes a password using PBKDF2-HMAC-SHA256 with 100,000 iterations."""
+    """Hashes a password using PBKDF2-HMAC-SHA256 with 600,000 iterations."""
     if salt is None:
         salt = secrets.token_hex(16)
     pw_hash = hashlib.pbkdf2_hmac(
         "sha256",
         password.encode("utf-8"),
         salt.encode("utf-8"),
-        100_000,
+        PBKDF2_ITERATIONS,
     ).hex()
     return pw_hash, salt
 
 
 def verify_password(password: str, salt: str, expected_hash: str) -> bool:
-    """Constant-time verification of password against stored hash."""
+    """Constant-time verification of password against stored hash with fallback."""
+    # Check with current standard (600,000 iterations)
     computed_hash, _ = hash_password(password, salt)
-    return secrets.compare_digest(computed_hash, expected_hash)
+    if secrets.compare_digest(computed_hash, expected_hash):
+        return True
+    # Backwards compatibility check for 100,000 iterations
+    legacy_hash = hashlib.pbkdf2_hmac(
+        "sha256",
+        password.encode("utf-8"),
+        salt.encode("utf-8"),
+        100_000,
+    ).hex()
+    return secrets.compare_digest(legacy_hash, expected_hash)
 
 
 def generate_session_token() -> str:
     """Generates a cryptographically secure random session token."""
     return secrets.token_hex(32)
+
+
+def hash_token(raw_token: str) -> str:
+    """Computes SHA-256 hash of a session token for secure storage at rest."""
+    return hashlib.sha256(raw_token.encode("utf-8")).hexdigest()
 
 
 # --- Pydantic Schemas ---
@@ -107,12 +172,27 @@ class AuthResponse(BaseModel):
     profile: ProfileSchema
 
 
+class ContactRequest(BaseModel):
+    name: str = Field(..., min_length=1, max_length=100)
+    email: str = Field(..., min_length=3, max_length=255)
+    subject: str = Field(..., min_length=1, max_length=200)
+    message: str = Field(..., min_length=1, max_length=2000)
+
+    @field_validator("email")
+    @classmethod
+    def validate_email(cls, v: str) -> str:
+        clean = v.strip().lower()
+        if not EMAIL_REGEX.match(clean):
+            raise ValueError(f"Invalid email address format: '{v}'")
+        return clean
+
+
 # --- Current User Dependency ---
 
 def get_current_user(authorization: Optional[str] = Header(None)) -> dict:
     """
     Extracts and validates the bearer token from the Authorization header.
-    Returns the authenticated user dict: {'id': ..., 'email': ...}.
+    Compares SHA-256 hash of token against database sessions.
     Raises 401 HTTPException if missing, invalid, or expired.
     """
     if not authorization or not authorization.startswith("Bearer "):
@@ -122,18 +202,19 @@ def get_current_user(authorization: Optional[str] = Header(None)) -> dict:
             headers={"WWW-Authenticate": "Bearer"},
         )
 
-    token = authorization[7:].strip()
+    raw_token = authorization[7:].strip()
+    token_hash = hash_token(raw_token)
     now_iso = datetime.now(timezone.utc).isoformat()
 
     with get_db_connection() as conn:
         row = conn.execute(
             """
-            SELECT s.token, s.expires_at, u.id, u.email, u.created_at
+            SELECT s.token_hash, s.expires_at, u.id, u.email, u.created_at
             FROM sessions s
             JOIN users u ON s.user_id = u.id
-            WHERE s.token = ? AND s.expires_at > ?
+            WHERE s.token_hash = ? AND s.expires_at > ?
             """,
-            (token, now_iso),
+            (token_hash, now_iso),
         ).fetchone()
 
         if not row:
@@ -147,28 +228,37 @@ def get_current_user(authorization: Optional[str] = Header(None)) -> dict:
             "id": row["id"],
             "email": row["email"],
             "created_at": row["created_at"],
-            "token": token,
+            "token_hash": token_hash,
         }
 
 
 # --- Authentication Endpoints ---
 
 @router.post("/register", response_model=AuthResponse, status_code=status.HTTP_201_CREATED)
-def register(req: RegisterRequest):
+def register(req: RegisterRequest, request: Request):
     """
-    Registers a new user with hashed password and default profile.
-    Automatically creates a valid session token.
+    Registers a new user with hardened PBKDF2 password hashing and default profile.
+    Stores only the SHA-256 hash of the session token.
+    Rate limited to 5 registrations per minute per IP.
     """
+    client_ip = get_client_ip(request)
+    if not register_limiter.check(client_ip):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many registration attempts. Please wait before retrying.",
+            headers={"Retry-After": "60"},
+        )
+
     clean_email = req.email.strip().lower()
     now = datetime.now(timezone.utc)
     now_iso = now.isoformat()
     expires_at = (now + timedelta(days=14)).isoformat()
 
     pw_hash, salt = hash_password(req.password)
-    token = generate_session_token()
+    raw_token = generate_session_token()
+    token_h = hash_token(raw_token)
 
     with get_db_connection() as conn:
-        # Check if email is already registered
         existing = conn.execute(
             "SELECT id FROM users WHERE email = ?", (clean_email,)
         ).fetchone()
@@ -178,7 +268,6 @@ def register(req: RegisterRequest):
                 detail=f"An account with email '{clean_email}' already exists.",
             )
 
-        # Insert user
         cur = conn.execute(
             """
             INSERT INTO users (email, password_hash, salt, created_at)
@@ -188,7 +277,6 @@ def register(req: RegisterRequest):
         )
         user_id = cur.lastrowid
 
-        # Insert profile
         conn.execute(
             """
             INSERT INTO user_profiles (
@@ -211,14 +299,15 @@ def register(req: RegisterRequest):
             ),
         )
 
-        # Create initial session
         conn.execute(
             """
-            INSERT INTO sessions (token, user_id, created_at, expires_at)
+            INSERT INTO sessions (token_hash, user_id, created_at, expires_at)
             VALUES (?, ?, ?, ?)
             """,
-            (token, user_id, now_iso, expires_at),
+            (token_h, user_id, now_iso, expires_at),
         )
+
+    logger.info("Registration successful for sanitized account ID %d", user_id)
 
     profile_data = ProfileSchema(
         name=req.name or clean_email.split("@")[0],
@@ -233,17 +322,27 @@ def register(req: RegisterRequest):
     )
 
     return AuthResponse(
-        token=token,
+        token=raw_token,
         user=UserResponse(id=user_id, email=clean_email, created_at=now_iso),
         profile=profile_data,
     )
 
 
 @router.post("/login", response_model=AuthResponse)
-def login(req: LoginRequest):
+def login(req: LoginRequest, request: Request):
     """
-    Authenticates user credentials and issues a session token.
+    Authenticates user credentials and returns a secure session token.
+    Stores only the SHA-256 hash of the session token in the database.
+    Rate limited to 5 login attempts per minute per IP.
     """
+    client_ip = get_client_ip(request)
+    if not login_limiter.check(client_ip):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many login attempts. Please wait before retrying.",
+            headers={"Retry-After": "60"},
+        )
+
     clean_email = req.email.strip().lower()
 
     with get_db_connection() as conn:
@@ -265,14 +364,15 @@ def login(req: LoginRequest):
         now = datetime.now(timezone.utc)
         now_iso = now.isoformat()
         expires_at = (now + timedelta(days=14)).isoformat()
-        token = generate_session_token()
+        raw_token = generate_session_token()
+        token_h = hash_token(raw_token)
 
         conn.execute(
             """
-            INSERT INTO sessions (token, user_id, created_at, expires_at)
+            INSERT INTO sessions (token_hash, user_id, created_at, expires_at)
             VALUES (?, ?, ?, ?)
             """,
-            (token, user_id, now_iso, expires_at),
+            (token_h, user_id, now_iso, expires_at),
         )
 
         prof_row = conn.execute(
@@ -283,6 +383,8 @@ def login(req: LoginRequest):
             """,
             (user_id,),
         ).fetchone()
+
+    logger.info("Login successful for sanitized account ID %d", user_id)
 
     if prof_row:
         profile = ProfileSchema(
@@ -310,7 +412,7 @@ def login(req: LoginRequest):
         )
 
     return AuthResponse(
-        token=token,
+        token=raw_token,
         user=UserResponse(id=user_id, email=clean_email, created_at=user_row["created_at"]),
         profile=profile,
     )
@@ -319,12 +421,12 @@ def login(req: LoginRequest):
 @router.post("/logout")
 def logout(current_user: dict = Depends(get_current_user)):
     """
-    Invalidates current session token.
+    Invalidates current session token by deleting its SHA-256 hash.
     """
     with get_db_connection() as conn:
         conn.execute(
-            "DELETE FROM sessions WHERE token = ?",
-            (current_user["token"],),
+            "DELETE FROM sessions WHERE token_hash = ?",
+            (current_user["token_hash"],),
         )
     return {"status": "ok", "message": "Successfully logged out."}
 
@@ -396,3 +498,31 @@ def update_profile(profile: ProfileSchema, current_user: dict = Depends(get_curr
         )
 
     return profile
+
+
+# --- Contact Us Endpoint (FR-11) ---
+
+@router.post("/contact", status_code=status.HTTP_201_CREATED)
+def submit_contact_inquiry(req: ContactRequest, request: Request):
+    """
+    FR-11: Receives Contact Us inquiry with rate limiting (5 requests/min per IP).
+    """
+    client_ip = get_client_ip(request)
+    if not contact_limiter.check(client_ip):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many contact submissions. Please wait before retrying.",
+            headers={"Retry-After": "60"},
+        )
+
+    now_iso = datetime.now(timezone.utc).isoformat()
+    with get_db_connection() as conn:
+        conn.execute(
+            """
+            INSERT INTO contact_messages (name, email, subject, message, created_at, ip_address)
+            VALUES (?, ?, ?, ?, ?, ?)
+            """,
+            (req.name, req.email, req.subject, req.message, now_iso, client_ip),
+        )
+
+    return {"status": "ok", "message": "Inquiry received. VitaSense team will respond shortly."}

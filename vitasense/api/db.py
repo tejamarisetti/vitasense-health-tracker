@@ -1,7 +1,7 @@
 """
 VitaSense AI - Database Module (SQLite)
 Manages SQLite connection, schema initialization, and thread-safe operations.
-Supports per-user isolation, sessions, profiles, and measurements.
+Supports per-user isolation, hashed session tokens, profiles, and measurements.
 """
 
 import sqlite3
@@ -46,8 +46,9 @@ def init_db(db_path: Path = None) -> None:
     Initializes database schema with tables:
     - users: authentication credentials & registration
     - user_profiles: clinical & demographic parameters
-    - sessions: authentication bearer tokens & expiration
+    - sessions: cryptographically hashed bearer tokens & expiration (FR-01, FR-13 hardening)
     - measurements: physiological time-series with quality flags & component checks
+    - contact_messages: user support inquiries with rate-limiting support (FR-11)
     """
     if db_path is None:
         db_path = get_db_path()
@@ -57,6 +58,12 @@ def init_db(db_path: Path = None) -> None:
     conn = sqlite3.connect(str(db_path))
     conn.execute("PRAGMA foreign_keys = ON;")
     with conn:
+        # Check if legacy sessions table with plaintext 'token' column exists
+        cur = conn.execute("PRAGMA table_info(sessions);")
+        columns = [row[1] for row in cur.fetchall()]
+        if columns and "token" in columns and "token_hash" not in columns:
+            conn.execute("DROP TABLE sessions;")
+
         conn.executescript(
             """
             CREATE TABLE IF NOT EXISTS users (
@@ -83,7 +90,7 @@ def init_db(db_path: Path = None) -> None:
             );
 
             CREATE TABLE IF NOT EXISTS sessions (
-                token TEXT PRIMARY KEY,
+                token_hash TEXT PRIMARY KEY,
                 user_id INTEGER NOT NULL,
                 created_at TEXT NOT NULL,
                 expires_at TEXT NOT NULL,
@@ -105,12 +112,22 @@ def init_db(db_path: Path = None) -> None:
                 FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
             );
 
+            CREATE TABLE IF NOT EXISTS contact_messages (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                name TEXT NOT NULL,
+                email TEXT NOT NULL,
+                subject TEXT NOT NULL,
+                message TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                ip_address TEXT
+            );
+
             CREATE INDEX IF NOT EXISTS idx_measurements_user_ts 
                 ON measurements(user_id, timestamp);
             CREATE INDEX IF NOT EXISTS idx_measurements_user_source 
                 ON measurements(user_id, source);
-            CREATE INDEX IF NOT EXISTS idx_sessions_token 
-                ON sessions(token);
+            CREATE INDEX IF NOT EXISTS idx_sessions_token_hash 
+                ON sessions(token_hash);
             """
         )
     conn.close()

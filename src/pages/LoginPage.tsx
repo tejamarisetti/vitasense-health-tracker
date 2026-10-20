@@ -270,11 +270,11 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
                   type="button"
                   onClick={() => {
                     setForgotEmail(email || '');
-                    setForgotSent(false);
                     setShowForgotModal(true);
                   }}
+                  title="Password reset is not enabled in this deployment"
                 >
-                  Forgot password?
+                  Forgot password? <small style={{ color: 'var(--faint)' }}>(Not Enabled)</small>
                 </button>
               </span>
               <div className="input-shell">
@@ -363,15 +363,15 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
         }}
       />
 
-      {/* Forgot Password Recovery Modal */}
+      {/* Forgot Password Modal (Marked Not Enabled per PRD) */}
       {showForgotModal && (
         <div className="forgot-dialog-backdrop" onClick={() => setShowForgotModal(false)}>
           <div className="forgot-dialog" onClick={(e) => e.stopPropagation()}>
             <div className="forgot-dialog-header">
               <div>
                 <span className="app-kicker">ACCOUNT SECURITY</span>
-                <h3>Reset Password</h3>
-                <p>Enter your email to receive recovery instructions.</p>
+                <h3>Password Reset</h3>
+                <p>Self-service recovery status</p>
               </div>
               <button
                 className="forgot-dialog-close"
@@ -382,56 +382,22 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
               </button>
             </div>
 
-            {forgotSent ? (
-              <div style={{ textAlign: 'center', padding: '16px 0' }}>
-                <div style={{ fontSize: '36px', marginBottom: '12px' }}>✉️</div>
-                <h4 style={{ fontSize: '16px', marginBottom: '6px' }}>Recovery Link Dispatched</h4>
-                <p style={{ color: 'var(--muted)', fontSize: '12px', marginBottom: '20px' }}>
-                  We sent password reset instructions to <strong>{forgotEmail}</strong>.
-                </p>
-                <button
-                  type="button"
-                  className="button button-primary"
-                  style={{ width: '100%' }}
-                  onClick={() => setShowForgotModal(false)}
-                >
-                  Return to Sign In
-                </button>
-              </div>
-            ) : (
-              <form
-                onSubmit={(e) => {
-                  e.preventDefault();
-                  if (forgotEmail.trim()) {
-                    setForgotSent(true);
-                  }
-                }}
+            <div style={{ textAlign: 'center', padding: '16px 0' }}>
+              <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔒</div>
+              <h4 style={{ fontSize: '15px', marginBottom: '6px' }}>Password Reset Not Enabled</h4>
+              <p style={{ color: 'var(--muted)', fontSize: '12px', marginBottom: '20px', lineHeight: 1.6 }}>
+                Automated self-service password recovery is currently <strong>not enabled</strong> in this deployment per research security policy. 
+                Please contact the system administrator to manage or rotate account credentials.
+              </p>
+              <button
+                type="button"
+                className="button button-soft"
+                style={{ width: '100%' }}
+                onClick={() => setShowForgotModal(false)}
               >
-                <label style={{ display: 'block', marginBottom: '16px' }}>
-                  <span style={{ fontSize: '11px', display: 'block', marginBottom: '6px' }}>
-                    Registered Email Address
-                  </span>
-                  <div className="input-shell">
-                    <Icon name="shield" />
-                    <input
-                      type="email"
-                      value={forgotEmail}
-                      onChange={(e) => setForgotEmail(e.target.value)}
-                      placeholder="alex@example.com"
-                      required
-                      autoFocus
-                    />
-                  </div>
-                </label>
-                <button
-                  type="submit"
-                  className="button button-primary"
-                  style={{ width: '100%', height: '46px', fontWeight: 600 }}
-                >
-                  Send Recovery Link <Icon name="arrow" />
-                </button>
-              </form>
-            )}
+                Return to Sign In
+              </button>
+            </div>
           </div>
         </div>
       )}

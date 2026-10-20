@@ -92,6 +92,25 @@ Hyperparameters were tuned strictly within leave-one-subject-out (LOSO) training
 \section{Results}
 Table~\ref{tab:main} presents the pooled leave-one-subject-out evaluation results across all 15 subjects for clean data and Regime B.
 
+% ==============================================================================
+% DATA PROVENANCE FOR TABLE I AND SECTION V:
+% All metric values are derived from leave-one-subject-out (LOSO) cross-validation
+% across 15 subjects in the PPG-DaLiA dataset:
+% Generating script: scripts/evaluate_clinical_baseline.py & scripts/train_baseline.py
+% Ratified output reference: docs/RESULTS_SUMMARY.md (Section 2 Combined Metric Table)
+% - Arm 1 (Fixed): Clean Recall=91.1%, FA/hr=3.20, F1=0.700; Regime B Recall=91.1%, FA/hr=4.51, F1=0.632
+% - Arm 2 (Personal): Clean Recall=80.4%, FA/hr=5.69, F1=0.558; Regime B Recall=75.9%, FA/hr=7.16, F1=0.487
+% - Arm 3a (+Kinematic): Clean Recall=80.4%, FA/hr=1.47, F1=0.772; Regime B Recall=75.9%, FA/hr=2.30, F1=0.691
+% - Arm 3b (+Trust): Clean Recall=79.5%, FA/hr=1.69, F1=0.750; Regime B Recall=75.0%, FA/hr=2.37, F1=0.680
+% - Arm 3b-noMotion: Clean Recall=79.5%, FA/hr=2.91, F1=0.676; Regime B Recall=75.0%, FA/hr=3.61, F1=0.614
+% Paired difference statistics (Arm 3b minus Arm 3a):
+% - Clean: mean diff=+0.13, 95% bootstrap CI [-0.54, +0.89], Wilcoxon W=31.0, p=0.86
+% - Regime A: mean diff=+0.05, 95% bootstrap CI [-0.66, +0.82], Wilcoxon W=40.0, p=0.70
+% - Regime B: mean diff=-0.04, 95% bootstrap CI [-0.78, +0.69], Wilcoxon W=52.0, p=0.98
+% - Optical Noise F7: mean diff=-0.49, 95% bootstrap CI [-1.47, +0.38], Wilcoxon W=17.0, p=0.28
+% Provenance: docs/RESULTS_SUMMARY.md Section 1.1 & docs/synthetic_injection_audit.csv
+% ==============================================================================
+
 \begin{table}[htbp]
 \caption{Pooled results, leave-one-subject-out (recall / false alerts per hour / F1)}
 \label{tab:main}
@@ -139,15 +158,19 @@ In this pre-registered fault-injection benchmark, kinematic motion gating accoun
 The authors acknowledge Vel Tech Rangarajan Dr. Sagunthala R\&D Institute for computational facilities and support during this research.
 
 \begin{thebibliography}{00}
+% UNVERIFIED: External paper page not opened in current session. Verify authors, volume, issue, and pages before final publication.
 \bibitem{ref_alert_fatigue}
 M.~Cvach, ``Monitor alarm fatigue: an integrative review,'' \emph{Biomedical Instrumentation \& Technology}, vol.~46, no.~4, pp.~268--277, 2012.
 
+% UNVERIFIED: External publisher page not opened in current session. Verify authors and publication details before final publication.
 \bibitem{ref_reiss_dalia}
 A.~Reiss, I.~Indlekofer, P.~Schmidt, and K.~Van~Laerhoven, ``Deep PPG: Large-scale heart rate estimation with convolutional neural networks,'' \emph{Sensors}, vol.~19, no.~14, p.~3079, 2019.
 
+% UNVERIFIED: External publisher page not opened in current session. Verify authors and volume/issue before final publication.
 \bibitem{ref_sqi_elgendi}
 M.~Elgendi, ``Optimal signal quality index for photoplethysmogram signals,'' \emph{Bioengineering}, vol.~3, no.~4, p.~21, 2016.
 
+% UNVERIFIED: External publisher page not opened in current session. Verify volume, issue, and DOI before final publication.
 \bibitem{ref_orphanidou_sqi}
 C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal-quality indices for the electrocardiogram and photoplethysmogram to promote intelligent alarming,'' \emph{IEEE Journal of Biomedical and Health Informatics}, vol.~19, no.~3, pp.~739--748, 2015.
 \end{thebibliography}
