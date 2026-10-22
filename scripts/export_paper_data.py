@@ -284,17 +284,22 @@ def generate_tables():
 \label{tab:dataset}
 \centering
 \scriptsize
-\begin{tabular}{lp{4.8cm}}
-\toprule
+\begin{tabular}{|l|p{4.8cm}|}
+\hline
 \textbf{Attribute} & \textbf{Specification} \\
-\midrule
+\hline
 Subjects & $N = 15$ healthy individuals (7M, 8F, age 21--55, mean 30.6) \\
+\hline
 Protocol Duration & $\approx 2.5$\,h per subject ($31.25$ total ambulatory hours) \\
+\hline
 Activities & Sitting, Walking, Stairs, Cycling, Driving, Lunch, Soccer \\
+\hline
 Wrist Sensors & Empatica E4 (BVP: 64\,Hz, 3D ACC: 32\,Hz, GSR/Temp: 4\,Hz) \\
+\hline
 Reference Standard & Chest ECG (RespiBAN Professional, 700\,Hz) \\
+\hline
 Quarantine & Chest ECG strictly quarantined from alerting arms \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 """
@@ -307,19 +312,26 @@ Quarantine & Chest ECG strictly quarantined from alerting arms \\
 \label{tab:fault_taxonomy}
 \centering
 \scriptsize
-\begin{tabular}{lp{3.3cm}cc}
-\toprule
+\begin{tabular}{|l|p{3.3cm}|c|c|}
+\hline
 \textbf{Fault ID} & \textbf{Mechanism \& Parameter} & \textbf{Reg. A} & \textbf{Reg. B} \\
-\midrule
+\hline
 F0\_CLEAN & Ambient background & 28.09\,h & 21.67\,h \\
+\hline
 F1\_GAPS & Packet dropout (5--15\,s NaN) & 0.94\,h & 3.15\,h \\
+\hline
 F2\_STALE & Sensor freeze (10--30\,s constant) & 0.62\,h & 1.58\,h \\
+\hline
 F3\_DUPL & Repeated packets (burst 2--5) & 0.62\,h & 1.56\,h \\
+\hline
 F4\_SPIKE & Sudden jumps ($\pm 30$--$60$\,bpm) & 0.07\,h & 0.21\,h \\
+\hline
 F5\_DRIFT & Slow ramp ($+0.2$\,bpm/s trend) & 0.45\,h & 1.55\,h \\
+\hline
 F6\_UNIT & Scale error ($0.5\times$ or $2.0\times$) & 0.48\,h & 1.56\,h \\
+\hline
 F7\_OPTICAL & Motion noise ($\text{SNR}=+5$\,dB, 64\,Hz) & Standalone & Standalone \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 """
@@ -332,16 +344,20 @@ F7\_OPTICAL & Motion noise ($\text{SNR}=+5$\,dB, 64\,Hz) & Standalone & Standalo
 \label{tab:parameter_grids}
 \centering
 \scriptsize
-\begin{tabular}{lp{4.5cm}c}
-\toprule
+\begin{tabular}{|l|p{4.5cm}|c|}
+\hline
 \textbf{Arm} & \textbf{Tuned Parameters} & \textbf{Refractory $R$} \\
-\midrule
+\hline
 Arm 1 & \raggedright $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm; $P \in \{10, 20, 30\}$\,s & 60\,s \\
+\hline
 Arm 2 & \raggedright $k \in \{2.0, 2.5, 3.0, 3.5, 4.0\}$; $\kappa \in \{0.5, 1.0, 2.0\}$\,h; $P \in \{10, 20, 30\}$\,s & 60\,s \\
+\hline
 Arm 3a & \raggedright $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}$\,g; $P \in \{10, 20, 30\}$\,s & 60\,s \\
+\hline
 Arm 3b & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P \in \{10, 20, 30\}$\,s & 60\,s \\
+\hline
 Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P \in \{10, 20, 30\}$\,s & 60\,s \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 """
@@ -356,23 +372,24 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         r"\label{tab:combined_metrics}",
         r"\centering",
         r"\scriptsize",
-        r"\begin{tabular}{llcccccc}",
-        r"\toprule",
+        r"\begin{tabular}{|l|l|c|c|c|c|c|c|}",
+        r"\hline",
         r"\textbf{Condition} & \textbf{Alerting Arm} & \textbf{Recall (\%)} & \textbf{FA/hr} & \textbf{True Alerts} & \textbf{False Alerts} & \textbf{Precision (\%)} & \textbf{$F_1$ Score} \\",
-        r"\midrule",
+        r"\hline",
     ]
     cur_cond = ""
     for _, r in df_comb.iterrows():
-        cond_str = r["Condition"] if r["Condition"] != cur_cond else ""
+        raw_cond = str(r["Condition"]).replace("%", r"\%")
+        cond_str = raw_cond if r["Condition"] != cur_cond else ""
         if r["Condition"] != cur_cond and cur_cond != "":
-            lines.append(r"\midrule")
+            lines.append(r"\hline")
         cur_cond = r["Condition"]
         lines.append(
             f"{cond_str:<28} & {r['Arm']:<22} & {r['Event_Recall_pct']:>5.1f} & {r['Clean_FA_hr']:>5.2f} & "
             f"{r['True_Alerts_TP']:>4d} & {r['False_Alerts_FP']:>4d} & {r['Precision_pct']:>5.1f} & {r['F1_Score']:>5.3f} \\\\"
         )
     lines.extend([
-        r"\bottomrule",
+        r"\hline",
         r"\end{tabular}",
         r"\end{table*}",
     ])
@@ -388,16 +405,17 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         r"\centering",
         r"\scriptsize",
         r"\setlength{\tabcolsep}{3.5pt}",
-        r"\begin{tabular}{llccccc}",
-        r"\toprule",
+        r"\begin{tabular}{|l|l|c|c|c|c|c|}",
+        r"\hline",
         r"\textbf{Condition} & \textbf{Stratum} & \textbf{Arm 1 (Fixed)} & \textbf{Arm 2 (Personal)} & \textbf{Arm 3a (+Kinematic)} & \textbf{Arm 3b (+Trust)} & \textbf{Arm 3b-noMotion} \\",
-        r"\midrule",
+        r"\hline",
     ]
     cur_cond = ""
     for _, r in df_strata.iterrows():
-        cond_str = r["Condition"] if r["Condition"] != cur_cond else ""
+        raw_cond = str(r["Condition"]).replace("%", r"\%")
+        cond_str = raw_cond if r["Condition"] != cur_cond else ""
         if r["Condition"] != cur_cond and cur_cond != "":
-            lines.append(r"\midrule")
+            lines.append(r"\hline")
         cur_cond = r["Condition"]
         c1 = f"{r['Arm 1_Recall_pct']:.1f}\\% / {r['Arm 1_Delay_sec']}s / {r['Arm 1_FA_hr']:.2f}"
         c2 = f"{r['Arm 2_Recall_pct']:.1f}\\% / {r['Arm 2_Delay_sec']}s / {r['Arm 2_FA_hr']:.2f}"
@@ -406,7 +424,7 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         c5 = f"{r['Arm 3b-noMotion_Recall_pct']:.1f}\\% / {r['Arm 3b-noMotion_Delay_sec']}s / {r['Arm 3b-noMotion_FA_hr']:.2f}"
         lines.append(f"{cond_str:<26} & {r['Stratum']:<22} & {c1} & {c2} & {c3} & {c4} & {c5} \\\\")
     lines.extend([
-        r"\bottomrule",
+        r"\hline",
         r"\end{tabular}",
         r"\end{table*}",
     ])
@@ -422,10 +440,10 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         r"\centering",
         r"\scriptsize",
         r"\setlength{\tabcolsep}{2.5pt}",
-        r"\begin{tabular}{lcccc}",
-        r"\toprule",
+        r"\begin{tabular}{|l|c|c|c|c|}",
+        r"\hline",
         r"\textbf{Condition} & \textbf{Mean $\Delta$} & \textbf{95\% Boot. CI} & \textbf{Wilcoxon $W$} & \textbf{$p$-val} \\",
-        r"\midrule",
+        r"\hline",
     ]
     cond_short_map = {
         "Condition 0 (No-Fault)": "Condition 0 (Clean)",
@@ -440,7 +458,7 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
             f"{c_short:<22} & {r['Mean_Diff_FA_hr']:>+5.2f} & {ci_str} & {r['Wilcoxon_W']:>5.1f} & {r['Wilcoxon_p']:>6.4f} \\\\"
         )
     lines.extend([
-        r"\bottomrule",
+        r"\hline",
         r"\end{tabular}",
         r"\end{table}",
     ])
@@ -455,23 +473,23 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         r"\centering",
         r"\scriptsize",
         r"\setlength{\tabcolsep}{3pt}",
-        r"\begin{tabular}{llcccc}",
-        r"\toprule",
+        r"\begin{tabular}{|l|l|c|c|c|c|}",
+        r"\hline",
         r"\textbf{Arm} & \textbf{Parameter Boundary} & \textbf{Cond 0} & \textbf{Reg A} & \textbf{Reg B} & \textbf{F7} \\",
-        r"\midrule",
+        r"\hline",
         r"Arm 1 (Fixed)    & $\tau_{\text{pop}} = 100$\,bpm$_{\mathrm{lo}}$ & 100\% & 100\% & 100\% & 100\% \\",
         r"                 & $P = 30$\,s$_{\mathrm{hi}}$                     & 100\% & 100\% & 100\% & 100\% \\",
-        r"\midrule",
+        r"\hline",
         r"Arm 2 (Personal) & $k = 2.0_{\mathrm{lo}}$                         & 100\% & 100\% & 100\% & 100\% \\",
         r"                 & $\kappa = 2.0$\,h$_{\mathrm{hi}}$               & 93.3\% & 93.3\% & 100\% & 100\% \\",
         r"                 & $P = 10$\,s$_{\mathrm{lo}}$                     & 100\% & 100\% & 100\% & 100\% \\",
-        r"\midrule",
+        r"\hline",
         r"Arm 3a (+Kin.)   & $\theta_{\text{rest}} = 0.08$\,g$_{\mathrm{hi}}$ & 93.3\% & 93.3\% & 93.3\% & 100\% \\",
         r"                 & $\theta_{\text{rest}} = 0.03$\,g$_{\mathrm{lo}}$ & 6.7\%  & 6.7\%  & 6.7\%  & 0.0\% \\",
-        r"\midrule",
+        r"\hline",
         r"Arm 3b (+Trust)  & $\theta_{\text{trust}} = 0.60_{\mathrm{lo}}$     & 93.3\% & 93.3\% & 93.3\% & 100\% \\",
         r"                 & $\theta_{\text{trust}} = 0.80_{\mathrm{hi}}$     & 6.7\%  & 6.7\%  & 6.7\%  & 0.0\% \\",
-        r"\bottomrule",
+        r"\hline",
         r"\end{tabular}",
         r"\end{table}",
     ]
@@ -487,17 +505,17 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         r"\centering",
         r"\tiny",
         r"\setlength{\tabcolsep}{1.8pt}",
-        r"\begin{tabular}{llcccccc}",
-        r"\toprule",
+        r"\begin{tabular}{|l|l|c|c|c|c|c|c|}",
+        r"\hline",
         r"\textbf{Reg.} & \textbf{Fault} & \textbf{Exp.} & \textbf{Arm 1} & \textbf{Arm 2} & \textbf{Arm 3a} & \textbf{Arm 3b} & \textbf{3b-nM} \\",
-        r"\midrule",
+        r"\hline",
     ]
     cur_reg = ""
     for _, r in df_fault.iterrows():
         reg_short = "Reg A" if "Regime A" in r["Regime"] else "Reg B"
         reg_display = reg_short if reg_short != cur_reg else ""
         if reg_short != cur_reg and cur_reg != "":
-            lines.append(r"\midrule")
+            lines.append(r"\hline")
         cur_reg = reg_short
         c1 = f"{r['Arm 1_FA_hr']:.1f} ({r['Arm 1_FA_Count']})" + ("*" if r['Arm 1_Insufficient_Data'] else "")
         c2 = f"{r['Arm 2_FA_hr']:.1f} ({r['Arm 2_FA_Count']})" + ("*" if r['Arm 2_Insufficient_Data'] else "")
@@ -507,8 +525,9 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
         ft_escaped = r['Fault_Type'].replace("_", r"\_")
         lines.append(f"{reg_display:<5} & {ft_escaped:<10} & {r['Exposure_Hours']:>4.1f}h & {c1:<9} & {c2:<9} & {c3:<9} & {c4:<9} & {c5:<9} \\\\")
     lines.extend([
-        r"\bottomrule",
-        r"\multicolumn{8}{l}{* Insufficient data ($<10$ alerts or $<1.0$\,h). Rate shown as FA/h (count).} \\",
+        r"\hline",
+        r"\multicolumn{8}{|l|}{* Insufficient data ($<10$ alerts or $<1.0$\,h). Rate shown as FA/h (count).} \\",
+        r"\hline",
         r"\end{tabular}",
         r"\end{table}",
     ])
@@ -521,20 +540,28 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
 \label{tab:deviations}
 \centering
 \scriptsize
-\begin{tabular}{lp{4.7cm}}
-\toprule
+\begin{tabular}{|l|p{4.7cm}|}
+\hline
 \textbf{Milestone [Commit]} & \textbf{Ratified Scope and Description} \\
-\midrule
+\hline
 Protocol v1.0.0 [\texttt{41eff1e}] & Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
+\hline
 Amendment 1 [\texttt{3b1f2f6}] & Resting alert ground truth; non-penalization of motion. \\
+\hline
 Implementation Fix [\texttt{3a5ccc2}] & Removed $/64$ accel scaling; centered 8\,s windows ($t=2i+4$\,s). \\
+\hline
 Amendment 2 [\texttt{696fd00}] & Labelled synthetic tachycardia injection; S5 outlier handling rule. \\
+\hline
 Adaptive Ramp Fix [\texttt{a0d682a}] & Baseline-adapted ramp rates ($r_{\text{lo}}, r_{\text{hi}}$); plateau $[105, 135]$\,bpm. \\
+\hline
 Amendment 3 [\texttt{a0d682a}] & Restated $H_1$ as estimation; 15-subject LOSO; Arm 3b-noMotion ablation. \\
+\hline
 Gap Enforcement [\texttt{0bf4ca4}] & Ratified 112 episodes with $\ge 60$\,s minimum inter-episode gap. \\
+\hline
 Amendment 4 [\texttt{a9ce657}] & Standard emitter: $P \in \{10,20,30\}$\,s, $R=60$\,s; parameter grids. \\
+\hline
 Fallback Rule [\texttt{f92ca8d}] & Arm 2 fallback invoked in 100\% of folds (max recall $\approx 80.4\% < 85\%$). \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 """
@@ -547,17 +574,24 @@ Fallback Rule [\texttt{f92ca8d}] & Arm 2 fallback invoked in 100\% of folds (max
 \label{tab:limitations}
 \centering
 \scriptsize
-\begin{tabular}{lp{4.7cm}}
-\toprule
+\begin{tabular}{|l|p{4.7cm}|}
+\hline
 \textbf{Threat Domain} & \textbf{Empirical Limitation and Mitigation} \\
-\midrule
+\hline
 Synthetic Events & True resting tachycardia was absent in healthy cohort; 112 episodes synthetically injected into derived stream. Recall values are tied to synthetic plateau distribution ($105$--$135$\,bpm). \\
+\hline
 Cohort Size & $N = 15$ healthy young adults limits power for small paired false-alert differences. Reported with 95\% bootstrap CIs. \\
+\hline
 Noise Coupling & Estimator tracking errors and motion artifacts interact directly with downstream thresholding logic. \\
+\hline
 Grid Boundaries & Tuning frequently selected grid boundaries ($\tau_{\text{pop}} = 100$, $k = 2.0$, $P = 10$\,s / $30$\,s), reflecting severe trade-offs. \\
-Ambulatory Protocol & Single 2.5-hour multimodal script; generalizability to continuous free-living 24/7 monitoring is not established. \\
+\hline
+External Datasets & PhysioNet Wearable 1.0.1 and WESAD datasets were not used for evaluation (external checks reserved for future work). \\
+\hline
+Arm 4 Scope & Arm 4 conformal abstention was never built in this benchmark. \\
+\hline
 Non-Clinical Scope & Academic software benchmark only; not validated for clinical diagnosis or medical device deployment. \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 """

@@ -359,7 +359,25 @@ export function BenchmarkPage() {
                 <strong>Front-End Estimator Noise:</strong> Optical PPG tracking errors during vigorous movement interact directly with alerting rules.
               </li>
               <li>
-                <strong>Arm 4 Not Built:</strong> Conformal prediction with abstention was placed on hold and never implemented in this benchmark.
+                <strong>Arm 4 Not Built:</strong> Conformal prediction with selective abstention was placed on hold and never built or evaluated.
+              </li>
+            </ul>
+          </div>
+
+          <div className="analysis-card">
+            <h4>App PRD Status & Research Dataset Scope</h4>
+            <ul>
+              <li>
+                <strong>FR-04 (Data Quality):</strong> <em>Partial</em> — Anomaly flags (missing, flatline, spike) active; automated inference exclusion is pending.
+              </li>
+              <li>
+                <strong>FR-06 (Symptom Assessment):</strong> <em>Not Started</em> — Guided questionnaire with answer review step planned for future release.
+              </li>
+              <li>
+                <strong>FR-07 (AI/ML Explanation):</strong> <em>Not Started</em> — Feature attribution & prediction uncertainty planned for future release.
+              </li>
+              <li>
+                <strong>External Datasets:</strong> PhysioNet Wearable Device Dataset 1.0.1 and WESAD were <em>not used</em> for benchmark evaluation (PPG-DaLiA only).
               </li>
             </ul>
           </div>

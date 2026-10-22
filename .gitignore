@@ -59,3 +59,7 @@ models/*.onnx
 *.sqlite3
 data/*.db
 *.timestamp-*.mjs
+
+# LaTeX intermediates
+*.aux
+*.out

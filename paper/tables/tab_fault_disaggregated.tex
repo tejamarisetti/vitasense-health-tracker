@@ -4,10 +4,10 @@
 \centering
 \tiny
 \setlength{\tabcolsep}{1.8pt}
-\begin{tabular}{llcccccc}
-\toprule
+\begin{tabular}{|l|l|c|c|c|c|c|c|}
+\hline
 \textbf{Reg.} & \textbf{Fault} & \textbf{Exp.} & \textbf{Arm 1} & \textbf{Arm 2} & \textbf{Arm 3a} & \textbf{Arm 3b} & \textbf{3b-nM} \\
-\midrule
+\hline
 Reg A & F0\_CLEAN  & 28.1h & 3.2 (90)  & 5.9 (165) & 1.5 (43)  & 1.8 (50)  & 3.0 (83)  \\
       & F1\_GAPS   &  0.9h & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  \\
       & F2\_STALE  &  0.6h & 21.1 (13)* & 8.1 (5)*  & 3.2 (2)*  & 1.6 (1)*  & 1.6 (1)*  \\
@@ -15,7 +15,7 @@ Reg A & F0\_CLEAN  & 28.1h & 3.2 (90)  & 5.9 (165) & 1.5 (43)  & 1.8 (50)  & 3.0
       & F4\_SPIKE  &  0.1h & 0.0 (0)*  & 14.8 (1)* & 0.0 (0)*  & 0.0 (0)*  & 14.8 (1)* \\
       & F5\_DRIFT  &  0.5h & 0.0 (0)*  & 2.2 (1)*  & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  \\
       & F6\_UNIT   &  0.5h & 14.5 (7)* & 26.9 (13)* & 8.3 (4)*  & 12.4 (6)* & 16.6 (8)* \\
-\midrule
+\hline
 Reg B & F0\_CLEAN  & 21.7h & 3.5 (76)  & 5.8 (125) & 1.6 (35)  & 1.9 (40)  & 2.9 (63)  \\
       & F1\_GAPS   &  3.1h & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  \\
       & F2\_STALE  &  1.6h & 20.2 (32) & 10.8 (17) & 3.2 (5)*  & 4.4 (7)*  & 7.6 (12)  \\
@@ -23,7 +23,8 @@ Reg B & F0\_CLEAN  & 21.7h & 3.5 (76)  & 5.8 (125) & 1.6 (35)  & 1.9 (40)  & 2.9
       & F4\_SPIKE  &  0.2h & 0.0 (0)*  & 0.0 (0)*  & 0.0 (0)*  & 4.8 (1)*  & 4.8 (1)*  \\
       & F5\_DRIFT  &  1.6h & 2.6 (4)*  & 6.5 (10)  & 1.9 (3)*  & 0.7 (1)*  & 1.9 (3)*  \\
       & F6\_UNIT   &  1.6h & 15.4 (24) & 36.6 (57) & 16.7 (26) & 14.8 (23) & 19.9 (31) \\
-\bottomrule
-\multicolumn{8}{l}{* Insufficient data ($<10$ alerts or $<1.0$\,h). Rate shown as FA/h (count).} \\
+\hline
+\multicolumn{8}{|l|}{* Insufficient data ($<10$ alerts or $<1.0$\,h). Rate shown as FA/h (count).} \\
+\hline
 \end{tabular}
 \end{table}

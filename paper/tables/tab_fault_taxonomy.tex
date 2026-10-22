@@ -3,18 +3,25 @@
 \label{tab:fault_taxonomy}
 \centering
 \scriptsize
-\begin{tabular}{lp{3.3cm}cc}
-\toprule
+\begin{tabular}{|l|p{3.3cm}|c|c|}
+\hline
 \textbf{Fault ID} & \textbf{Mechanism \& Parameter} & \textbf{Reg. A} & \textbf{Reg. B} \\
-\midrule
+\hline
 F0\_CLEAN & Ambient background & 28.09\,h & 21.67\,h \\
+\hline
 F1\_GAPS & Packet dropout (5--15\,s NaN) & 0.94\,h & 3.15\,h \\
+\hline
 F2\_STALE & Sensor freeze (10--30\,s constant) & 0.62\,h & 1.58\,h \\
+\hline
 F3\_DUPL & Repeated packets (burst 2--5) & 0.62\,h & 1.56\,h \\
+\hline
 F4\_SPIKE & Sudden jumps ($\pm 30$--$60$\,bpm) & 0.07\,h & 0.21\,h \\
+\hline
 F5\_DRIFT & Slow ramp ($+0.2$\,bpm/s trend) & 0.45\,h & 1.55\,h \\
+\hline
 F6\_UNIT & Scale error ($0.5\times$ or $2.0\times$) & 0.48\,h & 1.56\,h \\
+\hline
 F7\_OPTICAL & Motion noise ($\text{SNR}=+5$\,dB, 64\,Hz) & Standalone & Standalone \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}

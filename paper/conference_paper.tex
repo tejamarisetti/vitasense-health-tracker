@@ -16,26 +16,12 @@
 
 \begin{document}
 
-\title{A Pre-Registered Fault-Injection Benchmark for Wearable Heart-Rate Alerting: Kinematic Motion Gating Dominates and Software Trust Scores Add Little}
+\title{\LARGE Benchmarking Motion Gating for Wearable Heart-Rate Alerting}
 
-\author{\IEEEauthorblockN{Student 1}
-\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}\\
-Chennai, India \\
-email address}
-\and
-\IEEEauthorblockN{Student 2}
-\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}\\
-Chennai, India \\
-email address}
-\and
-\IEEEauthorblockN{Student 3}
-\IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}\\
-Chennai, India \\
-email address}
-}
+\author{\IEEEauthorblockN{Student 1, \quad Student 2, \quad Student 3}
+\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
+\textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}, Chennai, India \\
+email address}}
 
 \maketitle
 
@@ -48,7 +34,7 @@ wearable sensors, photoplethysmography, heart-rate alerting, data quality, fault
 \end{IEEEkeywords}
 
 \section{Introduction}
-Ambulatory continuous monitoring with consumer and medical-grade wearables offers substantial promise for early arrhythmia detection. However, wrist photoplethysmography (PPG) is acutely vulnerable to motion artifacts, optical decoupling, transmission dropouts, and flatline sensor lockups. When raw optical or derived telemetry signals degrade, alerting systems frequently emit spurious clinical notifications. In home monitoring and clinical telemetry alike, high false-alert frequencies precipitate severe alarm fatigue, inducing desensitization and compromising user adherence.
+Ambulatory continuous monitoring with consumer and medical-grade wearables offers substantial promise for early arrhythmia detection. However, wrist photoplethysmography (PPG) is acutely vulnerable to motion artifacts, optical decoupling, transmission dropouts, and flatline sensor lockups. When raw optical or derived telemetry signals degrade, alerting systems frequently emit spurious clinical notifications. In home monitoring and clinical telemetry alike, high false-alert frequencies precipitate severe alarm fatigue, inducing desensitization and compromising user adherence \cite{ref_alarm_fatigue}.
 
 To prevent spurious alarms, modern digital health frameworks deploy complex signal quality indices (SQIs) and multi-component trust heuristics that penalize missing samples, flag frozen sensor values, and bound rate-of-change dynamics. Despite their architectural prevalence, the isolated incremental utility of multi-component software trust scores over straightforward kinematic stillness gating (e.g., Euclidean Norm Minus One, ENMO) has not been demonstrated in pre-registered, cross-validated benchmarks. Many prior evaluations suffer from train-test leakage, post-hoc hyperparameter selection, or lack of minimal baseline comparators.
 
@@ -60,7 +46,7 @@ This paper reports a rigorous, pre-registered fault-injection benchmark for wear
 \end{enumerate}
 
 \section{Literature Survey}
-Wrist-based pulse rate monitoring relies on optical absorption changes in microvascular tissue beds \cite{ref_reiss_dalia, ref_charlton_roadmap}. Relative motion between sensor photodiodes and cutaneous capillary beds introduces severe motion artifacts that overlap spectrally with true cardiac fundamental frequencies \cite{ref_reiss_dalia}.
+Wrist-based pulse rate monitoring relies on optical absorption changes in microvascular tissue beds \cite{ref_reiss_dalia, ref_charlton_roadmap}. Relative motion between sensor photodiodes and cutaneous capillary beds introduces severe motion artifacts that overlap spectrally with true cardiac fundamental frequencies \cite{ref_reiss_dalia, ref_troika}.
 
 To isolate motion artifact and evaluate waveform integrity, numerous signal quality indices (SQIs) have been proposed, spanning statistical moments (skewness, kurtosis), spectral purity, and template cross-correlation \cite{ref_elgendi_sqi}. While SQIs achieve strong classification performance on stationary laboratory datasets, ambulatory evaluations reveal severe performance drops during daily locomotion \cite{ref_reiss_dalia, ref_charlton_roadmap}. In clinical deployments, uncertainty quantification and selective prediction frameworks, such as conformal prediction, provide distribution-free finite-sample guarantees that offer structured paths for principled abstention \cite{ref_vazquez_conformal}. Table~\ref{tab:lit_comparison} contrasts existing wearable alerting paradigms with our pre-registered framework.
 
@@ -69,16 +55,20 @@ To isolate motion artifact and evaluate waveform integrity, numerous signal qual
 \label{tab:lit_comparison}
 \centering
 \scriptsize
-\begin{tabular}{lcccc}
-\toprule
+\begin{tabular}{|l|c|c|c|c|}
+\hline
 \textbf{Study / Paradigm} & \textbf{Pre-Reg.} & \textbf{Ablation} & \textbf{LOSO} & \textbf{Fault Inject.} \\
-\midrule
+\hline
 Deep PPG \cite{ref_reiss_dalia} & No & No & Yes & No \\
+\hline
 Optimal PPG SQI \cite{ref_elgendi_sqi} & No & No & No & No \\
+\hline
 PPG Roadmap \cite{ref_charlton_roadmap} & Review & N/A & N/A & N/A \\
+\hline
 Conformal Clinical UQ \cite{ref_vazquez_conformal} & Review & N/A & N/A & N/A \\
+\hline
 \textbf{This Benchmark} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
 
@@ -103,25 +93,43 @@ Sensor telemetry faults were simulated under two pre-specified schedules alongsi
 \input{tables/tab_fault_taxonomy.tex}
 
 \section{System Architecture}
-The experimental harness and interactive replay lab were implemented as a modular full-stack application (Fig.~\ref{fig:arch}). The front-end is a React Progressive Web Application (PWA) supporting live signal inspection, threshold tuning, and an interactive benchmark dashboard. The back-end is powered by FastAPI and SQLite, incorporating the core \texttt{vitasense.quality} engine, replay caches, and LLM assistant routing with rule-based safety fallbacks.
+The experimental harness and interactive replay lab were implemented as a modular full-stack application (Fig.~\ref{fig:arch}). The front-end is a React Progressive Web Application (PWA) aligned with Figma interactive specifications, featuring live telemetry inspection, threshold tuning, and an interactive benchmark dashboard. In terms of product requirements (PRD), core streaming telemetry and visual replay are operational. Requirement FR-04 (data quality checks) is currently partial: anomaly flags (missing data, flatlines, physiological bounds) are active, while automated exclusion from inference is pending. Modules FR-06 (guided symptom-risk questionnaire with user review step) and FR-07 (explanation with prediction uncertainty) are planned for future increments. The back-end is powered by FastAPI and SQLite, incorporating the core \texttt{vitasense.quality} engine, replay caches, and LLM assistant routing with rule-based safety fallbacks.
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    box/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
-    proc/.style={rectangle, draw=black!70, fill=green!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
-    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+    layer/.style={rectangle, draw=#1!80!black, fill=#1!8, rounded corners=3pt, font=\scriptsize, align=center, inner sep=3.5pt, line width=0.6pt},
+    arr/.style={-{Stealth[length=1.5mm, width=1.1mm]}, thick, color=black!70}
 ]
-\node[box, fill=purple!8, text width=3.25in] (ui) {\textbf{Client Layer: React PWA}\\Telemetry Dashboard $\cdot$ Signal Replay Lab $\cdot$ Research Benchmark Page $\cdot$ Auth};
-\node[proc, fill=orange!8, below=0.15cm of ui, text width=3.25in] (api) {\textbf{API Layer: FastAPI (Python 3.13)}\\Session Verification $\cdot$ Rate Limiter $\cdot$ REST Endpoints $\cdot$ SSE Event Stream $\cdot$ Assistant};
-\node[box, below=0.15cm of api, xshift=-2.0cm, text width=1.45in] (db) {\textbf{Storage \& Caching}\\SQLite (\texttt{vitasense.db})\\Pre-computed Caches};
-\node[proc, below=0.15cm of api, xshift=2.0cm, text width=1.45in] (engine) {\textbf{Analytics Engine}\\Quality Checks (\texttt{vitasense.quality})\\Emitter ($P, R$) $\cdot$ Trust Scorer};
+\node[layer=blue, text width=3.15in] (ui) {
+    \textbf{\textcolor{blue!80!black}{CLIENT APPLICATION LAYER (React 18 PWA)}}\\[2pt]
+    \textsc{Telemetry Monitor} $\;\bullet\;$ \textsc{Replay Lab} $\;\bullet\;$ \textsc{LOSO Benchmark}
+};
 
-\draw[arr, <->] (ui) -- (api);
-\draw[arr, <->] (api) -| (db);
-\draw[arr, <->] (api) -| (engine);
+\node[layer=orange, below=0.25cm of ui, text width=3.15in] (api) {
+    \textbf{\textcolor{orange!85!black}{BACKEND SERVICES \& API GATEWAY (FastAPI / Py 3.13)}}\\[2pt]
+    \textsc{REST API} $\;\bullet\;$ \textsc{SSE Streaming} $\;\bullet\;$ \textsc{Quality Engine} $\;\bullet\;$ \textsc{Fallback}
+};
+
+\node[layer=teal, below=0.25cm of api, xshift=-1.65cm, text width=1.45in] (db) {
+    \textbf{\textcolor{teal!80!black}{Storage \& Caching}}\\[2pt]
+    SQLite (\texttt{vitasense.db})\\
+    Pre-computed LOSO Caches\\
+    Provenance Audit Logs
+};
+
+\node[layer=purple, below=0.25cm of api, xshift=1.65cm, text width=1.45in] (engine) {
+    \textbf{\textcolor{purple!80!black}{Analytics Engine}}\\[2pt]
+    \texttt{vitasense.quality} Checks\\
+    Kinematic Gating (Arm 3a)\\
+    Standard Alert Emitter
+};
+
+\draw[arr, <->] (ui.south) -- (api.north) node[midway, fill=white, inner sep=1.5pt, font=\tiny\itshape, text=blue!80!black] {HTTP / EventStream};
+\draw[arr, ->] (api.south -| db) -- (db.north);
+\draw[arr, ->] (api.south -| engine) -- (engine.north);
 \end{tikzpicture}
-\caption{Design Diagram: VitaSense Application Architecture.}
+\caption{Visual Architecture: VitaSense full-stack telemetry and benchmark application.}
 \label{fig:arch}
 \end{figure}
 
@@ -139,50 +147,65 @@ The research pipeline processes raw sensor streams into calibrated, causal alert
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    node/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
-    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+    stepnode/.style={rectangle, draw=#1!70!black, fill=#1!10, rounded corners=3pt, font=\tiny, align=center, inner sep=2.5pt, line width=0.5pt, text width=0.92in},
+    arr/.style={-{Stealth[length=1.5mm, width=1.1mm]}, thick, color=black!70}
 ]
-\node[node] (raw) {PPG-DaLiA\\Raw Data};
-\node[node, right=0.2cm of raw] (cache) {Feature\\Cache};
-\node[node, right=0.2cm of cache] (inj) {Synthetic\\Injection};
-\node[node, right=0.2cm of inj] (fault) {Fault\\Schedule};
-\node[node, below=0.2cm of fault] (arms) {Alerting\\Arms 1--3b};
-\node[node, left=0.2cm of arms] (emit) {Shared\\Emitter};
-\node[node, left=0.2cm of emit] (score) {Scoring\\\& LOSO};
+\node[stepnode=blue] (s1) {\textbf{\textcolor{blue!80!black}{1. Ingestion}}\\PPG-DaLiA Wrist\\64Hz BVP, 32Hz ACC};
+\node[stepnode=teal, right=0.16cm of s1] (s2) {\textbf{\textcolor{teal!80!black}{2. Synthetic Inj.}}\\112 Tachy Episodes\\Stillness $\le 0.05$\,g};
+\node[stepnode=orange, right=0.16cm of s2] (s3) {\textbf{\textcolor{orange!80!black}{3. Fault Sched.}}\\Regimes A, B \&\\F7 Optical Noise};
 
-\draw[arr] (raw) -- (cache);
-\draw[arr] (cache) -- (inj);
-\draw[arr] (inj) -- (fault);
-\draw[arr] (fault) -- (arms);
-\draw[arr] (arms) -- (emit);
-\draw[arr] (emit) -- (score);
+\node[stepnode=purple, below=0.28cm of s3] (s4) {\textbf{\textcolor{purple!80!black}{4. Alerting Arms}}\\Arms 1, 2, 3a, 3b\\Causal thresholds};
+\node[stepnode=green!60!black, left=0.16cm of s4] (s5) {\textbf{\textcolor{green!60!black}{5. Std. Emitter}}\\Hold-off $P \ge 20$\,s\\Refractory $R = 60$\,s};
+\node[stepnode=red, left=0.16cm of s5] (s6) {\textbf{\textcolor{red!70!black}{6. LOSO Eval.}}\\15 Training Folds\\Wilcoxon \& Boot. CI};
+
+\draw[arr] (s1) -- (s2);
+\draw[arr] (s2) -- (s3);
+\draw[arr] (s3) -- (s4);
+\draw[arr] (s4) -- (s5);
+\draw[arr] (s5) -- (s6);
 \end{tikzpicture}
-\caption{Design Diagram: Pre-Registered Benchmark Research Pipeline.}
+\caption{Visual Pipeline: Pre-registered fault injection and LOSO benchmarking.}
 \label{fig:pipeline}
 \end{figure}
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    box/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
-    gate/.style={diamond, draw=black!70, fill=yellow!15, aspect=1.8, font=\tiny, align=center, inner sep=1pt},
-    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+    box/.style={rectangle, draw=#1!70!black, fill=#1!10, rounded corners=3pt, font=\tiny, align=center, inner sep=2.5pt, line width=0.5pt},
+    arr/.style={-{Stealth[length=1.5mm, width=1.1mm]}, thick, color=black!70}
 ]
-\node[box] (inp) {Heart Rate $HR(t)$ $\cdot$ Accel $\mathbf{a}(t)$};
-\node[box, below=0.18cm of inp] (tau) {Causal Baseline $\tau_i(t)$ (Arm 2)};
-\node[gate, below left=0.18cm and -0.4cm of tau] (g_kin) {$\text{ENMO} \le \theta_{\text{rest}}$? (3a)};
-\node[gate, below right=0.18cm and -0.4cm of tau] (g_tr) {$S_{\text{trust}} \ge \theta_{\text{trust}}$? (3b)};
-\node[box, fill=green!10, below=0.22cm of tau] (emit) {Standard Emitter ($P, R$)};
-\node[box, fill=red!10, below=0.18cm of emit] (out) {Emitted Tachycardia Alert};
+\node[box=blue, text width=3.1in] (inp) {\textbf{\textcolor{blue!80!black}{Sensor Inputs:}} Heart Rate $HR(t)$ $\cdot$ Accelerometry Triaxial $\mathbf{a}(t)$};
+\node[box=orange, below=0.26cm of inp, text width=3.1in] (tau) {\textbf{\textcolor{orange!80!black}{Arm 2 Causal Personal Baseline:}} $\tau_i(t) = \max(100.0, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$};
 
-\draw[arr] (inp) -- (tau);
-\draw[arr] (tau) -| (g_kin);
-\draw[arr] (tau) -| (g_tr);
-\draw[arr] (g_kin) |- (emit);
-\draw[arr] (g_tr) |- (emit);
-\draw[arr] (emit) -- (out);
+\node[box=teal, below=0.26cm of tau, xshift=-1.45cm, text width=1.35in] (g_kin) {
+    \textbf{\textcolor{teal!80!black}{Arm 3a Kinematic Gate}}\\[1pt]
+    $\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}}$\\
+    \textit{(Passes if resting/still)}
+};
+
+\node[box=purple, below=0.26cm of tau, xshift=1.45cm, text width=1.35in] (g_tr) {
+    \textbf{\textcolor{purple!80!black}{Arm 3b Trust Gate}}\\[1pt]
+    $S_{\text{trust}}(t) \ge \theta_{\text{trust}}$\\
+    \textit{(Multi-signal composite)}
+};
+
+\node[box=green!60!black, below=0.26cm of $(g_kin.south)!0.5!(g_tr.south)$, text width=2.4in] (emit) {
+    \textbf{\textcolor{green!60!black}{Shared Standard Alert Emitter ($P, R$)}}\\[1pt]
+    Persistence $W_p \ge P$ s $\cdot$ Refractory Hold-off $W_r = 60$ s
+};
+
+\node[box=red, below=0.22cm of emit, text width=2.4in] (out) {
+    \textbf{\textcolor{red!80!black}{Verified Clinical Notification / Suppressed False Alert}}
+};
+
+\draw[arr, ->] (inp.south) -- (tau.north);
+\draw[arr, ->] (tau.south -| g_kin) -- (g_kin.north) node[midway, fill=white, inner sep=1pt, font=\tiny\bfseries] {$HR > \tau_i$};
+\draw[arr, ->] (tau.south -| g_tr) -- (g_tr.north) node[midway, fill=white, inner sep=1pt, font=\tiny\bfseries] {$HR > \tau_i$};
+\draw[arr, ->] (g_kin.south) -- (emit.north -| g_kin.south) node[midway, fill=white, inner sep=1pt, font=\tiny] {Pass};
+\draw[arr, ->] (g_tr.south) -- (emit.north -| g_tr.south) node[midway, fill=white, inner sep=1pt, font=\tiny] {Pass};
+\draw[arr, ->] (emit.south) -- (out.north);
 \end{tikzpicture}
-\caption{Design Diagram: Alert Logic and Gating Across Arms.}
+\caption{Visual Decision Flow: Causal alerting logic and dual gating pathways.}
 \label{fig:arms}
 \end{figure}
 
@@ -298,45 +321,48 @@ Scoring evaluates event-level recall (detecting injected episodes within $[t_{\t
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    box/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
-    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+    milestone/.style={rectangle, draw=#1!70!black, fill=#1!12, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt, line width=0.5pt, text width=0.56in},
+    arr/.style={-{Stealth[length=1.4mm, width=1.0mm]}, thick, color=black!70}
 ]
-\node[box] (v1) {\textbf{v1.0.0}\\\texttt{41eff1e}\\18-Oct};
-\node[box, right=0.2cm of v1] (a1) {\textbf{Amd 1}\\\texttt{3b1f2f6}\\19-Oct 14:56};
-\node[box, right=0.2cm of a1] (a2) {\textbf{Amd 2}\\\texttt{696fd00}\\19-Oct 15:18};
-\node[box, right=0.2cm of a2] (a3) {\textbf{Amd 3}\\\texttt{a0d682a}\\19-Oct 16:25};
-\node[box, right=0.2cm of a3] (a4) {\textbf{Amd 4}\\\texttt{a9ce657}\\19-Oct 17:46};
+\node[milestone=blue] (v1) {\textbf{\textcolor{blue!80!black}{v1.0.0}}\\\texttt{41eff1e}\\18-Oct};
+\node[milestone=teal, right=0.10cm of v1] (a1) {\textbf{\textcolor{teal!80!black}{Amd 1}}\\\texttt{3b1f2f6}\\19-Oct};
+\node[milestone=orange, right=0.10cm of a1] (a2) {\textbf{\textcolor{orange!80!black}{Amd 2}}\\\texttt{696fd00}\\19-Oct};
+\node[milestone=purple, right=0.10cm of a2] (a3) {\textbf{\textcolor{purple!80!black}{Amd 3}}\\\texttt{a0d682a}\\19-Oct};
+\node[milestone=green!60!black, right=0.10cm of a3] (a4) {\textbf{\textcolor{green!60!black}{Amd 4}}\\\texttt{a9ce657}\\19-Oct};
 
 \draw[arr] (v1) -- (a1);
 \draw[arr] (a1) -- (a2);
 \draw[arr] (a2) -- (a3);
 \draw[arr] (a3) -- (a4);
 \end{tikzpicture}
-\caption{Design Diagram: Protocol Evolution Timeline (Commits from git log).}
+\caption{Visual Timeline: Pre-registered protocol amendments and git provenance.}
 \label{fig:timeline}
 \end{figure}
 
 \begin{figure*}[t]
 \centering
-\begin{minipage}{0.24\textwidth}
+\begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=\linewidth]{figures/fig_recall_vs_fahr.pdf}
-\centerline{\footnotesize (a) Recall vs FA/hr}
+\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_recall_vs_fahr.pdf}
+\centerline{\footnotesize (a) Event Recall vs Clean False Alerts per Hour across Arms and Regimes}
 \end{minipage}\hfill
-\begin{minipage}{0.24\textwidth}
+\begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=\linewidth]{figures/fig_forest_plot_3b_vs_3a.pdf}
-\centerline{\footnotesize (b) Paired $\Delta$ (3b vs 3a)}
+\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_forest_plot_3b_vs_3a.pdf}
+\centerline{\footnotesize (b) Paired Differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% Bootstrap CIs}
+\end{minipage}
+
+\vspace{0.08cm}
+
+\begin{minipage}{0.48\textwidth}
+\centering
+\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_persubject_fahr.pdf}
+\centerline{\footnotesize (c) Per-Subject False Alerts per Hour in Clean Data (Condition 0)}
 \end{minipage}\hfill
-\begin{minipage}{0.24\textwidth}
+\begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=\linewidth]{figures/fig_persubject_fahr.pdf}
-\centerline{\footnotesize (c) Per-Subject Clean FA/hr}
-\end{minipage}\hfill
-\begin{minipage}{0.24\textwidth}
-\centering
-\includegraphics[width=\linewidth]{figures/fig_arm1_sensitivity.pdf}
-\centerline{\footnotesize (d) Arm 1 Sensitivity}
+\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_arm1_sensitivity.pdf}
+\centerline{\footnotesize (d) Arm 1 Threshold Sensitivity across Cutoffs $\tau_{\text{pop}}$ and Persistence $P$}
 \end{minipage}
 \caption{Benchmark results across arms and conditions: (a) Event recall vs clean false alerts per hour; (b) Forest plot of paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% bootstrap CIs; (c) Per-subject FA/hr in Condition 0; (d) Arm 1 sensitivity across $\tau_{\text{pop}}$ and persistence $P$.}
 \label{fig:results_all}
@@ -371,7 +397,7 @@ Hyperparameter tuning consistently selected parameter boundary values (Table~\re
 \input{tables/tab_edge_of_grid.tex}
 
 \section{Limitations}
-This benchmark is subject to several methodological constraints (Table~\ref{tab:limitations}): (1) Events were synthetically injected due to natural sparsity; (2) The cohort is limited to 15 healthy participants; (3) Algorithmic errors in front-end PPG tracking couple into downstream logic; (4) Post-result protocol amendments (Table~\ref{tab:deviations}) document adjustments made after preliminary inspection.
+This benchmark is subject to several methodological constraints (Table~\ref{tab:limitations}): (1) Events were synthetically injected due to natural sparsity; (2) The cohort is limited to 15 healthy participants; (3) Algorithmic errors in front-end PPG tracking couple into downstream logic; (4) Post-result protocol amendments (Table~\ref{tab:deviations}) document adjustments made after preliminary inspection; (5) Arm 4 (conformal prediction with selective abstention) was never built or evaluated; (6) PhysioNet Wearable 1.0.1 and WESAD \cite{ref_wesad} datasets were not used for benchmark evaluation, maintaining focus strictly on the ratified PPG-DaLiA protocol.
 
 \input{tables/tab_limitations.tex}
 \input{tables/tab_deviations.tex}
@@ -379,11 +405,11 @@ This benchmark is subject to several methodological constraints (Table~\ref{tab:
 \section{Future Scope}
 Future efforts will extend this benchmark along five technical avenues:
 \begin{enumerate}
-    \item \textbf{Arm 4 Conformal Abstention:} Integrating inductive and split conformal prediction to output distribution-free validity sets with user-calibrated error bounds \cite{ref_vazquez_conformal}.
-    \item \textbf{External Dataset Generalization:} Evaluating on external public wearable corpora, including the PhysioNet Wearable Device Dataset \cite{ref_physionet_wearable}.
+    \item \textbf{Arm 4 Conformal Abstention:} Building and integrating inductive conformal prediction to yield distribution-free validity sets with user-calibrated error bounds \cite{ref_vazquez_conformal}.
+    \item \textbf{External Dataset Generalization:} Evaluating on external public wearable corpora, including the PhysioNet Wearable Device Dataset \cite{ref_physionet_wearable} and WESAD \cite{ref_wesad}.
     \item \textbf{Clinical Patient Cohorts:} Validating on holter-monitored inpatient recordings with spontaneous atrial fibrillation and supraventricular tachycardia.
     \item \textbf{On-Device Hardware Integration:} Deploying causal baseline and kinematic gating engines onto low-power embedded microcontrollers.
-    \item \textbf{Symptom-Risk Questionnaire Module:} Pairing continuous passive telemetry gating with guided active user symptom-logging.
+    \item \textbf{Symptom-Risk Questionnaire Module:} Implementing PRD modules FR-06 (guided questionnaire) and FR-07 (explanation and uncertainty) to complement passive telemetry.
 \end{enumerate}
 
 \section{Conclusion}
@@ -394,9 +420,6 @@ In this pre-registered fault-injection benchmark, kinematic motion gating accoun
 
 \section*{Data and Code Availability}
 The PPG-DaLiA dataset is openly accessible via the UCI Machine Learning Repository \cite{ref_reiss_dalia, ref_uci_dalia}. The PhysioNet Wearable Device Dataset is available under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are provided in the project repository.
-
-\section*{Acknowledgment}
-The authors thank Vel Tech Rangarajan Dr. Sagunthala R\&D Institute for computational support during this research.
 
 \begin{thebibliography}{00}
 
@@ -434,6 +457,21 @@ R.~Detrano, A.~J\'anosi, W.~Steinbrunn, K.~Pfisterer, and J.~Schmid, ``Heart Dis
 % Accessed: 2026-10-22
 \bibitem{ref_physionet_wearable}
 A.~Kos, Y.~Toma\v{z}i\v{c}, and A.~Umek, ``Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,'' PhysioNet, Version 1.0.1, 2022, DOI: 10.13026/8fca-2v93.
+
+% URL: https://dl.acm.org/doi/10.1145/3242969.3242985
+% Accessed: 2026-10-22
+\bibitem{ref_wesad}
+P.~Schmidt, A.~Reiss, R.~Duerichen, C.~Marberger, and K.~Van~Laerhoven, ``Introducing WESAD, a multimodal dataset for wearable stress and affect detection,'' in \emph{Proc. 20th ACM Int. Conf. Multimodal Interaction (ICMI)}, 2018, pp.~400--408.
+
+% URL: https://ieeexplore.ieee.org/document/6905807
+% Accessed: 2026-10-22
+\bibitem{ref_troika}
+Z.~Zhang, Z.~Pi, and B.~Liu, ``TROIKA: A general framework for heart rate monitoring using wrist-type photoplethysmographic signals during intensive physical exercise,'' \emph{IEEE Trans. Biomed. Eng.}, vol.~62, no.~2, pp.~522--531, 2015.
+
+% URL: https://pubmed.ncbi.nlm.nih.gov/22614385/
+% Accessed: 2026-10-22
+\bibitem{ref_alarm_fatigue}
+M.~Cvach, ``Monitor alarm fatigue: An integrative review,'' \emph{Biomed. Instrum. Technol.}, vol.~46, no.~4, pp.~268--277, 2012.
 
 \end{thebibliography}
 

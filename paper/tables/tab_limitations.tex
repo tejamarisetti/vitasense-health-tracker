@@ -3,16 +3,23 @@
 \label{tab:limitations}
 \centering
 \scriptsize
-\begin{tabular}{lp{4.7cm}}
-\toprule
+\begin{tabular}{|l|p{4.7cm}|}
+\hline
 \textbf{Threat Domain} & \textbf{Empirical Limitation and Mitigation} \\
-\midrule
+\hline
 Synthetic Events & True resting tachycardia was absent in healthy cohort; 112 episodes synthetically injected into derived stream. Recall values are tied to synthetic plateau distribution ($105$--$135$\,bpm). \\
+\hline
 Cohort Size & $N = 15$ healthy young adults limits power for small paired false-alert differences. Reported with 95\% bootstrap CIs. \\
+\hline
 Noise Coupling & Estimator tracking errors and motion artifacts interact directly with downstream thresholding logic. \\
+\hline
 Grid Boundaries & Tuning frequently selected grid boundaries ($\tau_{\text{pop}} = 100$, $k = 2.0$, $P = 10$\,s / $30$\,s), reflecting severe trade-offs. \\
-Ambulatory Protocol & Single 2.5-hour multimodal script; generalizability to continuous free-living 24/7 monitoring is not established. \\
+\hline
+External Datasets & PhysioNet Wearable 1.0.1 and WESAD datasets were not used for evaluation (external checks reserved for future work). \\
+\hline
+Arm 4 Scope & Arm 4 conformal abstention was never built in this benchmark. \\
+\hline
 Non-Clinical Scope & Academic software benchmark only; not validated for clinical diagnosis or medical device deployment. \\
-\bottomrule
+\hline
 \end{tabular}
 \end{table}
