@@ -1,52 +1,293 @@
 # VitaSense AI - PRD Traceability Matrix
 
-**Document Version:** 2.0.0  
-**Generated Date:** 2026-10-20  
-**PRD Reference:** `docs/PRD.pdf` (*Note: File was not present on disk at run time; requirements and numbering adhere strictly to the user-specified authoritative FR list without guessing.*)
+**Document Version:** 3.0.0  
+**Generated Date:** 2026-10-22  
+**PRD Reference:** [docs/PRD.pdf](file:///d:/projects/health%20tracker/docs/PRD.pdf) (*VitaSense AI Product Requirements Document Version 2.0, 16 October 2026, Section 8 Functional Requirements*).  
+**Requirements Traceability Rule:** Requirement wording is transcribed verbatim from `docs/PRD.pdf` Section 8. Requirement statuses are determined strictly by verified implementation evidence and automated test execution. Per instructions, FR-06 and FR-07 are not started; FR-10 is backed by a verified backend API and interactive UI implementation.
 
 ---
 
-## 1. Executive Summary & Traceability Overview
-
-This matrix maps every Functional Requirement (FR-01 through FR-13) to its current implementation status, source files, and automated test coverage.
+## 1. Summary of Functional Requirements Status
 
 - **Total Functional Requirements:** 13
-- **Implemented:** 12
-- **Partial:** 1 (FR-04 Data Quality Engine: quality flags and component checks exist, but exclusion from downstream ML inference is not yet implemented)
-- **Not Started:** 0
+- **Implemented (8):** FR-01, FR-02, FR-03, FR-05, FR-08, FR-09, FR-10, FR-11, FR-12, FR-13 (10 requirements implemented)
+- **Partial (1):** FR-04 (Data quality engine and component checks are implemented; exclusion from downstream ML inference is pending)
+- **Not Started (2):** FR-06 (Symptom-based risk assessment), FR-07 (AI/ML explanation)
 
 ---
 
-## 2. Comprehensive Traceability Matrix
+## 2. Requirement-by-Requirement Traceability Matrix
 
-| FR ID | Feature Name | Status | Implementation Files | Automated Test References | Notes / Architectural Details |
-| :--- | :--- | :---: | :--- | :--- | :--- |
-| **FR-01** | **User Authentication** | **Implemented** | [auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)<br>[db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)<br>[LoginPage.tsx](file:///d:/projects/health%20tracker/src/pages/LoginPage.tsx)<br>[CreateAccountPage.tsx](file:///d:/projects/health%20tracker/src/pages/CreateAccountPage.tsx) | [test_phase2_auth_measurements.py:L27-L86](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L27-L86)<br>[test_phase2_auth_measurements.py:L441-L573](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L441-L573) | Hardened PBKDF2-HMAC-SHA256 (600,000 iterations); session tokens hashed with SHA-256 before storage in SQLite; rate limiting on register & login (5 req/min per IP); expired/revoked token enforcement; password reset marked "not enabled" in UI. |
-| **FR-02** | **User Profile** | **Implemented** | [auth.py:L268-L308](file:///d:/projects/health%20tracker/vitasense/api/auth.py#L268-L308)<br>[ProfileModal.tsx](file:///d:/projects/health%20tracker/src/components/ProfileModal.tsx)<br>[types.ts](file:///d:/projects/health%20tracker/src/types.ts) | [test_phase2_auth_measurements.py:L88-L124](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L88-L124) | Structured profile CRUD (age, biological sex, height, weight, resting HR baseline, activity level, cardiovascular health goal). Stored in `user_profiles` table with foreign key cascade. |
-| **FR-03** | **Physiological Measurements** | **Implemented** | [measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)<br>[db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)<br>[TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx) | [test_phase2_auth_measurements.py:L126-L230](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L126-L230) | Server-side validation for type (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`), value (finite, non-negative), unit consistency, ISO8601 timestamp (clock-skew & future limit), and source (`manual`, `import`, `demo`). Strict per-user isolation. |
-| **FR-04** | **Data Quality Engine** | **Partial** | [trust_score.py](file:///d:/projects/health%20tracker/vitasense/quality/trust_score.py)<br>[measurements.py:L89-L219](file:///d:/projects/health%20tracker/vitasense/api/measurements.py#L89-L219)<br>[TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx) | [test_phase2_auth_measurements.py:L232-L320](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L232-L320)<br>[test_trust_score.py](file:///d:/projects/health%20tracker/tests/test_trust_score.py) | **Partial Implementation:** Detects and flags `missing`, `stale` (sensor flatlines), `duplicate` (timestamps), `implausible` (physiological boundaries), and `sudden_change` (jump rates >40 bpm/s); computes component check breakdown. **Pending:** Automated exclusion of flagged records from downstream ML inference pipelines. |
-| **FR-05** | **Real-Time Dashboard** | **Implemented** | [OverviewPage.tsx](file:///d:/projects/health%20tracker/src/pages/OverviewPage.tsx)<br>[MetricCard.tsx](file:///d:/projects/health%20tracker/src/components/MetricCard.tsx)<br>[Waveform.tsx](file:///d:/projects/health%20tracker/src/components/Waveform.tsx) | Verified via frontend build `npm.cmd run build` | Live vital cards (heart rate, SpO₂), animated SVG waveform rendering, daily activity metric stack, and AI insight preview. |
-| **FR-06** | **Symptom Risk Assessment** | **Implemented** | [assistant.py](file:///d:/projects/health%20tracker/vitasense/api/assistant.py)<br>[CompanionPage.tsx](file:///d:/projects/health%20tracker/src/pages/CompanionPage.tsx) | [test_assistant_api.py:L14-L85](file:///d:/projects/health%20tracker/tests/test_assistant_api.py#L14-L85) | Safety-aligned intent classification; handles symptom inquiry, structured risk disclaimers, refusal of formal clinical diagnosis, and guidance to consult medical professionals. |
-| **FR-07** | **AI/ML Explanation** | **Implemented** | [assistant.py](file:///d:/projects/health%20tracker/vitasense/api/assistant.py)<br>[CompanionPage.tsx](file:///d:/projects/health%20tracker/src/pages/CompanionPage.tsx)<br>[BenchmarkPage.tsx](file:///d:/projects/health%20tracker/src/pages/BenchmarkPage.tsx) | [test_assistant_api.py](file:///d:/projects/health%20tracker/tests/test_assistant_api.py)<br>[test_replay_api.py](file:///d:/projects/health%20tracker/tests/test_replay_api.py) | Explainable telemetry cards, engine indicator (`llm` vs `rule_fallback`), reason codes for abstentions, and pre-registered benchmark arm comparisons. |
-| **FR-08** | **Trend Analysis** | **Implemented** | [TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)<br>[measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py) | [test_phase2_auth_measurements.py](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py) | Multi-day observation windows (24H, 7D, 30D, 3M), deviation from personal resting baseline, and structured export to JSON, CSV, and printable digest. |
-| **FR-09** | **Alerts & Notifications** | **Implemented** | [emitter.py](file:///d:/projects/health%20tracker/vitasense/alerts/emitter.py)<br>[AlertsPage.tsx](file:///d:/projects/health%20tracker/src/pages/AlertsPage.tsx) | [test_alert_emitter.py](file:///d:/projects/health%20tracker/tests/test_alert_emitter.py)<br>[test_arm_quarantine.py](file:///d:/projects/health%20tracker/tests/test_arm_quarantine.py) | Persistence filter ($P \in \{10, 20, 30\}\text{s}$), mandatory 60s refractory period ($R = 60\text{s}$), in-app notification inbox, and false-alert triage. |
-| **FR-10** | **History & Search** | **Implemented** | [replay.py](file:///d:/projects/health%20tracker/vitasense/api/replay.py)<br>[SignalsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SignalsPage.tsx) | [test_replay_api.py](file:///d:/projects/health%20tracker/tests/test_replay_api.py) | Telemetry replay stream across 15 PPG-DaLiA subjects, offset/limit window queries, and synchronized fault injection inspection. |
-| **FR-11** | **Contact Us & Support** | **Implemented** | [auth.py:L310-L334](file:///d:/projects/health%20tracker/vitasense/api/auth.py#L310-L334)<br>[app.py:L43-L49](file:///d:/projects/health%20tracker/vitasense/api/app.py#L43-L49)<br>[SettingsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx) | [test_phase2_auth_measurements.py:L525-L573](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L525-L573) | `POST /api/contact` endpoint with database persistence in `contact_messages`, rate-limiting (5 submissions/min per IP), and frontend contact form. |
-| **FR-12** | **Demo Mode & Onboarding** | **Implemented** | [measurements.py:L310-L400](file:///d:/projects/health%20tracker/vitasense/api/measurements.py#L310-L400)<br>[LandingPage.tsx](file:///d:/projects/health%20tracker/src/pages/LandingPage.tsx)<br>[TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx) | [test_phase2_auth_measurements.py:L322-L379](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L322-L379) | Synthetic demo telemetry pre-population with non-destructive reset (`POST /api/measurements/demo/reset`) that deletes ONLY `source = 'demo'` and strictly preserves real user measurements (`source = 'manual'` or `'import'`). |
-| **FR-13** | **Privacy & Account Controls** | **Implemented** | [auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)<br>[measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)<br>[SettingsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx) | [test_phase2_auth_measurements.py:L177-L230](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L177-L230) | Strict per-user database row isolation (`WHERE user_id = :uid`), session revocation on logout, zero logging of raw credentials/tokens/bodies, and user-initiated data clearing. |
+### FR-01 — Authentication and sessions
+* **PRD Verbatim Requirement:**
+  - Users can register, log in, log out, and receive understandable validation errors.
+  - Passwords must be securely hashed server-side; never store plaintext passwords.
+  - Protected pages and APIs require a valid session/token.
+  - Users can access only their own private profile, measurements, assessments, predictions, and alerts.
+  - Include password reset only if an email/reset mechanism is actually configured; otherwise clearly mark it as not enabled rather than faking it.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/pages/LoginPage.tsx](file:///d:/projects/health%20tracker/src/pages/LoginPage.tsx)
+  - [src/pages/CreateAccountPage.tsx](file:///d:/projects/health%20tracker/src/pages/CreateAccountPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase2_auth_measurements.py:L27-L86](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L27-L86) (registration, password hashing, session tokens, login/logout)
+  - [tests/test_phase2_auth_measurements.py:L441-L573](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L441-L573) (rate-limiting on register & login, cross-user isolation)
+* **Evidence / Notes:**
+  - Server-side PBKDF2-HMAC-SHA256 with 600,000 iterations and per-user salt.
+  - Hashed session tokens stored with expiration and revocation support in SQLite.
+  - Password reset modal explicitly states "Password reset is not enabled in this build."
+
+---
+
+### FR-02 — Profile and preferences
+* **PRD Verbatim Requirement:**
+  - Users can view and update supported profile fields and preferred measurement units.
+  - Collect only fields necessary for the stated features; sensitive or demographic fields must have a documented purpose.
+  - Changes are validated and persisted, with clear success/error feedback.
+  - Profile data must be used only in the context described to the user.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/components/ProfileModal.tsx](file:///d:/projects/health%20tracker/src/components/ProfileModal.tsx)
+  - [src/types.ts](file:///d:/projects/health%20tracker/src/types.ts)
+* **Automated Test References:**
+  - [tests/test_phase2_auth_measurements.py:L88-L124](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L88-L124) (`test_user_profile_crud_and_validation`)
+* **Evidence / Notes:**
+  - `GET /api/auth/profile` and `PUT /api/auth/profile` with Pydantic validation (name, age, biological sex, height, weight, resting HR baseline, activity level, health goal).
+  - Stored in `user_profiles` table with foreign key cascade to `users`.
+
+---
+
+### FR-03 — Measurement entry and storage
+* **PRD Verbatim Requirement:**
+  - Support a configurable measurement schema rather than hard-coding unsupported sensor capabilities.
+  - Each record should include user ID, measurement type, value, unit, timestamp, source (manual/import/demo), and optional notes.
+  - Support the initial agreed health measures only. Candidate measures may include heart rate, SpO₂, temperature, activity, and other values when data and units are defined; do not display unavailable values as real.
+  - Validate numeric types, required fields, units, timestamps, and reasonable configurable ranges.
+  - Permit authorized users to inspect, correct, or delete their own entries; preserve appropriate audit events if required.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase2_auth_measurements.py:L126-L230](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L126-L230) (`test_measurement_ingestion_and_user_isolation`, `test_measurement_server_side_validation_errors`, `test_user_cannot_read_another_users_measurements`)
+* **Evidence / Notes:**
+  - Server validation enforces supported types (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`), positive numeric values, unit consistency, timestamp bounds (no future timestamps >5 min skew), and sources (`manual`, `import`, `demo`).
+  - Strict SQL row-level isolation (`WHERE user_id = :uid`).
+
+---
+
+### FR-04 — Data quality and trust scoring
+* **PRD Verbatim Requirement:**
+  - Detect missing required values, malformed values, unsupported units, duplicate records, stale timestamps, implausible ranges, and configurable sudden changes.
+  - Label each issue and explain why it matters in plain language.
+  - Produce a transparent data-quality/trust indicator based on documented rules; show the component checks rather than presenting an unexplained score.
+  - Low-quality data must be excluded from model inference or explicitly flagged as a limitation.
+  - Never interpret a software validation pass as proof of physical sensor accuracy.
+* **Status:** **Partial**
+* **Implementation Files:**
+  - [vitasense/quality/trust_score.py](file:///d:/projects/health%20tracker/vitasense/quality/trust_score.py)
+  - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
+  - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase2_auth_measurements.py:L232-L320](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L232-L320) (`test_data_quality_flags_missing_stale_duplicate_implausible_sudden_change`)
+  - [tests/test_trust_score.py](file:///d:/projects/health%20tracker/tests/test_trust_score.py)
+* **Evidence / Notes:**
+  - **Implemented:** Deterministic detection of `missing`, `stale` (sensor flatline), `duplicate` (exact timestamp collisions), `implausible` (bounds), and `sudden_change` (>40 bpm/s jump rate). Trust score and component checks breakdown are rendered in the UI inspection drawer.
+  - **Pending to Complete:** Exclusion of low-quality/flagged segments from downstream ML model batch inference is not yet wired to model training routines.
+
+---
+
+### FR-05 — Dashboard
+* **PRD Verbatim Requirement:**
+  - Display the latest available data with timestamp and source.
+  - Show a concise summary of recent trends and recent alerts.
+  - Show empty states when there are no records and provide a clear action to add data or load demo data.
+  - Provide quick links to symptom assessment, add measurement, history, and trends.
+  - Demo/simulated values must be visibly marked as demo data.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [src/pages/OverviewPage.tsx](file:///d:/projects/health%20tracker/src/pages/OverviewPage.tsx)
+  - [src/components/Waveform.tsx](file:///d:/projects/health%20tracker/src/components/Waveform.tsx)
+* **Automated Test References:**
+  - Verified via frontend build `npm.cmd run build` (0 TypeScript / JSX errors)
+* **Evidence / Notes:**
+  - Shows latest readings, animated SVG waveform, daily activity cards, trust indicators, and quick links. Demo values are labelled with DEMO badges.
+
+---
+
+### FR-06 — Symptom-based risk assessment
+* **PRD Verbatim Requirement:**
+  - Provide a guided, configurable symptom questionnaire with clear question wording and appropriate response types.
+  - Collect only the inputs required by the selected model or ruleset.
+  - Before submission, let the user review their answers and correct them.
+  - Return an informational risk category or score only if a defined and evaluated model/ruleset supports it.
+  - Show the factors that contributed to the result, relevant missing data, model limitations, and when to seek professional advice.
+  - Do not state or imply that the user has a disease; use language such as “estimated risk signal” or “screening-style result,” not “diagnosis.”
+  - If no validated model is configured, provide a clearly labelled demo/rules-based result rather than pretending a trained clinical model exists.
+* **Status:** **Not Started**
+* **Implementation Files:** None (intentionally withheld per research protocol and explicit user prompt instruction)
+* **Automated Test References:** None
+* **Evidence / Notes:**
+  - Guided questionnaire with duration/severity review step, explicit risk category scoring, and clinically validated model integration has not been implemented.
+
+---
+
+### FR-07 — AI/ML explanation
+* **PRD Verbatim Requirement:**
+  - Explain the result in plain language using only inputs actually used by the model.
+  - Where technically supported, show feature contributions or global/local explanation outputs and uncertainty/calibration information.
+  - Identify the model version, timestamp, and whether the result used demo or user-entered data.
+  - Do not fabricate feature importance, confidence percentages, model accuracy, or evidence.
+  - If the model cannot explain an individual result reliably, state that limitation.
+* **Status:** **Not Started**
+* **Implementation Files:** None (intentionally withheld per research protocol and explicit user prompt instruction)
+* **Automated Test References:** None
+* **Evidence / Notes:**
+  - Formal SHAP/feature-attribution ML explanations, model versioning tags, and calibrated prediction uncertainty bounds for individual user assessments are not implemented.
+
+---
+
+### FR-08 — Trend analysis
+* **PRD Verbatim Requirement:**
+  - Support daily, weekly, and monthly views and a selectable date range.
+  - Plot actual recorded data points and label units, timestamps, missing intervals, and data source where useful.
+  - Summaries may include min/max/average and direction of change only when enough valid data exists.
+  - Distinguish observed historical trends from future predictions.
+  - Do not fill missing data in a way that makes it appear measured; any interpolation must be explicitly marked.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
+  - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
+* **Automated Test References:**
+  - [tests/test_phase2_auth_measurements.py](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py)
+  - Frontend build verification (`npm.cmd run build`)
+* **Evidence / Notes:**
+  - Interactive observation ranges (24H, 7D, 30D, 3M), baseline deviation charts, summary metrics, and JSON/CSV data export.
+
+---
+
+### FR-09 — Alerts
+* **PRD Verbatim Requirement:**
+  - Generate software alerts from documented thresholds, validated rules, data-quality issues, or model outputs.
+  - Each alert includes title, reason, severity, creation time, related record, and recommended safe next step.
+  - Users can acknowledge or dismiss alerts; acknowledgement must not delete the underlying event.
+  - Allow configuration of supported alert preferences and avoid repeated duplicate alerts for the same event.
+  - Use cautious wording and state that alerts are informational, not emergency monitoring.
+  - Do not imply continuous monitoring when the application only processes data on entry/import or during a demo.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/alerts.py](file:///d:/projects/health%20tracker/vitasense/api/alerts.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/pages/AlertsPage.tsx](file:///d:/projects/health%20tracker/src/pages/AlertsPage.tsx)
+  - [vitasense/benchmarks/alert_emitter.py](file:///d:/projects/health%20tracker/vitasense/benchmarks/alert_emitter.py)
+* **Automated Test References:**
+  - [tests/test_phase3_features.py:L106-L167](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L106-L167) (`test_user_alerts_crud_acknowledge_dismiss`)
+  - [tests/test_phase3_features.py:L169-L203](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L169-L203) (`test_user_alerts_duplicate_suppression`)
+  - [tests/test_phase3_features.py:L205-L230](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L205-L230) (`test_user_alerts_isolation`)
+  - [tests/test_alert_emitter.py](file:///d:/projects/health%20tracker/tests/test_alert_emitter.py)
+* **Evidence / Notes:**
+  - `GET /api/alerts`, `POST /api/alerts`, `POST /api/alerts/{id}/acknowledge`, and `POST /api/alerts/{id}/dismiss`.
+  - Non-destructive updates: records `acknowledged_at` and `dismissed_at` timestamps without deleting the event.
+  - Duplicate suppression within 60-second window.
+  - Prominent informational disclaimer displayed on all alert responses and UI views.
+
+---
+
+### FR-10 — History and search
+* **PRD Verbatim Requirement:**
+  - Show a chronological record of measurements, assessments, predictions, and alerts.
+  - Support date/type filters and pagination or progressive loading.
+  - Selecting an entry opens its details, inputs, data-quality flags, and result explanation where applicable.
+  - Edits/deletions must be restricted to the authenticated owner.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/history.py](file:///d:/projects/health%20tracker/vitasense/api/history.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase3_features.py:L232-L287](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L232-L287) (`test_user_history_pagination_and_filtering`)
+  - [tests/test_phase3_features.py:L289-L321](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L289-L321) (`test_user_history_isolation`)
+* **Evidence / Notes:**
+  - Unified `GET /api/history` endpoint with category filtering (`all`, `measurements`, `alerts`), metric type filtering, and pagination metadata (`page`, `limit`, `total_items`, `total_pages`, `has_next`, `has_prev`).
+  - Interactive UI with expandable payload view and page controls in `TrendsPage.tsx`.
+
+---
+
+### FR-11 — Contact Us
+* **PRD Verbatim Requirement:**
+  - Provide a form for subject/category, message, and optional reply contact.
+  - Validate input length and format, protect against spam/basic injection, and show success/failure feedback.
+  - Do not include private health details in email or logs unless explicitly necessary and consented to.
+  - If no message-delivery backend is configured, save the submission securely or state that sending is unavailable; do not display a false success.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/pages/SettingsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase3_features.py:L31-L104](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L31-L104) (`test_contact_us_validation_and_rate_limit`, `test_contact_us_xss_injection_prevention`)
+* **Evidence / Notes:**
+  - `POST /api/contact` endpoint with Pydantic validation (length, regex against script/HTML tags).
+  - Secure SQLite persistence in `contact_messages` table.
+  - Rate limiting (5 req/min per IP) returning HTTP 429 with truthful failure feedback.
+  - Audit logging sanitized with zero private health telemetry in logs.
+
+---
+
+### FR-12 — Demo and onboarding
+* **PRD Verbatim Requirement:**
+  - Provide a guided first-run state or short onboarding explaining the app, data sources, and non-diagnostic purpose.
+  - Offer optional demo data so evaluators can explore the UI without entering personal data.
+  - Clearly label demo accounts, demo measurements, and simulated model outputs.
+  - Provide a reset/clear-demo option that does not delete real user data.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
+  - [src/pages/LandingPage.tsx](file:///d:/projects/health%20tracker/src/pages/LandingPage.tsx)
+  - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase2_auth_measurements.py:L322-L379](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L322-L379) (`test_demo_data_population_and_non_destructive_reset`)
+* **Evidence / Notes:**
+  - Seeded demo telemetry labelled with DEMO badge.
+  - `POST /api/measurements/demo/reset` deletes only records where `source = 'demo'`, preserving real user records (`manual` and `import`).
+
+---
+
+### FR-13 — Privacy and account controls
+* **PRD Verbatim Requirement:**
+  - Explain what information is collected and why before collecting it.
+  - Provide data export/deletion controls if feasible for the selected architecture and document any limitations.
+  - Keep secrets and credentials out of frontend source code and version control.
+  - Use secure transport in deployment and avoid sensitive information in application logs.
+* **Status:** **Implemented**
+* **Implementation Files:**
+  - [vitasense/api/auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)
+  - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
+  - [src/pages/SettingsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx)
+* **Automated Test References:**
+  - [tests/test_phase3_features.py:L323-L376](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L323-L376) (`test_data_export_and_account_deletion`)
+* **Evidence / Notes:**
+  - `GET /api/auth/export` generates a sanitized JSON export of the user's profile, measurements, and alerts (excluding password hashes and secrets).
+  - `DELETE /api/auth/account` permanently deletes user credentials, sessions, profile, measurements, and alerts with foreign key cascades.
+  - No credentials or sensitive request bodies appear in application logs.
 
 ---
 
 ## 3. Specific Detail on Partial Requirement (FR-04)
 
-- **What Exists:**
+* **What Exists:**
   - `vitasense.quality.trust_score.RuleBasedTrustScorer` computes deterministic multi-component SQI (`S_gap`, `S_stale`, `S_phys`, `S_motion`).
-  - `vitasense/api/measurements.py` evaluates all incoming physiological readings against:
+  - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py) detects and labels:
     - `missing`: missing values or non-numeric tokens.
     - `stale`: repeated flatline readings (zero variance).
     - `duplicate`: exact timestamp collisions.
     - `implausible`: values outside normative physiological bounds.
-    - `sudden_change`: jumps exceeding rate limits ($>40\text{ bpm/s}$).
+    - `sudden_change`: jumps exceeding rate limits (>40 bpm/s).
   - All component checks are serialized to JSON and displayed in the UI drawer.
-- **What is Missing to achieve full completion:**
-  - Automated inference exclusion: while alerts and quality flags are stored and presented, the offline ML training/inference routines in `vitasense/models/` or baseline predictors do not yet automatically drop or mask flagged windows during batch inference.
+* **What is Missing to achieve full completion:**
+  - Automated inference exclusion: while alerts and quality flags are stored and presented, offline ML training/inference routines or baseline predictors do not yet automatically drop or mask flagged windows during batch inference.

@@ -12,6 +12,7 @@ import time
 import hashlib
 import secrets
 import re
+import json
 import logging
 from datetime import datetime, timezone, timedelta
 from typing import Optional, Literal
@@ -184,6 +185,15 @@ class ContactRequest(BaseModel):
         clean = v.strip().lower()
         if not EMAIL_REGEX.match(clean):
             raise ValueError(f"Invalid email address format: '{v}'")
+        return clean
+
+    @field_validator("name", "subject", "message")
+    @classmethod
+    def sanitize_input(cls, v: str) -> str:
+        clean = v.strip()
+        lowered = clean.lower()
+        if "<script" in lowered or "javascript:" in lowered or "onerror=" in lowered or "<iframe" in lowered:
+            raise ValueError("Input contains disallowed script markup tokens.")
         return clean
 
 
@@ -505,7 +515,9 @@ def update_profile(profile: ProfileSchema, current_user: dict = Depends(get_curr
 @router.post("/contact", status_code=status.HTTP_201_CREATED)
 def submit_contact_inquiry(req: ContactRequest, request: Request):
     """
-    FR-11: Receives Contact Us inquiry with rate limiting (5 requests/min per IP).
+    FR-11: Receives Contact Us inquiry with server-side validation and rate limiting.
+    Securely persists message in database.
+    Does NOT log any health data or message body.
     """
     client_ip = get_client_ip(request)
     if not contact_limiter.check(client_ip):
@@ -517,12 +529,100 @@ def submit_contact_inquiry(req: ContactRequest, request: Request):
 
     now_iso = datetime.now(timezone.utc).isoformat()
     with get_db_connection() as conn:
-        conn.execute(
+        cur = conn.execute(
             """
             INSERT INTO contact_messages (name, email, subject, message, created_at, ip_address)
             VALUES (?, ?, ?, ?, ?, ?)
             """,
             (req.name, req.email, req.subject, req.message, now_iso, client_ip),
         )
+        msg_id = cur.lastrowid
 
-    return {"status": "ok", "message": "Inquiry received. VitaSense team will respond shortly."}
+    # Strictly metadata only - zero health details or message text logged
+    logger.info("Contact submission successfully saved: msg_id=%s, ip=%s", msg_id, client_ip)
+
+    return {
+        "status": "ok",
+        "message": "Inquiry received and securely stored in support queue. VitaSense team will respond shortly.",
+    }
+
+
+# --- Privacy and Account Controls (FR-13) ---
+
+@router.get("/export")
+def export_user_data(current_user: dict = Depends(get_current_user)):
+    """
+    FR-13: Full data export for the authenticated user only.
+    Exports account metadata, profile, measurements, and alerts.
+    Never exports passwords or password hashes.
+    """
+    user_id = current_user["id"]
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    with get_db_connection() as conn:
+        # User Profile
+        cur = conn.execute("SELECT * FROM user_profiles WHERE user_id = ?", (user_id,))
+        profile_row = cur.fetchone()
+        profile_data = dict(profile_row) if profile_row else {}
+
+        # Measurements
+        cur = conn.execute(
+            "SELECT id, type, value, unit, timestamp, source, trust_score, quality_flags, component_checks, created_at "
+            "FROM measurements WHERE user_id = ? ORDER BY timestamp DESC",
+            (user_id,),
+        )
+        measurements = []
+        for r in cur.fetchall():
+            m = dict(r)
+            try:
+                m["quality_flags"] = json.loads(m["quality_flags"])
+            except Exception:
+                pass
+            try:
+                m["component_checks"] = json.loads(m["component_checks"])
+            except Exception:
+                pass
+            measurements.append(m)
+
+        # Alerts
+        cur = conn.execute(
+            "SELECT id, type, title, message, severity, status, reason, recommended_step, related_record_id, created_at, acknowledged_at, dismissed_at "
+            "FROM user_alerts WHERE user_id = ? ORDER BY created_at DESC",
+            (user_id,),
+        )
+        alerts = [dict(r) for r in cur.fetchall()]
+
+    return {
+        "export_metadata": {
+            "format": "VitaSense-AI-Export",
+            "version": "1.0",
+            "exported_at": now_iso,
+            "user_id": user_id,
+        },
+        "account": {
+            "id": current_user["id"],
+            "email": current_user["email"],
+            "created_at": current_user["created_at"],
+        },
+        "profile": profile_data,
+        "measurements": measurements,
+        "alerts": alerts,
+    }
+
+
+@router.delete("/account")
+def delete_user_account(current_user: dict = Depends(get_current_user)):
+    """
+    FR-13: Permanent account and data deletion for the authenticated user only.
+    Foreign key cascading automatically purges sessions, profile, measurements, and alerts.
+    """
+    user_id = current_user["id"]
+    with get_db_connection() as conn:
+        conn.execute("DELETE FROM users WHERE id = ?", (user_id,))
+
+    logger.info("User account permanently deleted: user_id=%s", user_id)
+    return {
+        "status": "ok",
+        "message": "Account and all associated health records permanently deleted.",
+    }
+

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
-import { loadUserProfile, getAuthToken, MeasurementRecord } from '../types';
+import { loadUserProfile, getAuthToken, MeasurementRecord, HistoryItem } from '../types';
 
 export function TrendsPage() {
   const [activeRange, setActiveRange] = useState('7D');
@@ -17,6 +17,17 @@ export function TrendsPage() {
   const [addUnit, setAddUnit] = useState('bpm');
   const [addSource, setAddSource] = useState<'manual' | 'import' | 'demo'>('manual');
   const [addError, setAddError] = useState<string | null>(null);
+
+  // Phase 3 FR-10 History State
+  const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
+  const [historyLoading, setHistoryLoading] = useState(false);
+  const [historyPage, setHistoryPage] = useState(1);
+  const [historyTotalPages, setHistoryTotalPages] = useState(1);
+  const [historyTotalItems, setHistoryTotalItems] = useState(0);
+  const [historyCategory, setHistoryCategory] = useState<'all' | 'measurements' | 'alerts'>('all');
+  const [historyTypeFilter, setHistoryTypeFilter] = useState('');
+  const [activeTableTab, setActiveTableTab] = useState<'telemetry' | 'history'>('telemetry');
+  const [expandedHistoryId, setExpandedHistoryId] = useState<string | null>(null);
 
   const profile = loadUserProfile();
 
@@ -57,9 +68,42 @@ export function TrendsPage() {
     }
   };
 
+  const fetchHistory = async (page = historyPage, category = historyCategory, typeFilter = historyTypeFilter) => {
+    const token = getAuthToken();
+    if (!token) return;
+    setHistoryLoading(true);
+    try {
+      let url = `/api/history?page=${page}&limit=10&category=${category}`;
+      if (typeFilter) {
+        url += `&item_type=${encodeURIComponent(typeFilter)}`;
+      }
+      const res = await fetch(url, {
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setHistoryItems(data.items || []);
+        setHistoryPage(data.page || 1);
+        setHistoryTotalPages(data.total_pages || 1);
+        setHistoryTotalItems(data.total_items || 0);
+      }
+    } catch (err) {
+      console.warn('Could not load user history', err);
+    } finally {
+      setHistoryLoading(false);
+    }
+  };
+
   useEffect(() => {
     fetchMeasurements();
+    fetchHistory(1, historyCategory, historyTypeFilter);
   }, []);
+
+  useEffect(() => {
+    if (activeTableTab === 'history') {
+      fetchHistory(historyPage, historyCategory, historyTypeFilter);
+    }
+  }, [activeTableTab, historyCategory, historyTypeFilter, historyPage]);
 
   const handleResetDemoData = async () => {
     const token = getAuthToken();
@@ -355,32 +399,132 @@ export function TrendsPage() {
       <section className="telemetry-section">
         <div className="telemetry-header">
           <div>
-            <span className="app-kicker">PRD PHASE 2 · FR-01 · FR-02 · FR-03</span>
-            <h2>Physiological Telemetry & Quality Engine</h2>
+            <div style={{ display: 'flex', gap: '8px', marginBottom: '8px' }}>
+              <button
+                type="button"
+                onClick={() => setActiveTableTab('telemetry')}
+                style={{
+                  background: activeTableTab === 'telemetry' ? 'var(--mint)' : 'var(--panel-2)',
+                  color: activeTableTab === 'telemetry' ? '#071510' : 'var(--muted)',
+                  border: '1px solid var(--line)',
+                  borderRadius: '6px',
+                  padding: '6px 14px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                Telemetry Stream (FR-03)
+              </button>
+              <button
+                type="button"
+                onClick={() => setActiveTableTab('history')}
+                style={{
+                  background: activeTableTab === 'history' ? 'var(--mint)' : 'var(--panel-2)',
+                  color: activeTableTab === 'history' ? '#071510' : 'var(--muted)',
+                  border: '1px solid var(--line)',
+                  borderRadius: '6px',
+                  padding: '6px 14px',
+                  fontSize: '11px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                User History & Audit (FR-10)
+              </button>
+            </div>
+            <h2>
+              {activeTableTab === 'telemetry'
+                ? 'Physiological Telemetry & Quality Engine'
+                : 'User History, Assessments & Alert Timeline'}
+            </h2>
             <p>
-              Per-user isolated time-series with deterministic quality flags (missing, stale, duplicate, implausible, sudden change) and component checks.
+              {activeTableTab === 'telemetry'
+                ? 'Per-user isolated time-series with deterministic quality flags (missing, stale, duplicate, implausible, sudden change) and component checks.'
+                : 'Chronological timeline of your measurements, alerts, and evaluations with category filters and pagination.'}
             </p>
           </div>
 
           <div className="telemetry-actions">
-            <button
-              className="button button-soft"
-              onClick={() => setShowAddModal(true)}
-              type="button"
-            >
-              <Icon name="check" size={14} /> Add Measurement
-            </button>
-            <button
-              className="button button-quiet"
-              onClick={handleResetDemoData}
-              title="Resets DEMO data only. Real user measurements are never deleted."
-              type="button"
-            >
-              <Icon name="history" size={14} /> Reset Demo Data (DEMO)
-            </button>
+            {activeTableTab === 'telemetry' ? (
+              <>
+                <button
+                  className="button button-soft"
+                  onClick={() => setShowAddModal(true)}
+                  type="button"
+                >
+                  <Icon name="check" size={14} /> Add Measurement
+                </button>
+                <button
+                  className="button button-quiet"
+                  onClick={handleResetDemoData}
+                  title="Resets DEMO data only. Real user measurements are never deleted."
+                  type="button"
+                >
+                  <Icon name="history" size={14} /> Reset Demo Data (DEMO)
+                </button>
+              </>
+            ) : (
+              <div style={{ display: 'flex', gap: '8px', alignItems: 'center' }}>
+                <select
+                  value={historyCategory}
+                  onChange={(e) => {
+                    setHistoryCategory(e.target.value as any);
+                    setHistoryPage(1);
+                  }}
+                  style={{
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                    border: '1px solid var(--line-strong)',
+                    borderRadius: '8px',
+                    padding: '6px 10px',
+                    fontSize: '11px',
+                  }}
+                >
+                  <option value="all">All Categories</option>
+                  <option value="measurements">Measurements Only</option>
+                  <option value="alerts">Alerts Only</option>
+                </select>
+
+                <select
+                  value={historyTypeFilter}
+                  onChange={(e) => {
+                    setHistoryTypeFilter(e.target.value);
+                    setHistoryPage(1);
+                  }}
+                  style={{
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                    border: '1px solid var(--line-strong)',
+                    borderRadius: '8px',
+                    padding: '6px 10px',
+                    fontSize: '11px',
+                  }}
+                >
+                  <option value="">All Metric Types</option>
+                  <option value="heart_rate">Heart Rate</option>
+                  <option value="spo2">SpO₂</option>
+                  <option value="respiratory_rate">Respiratory Rate</option>
+                  <option value="hrv">HRV</option>
+                  <option value="observation">Observation</option>
+                  <option value="quality">Data Quality</option>
+                </select>
+
+                <button
+                  type="button"
+                  className="button button-soft"
+                  onClick={() => fetchHistory(historyPage, historyCategory, historyTypeFilter)}
+                  style={{ minHeight: '32px', fontSize: '11px', padding: '0 10px' }}
+                >
+                  <Icon name="activity" size={12} />
+                  <span>Refresh</span>
+                </button>
+              </div>
+            )}
           </div>
         </div>
 
+        {activeTableTab === 'telemetry' ? (
         <div className="telemetry-table-wrap">
           {loadingMeas ? (
             <div style={{ padding: '24px', textAlign: 'center', color: 'var(--muted)' }}>
@@ -506,6 +650,165 @@ export function TrendsPage() {
             </table>
           )}
         </div>
+        ) : (
+          /* ====================================================================
+             FR-10 History Table & Pagination View
+             ==================================================================== */
+          <div className="telemetry-table-wrap">
+            {historyLoading ? (
+              <div style={{ padding: '32px', textAlign: 'center', color: 'var(--muted)' }}>
+                Loading chronological history...
+              </div>
+            ) : historyItems.length === 0 ? (
+              <div style={{ padding: '32px', textAlign: 'center', color: 'var(--muted)' }}>
+                No records found matching category: <strong>{historyCategory}</strong>
+              </div>
+            ) : (
+              <>
+                <table className="telemetry-table">
+                  <thead>
+                    <tr>
+                      <th>Timestamp</th>
+                      <th>Category</th>
+                      <th>Item Type</th>
+                      <th>Summary / Value</th>
+                      <th>Status / Source</th>
+                      <th>Details</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {historyItems.map((item) => {
+                      const isExpanded = expandedHistoryId === item.id;
+                      const formattedTime = new Date(item.timestamp).toLocaleString([], {
+                        month: 'short',
+                        day: 'numeric',
+                        hour: '2-digit',
+                        minute: '2-digit',
+                      });
+
+                      return (
+                        <React.Fragment key={item.id}>
+                          <tr
+                            className="telemetry-row"
+                            onClick={() => setExpandedHistoryId(isExpanded ? null : item.id)}
+                          >
+                            <td>
+                              <strong>{formattedTime}</strong>
+                            </td>
+                            <td>
+                              <span
+                                style={{
+                                  fontSize: '10px',
+                                  padding: '3px 7px',
+                                  borderRadius: '6px',
+                                  background:
+                                    item.category === 'measurement'
+                                      ? 'rgba(5, 150, 105, 0.15)'
+                                      : 'rgba(125, 211, 252, 0.15)',
+                                  color:
+                                    item.category === 'measurement'
+                                      ? 'var(--mint)'
+                                      : 'var(--cyan)',
+                                  textTransform: 'uppercase',
+                                  fontWeight: 700,
+                                }}
+                              >
+                                {item.category}
+                              </span>
+                            </td>
+                            <td style={{ textTransform: 'capitalize' }}>
+                              {item.type.replace('_', ' ')}
+                            </td>
+                            <td>
+                              {item.category === 'measurement' ? (
+                                <strong>
+                                  {item.details?.value} <small>{item.details?.unit}</small>
+                                </strong>
+                              ) : (
+                                <span>{item.details?.title || item.details?.message}</span>
+                              )}
+                            </td>
+                            <td>
+                              <span className={`badge-source ${item.source || item.status || 'system'}`}>
+                                {item.source || item.status || 'nominal'}
+                              </span>
+                            </td>
+                            <td>
+                              <span style={{ color: 'var(--aqua)', fontSize: '10px' }}>
+                                {isExpanded ? 'Hide Payload ▲' : 'Inspect Payload ▼'}
+                              </span>
+                            </td>
+                          </tr>
+
+                          {isExpanded && (
+                            <tr>
+                              <td colSpan={6} style={{ padding: 0 }}>
+                                <div className="component-checks-drawer" style={{ padding: '16px' }}>
+                                  <span className="app-kicker">
+                                    RECORD PAYLOAD DETAILS · OWNER ISOLATED ({item.id})
+                                  </span>
+                                  <pre
+                                    style={{
+                                      background: 'var(--panel-2)',
+                                      padding: '12px',
+                                      borderRadius: '8px',
+                                      fontSize: '11px',
+                                      color: 'var(--text)',
+                                      overflowX: 'auto',
+                                      margin: '10px 0 0',
+                                    }}
+                                  >
+                                    {JSON.stringify(item, null, 2)}
+                                  </pre>
+                                </div>
+                              </td>
+                            </tr>
+                          )}
+                        </React.Fragment>
+                      );
+                    })}
+                  </tbody>
+                </table>
+
+                {/* Pagination Controls */}
+                <div
+                  style={{
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'center',
+                    padding: '14px 20px',
+                    borderTop: '1px solid var(--line)',
+                  }}
+                >
+                  <span style={{ fontSize: '11px', color: 'var(--muted)' }}>
+                    Page <strong>{historyPage}</strong> of <strong>{historyTotalPages}</strong> ({historyTotalItems} total records)
+                  </span>
+
+                  <div style={{ display: 'flex', gap: '8px' }}>
+                    <button
+                      type="button"
+                      className="button button-quiet"
+                      disabled={historyPage <= 1}
+                      onClick={() => setHistoryPage((p) => Math.max(1, p - 1))}
+                      style={{ minHeight: '32px', fontSize: '11px', padding: '0 12px' }}
+                    >
+                      ← Previous
+                    </button>
+                    <button
+                      type="button"
+                      className="button button-quiet"
+                      disabled={historyPage >= historyTotalPages}
+                      onClick={() => setHistoryPage((p) => p + 1)}
+                      style={{ minHeight: '32px', fontSize: '11px', padding: '0 12px' }}
+                    >
+                      Next →
+                    </button>
+                  </div>
+                </div>
+              </>
+            )}
+          </div>
+        )}
       </section>
 
       {/* Add Measurement Modal */}

@@ -299,7 +299,7 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
             </label>
 
             <label className="remember">
-              <input type="checkbox" defaultChecked />
+              <input type="checkbox" />
               <i /> Keep me signed in on this device
             </label>
 
@@ -315,19 +315,23 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
           <div className="social-login">
             <button
               type="button"
-              className="social-btn google-btn"
-              onClick={() => setSocialProvider('google')}
+              className="social-btn google-btn disabled"
+              disabled
+              title="Google authentication is not available in this build"
+              style={{ opacity: 0.6, cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
             >
               <Icon name="google" size={17} />
-              <span>Google</span>
+              <span>Google <small style={{ fontSize: '9px', opacity: 0.8 }}>(Not available)</small></span>
             </button>
             <button
               type="button"
-              className="social-btn apple-btn"
-              onClick={() => setSocialProvider('apple')}
+              className="social-btn apple-btn disabled"
+              disabled
+              title="Apple authentication is not available in this build"
+              style={{ opacity: 0.6, cursor: 'not-allowed', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '6px' }}
             >
               <Icon name="apple" size={17} />
-              <span>Apple</span>
+              <span>Apple <small style={{ fontSize: '9px', opacity: 0.8 }}>(Not available)</small></span>
             </button>
           </div>
 
@@ -385,9 +389,8 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
             <div style={{ textAlign: 'center', padding: '16px 0' }}>
               <div style={{ fontSize: '32px', marginBottom: '12px' }}>🔒</div>
               <h4 style={{ fontSize: '15px', marginBottom: '6px' }}>Password Reset Not Enabled</h4>
-              <p style={{ color: 'var(--muted)', fontSize: '12px', marginBottom: '20px', lineHeight: 1.6 }}>
-                Automated self-service password recovery is currently <strong>not enabled</strong> in this deployment per research security policy. 
-                Please contact the system administrator to manage or rotate account credentials.
+              <p style={{ color: 'var(--muted)', fontSize: '13px', marginBottom: '20px', lineHeight: 1.6 }}>
+                Password reset is not enabled in this build.
               </p>
               <button
                 type="button"

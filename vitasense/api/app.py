@@ -36,9 +36,15 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# Mount Phase 2 Authentication & Measurement Ingestion Routers
+# Mount Authentication, Measurement, Alerts, and History Routers
 app.include_router(auth_router)
 app.include_router(measurements_router)
+
+from vitasense.api.alerts import router as alerts_router
+from vitasense.api.history import router as history_router
+
+app.include_router(alerts_router, prefix="/api")
+app.include_router(history_router, prefix="/api")
 
 from vitasense.api.auth import submit_contact_inquiry, ContactRequest
 from fastapi import Request

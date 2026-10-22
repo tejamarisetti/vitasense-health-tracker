@@ -122,12 +122,34 @@ def init_db(db_path: Path = None) -> None:
                 ip_address TEXT
             );
 
+            CREATE TABLE IF NOT EXISTS user_alerts (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                type TEXT NOT NULL,
+                title TEXT NOT NULL,
+                message TEXT NOT NULL,
+                severity TEXT NOT NULL DEFAULT 'info',
+                status TEXT NOT NULL DEFAULT 'active',
+                reason TEXT NOT NULL DEFAULT '',
+                recommended_step TEXT NOT NULL DEFAULT 'Monitor trends and consult a qualified healthcare professional if symptoms persist.',
+                related_record_id INTEGER,
+                created_at TEXT NOT NULL,
+                acknowledged_at TEXT,
+                dismissed_at TEXT,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
+                FOREIGN KEY (related_record_id) REFERENCES measurements(id) ON DELETE SET NULL
+            );
+
             CREATE INDEX IF NOT EXISTS idx_measurements_user_ts 
                 ON measurements(user_id, timestamp);
             CREATE INDEX IF NOT EXISTS idx_measurements_user_source 
                 ON measurements(user_id, source);
             CREATE INDEX IF NOT EXISTS idx_sessions_token_hash 
                 ON sessions(token_hash);
+            CREATE INDEX IF NOT EXISTS idx_alerts_user_status
+                ON user_alerts(user_id, status);
+            CREATE INDEX IF NOT EXISTS idx_alerts_user_created
+                ON user_alerts(user_id, created_at);
             """
         )
     conn.close()

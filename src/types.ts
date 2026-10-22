@@ -91,3 +91,29 @@ export function saveUserProfile(profile: UserProfile): void {
     console.warn('Could not save user profile to storage', err);
   }
 }
+
+export interface UserAlert {
+  id: number;
+  user_id: number;
+  title: string;
+  message: string;
+  severity: 'info' | 'warning' | 'critical';
+  category: string;
+  status: 'active' | 'acknowledged' | 'dismissed';
+  acknowledged_at?: string | null;
+  dismissed_at?: string | null;
+  created_at: string;
+  informational_notice?: string;
+}
+
+export interface HistoryItem {
+  id: string;
+  category: 'measurement' | 'alert' | 'assessment';
+  type: string;
+  timestamp: string;
+  details: Record<string, any>;
+  flags?: string[];
+  status?: string;
+  source?: string;
+}
+
