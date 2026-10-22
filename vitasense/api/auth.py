@@ -592,6 +592,33 @@ def export_user_data(current_user: dict = Depends(get_current_user)):
         )
         alerts = [dict(r) for r in cur.fetchall()]
 
+        # Symptom Assessments (FR-06 / FR-07)
+        cur = conn.execute(
+            "SELECT id, symptoms, risk_level, risk_score, contributing_factors, feature_contributions, uncertainty_range, model_version, is_demo, disclaimer, created_at "
+            "FROM symptom_assessments WHERE user_id = ? ORDER BY created_at DESC",
+            (user_id,),
+        )
+        assessments = []
+        for r in cur.fetchall():
+            item = dict(r)
+            try:
+                item["symptoms"] = json.loads(item["symptoms"])
+            except Exception:
+                pass
+            try:
+                item["contributing_factors"] = json.loads(item["contributing_factors"])
+            except Exception:
+                pass
+            try:
+                item["feature_contributions"] = json.loads(item["feature_contributions"])
+            except Exception:
+                pass
+            try:
+                item["uncertainty_range"] = json.loads(item["uncertainty_range"])
+            except Exception:
+                pass
+            assessments.append(item)
+
     return {
         "export_metadata": {
             "format": "VitaSense-AI-Export",
@@ -607,6 +634,7 @@ def export_user_data(current_user: dict = Depends(get_current_user)):
         "profile": profile_data,
         "measurements": measurements,
         "alerts": alerts,
+        "assessments": assessments,
     }
 
 

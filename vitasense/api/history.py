@@ -149,6 +149,57 @@ def get_user_history(
                     )
                 )
 
+        # 3. Fetch user's symptom assessments if category is "all" or "assessments"
+        if category in ("all", "assessments"):
+            as_query = "SELECT * FROM symptom_assessments WHERE user_id = ?"
+            as_params: List[Any] = [user_id]
+            if start_date:
+                as_query += " AND created_at >= ?"
+                as_params.append(start_date)
+            if end_date:
+                as_query += " AND created_at <= ?"
+                as_params.append(end_date)
+            cur = conn.execute(as_query, tuple(as_params))
+            for row in cur.fetchall():
+                try:
+                    symptoms_data = json.loads(row["symptoms"])
+                except Exception:
+                    symptoms_data = {}
+                try:
+                    factors = json.loads(row["contributing_factors"])
+                except Exception:
+                    factors = []
+                try:
+                    feat_contribs = json.loads(row["feature_contributions"])
+                except Exception:
+                    feat_contribs = {}
+                try:
+                    uncert = json.loads(row["uncertainty_range"])
+                except Exception:
+                    uncert = [0.0, 1.0]
+
+                combined_items.append(
+                    HistoryItem(
+                        id=f"assess_{row['id']}",
+                        category="assessment",
+                        type="symptom_assessment",
+                        title=f"{row['risk_level']} (Score: {row['risk_score']:.2f})",
+                        value=row["risk_score"],
+                        unit="score",
+                        timestamp=row["created_at"],
+                        source="demo" if row["is_demo"] else "user-entered",
+                        details={
+                            "symptoms": symptoms_data,
+                            "risk_level": row["risk_level"],
+                            "contributing_factors": factors,
+                            "feature_contributions": feat_contribs,
+                            "uncertainty_range": uncert,
+                            "model_version": row["model_version"],
+                            "disclaimer": row["disclaimer"],
+                        },
+                    )
+                )
+
     # Sort descending by timestamp
     combined_items.sort(key=lambda x: x.timestamp, reverse=True)
 

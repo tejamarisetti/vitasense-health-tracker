@@ -9,6 +9,7 @@ import { TrendsPage } from './pages/TrendsPage';
 import { AlertsPage } from './pages/AlertsPage';
 import { BenchmarkPage } from './pages/BenchmarkPage';
 import { SettingsPage } from './pages/SettingsPage';
+import { AssessmentPage } from './pages/AssessmentPage';
 import { Sidebar, navItems } from './components/Sidebar';
 import { AppHeader } from './components/AppHeader';
 import { ProfileModal } from './components/ProfileModal';
@@ -66,6 +67,7 @@ export function App() {
               {page === 'overview' && <OverviewPage go={go} />}
               {page === 'companion' && <CompanionPage />}
               {page === 'signals' && <SignalsPage />}
+              {page === 'assessment' && <AssessmentPage go={go} />}
               {page === 'benchmark' && <BenchmarkPage />}
               {page === 'trends' && <TrendsPage />}
               {page === 'alerts' && <AlertsPage go={go} />}

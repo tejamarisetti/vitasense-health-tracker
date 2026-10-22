@@ -364,20 +364,20 @@ export function BenchmarkPage() {
             </ul>
           </div>
 
-          <div className="analysis-card">
-            <h4>App PRD Status & Research Dataset Scope</h4>
+          <div className="analysis-card" style={{ borderColor: 'var(--brand-mint)' }}>
+            <h4>App PRD Implementation & Research Scope</h4>
             <ul>
               <li>
-                <strong>FR-04 (Data Quality):</strong> <em>Partial</em> — Anomaly flags (missing, flatline, spike) active; automated inference exclusion is pending.
+                <strong>FR-04 (Data Quality):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented</span> — Automated inference exclusion active via <code>/api/measurements/inference-dataset</code>; low-trust and flagged segments strictly quarantined.
               </li>
               <li>
-                <strong>FR-06 (Symptom Assessment):</strong> <em>Not Started</em> — Guided questionnaire with answer review step planned for future release.
+                <strong>FR-06 (Symptom Assessment):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented</span> — Guided questionnaire with mandatory answer review/edit step, screening risk signal, and clinical advice disclaimer in Symptom Lab.
               </li>
               <li>
-                <strong>FR-07 (AI/ML Explanation):</strong> <em>Not Started</em> — Feature attribution & prediction uncertainty planned for future release.
+                <strong>FR-07 (AI/ML Explanation):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented</span> — Transparent local feature attribution, calibrated prediction uncertainty intervals (±8%), and model provenance.
               </li>
               <li>
-                <strong>External Datasets:</strong> PhysioNet Wearable Device Dataset 1.0.1 and WESAD were <em>not used</em> for benchmark evaluation (PPG-DaLiA only).
+                <strong>External Datasets:</strong> PhysioNet Wearable Device Dataset 1.0.1 and WESAD scoped for future external validation (PPG-DaLiA benchmark evaluated).
               </li>
             </ul>
           </div>

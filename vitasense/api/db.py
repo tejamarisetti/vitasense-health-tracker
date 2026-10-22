@@ -140,6 +140,22 @@ def init_db(db_path: Path = None) -> None:
                 FOREIGN KEY (related_record_id) REFERENCES measurements(id) ON DELETE SET NULL
             );
 
+            CREATE TABLE IF NOT EXISTS symptom_assessments (
+                id INTEGER PRIMARY KEY AUTOINCREMENT,
+                user_id INTEGER NOT NULL,
+                symptoms TEXT NOT NULL,
+                risk_level TEXT NOT NULL,
+                risk_score REAL NOT NULL,
+                contributing_factors TEXT NOT NULL,
+                feature_contributions TEXT NOT NULL,
+                uncertainty_range TEXT NOT NULL,
+                model_version TEXT NOT NULL DEFAULT 'vitasense-ruleset-v2.1',
+                is_demo INTEGER NOT NULL DEFAULT 0,
+                disclaimer TEXT NOT NULL,
+                created_at TEXT NOT NULL,
+                FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
+            );
+
             CREATE INDEX IF NOT EXISTS idx_measurements_user_ts 
                 ON measurements(user_id, timestamp);
             CREATE INDEX IF NOT EXISTS idx_measurements_user_source 
@@ -150,6 +166,8 @@ def init_db(db_path: Path = None) -> None:
                 ON user_alerts(user_id, status);
             CREATE INDEX IF NOT EXISTS idx_alerts_user_created
                 ON user_alerts(user_id, created_at);
+            CREATE INDEX IF NOT EXISTS idx_assessments_user_created
+                ON symptom_assessments(user_id, created_at);
             """
         )
     conn.close()

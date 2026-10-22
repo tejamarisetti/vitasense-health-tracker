@@ -46,6 +46,9 @@ from vitasense.api.history import router as history_router
 app.include_router(alerts_router, prefix="/api")
 app.include_router(history_router, prefix="/api")
 
+from vitasense.api.assessment import router as assessment_router
+app.include_router(assessment_router)
+
 from vitasense.api.auth import submit_contact_inquiry, ContactRequest
 from fastapi import Request
 

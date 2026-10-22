@@ -129,6 +129,9 @@ export function OverviewPage({ go }: OverviewPageProps) {
           </div>
 
           <div className="insight-actions">
+            <button onClick={() => go('assessment')} type="button" style={{ background: 'var(--brand-mint)', color: '#000', fontWeight: 700 }}>
+              Assess Symptoms (FR-06) <Icon name="arrow" />
+            </button>
             <button onClick={() => go('companion')} type="button">
               Explain this trend <Icon name="arrow" />
             </button>

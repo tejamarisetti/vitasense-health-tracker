@@ -546,21 +546,13 @@ Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P
 \hline
 Protocol v1.0.0 [\texttt{41eff1e}] & Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
 \hline
-Amendment 1 [\texttt{3b1f2f6}] & Resting alert ground truth; non-penalization of motion. \\
+Amendment 1 [\texttt{3b1f2f6}] & Resting alert ground truth; non-penalization of motion; corrected accel scale [\texttt{3a5ccc2}]. \\
 \hline
-Implementation Fix [\texttt{3a5ccc2}] & Removed $/64$ accel scaling; centered 8\,s windows ($t=2i+4$\,s). \\
+Amendment 2 [\texttt{696fd00}] & Labelled synthetic tachycardia injection; adaptive ramps ($r_{\text{lo}}, r_{\text{hi}}$); S5 outlier handling rule. \\
 \hline
-Amendment 2 [\texttt{696fd00}] & Labelled synthetic tachycardia injection; S5 outlier handling rule. \\
+Amendment 3 [\texttt{a0d682a}] & Restated $H_1$ as estimation; 15-subject LOSO; Arm 3b-noMotion ablation; $\ge 60$\,s gap [\texttt{0bf4ca4}]. \\
 \hline
-Adaptive Ramp Fix [\texttt{a0d682a}] & Baseline-adapted ramp rates ($r_{\text{lo}}, r_{\text{hi}}$); plateau $[105, 135]$\,bpm. \\
-\hline
-Amendment 3 [\texttt{a0d682a}] & Restated $H_1$ as estimation; 15-subject LOSO; Arm 3b-noMotion ablation. \\
-\hline
-Gap Enforcement [\texttt{0bf4ca4}] & Ratified 112 episodes with $\ge 60$\,s minimum inter-episode gap. \\
-\hline
-Amendment 4 [\texttt{a9ce657}] & Standard emitter: $P \in \{10,20,30\}$\,s, $R=60$\,s; parameter grids. \\
-\hline
-Fallback Rule [\texttt{f92ca8d}] & Arm 2 fallback invoked in 100\% of folds (max recall $\approx 80.4\% < 85\%$). \\
+Amendment 4 [\texttt{a9ce657}] & Standard emitter: $P \in \{10,20,30\}$\,s, $R=60$\,s; Arm 2 fallback rule invoked in 100\% of folds [\texttt{f92ca8d}]. \\
 \hline
 \end{tabular}
 \end{table}
@@ -578,19 +570,15 @@ Fallback Rule [\texttt{f92ca8d}] & Arm 2 fallback invoked in 100\% of folds (max
 \hline
 \textbf{Threat Domain} & \textbf{Empirical Limitation and Mitigation} \\
 \hline
-Synthetic Events & True resting tachycardia was absent in healthy cohort; 112 episodes synthetically injected into derived stream. Recall values are tied to synthetic plateau distribution ($105$--$135$\,bpm). \\
+Synthetic Events & True resting tachycardia absent in cohort; 112 episodes injected into derived stream ($105$--$135$\,bpm). \\
 \hline
-Cohort Size & $N = 15$ healthy young adults limits power for small paired false-alert differences. Reported with 95\% bootstrap CIs. \\
+Cohort Size & $N = 15$ healthy young adults limits power for small paired differences (reported with 95\% bootstrap CIs). \\
 \hline
 Noise Coupling & Estimator tracking errors and motion artifacts interact directly with downstream thresholding logic. \\
 \hline
-Grid Boundaries & Tuning frequently selected grid boundaries ($\tau_{\text{pop}} = 100$, $k = 2.0$, $P = 10$\,s / $30$\,s), reflecting severe trade-offs. \\
+Grid Boundaries & Tuning selected boundaries ($\tau_{\text{pop}} = 100$, $k = 2.0$, $P = 10$\,s / $30$\,s), reflecting trade-offs. \\
 \hline
-External Datasets & PhysioNet Wearable 1.0.1 and WESAD datasets were not used for evaluation (external checks reserved for future work). \\
-\hline
-Arm 4 Scope & Arm 4 conformal abstention was never built in this benchmark. \\
-\hline
-Non-Clinical Scope & Academic software benchmark only; not validated for clinical diagnosis or medical device deployment. \\
+Scope \& Datasets & PhysioNet 1.0.1 and WESAD unanalyzed; Arm 4 conformal abstention deferred. Academic benchmark only. \\
 \hline
 \end{tabular}
 \end{table}

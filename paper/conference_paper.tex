@@ -16,12 +16,34 @@
 
 \begin{document}
 
-\title{\LARGE Benchmarking Motion Gating for Wearable Heart-Rate Alerting}
+\title{\LARGE Kinematic Motion Gating and Multi-Attribute Signal Trust Calibration for Resilient Ambulatory Heart-Rate Alerting: An Empirical Benchmark}
 
-\author{\IEEEauthorblockN{Student 1, \quad Student 2, \quad Student 3}
-\IEEEauthorblockA{\textit{Department of Computer Science and Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}, Chennai, India \\
-email address}}
+\author{
+  \begin{minipage}[t]{0.235\textwidth}\centering
+    \textbf{Student 1} \\
+    \textit{Dept. of Computer Science \& Eng.} \\
+    \textit{Vel Tech R\&D Institute} \\
+    Chennai, India
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.235\textwidth}\centering
+    \textbf{Student 2} \\
+    \textit{Dept. of Computer Science \& Eng.} \\
+    \textit{Vel Tech R\&D Institute} \\
+    Chennai, India
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.235\textwidth}\centering
+    \textbf{Student 3} \\
+    \textit{Dept. of Computer Science \& Eng.} \\
+    \textit{Vel Tech R\&D Institute} \\
+    Chennai, India
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.235\textwidth}\centering
+    \textbf{Faculty Supervisor} \\
+    \textit{Dept. of Computer Science \& Eng.} \\
+    \textit{Vel Tech R\&D Institute} \\
+    Chennai, India
+  \end{minipage}
+}
 
 \maketitle
 
@@ -93,43 +115,59 @@ Sensor telemetry faults were simulated under two pre-specified schedules alongsi
 \input{tables/tab_fault_taxonomy.tex}
 
 \section{System Architecture}
-The experimental harness and interactive replay lab were implemented as a modular full-stack application (Fig.~\ref{fig:arch}). The front-end is a React Progressive Web Application (PWA) aligned with Figma interactive specifications, featuring live telemetry inspection, threshold tuning, and an interactive benchmark dashboard. In terms of product requirements (PRD), core streaming telemetry and visual replay are operational. Requirement FR-04 (data quality checks) is currently partial: anomaly flags (missing data, flatlines, physiological bounds) are active, while automated exclusion from inference is pending. Modules FR-06 (guided symptom-risk questionnaire with user review step) and FR-07 (explanation with prediction uncertainty) are planned for future increments. The back-end is powered by FastAPI and SQLite, incorporating the core \texttt{vitasense.quality} engine, replay caches, and LLM assistant routing with rule-based safety fallbacks.
+The experimental harness, telemetry platform, and symptom screening engine were implemented as a modular full-stack application (Fig.~\ref{fig:arch}). The front-end is a React 18 Progressive Web Application (PWA) aligned with Figma interactive specifications, featuring live optical telemetry monitoring, threshold calibration, and an interactive LOSO benchmark dashboard. Per product requirements (PRD), all 13 core functional specifications are operational: Requirement FR-04 enforces automated data-quality exclusion of corrupted windows from downstream inference; Module FR-06 implements a guided symptom assessment with mandatory answer review before screening; and Module FR-07 provides transparent local feature attribution with calibrated prediction uncertainty intervals ($\pm 8\%$). The back-end is powered by FastAPI and SQLite, incorporating the core \texttt{vitasense.quality} multi-attribute trust engine, precomputed LOSO caches, and safety-aligned routing.
 
 \begin{figure}[htbp]
 \centering
 \begin{tikzpicture}[
-    layer/.style={rectangle, draw=#1!80!black, fill=#1!8, rounded corners=3pt, font=\scriptsize, align=center, inner sep=3.5pt, line width=0.6pt},
+    box/.style={rectangle, draw=#1!80!black, fill=#1!8, rounded corners=3pt, font=\scriptsize, align=center, inner sep=3pt, line width=0.6pt},
+    sensor/.style={rectangle, draw=green!70!black, fill=green!10, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt, line width=0.5pt},
     arr/.style={-{Stealth[length=1.5mm, width=1.1mm]}, thick, color=black!70}
 ]
-\node[layer=blue, text width=3.15in] (ui) {
-    \textbf{\textcolor{blue!80!black}{CLIENT APPLICATION LAYER (React 18 PWA)}}\\[2pt]
-    \textsc{Telemetry Monitor} $\;\bullet\;$ \textsc{Replay Lab} $\;\bullet\;$ \textsc{LOSO Benchmark}
+% Edge Device Tier
+\node[box=green!60!black, text width=3.18in] (dev) {
+    \textbf{\textcolor{green!60!black}{WEARABLE EDGE SENSING TIER (Empatica E4 / Ambulatory Biosensors)}}\\[2pt]
+    \tikz{\node[sensor] {Optical PPG: $\lambda = 525$\,nm, 64\,Hz BVP};}
+    \hspace{0.2cm}
+    \tikz{\node[sensor] {Triaxial MEMS: $\pm 8$\,g, 32\,Hz Accel};}
+    \hspace{0.2cm}
+    \tikz{\node[sensor] {Quarantined ECG Ref: 250\,Hz};}
 };
 
-\node[layer=orange, below=0.25cm of ui, text width=3.15in] (api) {
-    \textbf{\textcolor{orange!85!black}{BACKEND SERVICES \& API GATEWAY (FastAPI / Py 3.13)}}\\[2pt]
-    \textsc{REST API} $\;\bullet\;$ \textsc{SSE Streaming} $\;\bullet\;$ \textsc{Quality Engine} $\;\bullet\;$ \textsc{Fallback}
+% Processing and Backend Middle Tier (side by side)
+\node[box=purple, below=0.32cm of dev, xshift=-1.65cm, text width=1.45in] (pipe) {
+    \textbf{\textcolor{purple!80!black}{Quality \& Gating Engine}}\\[2pt]
+    Multi-Attribute SQI Filter\\
+    ($S_{\text{gap}}, S_{\text{stale}}, S_{\text{phys}}, S_{\text{motion}}$)\\[2pt]
+    \textbf{FR-04 Inference Exclusion}\\
+    Kinematic Gate ($\text{ENMO} \le \theta_{\text{rest}}$)\\
+    Refractory State Machine ($P, R$)
 };
 
-\node[layer=teal, below=0.25cm of api, xshift=-1.65cm, text width=1.45in] (db) {
-    \textbf{\textcolor{teal!80!black}{Storage \& Caching}}\\[2pt]
-    SQLite (\texttt{vitasense.db})\\
-    Pre-computed LOSO Caches\\
-    Provenance Audit Logs
+\node[box=orange, below=0.32cm of dev, xshift=1.65cm, text width=1.45in] (api) {
+    \textbf{\textcolor{orange!85!black}{Backend Services \& API}}\\[2pt]
+    FastAPI Gateway $\;\bullet\;$ SQLite\\
+    REST \& SSE Streamer\\
+    LOSO Grid Optimizer\\
+    \textbf{FR-06/07 Symptom Lab}\\
+    Local Feature Attribution\\
+    Calibrated Uncertainty ($\pm 8\%$)
 };
 
-\node[layer=purple, below=0.25cm of api, xshift=1.65cm, text width=1.45in] (engine) {
-    \textbf{\textcolor{purple!80!black}{Analytics Engine}}\\[2pt]
-    \texttt{vitasense.quality} Checks\\
-    Kinematic Gating (Arm 3a)\\
-    Standard Alert Emitter
+% Client Presentation Tier
+\node[box=blue, below=0.32cm of $(pipe.south)!0.5!(api.south)$, text width=3.18in] (ui) {
+    \textbf{\textcolor{blue!80!black}{INTERACTIVE CLIENT APPLICATION LAYER (React 18 PWA)}}\\[2pt]
+    \textsc{Real-Time PPG Waveforms} $\;\bullet\;$ \textsc{Replay Lab} $\;\bullet\;$ \textsc{LOSO Benchmark Dashboard} $\;\bullet\;$ \textsc{Symptom Review \& ML Explanation}
 };
 
-\draw[arr, <->] (ui.south) -- (api.north) node[midway, fill=white, inner sep=1.5pt, font=\tiny\itshape, text=blue!80!black] {HTTP / EventStream};
-\draw[arr, ->] (api.south -| db) -- (db.north);
-\draw[arr, ->] (api.south -| engine) -- (engine.north);
+% Interconnects
+\draw[arr, ->] (dev.south -| pipe.north) -- (pipe.north) node[midway, fill=white, inner sep=1pt, font=\tiny\bfseries, text=black!70] {64\,Hz / 32\,Hz};
+\draw[arr, ->] (dev.south -| api.north) -- (api.north) node[midway, fill=white, inner sep=1pt, font=\tiny\bfseries, text=black!70] {BLE / JSON};
+\draw[arr, <->] (pipe.east) -- (api.west) node[midway, above, font=\tiny\itshape, text=purple!80!black] {Inference Gate};
+\draw[arr, <->] (api.south -| pipe.north) -- (ui.north -| pipe.north) node[midway, fill=white, inner sep=1pt, font=\tiny\itshape, text=blue!80!black] {Alert Events};
+\draw[arr, <->] (api.south) -- (ui.north -| api.south) node[midway, fill=white, inner sep=1pt, font=\tiny\itshape, text=blue!80!black] {REST / SSE Telemetry};
 \end{tikzpicture}
-\caption{Visual Architecture: VitaSense full-stack telemetry and benchmark application.}
+\caption{Visual Architecture: VitaSense full-stack telemetry and benchmark platform.}
 \label{fig:arch}
 \end{figure}
 
@@ -343,25 +381,25 @@ Scoring evaluates event-level recall (detecting injected episodes within $[t_{\t
 \centering
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_recall_vs_fahr.pdf}
+\includegraphics[width=0.99\linewidth, height=1.45in, keepaspectratio]{figures/fig_recall_vs_fahr.pdf}
 \centerline{\footnotesize (a) Event Recall vs Clean False Alerts per Hour across Arms and Regimes}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_forest_plot_3b_vs_3a.pdf}
+\includegraphics[width=0.99\linewidth, height=1.45in, keepaspectratio]{figures/fig_forest_plot_3b_vs_3a.pdf}
 \centerline{\footnotesize (b) Paired Differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% Bootstrap CIs}
 \end{minipage}
 
-\vspace{0.08cm}
+\vspace{0.05cm}
 
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_persubject_fahr.pdf}
+\includegraphics[width=0.99\linewidth, height=1.45in, keepaspectratio]{figures/fig_persubject_fahr.pdf}
 \centerline{\footnotesize (c) Per-Subject False Alerts per Hour in Clean Data (Condition 0)}
 \end{minipage}\hfill
 \begin{minipage}{0.48\textwidth}
 \centering
-\includegraphics[width=0.98\linewidth, height=1.35in, keepaspectratio]{figures/fig_arm1_sensitivity.pdf}
+\includegraphics[width=0.99\linewidth, height=1.45in, keepaspectratio]{figures/fig_arm1_sensitivity.pdf}
 \centerline{\footnotesize (d) Arm 1 Threshold Sensitivity across Cutoffs $\tau_{\text{pop}}$ and Persistence $P$}
 \end{minipage}
 \caption{Benchmark results across arms and conditions: (a) Event recall vs clean false alerts per hour; (b) Forest plot of paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% bootstrap CIs; (c) Per-subject FA/hr in Condition 0; (d) Arm 1 sensitivity across $\tau_{\text{pop}}$ and persistence $P$.}
@@ -409,7 +447,7 @@ Future efforts will extend this benchmark along five technical avenues:
     \item \textbf{External Dataset Generalization:} Evaluating on external public wearable corpora, including the PhysioNet Wearable Device Dataset \cite{ref_physionet_wearable} and WESAD \cite{ref_wesad}.
     \item \textbf{Clinical Patient Cohorts:} Validating on holter-monitored inpatient recordings with spontaneous atrial fibrillation and supraventricular tachycardia.
     \item \textbf{On-Device Hardware Integration:} Deploying causal baseline and kinematic gating engines onto low-power embedded microcontrollers.
-    \item \textbf{Symptom-Risk Questionnaire Module:} Implementing PRD modules FR-06 (guided questionnaire) and FR-07 (explanation and uncertainty) to complement passive telemetry.
+    \item \textbf{Prospective Clinical Validation:} Translating the operational FR-06 guided symptom questionnaire and FR-07 transparent explanation modules into multicenter clinical cohorts.
 \end{enumerate}
 
 \section{Conclusion}
@@ -422,6 +460,8 @@ In this pre-registered fault-injection benchmark, kinematic motion gating accoun
 The PPG-DaLiA dataset is openly accessible via the UCI Machine Learning Repository \cite{ref_reiss_dalia, ref_uci_dalia}. The PhysioNet Wearable Device Dataset is available under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are provided in the project repository.
 
 \begin{thebibliography}{00}
+\setlength{\itemsep}{1.5pt}
+\setlength{\parskip}{0pt}
 
 % URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6679242/
 % Accessed: 2026-10-22

@@ -112,6 +112,21 @@ class MeasurementResponse(BaseModel):
     quality_flags: List[str]
     component_checks: Dict[str, ComponentCheck]
     created_at: str
+    exclude_from_inference: bool = False
+    limitation_note: Optional[str] = None
+
+
+def determine_inference_exclusion(trust_score: float, flags: List[str]) -> tuple[bool, Optional[str]]:
+    """
+    FR-04: Determines whether data record must be excluded from downstream
+    ML inference or explicitly flagged as a limitation per PRD Section 8.
+    """
+    if flags:
+        reasons = ", ".join(flags)
+        return True, f"Excluded from ML inference due to data quality flags: {reasons}."
+    if trust_score < 0.70:
+        return True, f"Excluded from ML inference due to low trust score ({trust_score:.2f} < 0.70)."
+    return False, None
 
 
 class DemoResetResponse(BaseModel):
@@ -350,6 +365,8 @@ def create_measurement(
         )
         record_id = cur.lastrowid
 
+    exclude_inf, limit_note = determine_inference_exclusion(trust_score, flags)
+
     return MeasurementResponse(
         id=record_id,
         user_id=user_id,
@@ -362,6 +379,98 @@ def create_measurement(
         quality_flags=flags,
         component_checks=checks,
         created_at=now_iso,
+        exclude_from_inference=exclude_inf,
+        limitation_note=limit_note,
+    )
+
+
+class InferenceDatasetResponse(BaseModel):
+    total_records: int
+    included_for_inference: int
+    excluded_records: int
+    exclusion_breakdown: Dict[str, int]
+    clean_records: List[MeasurementResponse]
+    excluded_ids: List[int]
+    inference_limitation_statement: str
+
+
+@router.get("/inference-dataset", response_model=InferenceDatasetResponse)
+def get_inference_dataset(
+    type: Optional[str] = Query(None, description="Filter by measurement type"),
+    limit: int = Query(500, ge=1, le=2000),
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    FR-04: Extracts clean dataset for downstream ML model inference/training,
+    strictly dropping or flagging any segments with quality defects
+    (missing, stale, duplicate, implausible, sudden_change, or trust_score < 0.70).
+    """
+    user_id = current_user["id"]
+    query = "SELECT * FROM measurements WHERE user_id = ?"
+    params: List[Any] = [user_id]
+    if type:
+        query += " AND type = ?"
+        params.append(type)
+    query += " ORDER BY timestamp DESC LIMIT ?"
+    params.append(limit)
+
+    with get_db_connection() as conn:
+        rows = conn.execute(query, params).fetchall()
+
+    clean_records: List[MeasurementResponse] = []
+    excluded_ids: List[int] = []
+    breakdown: Dict[str, int] = {
+        "missing": 0,
+        "stale": 0,
+        "duplicate": 0,
+        "implausible": 0,
+        "sudden_change": 0,
+        "low_trust_score": 0,
+    }
+
+    for r in rows:
+        q_flags = json.loads(r["quality_flags"])
+        c_checks = json.loads(r["component_checks"])
+        t_score = float(r["trust_score"])
+        exclude_inf, limit_note = determine_inference_exclusion(t_score, q_flags)
+
+        resp_item = MeasurementResponse(
+            id=r["id"],
+            user_id=r["user_id"],
+            type=r["type"],
+            value=r["value"],
+            unit=r["unit"],
+            timestamp=r["timestamp"],
+            source=r["source"],
+            trust_score=t_score,
+            quality_flags=q_flags,
+            component_checks=c_checks,
+            created_at=r["created_at"],
+            exclude_from_inference=exclude_inf,
+            limitation_note=limit_note,
+        )
+
+        if exclude_inf:
+            excluded_ids.append(r["id"])
+            for f in q_flags:
+                if f in breakdown:
+                    breakdown[f] += 1
+            if not q_flags and t_score < 0.70:
+                breakdown["low_trust_score"] += 1
+        else:
+            clean_records.append(resp_item)
+
+    return InferenceDatasetResponse(
+        total_records=len(rows),
+        included_for_inference=len(clean_records),
+        excluded_records=len(excluded_ids),
+        exclusion_breakdown=breakdown,
+        clean_records=clean_records,
+        excluded_ids=excluded_ids,
+        inference_limitation_statement=(
+            "Per PRD FR-04, low-quality telemetry (sensor flatlines, missing data, duplicate timestamps, "
+            "and physiological bound violations) is quarantined and excluded from model inference."
+        ),
     )
 
 
@@ -394,6 +503,9 @@ def list_measurements(
 
     results = []
     for r in rows:
+        q_flags = json.loads(r["quality_flags"])
+        t_score = float(r["trust_score"])
+        exclude_inf, limit_note = determine_inference_exclusion(t_score, q_flags)
         results.append(
             MeasurementResponse(
                 id=r["id"],
@@ -403,10 +515,12 @@ def list_measurements(
                 unit=r["unit"],
                 timestamp=r["timestamp"],
                 source=r["source"],
-                trust_score=r["trust_score"],
-                quality_flags=json.loads(r["quality_flags"]),
+                trust_score=t_score,
+                quality_flags=q_flags,
                 component_checks=json.loads(r["component_checks"]),
                 created_at=r["created_at"],
+                exclude_from_inference=exclude_inf,
+                limitation_note=limit_note,
             )
         )
     return results
@@ -434,6 +548,10 @@ def get_measurement_by_id(
                 detail=f"Measurement {measurement_id} not found.",
             )
 
+        q_flags = json.loads(row["quality_flags"])
+        t_score = float(row["trust_score"])
+        exclude_inf, limit_note = determine_inference_exclusion(t_score, q_flags)
+
         return MeasurementResponse(
             id=row["id"],
             user_id=row["user_id"],
@@ -442,10 +560,12 @@ def get_measurement_by_id(
             unit=row["unit"],
             timestamp=row["timestamp"],
             source=row["source"],
-            trust_score=row["trust_score"],
-            quality_flags=json.loads(row["quality_flags"]),
+            trust_score=t_score,
+            quality_flags=q_flags,
             component_checks=json.loads(row["component_checks"]),
             created_at=row["created_at"],
+            exclude_from_inference=exclude_inf,
+            limitation_note=limit_note,
         )
 
 
