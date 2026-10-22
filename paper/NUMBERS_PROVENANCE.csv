@@ -1,0 +1,58 @@
+Claim_Or_Number,Value,Location,Generating_Script,Output_File,Status
+Subject Count N=15,15,"Sec. III, Tab. I",scripts/prepare_benchmark_ground_truth.py,data/processed/benchmark_ground_truth.pkl,VERIFIED
+Total Monitoring Exposure,31.25 hours,"Sec. III, Tab. I",scripts/export_paper_data.py,results/paper/fault_disaggregated.csv,VERIFIED
+Injected Tachycardia Episodes,112,"Sec. III, Sec. V",scripts/generate_injection_audit.py,results/synthetic_injection_audit.csv,VERIFIED
+Injected Peak HR Floor/Ceil,"[105, 135] bpm","Sec. III, Sec. V",vitasense/benchmarks/synthetic_injection.py,docs/RESULTS_SUMMARY.md,VERIFIED
+Inter-episode Gap Floor,60 s,"Sec. III, Sec. V",vitasense/benchmarks/synthetic_injection.py,docs/RESULTS_SUMMARY.md,VERIFIED
+Arm 1 Clean Recall,91.1%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 1 Clean FA/hr,3.20,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 1 Clean F1 Score,0.700,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 2 Clean Recall,80.4%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 2 Clean FA/hr,5.69,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 2 Clean F1 Score,0.558,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a Clean Recall,80.4%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a Clean FA/hr,1.47,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a Clean F1 Score,0.772,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b Clean Recall,79.5%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b Clean FA/hr,1.69,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b Clean F1 Score,0.750,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b-noMotion Clean Recall,79.5%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b-noMotion Clean FA/hr,2.91,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b-noMotion Clean F1 Score,0.676,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 1 Regime B Recall,91.1%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 1 Regime B FA/hr,4.51,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 2 Regime B Recall,75.9%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 2 Regime B FA/hr,7.16,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a Regime B Recall,75.9%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a Regime B FA/hr,2.30,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b Regime B Recall,75.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b Regime B FA/hr,2.37,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b-noMotion Regime B Recall,75.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b-noMotion Regime B FA/hr,3.61,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 1 F7 Recall,92.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 1 F7 FA/hr,3.07,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a F7 Recall,64.3%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3a F7 FA/hr,1.57,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b F7 Recall,58.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Arm 3b F7 FA/hr,1.28,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
+Condition 0 Paired Mean Diff,+0.13 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Condition 0 Wilcoxon W,31.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Condition 0 Wilcoxon p,0.8589,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Condition 0 95% Bootstrap CI,"[-0.54, +0.89]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime A Paired Mean Diff,+0.05 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime A Wilcoxon W,40.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime A Wilcoxon p,0.7007,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime A 95% Bootstrap CI,"[-0.66, +0.82]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime B Paired Mean Diff,-0.04 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime B Wilcoxon W,52.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime B Wilcoxon p,0.9750,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Regime B 95% Bootstrap CI,"[-0.78, +0.69]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+F7 Paired Mean Diff,-0.49 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+F7 Wilcoxon W,17.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+F7 Wilcoxon p,0.2845,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+F7 95% Bootstrap CI,"[-1.47, +0.38]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
+Arm 1 tau_pop boundary 100,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
+Arm 1 Persistence boundary 30,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
+Arm 2 k boundary 2.0,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
+Arm 2 Persistence boundary 10,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
+Arm 2 Fallback Rule Invocations,100% (15/15),"Sec. VII, Sec. VIII",scripts/run_fault_regimes_benchmark.py,docs/RESULTS_SUMMARY.md,VERIFIED

@@ -3,30 +3,34 @@
 \usepackage{cite}
 \usepackage{amsmath,amssymb,amsfonts}
 \usepackage{algorithmic}
+\usepackage{algorithm}
 \usepackage{graphicx}
 \usepackage{textcomp}
 \usepackage{xcolor}
 \usepackage{booktabs}
+\usepackage{tikz}
+\usetikzlibrary{shapes.geometric,arrows.meta,positioning,calc,fit}
+
 \def\BibTeX{{\rm B\kern-.05em{\sc i\kern-.025em b}\kern-.08em
     T\kern-.1667em\lower.7ex\hbox{E}\kern-.125emX}}
 
 \begin{document}
 
-\title{A Pre-Registered Fault-Injection Benchmark for Wearable Heart-Rate Alerting: Motion Gating Dominates and Software Trust Scores Add Little}
+\title{A Pre-Registered Fault-Injection Benchmark for Wearable Heart-Rate Alerting: Kinematic Motion Gating Dominates and Software Trust Scores Add Little}
 
-\author{\IEEEauthorblockN{1\textsuperscript{st} Author Name}
+\author{\IEEEauthorblockN{Student 1}
 \IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
 \textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}\\
 Chennai, India \\
 email address}
 \and
-\IEEEauthorblockN{2\textsuperscript{nd} Author Name}
+\IEEEauthorblockN{Student 2}
 \IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
 \textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}\\
 Chennai, India \\
 email address}
 \and
-\IEEEauthorblockN{3\textsuperscript{rd} Author Name (Faculty Guide)}
+\IEEEauthorblockN{Student 3}
 \IEEEauthorblockA{\textit{Dept. of Computer Science and Engineering} \\
 \textit{Vel Tech Rangarajan Dr. Sagunthala R\&D Institute}\\
 Chennai, India \\
@@ -36,143 +40,401 @@ email address}
 \maketitle
 
 \begin{abstract}
-Wearable health monitors often combine software data-quality checks with alerting rules, yet the added value of a multi-component quality score over a simple motion gate is rarely tested. We present a pre-registered, reproducible benchmark that evaluates five alerting arms on a public wrist-photoplethysmography dataset with fifteen subjects, using leave-one-subject-out tuning, synthetic resting-tachycardia episodes, and two seeded fault regimes plus optical noise. All protocol amendments, including those made after seeing preliminary results, are logged. Motion gating reduced false alerts per hour by roughly two thirds to three quarters relative to an ungated personal baseline. A multi-component trust score gave no detectable improvement over motion gating alone: paired differences were small and every confidence interval included zero. A fixed threshold with persistence was a strong baseline for recall. Results come from synthetic events in healthy volunteers and carry no clinical validity.
+Wearable cardiovascular monitors frequently combine signal quality heuristics with alerting thresholds to detect resting tachycardia. However, the incremental utility of multi-signal software trust scoring over simple kinematic motion gating is rarely benchmarked under pre-registered protocols. We present a reproducible, pre-registered fault-injection benchmark evaluating five alerting arms across fifteen ambulatory subjects from the public PPG-DaLiA dataset. To address natural event sparsity in healthy individuals, 112 labelled synthetic resting tachycardia episodes were injected into derived pulse-rate streams alongside two seeded telemetry fault regimes and raw optical noise. Evaluated in a strict leave-one-subject-out design with standard persistence and refractory hold-off, our primary hypothesis H1 was not supported. Kinematic motion gating drove nearly the entire reduction in false alerts per hour (reducing false alerts by roughly two-thirds to three-quarters relative to ungated personal baselines), while multi-attribute software trust scoring yielded no statistically significant improvement across any evaluated condition (paired differences were negligible and all ninety-five percent bootstrap confidence intervals spanned zero). Furthermore, aggressive software trust scoring degraded event recall under intense optical noise. Fixed population thresholding with persistence proved to be an unexpectedly robust baseline. Because events were synthetically injected and evaluated in healthy volunteers, these findings are exploratory and carry no clinical standing.
 \end{abstract}
 
 \begin{IEEEkeywords}
-wearable sensors, photoplethysmography, alerting, data quality, fault injection, negative result, reproducibility
+wearable sensors, photoplethysmography, heart-rate alerting, data quality, fault injection, negative result, reproducibility
 \end{IEEEkeywords}
 
 \section{Introduction}
-Continuous ambulatory monitoring using consumer and clinical-grade wearables offers significant potential for early detection of hemodynamic deterioration and arrhythmia. However, pervasive motion artifacts, sensor displacement, intermittent transmission dropouts, and sensor flatlines frequently trigger spurious clinical notifications \cite{ref_alert_fatigue}. In hospital and outpatient settings alike, high false-alert rates lead to severe alert fatigue, desensitizing users and healthcare practitioners to genuine emergencies \cite{ref_alert_fatigue, ref_sqi_elgendi}.
+Ambulatory continuous monitoring with consumer and medical-grade wearables offers substantial promise for early arrhythmia detection. However, wrist photoplethysmography (PPG) is acutely vulnerable to motion artifacts, optical decoupling, transmission dropouts, and flatline sensor lockups. When raw optical or derived telemetry signals degrade, alerting systems frequently emit spurious clinical notifications. In home monitoring and clinical telemetry alike, high false-alert frequencies precipitate severe alarm fatigue, inducing desensitization and compromising user adherence.
 
-To combat spurious alerts, modern systems deploy signal quality indices (SQIs) and multi-component trust heuristics that penalize missing samples, detect frozen sensor values, and quantify rate-of-change plausibility. Despite their intuitive appeal and architectural ubiquity, the incremental value of multi-component software trust scoring over a simple kinematic motion gate (e.g., Euclidean Norm Minus One, ENMO) remains under-characterized in controlled, pre-registered benchmarks.
+To prevent spurious alarms, modern digital health frameworks deploy complex signal quality indices (SQIs) and multi-component trust heuristics that penalize missing samples, flag frozen sensor values, and bound rate-of-change dynamics. Despite their architectural prevalence, the isolated incremental utility of multi-component software trust scores over straightforward kinematic stillness gating (e.g., Euclidean Norm Minus One, ENMO) has not been demonstrated in pre-registered, cross-validated benchmarks. Many prior evaluations suffer from train-test leakage, post-hoc hyperparameter selection, or lack of minimal baseline comparators.
 
-This paper makes three primary contributions:
+This paper reports a rigorous, pre-registered fault-injection benchmark for wearable heart-rate alerting. Our contributions are:
 \begin{enumerate}
-    \item \textbf{A reproducible fault-injection benchmark:} We formalize an open fault taxonomy (gaps, flatline lockup, duplicates, spikes, drift, scale error, and motion-correlated optical noise) with a public codebase and pre-registered protocol.
-    \item \textbf{Controlled leave-one-subject-out evaluation:} We evaluate five distinct alerting arms across fifteen ambulatory subjects, preventing data leakage through strict cross-validation quarantine.
-    \item \textbf{An honest, statistically grounded negative result:} We demonstrate that kinematic motion gating accounts for 68\%--74\% of all false-alert reduction, while a multi-component software trust score provides no statistically detectable improvement over motion gating alone ($p = 0.86$).
+    \item \textbf{Open Benchmarking Framework:} A fully reproducible pipeline formalizing an eight-type fault taxonomy (clean, gaps, stale values, duplicates, spikes, drift, scaling errors, and raw optical noise) evaluated across 31.25 hours of multi-activity ambulatory recordings.
+    \item \textbf{Causal Leave-One-Subject-Out (LOSO) Evaluation:} Five distinct alerting arms evaluated with strict data quarantine, separating training folds from held-out evaluation subjects.
+    \item \textbf{Rigorous Negative Finding:} Empirical refutation of pre-registered hypothesis $H_1$, showing that kinematic motion gating delivers 67.9\%--74.2\% false alert reduction, whereas multi-attribute software trust scoring provides no statistically detectable incremental benefit ($p \ge 0.28$).
 \end{enumerate}
 
-\section{Related Work}
-Wrist-photoplethysmography (PPG) estimates pulse rate by measuring optical absorption changes associated with volumetric arterial blood pulsations \cite{ref_reiss_dalia}. During ambulatory physical activity, micro-movements of the optical sensor relative to the skin introduce massive motion artifacts that overlap spectrally with cardiac pulse harmonics \cite{ref_orphanidou_sqi}.
+\section{Literature Survey}
+Wrist-based pulse rate monitoring relies on optical absorption changes in microvascular tissue beds \cite{ref_reiss_dalia, ref_charlton_roadmap}. Relative motion between sensor photodiodes and cutaneous capillary beds introduces severe motion artifacts that overlap spectrally with true cardiac fundamental frequencies \cite{ref_reiss_dalia}.
 
-To filter unreliable measurements, researchers have proposed diverse signal quality indices (SQIs), including statistical skewness/kurtosis, template-matching correlation, spectral purity, and zero-crossing counters \cite{ref_sqi_elgendi, ref_orphanidou_sqi}. While SQIs have shown promise on stationary benchmarks, existing evaluations frequently suffer from optimistic train-test leakage, retrospective threshold tuning, or failure to benchmark against minimal kinematic baselines \cite{ref_reiss_dalia}. Pre-registration in biomedical machine learning is vital to prevent selective metric reporting and hyperparameter cherry-picking.
-
-\section{Dataset and Protocol}
-\subsection{Data}
-We evaluate on the public PPG-DaLiA benchmark (UCI Machine Learning Repository, ID 495, CC BY 4.0) \cite{ref_reiss_dalia}. The dataset comprises 15 healthy subjects (ages 21--55, mean 30.6 years; 7 male, 8 female) undergoing authentic daily activities (sitting, walking, ascending stairs, cycling, driving, and eating). The dataset pairs wrist PPG and 3D accelerometry with gold-standard chest electrocardiography (ECG) reference heart rates. Archive integrity was cryptographically validated via CRC32 and SHA-256 before analysis.
-
-\subsection{Pre-registration and Deviation Tracking}
-The benchmark protocol was frozen and version-tagged in git repository history prior to running alerting evaluations. All subsequent protocol adjustments were documented as numbered amendments with explicit rationale and timestamps. Amendments 3 and 4 ratified the stratified reporting (All-15 subjects, without outlier subject S5, and ambulatory high-error subjects S5/S6/S11) and baseline fallback procedures.
-
-\subsection{Synthetic Episode Injection}
-Natural resting tachycardia episodes were exceedingly rare in the healthy volunteer cohort (manifesting in only 3 of 15 subjects). To rigorously probe alerting sensitivity and false-alert rates, we injected 112 labelled synthetic resting tachycardia episodes into the derived pulse-rate stream. Injected peaks ranged from 105 to 135 bpm with minimum inter-event gaps of 60~s. Over 90\% of injected events featured physiological jump rates exceeding 50~bpm. The detector evaluated alerting logic on noisy ambulatory streams without access to the ground-truth injection mask.
-
-\subsection{Seeded Fault Regimes}
-Sensor faults were introduced under two distinct schedules:
-\begin{itemize}
-    \item \textbf{Regime A (Low Duty, $\approx$10\% faulted background time):} Occasional packet gaps, transient frozen samples, duplicate bursts, and baseline drift.
-    \item \textbf{Regime B (Nominal Duty, $\approx$25--30\% faulted background time):} Frequent dropouts, prolonged flatlines, scale multiplier errors, and non-physiological spike sequences.
-    \item \textbf{Optical Noise Condition (F7):} Motion-scaled Gaussian noise injected directly into the raw photoplethysmogram at an SNR of +5~dB.
-\end{itemize}
-
-\section{Alerting Arms}
-All alerting arms operate in a strictly causal manner on the heart-rate stream without future peeking or access to activity labels. Alerts are emitted using a shared temporal persistence filter $P \in \{10, 20, 30\}$~s and a mandatory refractory period $R = 60$~s:
-\begin{itemize}
-    \item \textbf{Arm 1 (Fixed Population Threshold):} Fires whenever heart rate exceeds a static population cutoff $\tau_{\text{pop}} \in [90, 110]$~bpm.
-    \item \textbf{Arm 2 (Personal Baseline with Shrinkage):} Adaptive personal threshold $\tau_i(t) = \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t)$ regularized toward the population training prior via empirical Bayes shrinkage $\kappa$.
-    \item \textbf{Arm 3a (Kinematic Gating):} Arm 2 personal baseline combined with a wrist triaxial accelerometry gate ($\text{ENMO} \le \theta_{\text{rest}}$).
-    \item \textbf{Arm 3b (Software Trust Gate):} Arm 2 personal baseline gated by a multi-component trust score $S_{\text{trust}}(t) \ge \theta_{\text{trust}}$ combining gap penalties, flatline zeroing, physiological bounding, rate-of-change, and motion.
-    \item \textbf{Arm 3b-noMotion (Trust Ablation):} The trust score gate of Arm 3b with the kinematic motion term ablated ($w_{\text{mot}} = 0$).
-\end{itemize}
-Hyperparameters were tuned strictly within leave-one-subject-out (LOSO) training folds by selecting the minimum false-alert rate achieving $\ge 85\%$ recall, or maximizing recall.
-
-\section{Results}
-Table~\ref{tab:main} presents the pooled leave-one-subject-out evaluation results across all 15 subjects for clean data and Regime B.
-
-% ==============================================================================
-% DATA PROVENANCE FOR TABLE I AND SECTION V:
-% All metric values are derived from leave-one-subject-out (LOSO) cross-validation
-% across 15 subjects in the PPG-DaLiA dataset:
-% Generating script: scripts/run_fault_regimes_benchmark.py
-% Results reference: docs/RESULTS_SUMMARY.md (Section 2 Combined Metric Table, recording experimental results)
-% - Arm 1 (Fixed): Clean Recall=91.1%, FA/hr=3.20, F1=0.700; Regime B Recall=91.1%, FA/hr=4.51, F1=0.632
-% - Arm 2 (Personal): Clean Recall=80.4%, FA/hr=5.69, F1=0.558; Regime B Recall=75.9%, FA/hr=7.16, F1=0.487
-% - Arm 3a (+Kinematic): Clean Recall=80.4%, FA/hr=1.47, F1=0.772; Regime B Recall=75.9%, FA/hr=2.30, F1=0.691
-% - Arm 3b (+Trust): Clean Recall=79.5%, FA/hr=1.69, F1=0.750; Regime B Recall=75.0%, FA/hr=2.37, F1=0.680
-% - Arm 3b-noMotion: Clean Recall=79.5%, FA/hr=2.91, F1=0.676; Regime B Recall=75.0%, FA/hr=3.61, F1=0.614
-% Paired difference statistics (Arm 3b minus Arm 3a):
-% - Clean: mean diff=+0.13, 95% bootstrap CI [-0.54, +0.89], Wilcoxon W=31.0, p=0.86
-% - Regime A: mean diff=+0.05, 95% bootstrap CI [-0.66, +0.82], Wilcoxon W=40.0, p=0.70
-% - Regime B: mean diff=-0.04, 95% bootstrap CI [-0.78, +0.69], Wilcoxon W=52.0, p=0.98
-% - Optical Noise F7: mean diff=-0.49, 95% bootstrap CI [-1.47, +0.38], Wilcoxon W=17.0, p=0.28
-% Provenance: docs/RESULTS_SUMMARY.md Section 1.1 & docs/synthetic_injection_audit.csv
-% ==============================================================================
+To isolate motion artifact and evaluate waveform integrity, numerous signal quality indices (SQIs) have been proposed, spanning statistical moments (skewness, kurtosis), spectral purity, and template cross-correlation \cite{ref_elgendi_sqi}. While SQIs achieve strong classification performance on stationary laboratory datasets, ambulatory evaluations reveal severe performance drops during daily locomotion \cite{ref_reiss_dalia, ref_charlton_roadmap}. In clinical deployments, uncertainty quantification and selective prediction frameworks, such as conformal prediction, provide distribution-free finite-sample guarantees that offer structured paths for principled abstention \cite{ref_vazquez_conformal}. Table~\ref{tab:lit_comparison} contrasts existing wearable alerting paradigms with our pre-registered framework.
 
 \begin{table}[htbp]
-\caption{Pooled results, leave-one-subject-out (recall / false alerts per hour / F1)}
-\label{tab:main}
+\caption{Comparative Overview of Wearable Alerting Paradigms}
+\label{tab:lit_comparison}
 \centering
-\footnotesize
-\begin{tabular}{lcc}
+\scriptsize
+\begin{tabular}{lcccc}
 \toprule
-Arm & No faults & Regime B \\
+\textbf{Study / Paradigm} & \textbf{Pre-Reg.} & \textbf{Ablation} & \textbf{LOSO} & \textbf{Fault Inject.} \\
 \midrule
-1 Fixed & 91.1 / 3.20 / 0.700 & 91.1 / 4.51 / 0.632 \\
-2 Personal & 80.4 / 5.69 / 0.558 & 75.9 / 7.16 / 0.487 \\
-3a Motion gate & 80.4 / 1.47 / 0.772 & 75.9 / 2.30 / 0.691 \\
-3b Trust gate & 79.5 / 1.69 / 0.750 & 75.0 / 2.37 / 0.680 \\
-3b-noMotion & 79.5 / 2.91 / 0.676 & 75.0 / 3.61 / 0.614 \\
+Deep PPG \cite{ref_reiss_dalia} & No & No & Yes & No \\
+Optimal PPG SQI \cite{ref_elgendi_sqi} & No & No & No & No \\
+PPG Roadmap \cite{ref_charlton_roadmap} & Review & N/A & N/A & N/A \\
+Conformal Clinical UQ \cite{ref_vazquez_conformal} & Review & N/A & N/A & N/A \\
+\textbf{This Benchmark} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} & \textbf{Yes} \\
 \bottomrule
 \end{tabular}
 \end{table}
 
-\subsection{Pre-specified Primary Comparison: Arm 3b versus Arm 3a}
-The pre-registered primary hypothesis posited that multi-component software trust scoring would reduce false alerts by at least 60\% over baseline personal alerting while maintaining high recall. 
+\section{Dataset and Protocol}
+\subsection{PPG-DaLiA Dataset}
+We evaluate on the public PPG-DaLiA benchmark (UCI ID 495, CC BY 4.0) \cite{ref_reiss_dalia}. The dataset comprises 15 healthy subjects undergoing 2.5 hours of authentic daily activities (Table~\ref{tab:dataset}). Reference heart rates are derived from gold-standard chest ECG. Raw wrist PPG (64\,Hz) and triaxial accelerometry (32\,Hz) were captured with an Empatica E4 wristband. Strict quarantine was maintained: chest ECG reference was isolated solely for ground truth evaluation and was inaccessible to alerting arms.
 
-In paired, subject-level comparisons of false alerts per hour ($\Delta = \text{Arm 3b} - \text{Arm 3a}$):
+\input{tables/tab_dataset.tex}
+
+\subsection{Labelled Synthetic Tachycardia Injection}
+Because natural resting tachycardia was virtually absent in this healthy volunteer cohort (manifesting in only 3 of 15 subjects), evaluating sensitivity on raw data is statistically uninformative. Per Amendment 2, we injected 112 labelled synthetic resting tachycardia episodes into derived pulse-rate streams during verified low-motion windows ($\text{ENMO}_{10\text{s}} \le 0.05$\,g). Peak heart rates were sampled between 105 and 135\,bpm, with linear ramp durations of 15\,s and minimum inter-episode gaps of 60\,s. To respect participant baseline heart rates $HR_{\text{base}}$, lower and upper ramp bounds were adaptively adjusted: $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$, $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$, with plateau peak heart rate clamped to $[105.0, 135.0]$\,bpm.
+
+\subsection{Seeded Fault Regimes}
+Sensor telemetry faults were simulated under two pre-specified schedules alongside an optical corruption condition (Table~\ref{tab:fault_taxonomy}):
 \begin{itemize}
-    \item \textbf{No-Fault Clean Background:} Mean difference $+0.13\text{ FA/hr}$, 95\% bootstrap CI $[-0.54, +0.89]$, Wilcoxon signed-rank test $W = 31.0$, $p = 0.86$.
-    \item \textbf{Regime A (10\% faults):} Mean difference $+0.05\text{ FA/hr}$, 95\% bootstrap CI $[-0.66, +0.82]$, Wilcoxon $W = 40.0$, $p = 0.70$.
-    \item \textbf{Regime B (25--30\% faults):} Mean difference $-0.04\text{ FA/hr}$, 95\% bootstrap CI $[-0.78, +0.69]$, Wilcoxon $W = 52.0$, $p = 0.98$.
-    \item \textbf{Optical Noise Condition (F7):} Mean difference $-0.49\text{ FA/hr}$, 95\% bootstrap CI $[-1.47, +0.38]$, Wilcoxon $W = 17.0$, $p = 0.28$.
+    \item \textbf{Condition 0 (No-Fault):} Clean ambulatory background.
+    \item \textbf{Regime A (Low Duty, $\approx 10\%$ faulted time):} Sporadic gaps, stale values, duplicates, and slow drift (seed 42).
+    \item \textbf{Regime B (Nominal Duty, $\approx 25\text{--}30\%$ faulted time):} Frequent dropouts, prolonged flatlines, and scale errors (seed 42).
+    \item \textbf{F7 (High-Motion Optical Noise):} Additive Gaussian noise continuously modulated by wrist 3D acceleration injected into raw 64\,Hz BVP at SNR $+5.0$\,dB prior to Step 3a spectral estimation.
 \end{itemize}
-Across every tested condition, paired differences were negligible, every 95\% confidence interval spanned zero, and no comparison achieved statistical significance. Consequently, the hypothesis that multi-component software trust scores improve upon motion gating is \textbf{not supported}.
 
-Furthermore, under intense optical noise (F7), Arm 3b recall degraded to 58.0\% compared to 64.3\% in Arm 3a, indicating that aggressive multi-component software abstention can inadvertently suppress valid tachycardia alerts during noisy periods.
+\input{tables/tab_fault_taxonomy.tex}
+
+\section{System Architecture}
+The experimental harness and interactive replay lab were implemented as a modular full-stack application (Fig.~\ref{fig:arch}). The front-end is a React Progressive Web Application (PWA) supporting live signal inspection, threshold tuning, and an interactive benchmark dashboard. The back-end is powered by FastAPI and SQLite, incorporating the core \texttt{vitasense.quality} engine, replay caches, and LLM assistant routing with rule-based safety fallbacks.
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    box/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
+    proc/.style={rectangle, draw=black!70, fill=green!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
+    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+]
+\node[box, fill=purple!8, text width=3.25in] (ui) {\textbf{Client Layer: React PWA}\\Telemetry Dashboard $\cdot$ Signal Replay Lab $\cdot$ Research Benchmark Page $\cdot$ Auth};
+\node[proc, fill=orange!8, below=0.15cm of ui, text width=3.25in] (api) {\textbf{API Layer: FastAPI (Python 3.13)}\\Session Verification $\cdot$ Rate Limiter $\cdot$ REST Endpoints $\cdot$ SSE Event Stream $\cdot$ Assistant};
+\node[box, below=0.15cm of api, xshift=-2.0cm, text width=1.45in] (db) {\textbf{Storage \& Caching}\\SQLite (\texttt{vitasense.db})\\Pre-computed Caches};
+\node[proc, below=0.15cm of api, xshift=2.0cm, text width=1.45in] (engine) {\textbf{Analytics Engine}\\Quality Checks (\texttt{vitasense.quality})\\Emitter ($P, R$) $\cdot$ Trust Scorer};
+
+\draw[arr, <->] (ui) -- (api);
+\draw[arr, <->] (api) -| (db);
+\draw[arr, <->] (api) -| (engine);
+\end{tikzpicture}
+\caption{Design Diagram: VitaSense Application Architecture.}
+\label{fig:arch}
+\end{figure}
+
+\section{Methods and Algorithms}
+\subsection{Evaluated Alerting Arms and Pipeline}
+The research pipeline processes raw sensor streams into calibrated, causal alerts without future peeking (Fig.~\ref{fig:pipeline}). We benchmark five causal alerting arms (Fig.~\ref{fig:arms}):
+\begin{enumerate}
+    \item \textbf{Arm 1 (Fixed Population Cutoff):} Standard clinical threshold $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm.
+    \item \textbf{Arm 2 (Personal Baseline with Shrinkage):} Dynamic cutoff $\tau_i(t) = \max(\tau_{\text{floor}}, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$ regularized toward training-population priors $(\mu_{\text{pop}}, \sigma_{\text{pop}})$ via empirical Bayes shrinkage $\kappa$ (Algorithm~\ref{alg:causal_baseline}).
+    \item \textbf{Arm 3a (Kinematic Motion Gating):} Arm 2 personal baseline paired with a stillness gate: alert triggers if and only if $HR(t) > \tau_i(t)$ and $\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}}$.
+    \item \textbf{Arm 3b (Multi-Attribute Trust Score Gating):} Arm 2 baseline gated by software trust score: alert triggers if and only if $HR(t) > \tau_i(t)$ and $S_{\text{trust}}(t) \ge \theta_{\text{trust}}$.
+    \item \textbf{Arm 3b-noMotion (Trust Ablation):} Arm 3b with kinematic motion term ablated ($w_{\text{mot}} = 0$).
+\end{enumerate}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    node/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
+    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+]
+\node[node] (raw) {PPG-DaLiA\\Raw Data};
+\node[node, right=0.2cm of raw] (cache) {Feature\\Cache};
+\node[node, right=0.2cm of cache] (inj) {Synthetic\\Injection};
+\node[node, right=0.2cm of inj] (fault) {Fault\\Schedule};
+\node[node, below=0.2cm of fault] (arms) {Alerting\\Arms 1--3b};
+\node[node, left=0.2cm of arms] (emit) {Shared\\Emitter};
+\node[node, left=0.2cm of emit] (score) {Scoring\\\& LOSO};
+
+\draw[arr] (raw) -- (cache);
+\draw[arr] (cache) -- (inj);
+\draw[arr] (inj) -- (fault);
+\draw[arr] (fault) -- (arms);
+\draw[arr] (arms) -- (emit);
+\draw[arr] (emit) -- (score);
+\end{tikzpicture}
+\caption{Design Diagram: Pre-Registered Benchmark Research Pipeline.}
+\label{fig:pipeline}
+\end{figure}
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    box/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
+    gate/.style={diamond, draw=black!70, fill=yellow!15, aspect=1.8, font=\tiny, align=center, inner sep=1pt},
+    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+]
+\node[box] (inp) {Heart Rate $HR(t)$ $\cdot$ Accel $\mathbf{a}(t)$};
+\node[box, below=0.18cm of inp] (tau) {Causal Baseline $\tau_i(t)$ (Arm 2)};
+\node[gate, below left=0.18cm and -0.4cm of tau] (g_kin) {$\text{ENMO} \le \theta_{\text{rest}}$? (3a)};
+\node[gate, below right=0.18cm and -0.4cm of tau] (g_tr) {$S_{\text{trust}} \ge \theta_{\text{trust}}$? (3b)};
+\node[box, fill=green!10, below=0.22cm of tau] (emit) {Standard Emitter ($P, R$)};
+\node[box, fill=red!10, below=0.18cm of emit] (out) {Emitted Tachycardia Alert};
+
+\draw[arr] (inp) -- (tau);
+\draw[arr] (tau) -| (g_kin);
+\draw[arr] (tau) -| (g_tr);
+\draw[arr] (g_kin) |- (emit);
+\draw[arr] (g_tr) |- (emit);
+\draw[arr] (emit) -- (out);
+\end{tikzpicture}
+\caption{Design Diagram: Alert Logic and Gating Across Arms.}
+\label{fig:arms}
+\end{figure}
+
+\subsection{Shared Standard Alert Emitter}
+To ensure rigorous cross-arm comparability, all arms feed instantaneous binary triggers into a shared \texttt{StandardAlertEmitter} (Algorithm~\ref{alg:emitter}). Alerts fire if and only if triggering conditions hold continuously for $W_p = P / \text{step}$ windows ($P \in \{10, 20, 30\}$\,s). Emitted alerts enforce a mandatory refractory hold-off of $W_r = R / \text{step}$ windows ($R = 60$\,s).
+
+\begin{algorithm}[htbp]
+\caption{Synthetic Tachycardia Injection \& Fault Schedule}
+\label{alg:synth_fault}
+\scriptsize
+\begin{algorithmic}[1]
+\REQUIRE Pulse rate $HR$, motion $\text{ENMO}$, seed $S = 42$, regime $\mathcal{R}$
+\STATE Identify resting blocks $\mathcal{B} = \{[t_s, t_e] \mid \text{ENMO}[t] \le 0.05\,\text{g}, \text{dur} \ge 80\,\text{s}\}$
+\FOR{episode $j = 1$ to $N_{\text{tachy}}$ (sample without overlap, gap $\ge 60$\,s)}
+    \STATE Sample target plateau $HR_{\text{peak}} \sim \mathcal{U}(105, 135)$\,bpm
+    \STATE Compute adaptive ramp rates: $r \leftarrow (HR_{\text{peak}} - HR_{\text{base}})/15\,\text{s}$
+    \STATE Inject 15\,s ramp, plateau (45--120\,s), 20\,s exponential decay
+\ENDFOR
+\IF{$\mathcal{R} \in \{\text{Regime A}, \text{Regime B}\}$}
+    \STATE Sample non-overlapping fault intervals outside synthetic events
+    \STATE Inject F1 (gaps), F2 (stale), F3 (dupl), F4 (spikes), F5 (drift), F6 (unit scale)
+\ELSIF{$\mathcal{R} == \text{F7}$}
+    \STATE Add optical Gaussian noise modulated by $\|\mathbf{a}(t)\|$ at $+5.0$\,dB SNR
+\ENDIF
+\RETURN Fault-injected stream $HR_{\text{faulted}}$ and episode ground truth
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htbp]
+\caption{Causal Personal Baseline \& Trust Score Gating}
+\label{alg:causal_baseline}
+\scriptsize
+\begin{algorithmic}[1]
+\REQUIRE $HR$, $\text{ENMO}$, priors $\mu_{\text{pop}}, \sigma_{\text{pop}}$, grid $k, \kappa, \theta_{\text{rest}}, \theta_{\text{trust}}$
+\FOR{window index $t = 0$ to $N-1$}
+    \STATE $c \leftarrow \sum_{\tau=0}^{t-1} \mathbb{I}(\text{ENMO}[\tau] \le 0.05 \land \text{finite}(HR[\tau]))$
+    \IF{$c > 1$}
+        \STATE $\bar{x} \leftarrow \frac{1}{c} \sum_{\tau < t} HR[\tau], \quad s \leftarrow \text{std}_{\tau < t}(HR[\tau])$
+    \ELSE
+        \STATE $\bar{x} \leftarrow \mu_{\text{pop}}, \quad s \leftarrow \sigma_{\text{pop}}$
+    \ENDIF
+    \STATE $w \leftarrow \frac{c \cdot \Delta t / 3600}{c \cdot \Delta t / 3600 + \kappa}; \quad \hat{\mu} \leftarrow w \bar{x} + (1-w)\mu_{\text{pop}}; \quad \hat{\sigma} \leftarrow w s + (1-w)\sigma_{\text{pop}}$
+    \STATE $\tau_i[t] \leftarrow \max(100.0, \hat{\mu} + k \cdot \hat{\sigma})$
+    \STATE $S_{\text{gap}} \leftarrow 1 - 2 \cdot \text{nan\_ratio}; \quad S_{\text{stale}} \leftarrow \mathbb{I}(\text{var} \ge 10^{-6})$
+    \STATE $S_{\text{phys}} \leftarrow \mathbb{I}(35 \le HR \le 220 \land |\Delta HR| \le 40)$
+    \STATE $S_{\text{mot}} \leftarrow \text{clip}(1.0 - 0.60 \cdot (\text{ENMO} - 0.05)/0.25, 0.2, 1.0)$
+    \STATE $S_{\text{trust}}[t] \leftarrow \text{clip}(S_{\text{gap}} \cdot S_{\text{stale}} \cdot S_{\text{phys}} \cdot S_{\text{mot}}, 0.0, 1.0)$
+    \STATE $Cond_{\text{3a}}[t] \leftarrow (HR[t] > \tau_i[t]) \land (\text{ENMO}[t] \le \theta_{\text{rest}})$
+    \STATE $Cond_{\text{3b}}[t] \leftarrow (HR[t] > \tau_i[t]) \land (S_{\text{trust}}[t] \ge \theta_{\text{trust}})$
+    \STATE $Cond_{\text{3b-noMot}}[t] \leftarrow (HR[t] > \tau_i[t]) \land (S_{\text{gap}} \cdot S_{\text{stale}} \cdot S_{\text{phys}} \ge \theta_{\text{trust}})$
+\ENDFOR
+\end{algorithmic}
+\end{algorithm}
+
+\begin{algorithm}[htbp]
+\caption{Standard Alert Emitter with Refractory Hold-off}
+\label{alg:emitter}
+\scriptsize
+\begin{algorithmic}[1]
+\REQUIRE Raw condition mask $C$, persistence $W_p = P / \Delta t$, refractory $W_r = R / \Delta t$
+\STATE $run\_len \leftarrow 0, \quad ref\_cnt \leftarrow 0, \quad Alert \leftarrow \mathbf{0}$
+\FOR{$t = 0$ to $N-1$}
+    \IF{$ref\_cnt > 0$}
+        \STATE $ref\_cnt \leftarrow ref\_cnt - 1$
+    \ENDIF
+    \IF{$C[t]$ is TRUE}
+        \STATE $run\_len \leftarrow run\_len + 1$
+        \IF{$run\_len \ge W_p$ \AND $ref\_cnt == 0$}
+            \STATE $Alert[t] \leftarrow \text{TRUE}; \quad ref\_cnt \leftarrow W_r; \quad run\_len \leftarrow 0$
+        \ENDIF
+    \ELSE
+        \STATE $run\_len \leftarrow 0$
+    \ENDIF
+\ENDFOR
+\RETURN $Alert$
+\end{algorithmic}
+\end{algorithm}
+
+\input{tables/tab_parameter_grids.tex}
+\input{tables/tab_combined_metrics.tex}
+
+\section{Experimental Setup}
+\subsection{Leave-One-Subject-Out (LOSO) Cross-Validation}
+Hyperparameters were tuned strictly within 15 LOSO training folds (Algorithm~\ref{alg:loso_scoring}). For each test subject $s \in \{1\dots 15\}$, candidate configurations were evaluated across the 14 training subjects pooled. The pre-specified selection rule chooses the parameter vector achieving $\ge 85\%$ training recall while minimizing false alerts per hour ($\text{FA/hr}$). If no parameter setting reaches $85\%$ recall, the pre-registered fallback rule selects the setting maximizing training recall.
+
+\begin{algorithm}[htbp]
+\caption{LOSO Grid Tuning, Fallback Rule, and Dual Scoring}
+\label{alg:loso_scoring}
+\scriptsize
+\begin{algorithmic}[1]
+\REQUIRE Training folds $\mathcal{S}_{\text{train}}$, test subject $s_{\text{test}}$, parameter grid $\Theta$
+\FOR{$\theta \in \Theta$}
+    \STATE Evaluate pooled training recall $\text{Rec}_{\text{train}}(\theta)$ and $\text{FA/hr}_{\text{train}}(\theta)$
+\ENDFOR
+\STATE $\mathcal{V} \leftarrow \{\theta \in \Theta \mid \text{Rec}_{\text{train}}(\theta) \ge 0.85\}$
+\IF{$\mathcal{V} \neq \emptyset$}
+    \STATE $\theta^* \leftarrow \arg\min_{\theta \in \mathcal{V}} \text{FA/hr}_{\text{train}}(\theta)$ \COMMENT{Primary selection rule}
+\ELSE
+    \STATE $\theta^* \leftarrow \arg\max_{\theta \in \Theta} \text{Rec}_{\text{train}}(\theta)$ \COMMENT{Fallback selection rule}
+\ENDIF
+\STATE Run chosen arm with $\theta^*$ on $s_{\text{test}}$ to yield alert mask $A$
+\STATE $\text{TP} \leftarrow \sum_{j} \mathbb{I}(\exists t \in [t_{s,j}, t_{e,j}] : A[t] == \text{TRUE})$
+\STATE $\text{Recall} \leftarrow \text{TP} / N_{\text{injected}}$
+\STATE $\text{Clean FA} \leftarrow \sum_{t} \mathbb{I}(A[t] == \text{TRUE} \land t \notin \mathcal{T}_{\text{injected}} \land t \notin \mathcal{T}_{\text{natural} \pm 30\text{s}})$
+\STATE $\text{FA/hr} \leftarrow \text{Clean FA} / T_{\text{non-event hours}}$
+\RETURN Test performance $(\text{Recall}, \text{FA/hr})$
+\end{algorithmic}
+\end{algorithm}
+
+\subsection{Evaluation Metrics and Paired Statistics}
+Scoring evaluates event-level recall (detecting injected episodes within $[t_{\text{start}}, t_{\text{end}}]$) alongside alert-level clean false alerts per hour ($\text{FA/hr}$), precision on non-event periods, and $F_1$ score. The primary statistical hypothesis test compares paired per-subject differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) using the two-sided Wilcoxon signed-rank test ($\alpha = 0.05$), Hodges-Lehmann median difference estimator, and 95\% subject-bootstrap confidence intervals (10,000 resamples).
+
+\begin{figure}[htbp]
+\centering
+\begin{tikzpicture}[
+    box/.style={rectangle, draw=black!70, fill=blue!5, rounded corners=2pt, font=\tiny, align=center, inner sep=2pt},
+    arr/.style={-{Latex[scale=0.5]}, thick, color=black!70}
+]
+\node[box] (v1) {\textbf{v1.0.0}\\\texttt{41eff1e}\\18-Oct};
+\node[box, right=0.2cm of v1] (a1) {\textbf{Amd 1}\\\texttt{3b1f2f6}\\19-Oct 14:56};
+\node[box, right=0.2cm of a1] (a2) {\textbf{Amd 2}\\\texttt{696fd00}\\19-Oct 15:18};
+\node[box, right=0.2cm of a2] (a3) {\textbf{Amd 3}\\\texttt{a0d682a}\\19-Oct 16:25};
+\node[box, right=0.2cm of a3] (a4) {\textbf{Amd 4}\\\texttt{a9ce657}\\19-Oct 17:46};
+
+\draw[arr] (v1) -- (a1);
+\draw[arr] (a1) -- (a2);
+\draw[arr] (a2) -- (a3);
+\draw[arr] (a3) -- (a4);
+\end{tikzpicture}
+\caption{Design Diagram: Protocol Evolution Timeline (Commits from git log).}
+\label{fig:timeline}
+\end{figure}
+
+\begin{figure*}[t]
+\centering
+\begin{minipage}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/fig_recall_vs_fahr.pdf}
+\centerline{\footnotesize (a) Recall vs FA/hr}
+\end{minipage}\hfill
+\begin{minipage}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/fig_forest_plot_3b_vs_3a.pdf}
+\centerline{\footnotesize (b) Paired $\Delta$ (3b vs 3a)}
+\end{minipage}\hfill
+\begin{minipage}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/fig_persubject_fahr.pdf}
+\centerline{\footnotesize (c) Per-Subject Clean FA/hr}
+\end{minipage}\hfill
+\begin{minipage}{0.24\textwidth}
+\centering
+\includegraphics[width=\linewidth]{figures/fig_arm1_sensitivity.pdf}
+\centerline{\footnotesize (d) Arm 1 Sensitivity}
+\end{minipage}
+\caption{Benchmark results across arms and conditions: (a) Event recall vs clean false alerts per hour; (b) Forest plot of paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% bootstrap CIs; (c) Per-subject FA/hr in Condition 0; (d) Arm 1 sensitivity across $\tau_{\text{pop}}$ and persistence $P$.}
+\label{fig:results_all}
+\end{figure*}
+
+\section{Results and Discussion}
+\subsection{Primary Hypothesis $H_1$ Outcome: NOT SUPPORTED}
+Pre-registered hypothesis $H_1$ postulated that incorporating software trust scores would reduce $\text{FA/hr}$ by $\ge 60\%$ over kinematic gating and personalized baselines while preserving $\ge 85\%$ recall.
+
+\textbf{Empirical finding: $H_1$ is not supported.} In paired per-subject comparisons (Table~\ref{tab:paired_comparison} and Fig.~\ref{fig:results_all}b), Arm 3b demonstrated no statistically detectable false-alert reduction over Arm 3a across any condition:
+\begin{itemize}
+    \item \textbf{Condition 0 (Clean):} Mean difference $+0.13$\,FA/h (95\% CI $[-0.54, +0.89]$, $W = 31.0$, $p = 0.8589$).
+    \item \textbf{Regime A (10\% faults):} Mean difference $+0.05$\,FA/h (95\% CI $[-0.66, +0.82]$, $W = 40.0$, $p = 0.7007$).
+    \item \textbf{Regime B (25--30\% faults):} Mean difference $-0.04$\,FA/h (95\% CI $[-0.78, +0.69]$, $W = 52.0$, $p = 0.9750$).
+    \item \textbf{F7 (Optical Noise):} Mean difference $-0.49$\,FA/h (95\% CI $[-1.47, +0.38]$, $W = 17.0$, $p = 0.2845$).
+\end{itemize}
+In every condition, 95\% bootstrap confidence intervals spanned zero, and Wilcoxon tests yielded $p \ge 0.28$.
+
+\input{tables/tab_strata.tex}
+\input{tables/tab_paired_comparison.tex}
 
 \subsection{Secondary Benchmark Findings}
-Kinematic motion gating (Arm 3a) was the overwhelming driver of alert accuracy, slashing false alerts per hour by 74.2\% in clean data ($1.47$ vs $5.69\text{ FA/hr}$) and by 67.9\% in Regime B ($2.30$ vs $7.16\text{ FA/hr}$) compared to ungated personal baselines. 
+\textbf{Kinematic motion gating drives alert accuracy:} Relative to ungated Arm 2, Arm 3a reduced false alerts per hour by 74.2\% in clean data ($1.47$ vs $5.69$\,FA/h) and by 67.9\% in Regime B ($2.30$ vs $7.16$\,FA/h) (Table~\ref{tab:combined_metrics}).
 
-Arm 1 (Fixed Population Threshold) with a 30-second persistence filter proved remarkably resilient, maintaining 91.1\% event recall and a false-alert rate of 3.20 to 4.51~FA/hr across all regimes.
+\textbf{Recall degradation under optical corruption (F7):} Under intense motion-coupled optical noise, Arm 3b recall degraded to 58.0\% compared to 64.3\% in Arm 3a, indicating that multi-component software abstention can suppress genuine emergencies during noisy episodes.
+
+\input{tables/tab_fault_disaggregated.tex}
+
+\subsection{Edge-of-Grid Analysis and Fallback Rule Invocation}
+Hyperparameter tuning consistently selected parameter boundary values (Table~\ref{tab:edge_of_grid}). Most notably, \textbf{Arm 2 never attained the $\ge 85\%$ recall target on any training fold in any condition} (maximum training recall achieved was $\approx 80.4\%$). Consequently, the fallback selection rule (maximizing training recall) was invoked in 100\% (15/15) of folds for Arm 2 across all regimes, selecting $k = 2.0$ and $P = 10$\,s.
+
+\input{tables/tab_edge_of_grid.tex}
 
 \section{Limitations}
-This investigation possesses important limitations: (1) Synthetic resting tachycardia injection was required due to low natural prevalence in healthy subjects; (2) Evaluation is restricted to 15 subjects within a single public dataset (PPG-DaLiA); (3) PPG estimator errors during vigorous ambulatory movements may introduce correlated artifacts; (4) Post-result protocol amendments were logged transparently but represent deviations from initial planning; (5) Conformal abstention (Arm 4) was deferred. This study represents an academic research benchmark and does not constitute a clinical validation.
+This benchmark is subject to several methodological constraints (Table~\ref{tab:limitations}): (1) Events were synthetically injected due to natural sparsity; (2) The cohort is limited to 15 healthy participants; (3) Algorithmic errors in front-end PPG tracking couple into downstream logic; (4) Post-result protocol amendments (Table~\ref{tab:deviations}) document adjustments made after preliminary inspection.
+
+\input{tables/tab_limitations.tex}
+\input{tables/tab_deviations.tex}
+
+\section{Future Scope}
+Future efforts will extend this benchmark along five technical avenues:
+\begin{enumerate}
+    \item \textbf{Arm 4 Conformal Abstention:} Integrating inductive and split conformal prediction to output distribution-free validity sets with user-calibrated error bounds \cite{ref_vazquez_conformal}.
+    \item \textbf{External Dataset Generalization:} Evaluating on external public wearable corpora, including the PhysioNet Wearable Device Dataset \cite{ref_physionet_wearable}.
+    \item \textbf{Clinical Patient Cohorts:} Validating on holter-monitored inpatient recordings with spontaneous atrial fibrillation and supraventricular tachycardia.
+    \item \textbf{On-Device Hardware Integration:} Deploying causal baseline and kinematic gating engines onto low-power embedded microcontrollers.
+    \item \textbf{Symptom-Risk Questionnaire Module:} Pairing continuous passive telemetry gating with guided active user symptom-logging.
+\end{enumerate}
 
 \section{Conclusion}
-In this pre-registered fault-injection benchmark, kinematic motion gating accounted for virtually all false-alert suppression in wearable heart-rate monitoring, whereas multi-component software trust scores provided no statistically detectable improvement. The full experimental harness, deviation log, and verification test suite are openly released to encourage independent reproduction across diverse clinical cohorts.
+In this pre-registered fault-injection benchmark, kinematic motion gating accounted for virtually all false-alert suppression in wearable heart-rate monitoring, while multi-component software trust scoring offered no statistically detectable benefit. Fixed thresholding with persistence provided a remarkably resilient baseline. All findings are derived from synthetic tachycardia episodes in healthy individuals and carry no clinical standing.
+
+\section*{Regulatory and Safety Statement}
+\textbf{Not a Medical Device:} The VitaSense AI software, alerting algorithms, and benchmark suite are academic research artifacts. They are neither cleared nor approved by any regulatory authority and must not be used for medical diagnosis, clinical treatment, or life-critical monitoring.
+
+\section*{Data and Code Availability}
+The PPG-DaLiA dataset is openly accessible via the UCI Machine Learning Repository \cite{ref_reiss_dalia, ref_uci_dalia}. The PhysioNet Wearable Device Dataset is available under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are provided in the project repository.
 
 \section*{Acknowledgment}
-The authors acknowledge Vel Tech Rangarajan Dr. Sagunthala R\&D Institute for computational facilities and support during this research.
+The authors thank Vel Tech Rangarajan Dr. Sagunthala R\&D Institute for computational support during this research.
 
 \begin{thebibliography}{00}
-% UNVERIFIED: External paper page not opened in current session. Verify authors, volume, issue, and pages before final publication.
-\bibitem{ref_alert_fatigue}
-M.~Cvach, ``Monitor alarm fatigue: an integrative review,'' \emph{Biomedical Instrumentation \& Technology}, vol.~46, no.~4, pp.~268--277, 2012.
 
-% UNVERIFIED: External publisher page not opened in current session. Verify authors and publication details before final publication.
+% URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6679242/
+% Accessed: 2026-10-22
 \bibitem{ref_reiss_dalia}
 A.~Reiss, I.~Indlekofer, P.~Schmidt, and K.~Van~Laerhoven, ``Deep PPG: Large-scale heart rate estimation with convolutional neural networks,'' \emph{Sensors}, vol.~19, no.~14, p.~3079, 2019.
 
-% UNVERIFIED: External publisher page not opened in current session. Verify authors and volume/issue before final publication.
-\bibitem{ref_sqi_elgendi}
+% URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/
+% Accessed: 2026-10-22
+\bibitem{ref_elgendi_sqi}
 M.~Elgendi, ``Optimal signal quality index for photoplethysmogram signals,'' \emph{Bioengineering}, vol.~3, no.~4, p.~21, 2016.
 
-% UNVERIFIED: External publisher page not opened in current session. Verify volume, issue, and DOI before final publication.
-\bibitem{ref_orphanidou_sqi}
-C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal-quality indices for the electrocardiogram and photoplethysmogram to promote intelligent alarming,'' \emph{IEEE Journal of Biomedical and Health Informatics}, vol.~19, no.~3, pp.~739--748, 2015.
+% URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/
+% Accessed: 2026-10-22
+\bibitem{ref_charlton_roadmap}
+P.~H.~Charlton \emph{et al.}, ``The 2023 wearable photoplethysmography roadmap,'' \emph{Journal of Physics: Photonics}, vol.~5, no.~4, p.~042501, 2023.
+
+% URL: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/
+% Accessed: 2026-10-22
+\bibitem{ref_vazquez_conformal}
+J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{Journal of Healthcare Informatics Research}, vol.~6, no.~3, pp.~257--285, 2022.
+
+% URL: https://archive.ics.uci.edu/dataset/495/ppg+dalia
+% Accessed: 2026-10-22
+\bibitem{ref_uci_dalia}
+A.~Reiss, I.~Indlekofer, P.~Schmidt, and K.~Van~Laerhoven, ``PPG-DaLiA,'' UCI Machine Learning Repository, 2019, DOI: 10.24432/C53890.
+
+% URL: https://archive.ics.uci.edu/dataset/45/heart+disease
+% Accessed: 2026-10-22
+\bibitem{ref_uci_heart}
+R.~Detrano, A.~J\'anosi, W.~Steinbrunn, K.~Pfisterer, and J.~Schmid, ``Heart Disease,'' UCI Machine Learning Repository, 1988, DOI: 10.24432/C52P4X.
+
+% URL: https://physionet.org/content/wearable-device-dataset/1.0.1/
+% Accessed: 2026-10-22
+\bibitem{ref_physionet_wearable}
+A.~Kos, Y.~Toma\v{z}i\v{c}, and A.~Umek, ``Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,'' PhysioNet, Version 1.0.1, 2022, DOI: 10.13026/8fca-2v93.
+
 \end{thebibliography}
 
 \end{document}

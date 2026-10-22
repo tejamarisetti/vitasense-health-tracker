@@ -1,0 +1,5 @@
+Condition,Mean_Diff_FA_hr,Median_Diff_FA_hr,Hodges_Lehmann_Diff,Wilcoxon_W,Wilcoxon_p,CI95_Mean_Low,CI95_Mean_High,CI95_HL_Low,CI95_HL_High
+Condition 0 (No-Fault),0.13,0.0,0.0,31.0,0.8589,-0.54,0.89,-0.48,0.69
+Regime A (Low Duty ~10%),0.05,-0.44,-0.08,40.0,0.7007,-0.66,0.82,-0.61,0.79
+Regime B (Nominal ~25-30%),-0.04,0.0,-0.0,52.0,0.975,-0.78,0.69,-0.87,0.87
+F7 (High-Motion BVP Noise),-0.49,0.0,-0.25,17.0,0.2845,-1.47,0.38,-1.43,0.23

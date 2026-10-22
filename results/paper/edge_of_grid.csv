@@ -1,0 +1,37 @@
+Condition,Arm,Grid_Dimension,Candidate_Grid,Boundary_Picked,Fold_Fraction_pct,Fold_Count
+Condition 0 (No-Fault),Arm 1 (Fixed),tau_pop (bpm),"{100, 110, 120, 125, 130}",100 (lower),100.0,15/15
+Condition 0 (No-Fault),Arm 1 (Fixed),Persistence P (s),"{10, 20, 30}",30 (upper),100.0,15/15
+Condition 0 (No-Fault),Arm 2 (Personal),Multiplier k,"{2.0, 2.5, 3.0, 3.5, 4.0}",2.0 (lower),100.0,15/15
+Condition 0 (No-Fault),Arm 2 (Personal),Shrinkage kap (h),"{0.5, 1.0, 2.0}",2.0 (upper),93.3,14/15
+Condition 0 (No-Fault),Arm 2 (Personal),Persistence P (s),"{10, 20, 30}",10 (lower),100.0,15/15
+Condition 0 (No-Fault),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.08 (upper),93.3,14/15
+Condition 0 (No-Fault),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.03 (lower),6.7,1/15
+Condition 0 (No-Fault),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.60 (lower),93.3,14/15
+Condition 0 (No-Fault),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.80 (upper),6.7,1/15
+Regime A (Low Duty ~10%),Arm 1 (Fixed),tau_pop (bpm),"{100, 110, 120, 125, 130}",100 (lower),100.0,15/15
+Regime A (Low Duty ~10%),Arm 1 (Fixed),Persistence P (s),"{10, 20, 30}",30 (upper),100.0,15/15
+Regime A (Low Duty ~10%),Arm 2 (Personal),Multiplier k,"{2.0, 2.5, 3.0, 3.5, 4.0}",2.0 (lower),100.0,15/15
+Regime A (Low Duty ~10%),Arm 2 (Personal),Shrinkage kap (h),"{0.5, 1.0, 2.0}",2.0 (upper),93.3,14/15
+Regime A (Low Duty ~10%),Arm 2 (Personal),Persistence P (s),"{10, 20, 30}",10 (lower),100.0,15/15
+Regime A (Low Duty ~10%),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.08 (upper),93.3,14/15
+Regime A (Low Duty ~10%),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.03 (lower),6.7,1/15
+Regime A (Low Duty ~10%),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.60 (lower),93.3,14/15
+Regime A (Low Duty ~10%),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.80 (upper),6.7,1/15
+Regime B (Nominal ~25-30%),Arm 1 (Fixed),tau_pop (bpm),"{100, 110, 120, 125, 130}",100 (lower),100.0,15/15
+Regime B (Nominal ~25-30%),Arm 1 (Fixed),Persistence P (s),"{10, 20, 30}",30 (upper),100.0,15/15
+Regime B (Nominal ~25-30%),Arm 2 (Personal),Multiplier k,"{2.0, 2.5, 3.0, 3.5, 4.0}",2.0 (lower),100.0,15/15
+Regime B (Nominal ~25-30%),Arm 2 (Personal),Shrinkage kap (h),"{0.5, 1.0, 2.0}",2.0 (upper),100.0,15/15
+Regime B (Nominal ~25-30%),Arm 2 (Personal),Persistence P (s),"{10, 20, 30}",10 (lower),100.0,15/15
+Regime B (Nominal ~25-30%),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.08 (upper),93.3,14/15
+Regime B (Nominal ~25-30%),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.03 (lower),6.7,1/15
+Regime B (Nominal ~25-30%),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.60 (lower),93.3,14/15
+Regime B (Nominal ~25-30%),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.80 (upper),6.7,1/15
+F7 (High-Motion BVP Noise),Arm 1 (Fixed),tau_pop (bpm),"{100, 110, 120, 125, 130}",100 (lower),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 1 (Fixed),Persistence P (s),"{10, 20, 30}",30 (upper),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 2 (Personal),Multiplier k,"{2.0, 2.5, 3.0, 3.5, 4.0}",2.0 (lower),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 2 (Personal),Shrinkage kap (h),"{0.5, 1.0, 2.0}",2.0 (upper),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 2 (Personal),Persistence P (s),"{10, 20, 30}",10 (lower),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.08 (upper),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 3a (+Kinematic),theta_rest (g),"{0.03, 0.05, 0.08}",0.03 (lower),0.0,0/15
+F7 (High-Motion BVP Noise),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.60 (lower),100.0,15/15
+F7 (High-Motion BVP Noise),Arm 3b (+Trust),theta_trust,"{0.60, 0.70, 0.80}",0.80 (upper),0.0,0/15

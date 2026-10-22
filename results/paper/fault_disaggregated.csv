@@ -1,0 +1,15 @@
+Regime,Fault_Type,Exposure_Hours,Arm 1_FA_Count,Arm 1_FA_hr,Arm 1_Insufficient_Data,Arm 2_FA_Count,Arm 2_FA_hr,Arm 2_Insufficient_Data,Arm 3a_FA_Count,Arm 3a_FA_hr,Arm 3a_Insufficient_Data,Arm 3b_FA_Count,Arm 3b_FA_hr,Arm 3b_Insufficient_Data,Arm 3b-noMotion_FA_Count,Arm 3b-noMotion_FA_hr,Arm 3b-noMotion_Insufficient_Data
+Regime A (Low Duty ~10%),F0_CLEAN,28.09,90,3.2,False,165,5.87,False,43,1.53,False,50,1.78,False,83,2.95,False
+Regime A (Low Duty ~10%),F1_GAPS,0.94,0,0.0,True,0,0.0,True,0,0.0,True,0,0.0,True,0,0.0,True
+Regime A (Low Duty ~10%),F2_STALE,0.62,13,21.08,True,5,8.11,True,2,3.24,True,1,1.62,True,1,1.62,True
+Regime A (Low Duty ~10%),F3_DUPL,0.62,2,3.21,True,5,8.04,True,2,3.21,True,0,0.0,True,3,4.82,True
+Regime A (Low Duty ~10%),F4_SPIKE,0.07,0,0.0,True,1,14.75,True,0,0.0,True,0,0.0,True,1,14.75,True
+Regime A (Low Duty ~10%),F5_DRIFT,0.45,0,0.0,True,1,2.22,True,0,0.0,True,0,0.0,True,0,0.0,True
+Regime A (Low Duty ~10%),F6_UNIT,0.48,7,14.48,True,13,26.9,True,4,8.28,True,6,12.41,True,8,16.55,True
+Regime B (Nominal ~25-30%),F0_CLEAN,21.67,76,3.51,False,125,5.77,False,35,1.62,False,40,1.85,False,63,2.91,False
+Regime B (Nominal ~25-30%),F1_GAPS,3.15,0,0.0,True,0,0.0,True,0,0.0,True,0,0.0,True,0,0.0,True
+Regime B (Nominal ~25-30%),F2_STALE,1.58,32,20.23,False,17,10.75,False,5,3.16,True,7,4.43,True,12,7.59,False
+Regime B (Nominal ~25-30%),F3_DUPL,1.56,5,3.21,True,15,9.62,False,3,1.92,True,2,1.28,True,3,1.92,True
+Regime B (Nominal ~25-30%),F4_SPIKE,0.21,0,0.0,True,0,0.0,True,0,0.0,True,1,4.84,True,1,4.84,True
+Regime B (Nominal ~25-30%),F5_DRIFT,1.55,4,2.58,True,10,6.46,False,3,1.94,True,1,0.65,True,3,1.94,True
+Regime B (Nominal ~25-30%),F6_UNIT,1.56,24,15.4,False,57,36.56,False,26,16.68,False,23,14.75,False,31,19.89,False
