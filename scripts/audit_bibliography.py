@@ -1,157 +1,152 @@
-"""Audit bibliography entries against fetched page texts.
+"""Audit bibliography entries against fetched raw page texts.
 
-Prints supporting page text (author line, title, year, volume/pages/DOI)
-for each of the 6 references and explicitly reports verification status.
+Reads the saved page files directly from disk and extracts the raw matched line
+for each citation field (author, title, journal, year, volume/article, DOI, URL).
+Prints 'NOT FOUND' for any field that cannot be extracted from the raw page text.
+Contains no hard-coded status text.
 """
 
-import json
-import re
 from pathlib import Path
+import re
 
 BASE_LOGS = Path(r"C:\Users\Master\.gemini\antigravity-ide\brain\c84ae576-da71-4751-a138-b2e1c847674a\.system_generated\steps")
 
-def audit_ref1():
-    print("=" * 80)
-    print("REFERENCE 1: Reiss et al. (Sensors 2019)")
-    print("Citation in conference_paper.tex:")
-    print("  A. Reiss, I. Indlekofer, P. Schmidt, and K. Van Laerhoven,")
-    print("  'Deep PPG: Large-scale heart rate estimation with convolutional neural networks,'")
-    print("  Sensors, vol. 19, no. 14, p. 3079, 2019.")
-    print("-" * 80)
-    path = BASE_LOGS / "6310" / "content.md"
-    txt = path.read_text(encoding="utf-8", errors="ignore")
-    print("[1] Title on page:")
-    print("    'Deep PPG: Large-Scale Heart Rate Estimation with Convolutional Neural Networks'")
-    print("[2] Author line on page:")
-    print("    Attila Reiss, Ina Indlekofer, Philip Schmidt, Kristof Van Laerhoven")
-    print("[3] Journal on page:")
-    print("    Sensors (Basel)")
-    print("[4] Date/Year on page:")
-    print("    Collection date 2019 Jul; Received 2019 May 23; Accepted 2019 Jul 10")
-    print("[5] Volume, Article, DOI on page:")
-    print("    https://doi.org/10.3390/s19143079 -> vol. 19, no. 14, Article 3079")
-    print("    PDF link on page: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6679242/pdf/sensors-19-03079.pdf")
-    print("Status: ALL FIELDS VERIFIED ON PAGE.")
+def find_matched_line(lines, pattern):
+    """Find the first line matching pattern, extracting the tag if line is minified HTML."""
+    if not pattern:
+        return None
+    for line in lines:
+        m = re.search(pattern, line, re.I)
+        if m:
+            stripped = line.strip()
+            # If the raw line is a minified HTML blob, extract the enclosing tag or local snippet
+            if len(stripped) > 250:
+                start = stripped.rfind('<', 0, m.start())
+                end = stripped.find('>', m.end())
+                if start != -1 and end != -1 and (end - start) < 250:
+                    return stripped[start:end+1]
+                s_start = max(0, m.start() - 30)
+                s_end = min(len(stripped), m.end() + 50)
+                return f"... {stripped[s_start:s_end].strip()} ..."
+            return stripped
+    return None
 
-def audit_ref2():
-    print("=" * 80)
-    print("REFERENCE 2: Elgendi (Bioengineering 2016)")
-    print("Citation in conference_paper.tex:")
-    print("  M. Elgendi, 'Optimal signal quality index for photoplethysmogram signals,'")
-    print("  Bioengineering, vol. 3, no. 4, p. 21, 2016.")
-    print("-" * 80)
-    path = BASE_LOGS / "6370" / "content.md"
-    txt = path.read_text(encoding="utf-8", errors="ignore")
-    print("[1] Title on page:")
-    print("    'Optimal Signal Quality Index for Photoplethysmogram Signals'")
-    print("[2] Author line on page:")
-    print("    Mohamed Elgendi")
-    print("[3] Journal on page:")
-    print("    Bioengineering (Basel)")
-    print("[4] Date/Year on page:")
-    print("    Collection date 2016 Dec; Received 2016 Aug 24; Accepted 2016 Sep 19")
-    print("[5] Volume, Article, DOI on page:")
-    print("    https://doi.org/10.3390/bioengineering3040021 -> vol. 3, no. 4, Article 21 (00021)")
-    print("    PDF link on page: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/pdf/bioengineering-03-00021.pdf")
-    print("Status: ALL FIELDS VERIFIED ON PAGE.")
+def main():
+    refs = [
+        {
+            "num": 1,
+            "id": "ref_reiss_dalia",
+            "citation": "A. Reiss, I. Indlekofer, P. Schmidt, and K. Van Laerhoven, 'Deep PPG: Large-scale heart rate estimation with convolutional neural networks,' Sensors, vol. 19, no. 14, p. 3079, 2019.",
+            "file": BASE_LOGS / "6310" / "content.md",
+            "patterns": {
+                "author": r'\[Attila Reiss\]',
+                "title": r'Deep PPG: Large-Scale Heart Rate Estimation',
+                "journal": r'term="Sensors%20\(Basel\)"\[jour\]',
+                "year": r'Collection date 2019',
+                "volume/article": r'sensors-19-03079\.pdf',
+                "DOI": r'10\.3390/s19143079',
+                "URL": r'^Source:\s*https?://',
+            }
+        },
+        {
+            "num": 2,
+            "id": "ref_elgendi_sqi",
+            "citation": "M. Elgendi, 'Optimal signal quality index for photoplethysmogram signals,' Bioengineering, vol. 3, no. 4, p. 21, 2016.",
+            "file": BASE_LOGS / "6370" / "content.md",
+            "patterns": {
+                "author": r'\[Mohamed Elgendi\]',
+                "title": r'Optimal Signal Quality Index',
+                "journal": r'term="Bioengineering%20\(Basel\)"\[jour\]',
+                "year": r'Collection date 2016',
+                "volume/article": r'bioengineering-03-00021\.pdf',
+                "DOI": r'10\.3390/bioengineering3040021',
+                "URL": r'^Source:\s*https?://',
+            }
+        },
+        {
+            "num": 3,
+            "id": "ref_charlton_roadmap",
+            "citation": "P. H. Charlton et al., 'The 2023 wearable photoplethysmography roadmap,' Physiological Measurement, vol. 44, no. 11, p. 111001, 2023, DOI: 10.1088/1361-6579/acead2.",
+            "file": BASE_LOGS / "6396" / "content.md",
+            "patterns": {
+                "author": r'\[Peter H Charlton\]',
+                "title": r'The 2023 wearable photoplethysmography roadmap',
+                "journal": r'term="Physiol%20Meas"\[jour\]',
+                "year": r'Issue date 2023|Collection date 2023',
+                "volume/article": r'pmea_44_11_111001\.pdf',
+                "DOI": r'10\.1088/1361-6579/acead2',
+                "URL": r'^Source:\s*https?://',
+            }
+        },
+        {
+            "num": 4,
+            "id": "ref_vazquez_conformal",
+            "citation": "J. Vazquez and J. C. Facelli, 'Conformal prediction in clinical medical sciences,' Journal of Healthcare Informatics Research, 2022, DOI: 10.1007/s41666-021-00113-8.",
+            "file": BASE_LOGS / "6406" / "content.md",
+            "patterns": {
+                "author": r'\[Janette Vazquez\]',
+                "title": r'Conformal Prediction in Clinical Medical Sciences',
+                "journal": r'term="J%20Healthc%20Inform%20Res"\[jour\]',
+                "year": r'Collection date 2022',
+                "volume/article": None,
+                "DOI": r'10\.1007/s41666-021-00113-8',
+                "URL": r'^Source:\s*https?://',
+            }
+        },
+        {
+            "num": 5,
+            "id": "ref_uci_dalia",
+            "citation": "'PPG-DaLiA,' UCI Machine Learning Repository, DOI: 10.24432/C53890, URL: https://archive.ics.uci.edu/dataset/495/ppg+dalia.",
+            "file": BASE_LOGS / "455" / "content.md",
+            "patterns": {
+                "author": None,
+                "title": r'<title>PPG-DaLiA',
+                "journal": r'<title>UCI Machine Learning Repository',
+                "year": None,
+                "volume/article": None,
+                "DOI": r'https://doi\.org/10\.24432/C53890',
+                "URL": r'^Source:\s*https?://',
+            }
+        },
+        {
+            "num": 6,
+            "id": "ref_physionet_wearable",
+            "citation": "A. Hongn, F. Bosch, L. Prado, and P. Bonomini, 'Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,' PhysioNet, Version 1.0.1, 2025, DOI: 10.13026/he0v-tf17.",
+            "file": BASE_LOGS / "449" / "content.md",
+            "patterns": {
+                "author": r'<meta name="citation_author" content="Hongn, Andrea">',
+                "title": r'<meta name="citation_title" content="Wearable Device Dataset',
+                "journal": r'<meta name="citation_technical_report_institution" content="PhysioNet">',
+                "year": r'<meta name="citation_publication_date" content="2025',
+                "volume/article": r'Version: 1\.0\.1|version 1\.0\.1',
+                "DOI": r'<meta name="citation_doi" content="10\.13026/he0v-tf17">',
+                "URL": r'^Source:\s*https?://',
+            }
+        },
+    ]
 
-def audit_ref3():
-    print("=" * 80)
-    print("REFERENCE 3: Charlton et al. (Physiological Measurement 2023)")
-    print("Citation in conference_paper.tex:")
-    print("  P. H. Charlton et al., 'The 2023 wearable photoplethysmography roadmap,'")
-    print("  Physiological Measurement, vol. 44, no. 11, p. 111001, 2023, DOI: 10.1088/1361-6579/acead2.")
-    print("-" * 80)
-    path = BASE_LOGS / "6396" / "content.md"
-    txt = path.read_text(encoding="utf-8", errors="ignore")
-    print("[1] Title on page:")
-    print("    'The 2023 wearable photoplethysmography roadmap'")
-    print("[2] Author line on page:")
-    print("    Peter H Charlton et al. (Peter H Charlton, John Allen, Raquel Bailon, Mohamed Elgendi, ...)")
-    print("[3] Journal on page:")
-    print("    Physiol Meas (Physiological Measurement)")
-    print("[4] Year on page:")
-    print("    2023 (in title and metadata)")
-    print("[5] Volume, Article, DOI on page:")
-    print("    DOI: 10.1088/1361-6579/acead2")
-    print("    PDF link on page: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/pdf/pmea_44_11_111001.pdf -> vol. 44, no. 11, Article 111001")
-    print("Status: ALL FIELDS VERIFIED ON PAGE.")
+    fields = ["author", "title", "journal", "year", "volume/article", "DOI", "URL"]
 
-def audit_ref4():
-    print("=" * 80)
-    print("REFERENCE 4: Vazquez and Facelli (Journal of Healthcare Informatics Research 2022)")
-    print("Citation in conference_paper.tex:")
-    print("  J. Vazquez and J. C. Facelli, 'Conformal prediction in clinical medical sciences,'")
-    print("  Journal of Healthcare Informatics Research, vol. 6, no. 3, pp. 257-285, 2022.")
-    print("-" * 80)
-    path = BASE_LOGS / "6406" / "content.md"
-    txt = path.read_text(encoding="utf-8", errors="ignore")
-    print("[1] Title on page:")
-    print("    'Conformal Prediction in Clinical Medical Sciences'")
-    print("[2] Author line on page:")
-    print("    Janette Vazquez, Julio C Facelli")
-    print("[3] Journal on page:")
-    print("    J Healthc Inform Res (Journal of Healthcare Informatics Research)")
-    print("[4] Year on page:")
-    print("    Collection date 2022 Sep (Received 2021 Apr 29, Accepted 2021 Dec 28)")
-    print("[5] DOI on page:")
-    print("    https://doi.org/10.1007/s41666-021-00113-8 (Article ID: 113)")
-    print("    PDF link on page: https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/pdf/41666_2021_Article_113.pdf")
-    print("[6] Pagination / Volume Note:")
-    print("    * Volume 6, issue 3, pp. 257-285 is the print pagination assigned by Springer Nature.")
-    print("    * On the PMC HTML reader page, the article is identified by DOI 10.1007/s41666-021-00113-8 and Collection Date 2022 Sep.")
-    print("    * Exact text 'pp. 257-285' is found in publisher CrossRef metadata, not in PMC HTML reader body.")
-    print("Status: Author, Title, Journal, Year 2022, and DOI VERIFIED ON PAGE. Volume 6(3) pp. 257-285 verified via publisher DOI metadata.")
+    for ref in refs:
+        print("=" * 80)
+        print(f"REFERENCE {ref['num']}: {ref['id']}")
+        print(f"File: {ref['file'].name}")
+        print(f"Citation: {ref['citation']}")
+        print("-" * 80)
 
-def audit_ref5():
-    print("=" * 80)
-    print("REFERENCE 5: Reiss, Indlekofer, Schmidt (UCI Machine Learning Repository 2019)")
-    print("Citation in conference_paper.tex:")
-    print("  A. Reiss, I. Indlekofer, and P. Schmidt, 'PPG-DaLiA,' UCI Machine Learning Repository, 2019, DOI: 10.24432/C53890.")
-    print("-" * 80)
-    path = BASE_LOGS / "455" / "content.md"
-    txt = path.read_text(encoding="utf-8", errors="ignore")
-    print("[1] Title on page:")
-    print("    <title>PPG-DaLiA - UCI Machine Learning Repository</title>")
-    print("[2] Repository on page:")
-    print("    UCI Machine Learning Repository (archive.ics.uci.edu/dataset/495/ppg+dalia)")
-    print("[3] DOI on page:")
-    print("    DOI: 10.24432/C53890 (appears 10 times in embedded script metadata and citation links)")
-    print("[4] Authors & Year on page:")
-    print("    Dataset ID 495; Donated/Created in 2019 by authors Attila Reiss, Ina Indlekofer, Philip Schmidt.")
-    print("    * On the live UCI landing page, authors and year are rendered via Svelte client-side hydration from dataset metadata.")
-    print("Status: Title, Repository, and DOI VERIFIED DIRECTLY ON PAGE. Authors/Year verified via linked dataset DOI / donor records.")
+        if not ref["file"].exists():
+            print(f"FILE NOT FOUND: {ref['file']}")
+            continue
 
-def audit_ref6():
-    print("=" * 80)
-    print("REFERENCE 6: Hongn, Bosch, Prado, Bonomini (PhysioNet 2025)")
-    print("Citation in conference_paper.tex:")
-    print("  A. Hongn, F. Bosch, L. Prado, and P. Bonomini, 'Wearable Device Dataset from Induced Stress")
-    print("  and Structured Exercise Sessions,' PhysioNet, Version 1.0.1, 2025, DOI: 10.13026/he0v-tf17.")
-    print("-" * 80)
-    path = BASE_LOGS / "449" / "content.md"
-    txt = path.read_text(encoding="utf-8", errors="ignore")
-    print("[1] Title on page:")
-    print("    <meta name='citation_title' content='Wearable Device Dataset from Induced Stress and Structured Exercise Sessions'>")
-    print("    <title>Wearable Device Dataset from Induced Stress and Structured Exercise Sessions v1.0.1</title>")
-    print("[2] Authors on page:")
-    print("    <meta name='citation_author' content='Hongn, Andrea'>")
-    print("    <meta name='citation_author' content='Bosch, Facundo'>")
-    print("    <meta name='citation_author' content='Prado, Lara'>")
-    print("    <meta name='citation_author' content='Bonomini, Paula'>")
-    print("[3] Institution / Publisher on page:")
-    print("    <meta name='citation_technical_report_institution' content='PhysioNet'>")
-    print("[4] Publication Date / Year on page:")
-    print("    <meta name='citation_publication_date' content='2025/6/24'>")
-    print("[5] DOI and Version on page:")
-    print("    <meta name='citation_doi' content='10.13026/he0v-tf17'>")
-    print("    Version: 1.0.1 (in HTML title, version metadata, and BibTeX citation: 'version 1.0.1')")
-    print("Status: ALL FIELDS VERIFIED ON PAGE.")
+        lines = ref["file"].read_text(encoding="utf-8", errors="ignore").splitlines()
+
+        for field in fields:
+            pat = ref["patterns"].get(field)
+            matched = find_matched_line(lines, pat)
+            if matched:
+                print(f"{field:<15}: {matched}")
+            else:
+                print(f"{field:<15}: NOT FOUND")
 
 if __name__ == "__main__":
-    audit_ref1()
-    audit_ref2()
-    audit_ref3()
-    audit_ref4()
-    audit_ref5()
-    audit_ref6()
+    main()
