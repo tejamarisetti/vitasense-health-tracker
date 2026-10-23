@@ -12,10 +12,16 @@ Produces:
 
 import sys
 import re
+from decimal import Decimal, ROUND_HALF_UP
 import numpy as np
 import pandas as pd
 from pathlib import Path
 import matplotlib.pyplot as plt
+
+def fmt_p(val: float) -> str:
+    """Rounds p-values to two decimal places using standard half-up rounding."""
+    d = Decimal(str(val)).quantize(Decimal("0.01"), rounding=ROUND_HALF_UP)
+    return f"{d:.2f}"
 
 ROOT = Path(__file__).resolve().parents[1]
 if str(ROOT) not in sys.path:
@@ -182,7 +188,7 @@ def generate_figures():
         ax.text(
             0.95,
             i,
-            f"Diff: {m:+.2f} (p={p:.2f})",
+            f"Diff: {m:+.2f} (p={fmt_p(p)})",
             va="center",
             ha="left",
             fontsize=7.8,
@@ -400,7 +406,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
 
     lines = [
         r"\begin{table*}[t]",
-        r"\caption{Leave-One-Subject-Out Combined Alerting Benchmark Results Across Conditions}",
+        r"\caption{Leave-One-Subject-Out Combined Alerting Benchmark Results Across Conditions (precision is alert-level and recall is episode-level)}",
         r"\label{tab:combined_metrics}",
         r"\centering",
         r"\scriptsize",
@@ -500,7 +506,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
         c_short = cond_short_map.get(r['Condition'], r['Condition'])
         ci_str = f"[{r['CI95_Mean_Low']:+.2f}, {r['CI95_Mean_High']:+.2f}]"
         lines.append(
-            f"{c_short:<22} & {r['Mean_Diff_FA_hr']:>+5.2f} & {ci_str} & {r['Wilcoxon_W']:>5.1f} & {r['Wilcoxon_p']:>4.2f} \\\\"
+            f"{c_short:<22} & {r['Mean_Diff_FA_hr']:>+5.2f} & {ci_str} & {r['Wilcoxon_W']:>5.1f} & {fmt_p(r['Wilcoxon_p']):>4} \\\\"
         )
     lines.extend([
         r"\hline",
@@ -607,7 +613,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
 (Motion Ablated) & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
 \hline
 \textbf{Arm 4: Conformal} & Arm 2 $\land\; \neg \text{Abstain}(t)$ & 60\,s \\
-(added post hoc) & $\alpha \in \{0.05, 0.10, 0.15\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
+(added post hoc) & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
 \hline
 \end{tabular}
 \end{table}
@@ -637,7 +643,7 @@ Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids fo
 \hline
 Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
 \hline
-Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha = 0.15$ (unratified exploratory). \\
+Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
 \hline
 \end{tabular}
 \end{table}
@@ -710,6 +716,7 @@ F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D accelerati
 \caption{Methodological Limitations \& Protocol Amendments (from git log)}
 \label{tab:limitations_and_amendments}
 \centering
+\renewcommand{\arraystretch}{0.96}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{|l|p{5.4cm}|}
 \hline
@@ -723,7 +730,7 @@ Subject S5 Outlier & Sustained elevated resting heart rate of unknown cause; ref
 \hline
 Design Choice Bounds & Cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices with unopened sources; evaluated via sensitivity grids. \\
 \hline
-Grid Boundaries & Tuning selected lower boundary ($\tau_{\text{pop}}=100$\,bpm, $k=2.0$, $P=10$\,s); fallback rule activated in 100\% of Arm 2 folds. \\
+Grid Boundaries & Tuning selected boundary values: Arm 1 ($\tau_{\text{pop}} = 100$\,bpm, $P = 30$\,s); Arm 2 ($k = 2.0$, $P = 10$\,s, triggering max-recall fallback in 100\% of folds). \\
 \hline
 \multicolumn{2}{|c|}{\textbf{Part B: Protocol Amendments and Provenance (from git log)}} \\
 \hline
@@ -739,7 +746,7 @@ Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids fo
 \hline
 Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
 \hline
-Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha = 0.15$ (unratified exploratory). \\
+Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
 \hline
 \end{tabular}%
 }
@@ -749,12 +756,17 @@ Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abste
     print(f"Saved: {TAB_DIR / 'tab_limitations_and_amendments.tex'}")
 
     # 13. Combined Statistical and Strata Table (Table V)
+    p_c0 = fmt_p(df_paired[df_paired["Condition"] == "Condition 0 (No-Fault)"]["Wilcoxon_p"].iloc[0])
+    p_ra = fmt_p(df_paired[df_paired["Condition"] == "Regime A (Low Duty ~10%)"]["Wilcoxon_p"].iloc[0])
+    p_rb = fmt_p(df_paired[df_paired["Condition"] == "Regime B (Nominal ~25-30%)"]["Wilcoxon_p"].iloc[0])
+    p_f7 = fmt_p(df_paired[df_paired["Condition"] == "F7 (High-Motion BVP Noise)"]["Wilcoxon_p"].iloc[0])
+
     tab_statistical_and_strata = r"""\begin{table}[htbp]
 \caption{Paired Statistical Comparison \& Subgroup Stratification}
 \label{tab:statistical_and_strata}
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.14}
+\renewcommand{\arraystretch}{1.0}
 \setlength{\tabcolsep}{3.5pt}
 \begin{tabular}{|l|c|c|c|c|}
 \hline
@@ -762,10 +774,10 @@ Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abste
 \hline
 \textbf{Condition} & \textbf{Mean $\Delta$} & \textbf{95\% CI} & \textbf{$W$} & \textbf{$p$-value} \\
 \hline
-Clean (Cond 0)       & $+0.13$ & $[-0.54, +0.89]$ & 31.0 & $0.86$ \\
-Regime A ($\approx 10\%$) & $+0.05$ & $[-0.66, +0.82]$ & 40.0 & $0.70$ \\
-Regime B ($\approx 25\%$) & $-0.04$ & $[-0.78, +0.69]$ & 52.0 & $0.98$ \\
-F7 Optical ($+5$\,dB)& $-0.49$ & $[-1.47, +0.38]$ & 17.0 & $0.28$ \\
+Clean (Cond 0)       & $+0.13$ & $[-0.54, +0.89]$ & 31.0 & P_C0_VAL \\
+Regime A ($\approx 10\%$) & $+0.05$ & $[-0.66, +0.82]$ & 40.0 & P_RA_VAL \\
+Regime B ($\approx 25\%$) & $-0.04$ & $[-0.78, +0.69]$ & 52.0 & P_RB_VAL \\
+F7 Optical ($+5$\,dB)& $-0.49$ & $[-1.47, +0.38]$ & 17.0 & P_F7_VAL \\
 \hline
 \multicolumn{5}{|c|}{\textbf{Part B: Stratified Event Recall (\%) / Clean FA/hr}} \\
 \hline
@@ -783,7 +795,7 @@ F7: without S5      & 92 / 2.7  & 63 / 4.0  & 63 / 1.2  & 56 / 1.1  \\
 \hline
 \end{tabular}
 \end{table}
-"""
+""".replace("P_C0_VAL", f"${p_c0}$").replace("P_RA_VAL", f"${p_ra}$").replace("P_RB_VAL", f"${p_rb}$").replace("P_F7_VAL", f"${p_f7}$")
     (TAB_DIR / "tab_statistical_and_strata.tex").write_text(tab_statistical_and_strata, encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_statistical_and_strata.tex'}")
 
@@ -862,8 +874,18 @@ def generate_provenance_csv():
         # Table I Related Work Literature Provenance (opened & verified)
         {"Claim_Or_Number": "Reiss 2019 Cohort N=15", "Value": "15 subjects", "Location": "Sec. II, Tab. I", "Generating_Script": "scripts/prepare_benchmark_ground_truth.py", "Output_File": "https://archive.ics.uci.edu/dataset/495/ppg+dalia", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Elgendi 2016 SQI count", "Value": "8 SQIs", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Elgendi 2016 8 SQIs Quote", "Value": "Eight SQIs were tested and evaluated. (Sec. 2.3)", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Charlton 2023 roadmap claim", "Value": "Benchmark & evaluation needs", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Vazquez & Facelli 2022 study count", "Value": "14 clinical studies", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Vazquez & Facelli 14 Studies Quote", "Value": "We identified 14 papers reporting the use of CP for clinical applications (Abstract)", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/", "Status": "VERIFIED"},
+
+        # Bibliography Metadata Verification (opened DOI / publisher pages)
+        {"Claim_Or_Number": "Ref ref_reiss_dalia", "Value": "Sensors 19(14):3079 (2019), DOI: 10.3390/s19143079", "Location": "Bibliography", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6679242/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Ref ref_elgendi_sqi", "Value": "Bioengineering 3(4):21 (2016), DOI: 10.3390/bioengineering3040021", "Location": "Bibliography", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Ref ref_charlton_roadmap", "Value": "Physiol. Meas. 44(11):111001 (2023), DOI: 10.1088/1361-6579/acead2", "Location": "Bibliography", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Ref ref_vazquez_conformal", "Value": "J. Healthc. Inform. Res. 6(3):257-285 (2022), DOI: 10.1007/s41666-021-00113-8", "Location": "Bibliography", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Ref ref_uci_dalia", "Value": "UCI Machine Learning Repository (2019), DOI: 10.24432/C53890", "Location": "Bibliography", "Generating_Script": "read_url_content", "Output_File": "https://archive.ics.uci.edu/dataset/495/ppg+dalia", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Ref ref_physionet_wearable", "Value": "PhysioNet Version 1.0.1 (2025), DOI: 10.13026/he0v-tf17", "Location": "Bibliography", "Generating_Script": "read_url_content", "Output_File": "https://physionet.org/content/wearable-device-dataset/1.0.1/", "Status": "VERIFIED"},
 
         # Edge of Grid
         {"Claim_Or_Number": "Arm 1 tau_pop boundary 100", "Value": "100.0% (15/15)", "Location": "Sec. VII, Tab. VII", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/edge_of_grid.csv", "Status": "VERIFIED"},

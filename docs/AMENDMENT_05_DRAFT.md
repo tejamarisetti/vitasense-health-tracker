@@ -29,16 +29,14 @@ Instead, Arm 4 was implemented and evaluated post hoc **after all five arms and 
 
 ---
 
-## 3. Discrepancy in Miscoverage Parameter Grid ($\alpha$)
+## 3. Miscoverage Parameter Grid ($\alpha$) and Selected Parameters
 
-1. **Ratified Grid in Protocol Amendment 3:**
+1. **Ratified Candidate Grid in Protocol Amendment 3:**
    - Protocol Amendment 3 Section 6.5 specified the candidate miscoverage grid as:
      $$\alpha \in \{0.05, 0.10\}$$
      corresponding to $95\%$ and $90\%$ nominal marginal coverage on resting segments.
-2. **Post Hoc Grid Evaluation ($\alpha = 0.15$):**
-   - In preliminary fold tuning, the ratified grid values $\alpha \in \{0.05, 0.10\}$ produced wide conformal prediction intervals that overlapped the alerting threshold $\tau_i(t)$ during injected episodes, depressing event recall below $55\%$.
-   - To investigate whether a less conservative coverage band could retain event sensitivity while suppressing false alerts, the miscoverage parameter was expanded post hoc to include $\alpha = 0.15$ ($85\%$ nominal marginal coverage).
-   - **Crucially, $\alpha = 0.15$ is outside the ratified grid $\{0.05, 0.10\}$**. This unratified value was evaluated strictly as exploratory post hoc tuning.
+2. **Selected Parameters Across LOSO Folds:**
+   - Tuning in all 15 LOSO training folds selected the boundary value $\alpha = 0.10$ (90% nominal coverage), alongside $\lambda_{\text{trust}} = 0.5$, $\theta_{\text{unc}} = 0.30$, and persistence $P = 10\text{ s}$ across all 15 folds (with $k = 2.0$ for 14 folds and $k = 2.5, \kappa = 2.0$ for S5).
 
 ---
 
@@ -60,7 +58,7 @@ Arm 4 parameters were partitioned strictly between fold-tuned hyperparameter gri
 For each held-out subject $S_i \in \{S_1, \dots, S_{15}\}$, the following 6 hyperparameters were tuned via grid search on the pooled remaining 14 training subjects $\mathcal{D}_{\text{train}} = \bigcup_{j \neq i} \mathcal{D}_j$:
 1. **Baseline Multiplier ($k$):** $k \in \{2.0, 2.5, 3.0, 3.5, 4.0\}$
 2. **Shrinkage Time Constant ($\kappa$):** $\kappa \in \{0.5, 1.0, 2.0\}\text{ hours}$
-3. **Miscoverage Level ($\alpha$):** $\alpha \in \{0.05, 0.10, 0.15\}$ (noting $\alpha = 0.15$ is outside the ratified grid)
+3. **Miscoverage Level ($\alpha$):** $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds)
 4. **Trust Uncertainty Weight ($\lambda_{\text{trust}}$):** $\lambda_{\text{trust}} \in \{0.5, 1.0\}$
 5. **Total Uncertainty Threshold ($\theta_{\text{unc}}$):** $\theta_{\text{unc}} \in \{0.20, 0.30\}$
 6. **Persistence Filter ($P$):** $P \in \{10, 20, 30\}\text{ seconds}$

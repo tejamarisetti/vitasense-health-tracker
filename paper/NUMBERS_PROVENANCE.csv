@@ -55,8 +55,16 @@ F7 Wilcoxon p,0.2845,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,
 F7 95% Bootstrap CI,"[-1.47, +0.38]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
 Reiss 2019 Cohort N=15,15 subjects,"Sec. II, Tab. I",scripts/prepare_benchmark_ground_truth.py,https://archive.ics.uci.edu/dataset/495/ppg+dalia,VERIFIED
 Elgendi 2016 SQI count,8 SQIs,"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/,VERIFIED
+Elgendi 2016 8 SQIs Quote,Eight SQIs were tested and evaluated. (Sec. 2.3),"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/,VERIFIED
 Charlton 2023 roadmap claim,Benchmark & evaluation needs,"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/,VERIFIED
 Vazquez & Facelli 2022 study count,14 clinical studies,"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/,VERIFIED
+Vazquez & Facelli 14 Studies Quote,We identified 14 papers reporting the use of CP for clinical applications (Abstract),"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/,VERIFIED
+Ref ref_reiss_dalia,"Sensors 19(14):3079 (2019), DOI: 10.3390/s19143079",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6679242/,VERIFIED
+Ref ref_elgendi_sqi,"Bioengineering 3(4):21 (2016), DOI: 10.3390/bioengineering3040021",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/,VERIFIED
+Ref ref_charlton_roadmap,"Physiol. Meas. 44(11):111001 (2023), DOI: 10.1088/1361-6579/acead2",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/,VERIFIED
+Ref ref_vazquez_conformal,"J. Healthc. Inform. Res. 6(3):257-285 (2022), DOI: 10.1007/s41666-021-00113-8",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/,VERIFIED
+Ref ref_uci_dalia,"UCI Machine Learning Repository (2019), DOI: 10.24432/C53890",Bibliography,read_url_content,https://archive.ics.uci.edu/dataset/495/ppg+dalia,VERIFIED
+Ref ref_physionet_wearable,"PhysioNet Version 1.0.1 (2025), DOI: 10.13026/he0v-tf17",Bibliography,read_url_content,https://physionet.org/content/wearable-device-dataset/1.0.1/,VERIFIED
 Arm 1 tau_pop boundary 100,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
 Arm 1 Persistence boundary 30,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
 Arm 2 k boundary 2.0,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
