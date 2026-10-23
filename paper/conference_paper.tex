@@ -30,26 +30,30 @@
 \title{\LARGE Motion Gating versus Signal Trust Scores for Wearable Heart-Rate Alerting: A Pre-Specified Fault-Injection Benchmark}
 
 \author{
-\IEEEauthorblockN{Student 1}
-\IEEEauthorblockA{\textit{Dept. of Computer Science \& Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala} \\
-\textit{R\&D Institute of Science and Technology} \\
-Chennai, Tamil Nadu, India \\
-email address}
-\and
-\IEEEauthorblockN{Student 2}
-\IEEEauthorblockA{\textit{Dept. of Computer Science \& Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala} \\
-\textit{R\&D Institute of Science and Technology} \\
-Chennai, Tamil Nadu, India \\
-email address}
-\and
-\IEEEauthorblockN{Faculty Supervisor}
-\IEEEauthorblockA{\textit{Dept. of Computer Science \& Engineering} \\
-\textit{Vel Tech Rangarajan Dr. Sagunthala} \\
-\textit{R\&D Institute of Science and Technology} \\
-Chennai, Tamil Nadu, India \\
-email address}
+  \begin{minipage}[t]{0.315\textwidth}\centering
+    \textbf{Student 1} \\
+    \textit{Dept. of Computer Science \& Engineering} \\
+    \textit{Vel Tech Rangarajan Dr. Sagunthala} \\
+    \textit{R\&D Institute of Science and Technology} \\
+    Chennai, Tamil Nadu, India \\
+    email address
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.315\textwidth}\centering
+    \textbf{Student 2} \\
+    \textit{Dept. of Computer Science \& Engineering} \\
+    \textit{Vel Tech Rangarajan Dr. Sagunthala} \\
+    \textit{R\&D Institute of Science and Technology} \\
+    Chennai, Tamil Nadu, India \\
+    email address
+  \end{minipage}\hfill
+  \begin{minipage}[t]{0.315\textwidth}\centering
+    \textbf{Faculty Supervisor} \\
+    \textit{Dept. of Computer Science \& Engineering} \\
+    \textit{Vel Tech Rangarajan Dr. Sagunthala} \\
+    \textit{R\&D Institute of Science and Technology} \\
+    Chennai, Tamil Nadu, India \\
+    email address
+  \end{minipage}
 }
 
 \maketitle
@@ -65,7 +69,7 @@ wearable sensors, photoplethysmography, heart-rate alerting, data quality, fault
 \section{Introduction}
 Ambulatory continuous monitoring with consumer and medical-grade wearables offers substantial potential for early arrhythmia detection. However, wrist photoplethysmography (PPG) is acutely sensitive to motion artifacts, optical decoupling, transmission dropouts, and flatline sensor freezes. When raw optical or derived telemetry signals degrade, alerting algorithms frequently emit spurious notifications. In wearable monitoring and clinical telemetry alike, frequent false alerts risk causing user annoyance and alert fatigue, which can compromise long-term adherence.
 
-To mitigate spurious alarms, modern digital health architectures deploy signal quality indices (SQIs) and multi-component trust heuristics that penalize missing samples, flag frozen values, and bound rate-of-change dynamics. Despite their widespread adoption, the isolated incremental utility of multi-component software trust scores over straightforward kinematic stillness gating (e.g., Euclidean Norm Minus One, ENMO) has rarely been benchmarked under controlled cross-validation. The core protocol was version-tagged before the alerting experiments; later amendments are listed in Table VI; no external public registry was used.
+To mitigate spurious alarms, modern digital health architectures deploy signal quality indices (SQIs) and multi-component trust heuristics that penalize missing samples, flag frozen values, and bound rate-of-change dynamics. Despite their widespread adoption, the isolated incremental utility of multi-component software trust scores over straightforward kinematic stillness gating (e.g., Euclidean Norm Minus One, ENMO) has rarely been benchmarked under controlled cross-validation. The core protocol was version-tagged before the alerting experiments; later amendments are listed in Table~\ref{tab:amendments}; no external public registry was used.
 
 This paper reports a pre-specified fault-injection benchmark for wearable heart-rate alerting. Our contributions are:
 \begin{enumerate}
@@ -75,7 +79,7 @@ This paper reports a pre-specified fault-injection benchmark for wearable heart-
 \end{enumerate}
 
 \section{Literature Survey}
-\textbf{A. Motion Artifact Mitigation in Wrist PPG:} Wrist photoplethysmography (PPG) optically monitors pulsatile blood volume changes in the cutaneous microvascular bed via illuminated LEDs and paired photodiodes \cite{ref_charlton_roadmap}. In ambulatory environments, physical movement introduces severe motion artifacts caused by displacement between the sensor photodiode and the skin, venous blood sloshing, and microvascular pressure transients \cite{ref_bent_sources}. These movement-induced spectral peaks overlap directly with cardiac fundamental frequencies ($1.0\text{--}3.5$\,Hz, corresponding to $60\text{--}210$\,bpm), severely biasing unconstrained peak-detection and Fourier pulse-rate estimates. To recover corrupted cardiac signals, multi-channel kinematic fusion has emerged as a cornerstone of wearable signal processing. Zhang \emph{et al.} \cite{ref_zhang_troika} introduced the TROIKA framework, combining temporal difference filtering, sparse signal reconstruction, and peak tracking against triaxial accelerometry on 12 treadmill subjects. Reiss \emph{et al.} \cite{ref_reiss_dalia} introduced the 15-subject PPG-DaLiA benchmark and deep convolutional tracking architectures, establishing standard Mean Absolute Error (MAE) baselines against chest ECG while noting performance bottlenecks during non-rhythmic wrist movements. Furthermore, Bent \emph{et al.} \cite{ref_bent_sources} systematically characterized device-level sources of wearable optical error across commercial monitors, confirming physical motion as the primary driver of tracking inaccuracies.
+\textbf{A. Motion Artifact Mitigation in Wrist PPG:} Wrist photoplethysmography (PPG) optically monitors pulsatile blood volume changes in the cutaneous microvascular bed via illuminated LEDs and paired photodiodes \cite{ref_charlton_roadmap}. In ambulatory environments, physical movement introduces severe motion artifacts caused by displacement between the sensor photodiode and the skin, venous blood sloshing, and microvascular pressure transients \cite{ref_bent_sources}. These movement-induced spectral peaks overlap directly with cardiac fundamental frequencies ($1.0\text{--}3.5$\,Hz, corresponding to $60\text{--}210$\,bpm), severely biasing unconstrained peak-detection and Fourier pulse-rate estimates. To recover corrupted cardiac signals, multi-channel kinematic fusion has emerged as a cornerstone of wearable signal processing. Zhang \emph{et al.} \cite{ref_zhang_troika} introduced the TROIKA framework, combining temporal difference filtering, sparse signal reconstruction, and peak tracking against triaxial accelerometry on 12 treadmill subjects. Reiss \emph{et al.} \cite{ref_reiss_dalia} introduced the 15-subject PPG-DaLiA benchmark hosted on the UCI repository \cite{ref_uci_dalia} alongside deep convolutional tracking architectures, establishing standard Mean Absolute Error (MAE) baselines against chest ECG while noting performance bottlenecks during non-rhythmic wrist movements. Subsequent wearable telemetry corpora, including the PhysioNet Wearable dataset \cite{ref_physionet_wearable}, have further broadened stress and multi-activity benchmark protocols. Furthermore, Bent \emph{et al.} \cite{ref_bent_sources} systematically characterized device-level sources of wearable optical error across commercial monitors, confirming physical motion as the primary driver of tracking inaccuracies.
 
 \textbf{B. Signal Quality Indices and Multi-Modal Fusion:} Because signal reconstruction cannot fully recover severely decoupled waveforms, extensive research has focused on automated Signal Quality Indices (SQIs) to identify and discard unreliable epochs \cite{ref_elgendi_sqi, ref_charlton_roadmap}. Elgendi \cite{ref_elgendi_sqi} evaluated eight distinct morphological and statistical SQIs, highlighting skewness, kurtosis, and perfusion indices on stationary recordings. Karlen \emph{et al.} \cite{ref_karlen_sqi} advanced real-time quality estimation using repeated Gaussian filtering and continuous template cross-correlation, demonstrating robust identification of uninterpretable pulse waves in clinical and ambulatory settings. In wireless patient monitoring, cross-channel telemetry fusion enhances alert fidelity. Orphanidou \emph{et al.} \cite{ref_orphanidou_sqi} developed unified ECG and PPG quality metrics combining envelope analysis, template matching, and physiological bounds, validating utility on ambulatory wireless recordings. Li and Clifford \cite{ref_li_clifford_fusion} demonstrated that fusing multi-parameter signal quality metrics with dynamic estimation drastically suppresses false alarms in intensive care telemetry without compromising clinical event sensitivity.
 
@@ -86,8 +90,8 @@ This paper reports a pre-specified fault-injection benchmark for wearable heart-
 \label{tab:related_work}
 \centering
 \scriptsize
-\renewcommand{\arraystretch}{0.75}
-\setlength{\tabcolsep}{2.0pt}
+\renewcommand{\arraystretch}{0.88}
+\setlength{\tabcolsep}{2.2pt}
 \begin{tabular}{|p{1.45cm}|p{1.30cm}|p{1.70cm}|p{1.60cm}|p{1.65cm}|}
 \hline
 \textbf{Study} & \textbf{Data} & \textbf{Method} & \textbf{Quality/\allowbreak uncertainty} & \textbf{Relevance} \\[4pt]
@@ -262,13 +266,13 @@ To ensure rigorous cross-arm comparability, all arms feed instantaneous binary t
 \end{algorithm}
 \begin{figure*}[t]
 \centering
-\begin{minipage}{0.48\textwidth}
+\begin{minipage}{0.485\textwidth}
   \centering
   \includegraphics[width=\linewidth]{figures/fig_recall_vs_fahr.pdf}\par
   \smallskip
   {\footnotesize (a) Event Recall vs Clean False Alerts per Hour across Arms and Regimes\par}
 \end{minipage}\hfill
-\begin{minipage}{0.48\textwidth}
+\begin{minipage}{0.485\textwidth}
   \centering
   \includegraphics[width=\linewidth]{figures/fig_forest_plot_3b_vs_3a.pdf}\par
   \smallskip
@@ -277,13 +281,13 @@ To ensure rigorous cross-arm comparability, all arms feed instantaneous binary t
 
 \medskip
 
-\begin{minipage}{0.48\textwidth}
+\begin{minipage}{0.485\textwidth}
   \centering
   \includegraphics[width=\linewidth]{figures/fig_persubject_fahr.pdf}\par
   \smallskip
   {\footnotesize (c) Per-Subject False Alerts per Hour in Clean Data (Condition 0)\par}
 \end{minipage}\hfill
-\begin{minipage}{0.48\textwidth}
+\begin{minipage}{0.485\textwidth}
   \centering
   \includegraphics[width=\linewidth]{figures/fig_arm1_sensitivity.pdf}\par
   \smallskip
@@ -300,8 +304,6 @@ Hyperparameters were tuned strictly within 15 LOSO training folds. For test subj
 
 Scoring assesses event-level recall (injected episodes within $[t_{\text{start}}, t_{\text{end}}]$) alongside alert-level clean false alerts per hour ($\text{FA/hr}$), precision, and $F_1$ score. Paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) are tested via two-sided Wilcoxon signed-rank tests ($\alpha = 0.05$), Hodges-Lehmann median estimators, and 95\% subject-bootstrap confidence intervals (10,000 resamples).
 
-\input{tables/tab_combined_metrics.tex}
-
 \section{Results and Discussion}
 \subsection{Primary Hypothesis $H_1$ Outcome: Estimation Finding}
 In Protocol Amendment~3, the primary research question was formulated as an estimation question: ``\emph{What is the difference in False Alerts per Hour between Arm 3b and Arm 3a $(\Delta\text{FA/hr} = \text{FA/hr}_{\text{Arm 3b}} - \text{FA/hr}_{\text{Arm 3a}})$, quantified with a 95\% subject-bootstrap confidence interval?}'' with stated targets ($\ge 60\%$ reduction in FA/hr relative to kinematic-only gating, and $\ge 85\%$ recall on genuine synthetic alert events maintained as stated targets, not rigid pass/fail criteria). In paired comparisons across the four evaluated conditions (Table~\ref{tab:paired_comparison}, Fig.~\ref{fig:results_all}b), Arm~3b demonstrated no statistically detectable false-alert reduction over Arm~3a, with mean differences between $-0.49$ and $+0.13$\,FA/h, all 95\% CIs including zero, and Wilcoxon signed-rank $p$ ranging from $0.28$ to $0.98$ (Table~\ref{tab:paired_comparison}).
@@ -310,6 +312,7 @@ In Protocol Amendment~3, the primary research question was formulated as an esti
 \input{tables/tab_strata.tex}
 
 \subsection{Secondary Benchmark Findings}
+\input{tables/tab_combined_metrics.tex}
 \textbf{Kinematic motion gating drives alert accuracy:} Kinematic stillness gating accounted for the largest share of false-alert suppression: relative to ungated Arm 2, Arm 3a reduced false alerts per hour by 74.2\% in clean data ($1.47$ vs $5.69$\,FA/h) and by 67.9\% in Regime B ($2.30$ vs $7.16$\,FA/h) (Table~\ref{tab:combined_metrics}). Furthermore, the no-motion trust ablation (Arm 3b-noMotion) alone reduced clean false alerts by about half ($5.69$ to $2.91$\,FA/h).
 
 \textbf{Recall degradation under optical corruption (F7):} Under intense motion-coupled optical noise, Arm 3b recall degraded to 58.0\% compared to 64.3\% in Arm 3a; two subjects drive the F7 recall difference (exploratory). In fault-disaggregated analysis of Regime B, stale sensor values (F2) in Arm~1 and scale errors (F6) in Arm~2 produced the highest false alert rates (up to $20.2$ and $36.6$\,FA/h, respectively); while kinematic gating suppressed stale-freeze false alerts, F2 episodes represent small exposure slices ($<1.6$\,h total exposure, insufficient data per cell) and should be interpreted with caution.
@@ -325,17 +328,18 @@ To benchmark distribution-free selective alerting, Arm 4 was pre-specified in Am
     \item \textbf{Synthetic Event Injection:} Resting tachycardia episodes were synthetically injected due to natural event sparsity in healthy volunteers; Arm~1 recall ($>91\%$) depends on the $[105, 135]$\,bpm injection range.
     \item \textbf{Cohort Homogeneity:} Evaluated on 15 healthy young individuals in structured laboratory and ambulatory daily-life tasks; unconstrained 24/7 free-living tracking remains unproven.
     \item \textbf{Error Propagation:} Front-end optical tracking inaccuracies propagate directly into downstream baseline and trust computation.
-    \item \textbf{Subject S5 Outlier:} Subject S5 exhibited sustained elevated resting pulse rate (reference ECG clean), necessitating dual pooled and stratified reporting.
+    \item \textbf{Subject S5 Outlier:} Subject S5 exhibited sustained elevated resting pulse rate (reference ECG clean), necessitating dual pooled and stratified reporting (Table~\ref{tab:strata}).
     \item \textbf{Post-Hoc Conformal Implementation:} Arm~4 was pre-specified in Amendment~3 but implemented after other arms' outcomes were observed.
     \item \textbf{External Corpora:} Validation on external ambulatory cohorts (e.g., PhysioNet Wearable, WESAD) was deferred to future work.
 \end{itemize}
 
 \input{tables/tab_amendments.tex}
 
-\section{Future Scope and Conclusion}
-\textbf{Future Scope:} Future efforts will extend this benchmark along five technical avenues: (1)~online dynamic conformal martingales under covariate shifts \cite{ref_vazquez_conformal}; (2)~external wearable corpora evaluation, including PhysioNet Wearable \cite{ref_physionet_wearable} and WESAD; (3)~ambulatory inpatient holter validation with spontaneous arrhythmias; (4)~on-device microcontroller deployment of causal baseline and kinematic gating engines; and (5)~prospective clinical validation of operational symptom review (FR-06) and local explanation (FR-07) modules.
+\section{Future Work}
+Future efforts will extend this benchmark along five technical avenues: (1)~online dynamic conformal martingales under covariate shifts \cite{ref_vazquez_conformal}; (2)~external wearable corpora evaluation, including PhysioNet Wearable \cite{ref_physionet_wearable} and WESAD; (3)~ambulatory inpatient holter validation with spontaneous arrhythmias; (4)~on-device microcontroller deployment of causal baseline and kinematic gating engines; and (5)~prospective clinical validation of operational symptom review (FR-06) and local explanation (FR-07) modules.
 
-\textbf{Conclusion:} In this pre-specified and version-tagged fault-injection benchmark, kinematic motion gating accounted for the largest share of false-alert suppression in wearable heart-rate monitoring, while the no-motion trust ablation (Arm 3b-noMotion) alone reduced clean false alerts by about half ($5.69$ to $2.91$\,FA/h). Multi-component software trust scoring offered no statistically detectable incremental benefit over kinematic stillness gating. Fixed thresholding with persistence achieved the highest recall but lower precision, and its recall depends directly on the 105--135\,bpm injection range. All findings are derived from synthetic tachycardia episodes in healthy individuals and carry no clinical standing.
+\section{Conclusion}
+In this pre-specified and version-tagged fault-injection benchmark, kinematic motion gating accounted for the largest share of false-alert suppression in wearable heart-rate monitoring, while the no-motion trust ablation (Arm 3b-noMotion) alone reduced clean false alerts by about half ($5.69$ to $2.91$\,FA/h). Multi-component software trust scoring offered no statistically detectable incremental benefit over kinematic stillness gating. Fixed thresholding with persistence achieved the highest recall but lower precision, and its recall depends directly on the 105--135\,bpm injection range. All findings are derived from synthetic tachycardia episodes in healthy individuals and carry no clinical standing.
 
 \section*{Regulatory, Data, and Code Availability}
 \textbf{Regulatory Status (Not a Medical Device):} VitaSense AI software, alerting algorithms, and benchmark suite are academic research artifacts. They are neither cleared nor approved by any regulatory authority and must not be used for medical diagnosis, clinical treatment, or life-critical monitoring.
