@@ -675,6 +675,79 @@ Arm 4 Status & Arm 4 inductive conformal abstention evaluated post hoc with $\al
     (TAB_DIR / "tab_limitations.tex").write_text(tab_limitations, encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_limitations.tex'}")
 
+    # 11. Dataset and Faults Combined Table
+    tab_dataset_and_faults = r"""\begin{table}[htbp]
+\caption{PPG-DaLiA Benchmark Dataset \& Injected Fault Regimes}
+\label{tab:dataset_and_faults}
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|p{5.0cm}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Part A: PPG-DaLiA Benchmark Dataset Characteristics \cite{ref_reiss_dalia}}} \\
+\hline
+Subjects & $N = 15$ healthy individuals (7 male, 8 female, age 21--55) \\
+Duration & $\approx 2.4$\,h per subject ($35.94$ total recording hours; $31.27$ non-event exposure hours) \\
+Activities & Sitting, Walking, Stairs, Cycling, Driving, Lunch, Soccer \\
+Sensors & Wrist Empatica E4 (BVP: 64\,Hz, 3D ACC: 32\,Hz) \\
+Ground Truth & Chest ECG (RespiBAN, 700\,Hz, strictly quarantined) \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Part B: Evaluated Telemetry \& Sensor Fault Regimes (Amendment 3)}} \\
+\hline
+Condition 0 & Clean ambulatory background ($31.27$\,h non-event exposure) \\
+Regime A & Low-duty ($\approx 10\%$ faults): sporadic gaps (F1), freeze (F2), duplicates (F3), drift (F5), scale errors (F6) \\
+Regime B & Nominal-duty ($\approx 25\text{--}30\%$ faults): prolonged flatlines, frequent dropouts, scale errors (seed 42) \\
+F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D acceleration injected into raw BVP (SNR $+5$\,dB) \\
+\hline
+\end{tabular}%
+}
+\end{table}
+"""
+    (TAB_DIR / "tab_dataset_and_faults.tex").write_text(tab_dataset_and_faults, encoding="utf-8")
+    print(f"Saved: {TAB_DIR / 'tab_dataset_and_faults.tex'}")
+
+    # 12. Combined Limitations and Amendments Table
+    tab_limitations_and_amendments = r"""\begin{table}[htbp]
+\caption{Methodological Limitations \& Protocol Amendments (from git log)}
+\label{tab:limitations_and_amendments}
+\centering
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|p{5.4cm}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Part A: Methodological Constraints and Threats to Validity}} \\
+\hline
+Synthetic Injection & 112 episodes ($105$--$135$\,bpm); Arm 1 recall is directly tied to this injection range vs 100\,bpm floor. \\
+\hline
+Cohort \& Protocol & $N = 15$ healthy adults in PPG-DaLiA protocol; free-living unconstrained 24/7 monitoring unproven. \\
+\hline
+Subject S5 Outlier & Severe baseline drift and motion artifact; metrics reported both pooled (All-15) and without S5. \\
+\hline
+Design Choice Bounds & Cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices with unopened sources; evaluated via sensitivity grids. \\
+\hline
+Grid Boundaries & Tuning selected lower boundary ($\tau_{\text{pop}}=100$\,bpm, $k=2.0$, $P=10$\,s); fallback rule activated in 100\% of Arm 2 folds. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Part B: Protocol Amendments and Provenance (from git log)}} \\
+\hline
+Protocol Freeze [\texttt{41eff1e}] & 2026-10-18: Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
+\hline
+ENMO Scale Fix [\texttt{3a5ccc2}] & 2026-10-19: Removed redundant /64 accelerometer division, enforced median norm check $[0.8, 1.2]$\,g. \\
+\hline
+Adaptive Ramp [\texttt{e358bf1}] & 2026-10-19: Adapted synthetic tachycardia ramp rates ($r_{\text{lo}}, r_{\text{hi}}$) clamped to $[105, 135]$\,bpm. \\
+\hline
+Emitter Rules [\texttt{cad4c7f}] & 2026-10-19: StandardAlertEmitter with $P \in \{10, 20, 30\}$\,s and refractory $R = 60$\,s across all arms. \\
+\hline
+Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids for $\tau_{\text{pop}}$ and $k$ following boundary selection. \\
+\hline
+Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
+\hline
+Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha = 0.15$ (unratified exploratory). \\
+\hline
+\end{tabular}%
+}
+\end{table}
+"""
+    (TAB_DIR / "tab_limitations_and_amendments.tex").write_text(tab_limitations_and_amendments, encoding="utf-8")
+    print(f"Saved: {TAB_DIR / 'tab_limitations_and_amendments.tex'}")
+
 
 
 def generate_provenance_csv():

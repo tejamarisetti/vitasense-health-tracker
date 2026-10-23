@@ -1,9 +1,9 @@
 # VitaSense AI - PRD Traceability Matrix
 
-**Document Version:** 3.0.0  
-**Generated Date:** 2026-10-22  
+**Document Version:** 3.1.0  
+**Generated Date:** 2026-10-23  
 **PRD Reference:** [docs/PRD.pdf](file:///d:/projects/health%20tracker/docs/PRD.pdf) (*VitaSense AI Product Requirements Document Version 2.0, 16 October 2026, Section 8 Functional Requirements*).  
-**Requirements Traceability Rule:** Requirement wording is transcribed verbatim from `docs/PRD.pdf` Section 8. Requirement statuses are determined strictly by verified implementation evidence and automated test execution. Per instructions, FR-06 and FR-07 are not started; FR-10 is backed by a verified backend API and interactive UI implementation.
+**Requirements Traceability Rule:** Requirement wording is transcribed verbatim from `docs/PRD.pdf` Section 8. Requirement statuses are determined strictly by verified implementation evidence and automated test execution.
 
 ---
 
@@ -39,7 +39,7 @@
 * **Evidence / Notes:**
   - Server-side PBKDF2-HMAC-SHA256 with 600,000 iterations and per-user salt.
   - Hashed session tokens stored with expiration and revocation support in SQLite.
-  - Real error reporting on connection failure with retry; offline fallback session bypass completely removed.
+  - Real error reporting on connection failure with retry action; offline fallback session bypass completely removed.
   - Server-side `POST /api/auth/demo` creates/reuses DEMO account without client credentials.
   - Password reset modal explicitly states "Password reset is not enabled in this build."
 
@@ -79,9 +79,10 @@
   - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
 * **Automated Test References:**
   - [tests/test_phase2_auth_measurements.py:L126-L230](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L126-L230) (`test_measurement_ingestion_and_user_isolation`, `test_measurement_server_side_validation_errors`, `test_user_cannot_read_another_users_measurements`)
+  - [tests/test_phase2_auth_measurements.py:L219](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L219) (`delete_measurement` isolation verification)
 * **Evidence / Notes:**
-  - **Implemented:** Ingestion, validation, range checking, and inspection of supported measures (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`) with row-level user isolation.
-  - **Missing Evidence (Partial):** Individual measurement editing (`PUT /api/measurements/{id}`) and individual entry deletion (`DELETE /api/measurements/{id}`) are not implemented. Users can view entries and delete their entire account or clear demo records, but cannot correct or delete individual recorded points.
+  - **Implemented:** Ingestion (`POST /api/measurements`), validation, range checking, inspection (`GET /api/measurements`, `GET /api/measurements/{id}`), and individual measurement deletion (`DELETE /api/measurements/{id}`, lines 572-593) of supported measures (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`) with row-level user isolation.
+  - **Missing Evidence (Partial):** Individual measurement editing or correction (`PUT /api/measurements/{id}` or `PATCH /api/measurements/{id}`) is not implemented. Users can inspect entries and delete entries, but cannot correct recorded values in place.
 
 ---
 
@@ -121,8 +122,8 @@
 * **Automated Test References:**
   - Verified via frontend build `npm.cmd run build` (0 TypeScript / JSX errors)
 * **Evidence / Notes:**
-  - **Implemented:** Displays latest available readings, recent alerts, animated waveform, trust indicators, and quick links to Symptom Lab and Trends. Demo data is clearly tagged.
-  - **Missing Evidence (Partial):** Missing dedicated empty state when zero records exist offering a direct action to add data or load demo data; missing explicit quick link to "Add Measurement" modal/flow from the dashboard.
+  - **Implemented:** Displays latest available readings with timestamp and source ("Demo wearable"), trend preview card, recent alerts summary, animated waveform, trust indicators, and quick links to Symptom Lab (`Assess Symptoms (FR-06)`), AI Companion, and Trends. Demo data is clearly tagged with "Streaming demo data".
+  - **Missing Evidence (Partial):** Overview dashboard uses static demo illustrations rather than dynamically querying `/api/measurements`; missing dynamic zero-record empty state offering a direct action to add data or load demo data; missing direct quick-link button to "Add Measurement" modal/flow from the dashboard.
 
 ---
 
@@ -186,8 +187,8 @@
   - [tests/test_phase2_auth_measurements.py](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py)
   - Frontend build verification (`npm.cmd run build`)
 * **Evidence / Notes:**
-  - **Implemented:** Supports 24H, 7D, 30D, 3M views, summary metrics, units, and data export.
-  - **Missing Evidence (Partial):** Discrete raw points are not plotted separately from continuous interpolated lines; missing intervals/interpolations are not visually marked on charts; future predictions are not separated from historical observations.
+  - **Implemented:** Supports preset range tabs for 24H (daily), 7D (weekly), 30D (monthly), and 3M; summary metrics (min, max, average, baseline deviations); units and data export.
+  - **Missing Evidence (Partial):** Free-form custom date range picker (calendar start/end dates) is missing; discrete raw measurement scatter points are not plotted separately from continuous interpolated lines; missing intervals/interpolations are not visually marked on charts; future predictions are not separated from historical observations.
 
 ---
 
@@ -208,8 +209,8 @@
 * **Automated Test References:**
   - [tests/test_phase3_features.py:L106-L230](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L106-L230) (`test_user_alerts_crud_acknowledge_dismiss`, duplicate suppression, isolation)
 * **Evidence / Notes:**
-  - **Implemented:** Alert retrieval, ingestion, non-destructive acknowledgment/dismissal, duplicate suppression (60s refractory), and informational disclaimers.
-  - **Missing Evidence (Partial):** Automated background rule-generation of alerts directly upon measurement ingestion is missing; user configuration of alert threshold preferences is not supported in the UI or backend.
+  - **Implemented:** Full alert lifecycle (`GET /api/alerts`, `POST /api/alerts`, `POST /api/alerts/{id}/acknowledge`, `POST /api/alerts/{id}/dismiss`). Acknowledgment and dismissal update status non-destructively without deleting the underlying event record. Duplicate suppression is enforced via a 60-second refractory window. Cautious informational disclaimers are displayed and persisted. In offline benchmark, rule-based alerts are emitted across Arms 1--4.
+  - **Missing Evidence (Partial):** Automated live background rule-generation of alerts directly upon measurement submission is missing; interactive user configuration of alert threshold preferences (e.g. threshold sliders or notification preference toggles) is not supported in the UI or backend.
 
 ---
 
@@ -227,7 +228,7 @@
 * **Automated Test References:**
   - [tests/test_phase3_features.py:L232-L321](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L232-L321) (`test_user_history_pagination_and_filtering`, isolation)
 * **Evidence / Notes:**
-  - Unified `GET /api/history` with category filtering, type filtering, pagination metadata, and owner isolation.
+  - Unified `GET /api/history` with category filtering (`all`, `measurements`, `alerts`, `assessments`), type filtering, pagination metadata, and owner isolation.
   - Interactive UI with expandable payload view and page controls in `TrendsPage.tsx`.
 
 ---
@@ -267,8 +268,8 @@
 * **Automated Test References:**
   - [tests/test_phase2_auth_measurements.py:L322-L379](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L322-L379) (`test_demo_data_population_and_non_destructive_reset`)
 * **Evidence / Notes:**
-  - **Implemented:** Demo accounts, demo data seeding, clear DEMO tags, and non-destructive demo reset.
-  - **Missing Evidence (Partial):** Guided first-run onboarding state explaining the application, data sources, and non-diagnostic purpose to a first-time user is not implemented.
+  - **Implemented:** Server-side demo entry `POST /api/auth/demo`, demo data seeding, clear DEMO tags, and non-destructive demo reset endpoint `POST /api/measurements/demo/reset` which deletes only demo records and preserves real records.
+  - **Missing Evidence (Partial):** Guided first-run onboarding state (e.g. multi-step tour or modal explaining app capabilities, data sources, and non-diagnostic purpose on initial login) is not implemented.
 
 ---
 
@@ -284,11 +285,15 @@
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
   - [src/pages/SettingsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx)
 * **Automated Test References:**
-  - [tests/test_phase3_features.py:L323-L376](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L323-L376) (`test_data_export_and_account_deletion`)
-  - [tests/test_auth_offline.py](file:///d:/projects/health%20tracker/tests/test_auth_offline.py) (`test_no_credentials_in_frontend_source`)
+  - [tests/test_phase3_features.py:L395-L466](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L395-L466) (`test_user_data_export_isolated_and_sanitized`, `test_user_account_deletion_cascades_all_data`)
+  - [tests/test_auth_offline.py](file:///d:/projects/health%20tracker/tests/test_auth_offline.py) (`test_scan_src_no_hardcoded_passwords_or_demo_credentials`)
 * **Evidence / Notes:**
-  - **Implemented:** Data export (`GET /api/auth/export`), account deletion (`DELETE /api/auth/account`), no credentials in frontend code or logs.
-  - **Missing Evidence (Partial):** An explicit explanation of what information is collected and why shown *before* collecting it is missing from registration and measurement forms.
+  - **Implemented (Built in Phase 3):**
+    - Full GDPR-compliant data export endpoint `GET /api/auth/export` ([vitasense/api/auth.py:L552-L639](file:///d:/projects/health%20tracker/vitasense/api/auth.py#L552-L639)) with client-side JSON export trigger in [src/pages/SettingsPage.tsx:L104-L128](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx#L104-L128). Test verified in `test_phase3_features.py:L395-L420` (guaranteeing password and salt are never exported).
+    - Permanent account and telemetry deletion endpoint `DELETE /api/auth/account` ([vitasense/api/auth.py:L641-L656](file:///d:/projects/health%20tracker/vitasense/api/auth.py#L641-L656)) with foreign-key cascading across sessions, profiles, measurements, and alerts. Triggerable via [src/pages/SettingsPage.tsx:L130-L160](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx#L130-L160) and test verified in `test_phase3_features.py:L422-L466`.
+    - Secrets and credentials completely eliminated from `src/` (verified via `test_auth_offline.py`).
+    - Sensitive password hashes and personal telemetry excluded from application logs.
+  - **Missing Evidence (Partial):** An explicit, upfront pre-collection disclosure notice (explaining what data is collected and why *before* the user submits data) is not rendered on the registration or measurement entry forms.
 
 ---
 

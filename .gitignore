@@ -60,6 +60,17 @@ models/*.onnx
 data/*.db
 *.timestamp-*.mjs
 
-# LaTeX intermediates
+# LaTeX intermediates & page renders
 *.aux
 *.out
+*.log
+*.synctex.gz
+paper/page*.png
+paper/test_tikz.*
+
+# Temporary extraction files
+docs/PRD_EXTRACTED_TEXT.txt
+
+# Caches
+.cache/
+*.cache

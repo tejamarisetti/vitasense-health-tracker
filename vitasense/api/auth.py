@@ -59,6 +59,7 @@ class SlidingWindowRateLimiter:
 register_limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=60.0)
 login_limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=60.0)
 contact_limiter = SlidingWindowRateLimiter(max_requests=5, window_seconds=60.0)
+demo_limiter = SlidingWindowRateLimiter(max_requests=10, window_seconds=60.0)
 
 
 def get_client_ip(request: Request) -> str:
@@ -656,11 +657,27 @@ def delete_user_account(current_user: dict = Depends(get_current_user)):
 
 
 @router.post("/demo", response_model=AuthResponse)
-def demo_login():
+def demo_login(request: Request):
     """
     Creates or reuses a server-side account labelled DEMO (no 'Dr.' persona, no fixed password in client code).
+    Rate limited and protected by ENABLE_DEMO_LOGIN environment switch.
     Returns a valid session token.
     """
+    enable_demo = os.getenv("ENABLE_DEMO_LOGIN", "true").strip().lower() in ("true", "1", "yes")
+    if not enable_demo:
+        raise HTTPException(
+            status_code=status.HTTP_403_FORBIDDEN,
+            detail="Demo account access is disabled in this environment.",
+        )
+
+    client_ip = get_client_ip(request)
+    if not demo_limiter.check(client_ip):
+        raise HTTPException(
+            status_code=status.HTTP_429_TOO_MANY_REQUESTS,
+            detail="Too many demo access requests. Please wait before retrying.",
+            headers={"Retry-After": "60"},
+        )
+
     demo_email = "demo@vitasense.local"
     demo_name = "DEMO"
     now_iso = datetime.now(timezone.utc).isoformat()

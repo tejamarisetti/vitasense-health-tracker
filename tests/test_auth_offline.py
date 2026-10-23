@@ -10,6 +10,7 @@ import os
 import re
 from pathlib import Path
 import pytest
+import secrets
 from fastapi.testclient import TestClient
 
 from vitasense.api.app import app
@@ -94,3 +95,155 @@ def test_no_credentials_strings_in_src():
         f"Found hard-coded credentials or banned persona strings in src/:\n"
         + "\n".join(suspicious_matches)
     )
+
+
+def test_demo_no_fixed_password():
+    """
+    Verifies that the demo account uses a random, salted, PBKDF2-hashed password
+    generated server-side and never leaks a fixed password or password hash.
+    """
+    res = client.post("/api/auth/demo")
+    assert res.status_code == 200
+    data = res.json()
+
+    # Verify no password or salt in response
+    assert "password" not in data
+    assert "password_hash" not in data
+    assert "salt" not in data
+
+    # Verify user row in database has non-trivial salt and hash
+    from vitasense.api.db import get_db_connection
+    with get_db_connection() as conn:
+        row = conn.execute("SELECT password_hash, salt FROM users WHERE email = 'demo@vitasense.local'").fetchone()
+        assert row is not None
+        assert len(row["password_hash"]) == 64  # SHA-256 hex digest
+        assert len(row["salt"]) >= 16
+
+
+def test_demo_rate_limiting():
+    """
+    Verifies that POST /api/auth/demo enforces rate limiting (10 requests per minute)
+    and returns HTTP 429 when the limit is exceeded.
+    """
+    from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+
+    # Make 10 allowed calls
+    for i in range(10):
+        r = client.post("/api/auth/demo")
+        assert r.status_code == 200, f"Call {i+1} failed: {r.text}"
+
+    # 11th call must trigger 429
+    r_blocked = client.post("/api/auth/demo")
+    assert r_blocked.status_code == 429
+    assert "Too many demo access requests" in r_blocked.json()["detail"]
+
+    # Reset limiter so other tests are unaffected
+    demo_limiter.reset()
+
+
+def test_demo_environment_switch_disabled(monkeypatch):
+    """
+    Verifies that setting ENABLE_DEMO_LOGIN=false disables the demo endpoint
+    with HTTP 403 Forbidden.
+    """
+    from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+
+    monkeypatch.setenv("ENABLE_DEMO_LOGIN", "false")
+    res = client.post("/api/auth/demo")
+    assert res.status_code == 403
+    assert "Demo account access is disabled" in res.json()["detail"]
+
+
+def test_demo_cannot_access_other_users_data():
+    """
+    Verifies strict multi-tenant isolation:
+    A session obtained via POST /api/auth/demo cannot read, list, or export
+    measurements or alerts belonging to another registered user.
+    """
+    from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+
+    # 1. Register a private user and insert a private measurement and alert
+    unique_email = f"confidential_{secrets.token_hex(4)}@example.com"
+    reg_res = client.post(
+        "/api/auth/register",
+        json={
+            "email": unique_email,
+            "password": "SecurePassword987!",
+            "name": "Confidential Patient",
+            "age": 45,
+            "sex": "Female",
+            "height": "165 cm",
+            "weight": "60 kg",
+            "resting_hr": 68,
+        },
+    )
+    assert reg_res.status_code == 201
+    patient_token = reg_res.json()["token"]
+    patient_id = reg_res.json()["user"]["id"]
+    patient_headers = {"Authorization": f"Bearer {patient_token}"}
+
+    from datetime import datetime, timezone
+    now_iso = datetime.now(timezone.utc).isoformat()
+
+    # Add private measurement
+    m_res = client.post(
+        "/api/measurements",
+        headers=patient_headers,
+        json={
+            "type": "heart_rate",
+            "value": 88.0,
+            "unit": "bpm",
+            "timestamp": now_iso,
+            "source": "manual",
+        },
+    )
+    assert m_res.status_code == 201
+    private_meas_id = m_res.json()["id"]
+
+    # Add private alert
+    a_res = client.post(
+        "/api/alerts",
+        headers=patient_headers,
+        json={
+            "type": "heart_rate",
+            "title": "Private Patient Alert",
+            "message": "Highly confidential health warning.",
+            "severity": "warning",
+        },
+    )
+    assert a_res.status_code == 201
+    private_alert_id = a_res.json()["id"]
+
+    # 2. Log in as demo user
+    demo_res = client.post("/api/auth/demo")
+    assert demo_res.status_code == 200
+    demo_token = demo_res.json()["token"]
+    demo_headers = {"Authorization": f"Bearer {demo_token}"}
+
+    # 3. Verify demo user CANNOT access private measurement by ID
+    get_m = client.get(f"/api/measurements/{private_meas_id}", headers=demo_headers)
+    assert get_m.status_code == 404, "Demo session must NOT access other users' measurements"
+
+    # 4. Verify demo user list does NOT contain private measurement
+    list_m = client.get("/api/measurements", headers=demo_headers)
+    assert list_m.status_code == 200
+    demo_meas_ids = [m["id"] for m in list_m.json()]
+    assert private_meas_id not in demo_meas_ids, "Private measurement leaked in demo measurements list"
+
+    # 5. Verify demo user alerts list does NOT contain private alert
+    list_a = client.get("/api/alerts", headers=demo_headers)
+    assert list_a.status_code == 200
+    demo_alert_ids = [a["id"] for a in list_a.json()]
+    assert private_alert_id not in demo_alert_ids, "Private alert leaked in demo alerts list"
+
+    # 6. Verify demo user data export does NOT contain private user's info
+    export_res = client.get("/api/auth/export", headers=demo_headers)
+    assert export_res.status_code == 200
+    export_data = export_res.json()
+    assert export_data["account"]["email"] == "demo@vitasense.local"
+    assert export_data["account"]["id"] != patient_id
+    exported_meas_ids = [m["id"] for m in export_data.get("measurements", [])]
+    assert private_meas_id not in exported_meas_ids, "Private measurement leaked in demo export"

@@ -2,10 +2,8 @@
 \caption{PPG-DaLiA Benchmark Dataset \& Injected Fault Regimes}
 \label{tab:dataset_and_faults}
 \centering
-\footnotesize
-\renewcommand{\arraystretch}{1.10}
-\setlength{\tabcolsep}{3.0pt}
-\begin{tabular}{|l|p{4.75cm}|}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|p{5.0cm}|}
 \hline
 \multicolumn{2}{|c|}{\textbf{Part A: PPG-DaLiA Benchmark Dataset Characteristics \cite{ref_reiss_dalia}}} \\
 \hline
@@ -22,5 +20,6 @@ Regime A & Low-duty ($\approx 10\%$ faults): sporadic gaps (F1), freeze (F2), du
 Regime B & Nominal-duty ($\approx 25\text{--}30\%$ faults): prolonged flatlines, frequent dropouts, scale errors (seed 42) \\
 F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D acceleration injected into raw BVP (SNR $+5$\,dB) \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
 \end{table}
