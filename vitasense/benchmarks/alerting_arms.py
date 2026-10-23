@@ -115,7 +115,7 @@ class Arm1FixedThreshold:
         )
 
 
-def compute_causal_baseline_threshold(
+def compute_causal_baseline_threshold_and_stats(
     hr_arr: np.ndarray,
     enmo_arr: np.ndarray,
     k: float,
@@ -125,11 +125,10 @@ def compute_causal_baseline_threshold(
     theta_rest: float = 0.05,
     tau_floor: float = 100.0,
     step_sec: float = 2.0,
-) -> np.ndarray:
+) -> Tuple[np.ndarray, np.ndarray, np.ndarray]:
     """
-    Computes personal threshold tau_i(t) strictly causally from deployment-available
-    low-motion windows (ENMO_10s <= theta_rest and valid HR) observed strictly before window t.
-    Protocol Section 4.2 & Amendment 3 Section 6.3.
+    Computes personal threshold tau_i(t) alongside causal predictive mean mu_hat(t)
+    and predictive standard deviation std_hat(t).
     """
     n = len(hr_arr)
     if len(enmo_arr) != n:
@@ -165,7 +164,38 @@ def compute_causal_baseline_threshold(
     std_hat = w * std_x + (1.0 - w) * sigma_pop
 
     # Dynamic personal threshold
-    return np.maximum(tau_floor, mu_hat + k * std_hat)
+    tau_series = np.maximum(tau_floor, mu_hat + k * std_hat)
+    return tau_series, mu_hat, std_hat
+
+
+def compute_causal_baseline_threshold(
+    hr_arr: np.ndarray,
+    enmo_arr: np.ndarray,
+    k: float,
+    kappa_hours: float,
+    mu_pop: float,
+    sigma_pop: float,
+    theta_rest: float = 0.05,
+    tau_floor: float = 100.0,
+    step_sec: float = 2.0,
+) -> np.ndarray:
+    """
+    Computes personal threshold tau_i(t) strictly causally from deployment-available
+    low-motion windows (ENMO_10s <= theta_rest and valid HR) observed strictly before window t.
+    Protocol Section 4.2 & Amendment 3 Section 6.3.
+    """
+    tau_series, _, _ = compute_causal_baseline_threshold_and_stats(
+        hr_arr=hr_arr,
+        enmo_arr=enmo_arr,
+        k=k,
+        kappa_hours=kappa_hours,
+        mu_pop=mu_pop,
+        sigma_pop=sigma_pop,
+        theta_rest=theta_rest,
+        tau_floor=tau_floor,
+        step_sec=step_sec,
+    )
+    return tau_series
 
 
 class Arm2PersonalBaselineShrinkage:
@@ -478,6 +508,122 @@ class Arm3bNoMotionGate:
                 "k": self.k,
                 "kappa_hours": self.kappa_hours,
                 "theta_trust": self.theta_trust,
+                "mu_pop": self.mu_pop,
+                "sigma_pop": self.sigma_pop,
+            },
+        )
+
+
+class Arm4ConformalAbstention:
+    """
+    Arm 4: Conformal Prediction / Multi-attribute Trust Abstention.
+    Protocol Amendment 3 Section 6.
+
+    Combines:
+    1. Causal personal baseline threshold tau_i(t) = max(tau_floor, mu_hat(t) + k * std_hat(t))
+    2. Predictive uncertainty U(t) = std_hat(t) / max(1.0, mu_hat(t))
+    3. Augmented uncertainty U_total(t) = U(t) + lambda_trust * (1.0 - S_trust(t))
+    4. Conformal nonconformity scores on training calibration set (low-motion windows):
+       s(t) = |HR(t) - mu_hat(t)| / max(1.0, std_hat(t))
+    5. Conformal quantile q_calib = Quantile_(1-alpha)({s(t)})
+    6. Prediction interval [mu_hat(t) - q_calib * std_hat(t), mu_hat(t) + q_calib * std_hat(t)]
+    7. Abstention rule:
+       Abstain (suppress alert) if:
+       a) Prediction interval spans threshold tau_i(t), OR
+       b) Augmented uncertainty U_total(t) > theta_unc
+    8. Alert fires if:
+       (HR(t) > tau_i(t)) AND NOT Abstain
+       Filtered through StandardAlertEmitter(P, R=60s).
+
+    Candidate Grids:
+    - alpha in {0.05, 0.10}
+    - lambda_trust in {0.5, 1.0}
+    - theta_unc in {0.20, 0.30}
+    """
+
+    def __init__(
+        self,
+        k: float = 2.5,
+        kappa_hours: float = 1.0,
+        alpha: float = 0.10,
+        lambda_trust: float = 0.5,
+        theta_unc: float = 0.30,
+        q_calib: float = 1.96,
+        mu_pop: float = 75.0,
+        sigma_pop: float = 15.0,
+        tau_floor: float = 100.0,
+        step_sec: float = 2.0,
+        **kwargs: Any,
+    ):
+        validate_arm_inputs(**kwargs)
+        self.k = float(k)
+        self.kappa_hours = float(kappa_hours)
+        self.alpha = float(alpha)
+        self.lambda_trust = float(lambda_trust)
+        self.theta_unc = float(theta_unc)
+        self.q_calib = float(q_calib)
+        self.mu_pop = float(mu_pop)
+        self.sigma_pop = float(sigma_pop)
+        self.tau_floor = float(tau_floor)
+        self.step_sec = float(step_sec)
+
+    def predict(
+        self,
+        hr_series: np.ndarray,
+        enmo_10s: np.ndarray,
+        trust_series: np.ndarray,
+        emitter: Optional[StandardAlertEmitter] = None,
+        **kwargs: Any,
+    ) -> ArmOutput:
+        """
+        Emits alert when (hr_series > tau_i(t)) AND NOT abstained by conformal interval / trust defect.
+        """
+        validate_arm_inputs(**kwargs)
+        hr_arr = np.asarray(hr_series, dtype=float)
+        enmo_arr = np.asarray(enmo_10s, dtype=float)
+        trust_arr = np.asarray(trust_series, dtype=float)
+
+        tau_series, mu_hat, std_hat = compute_causal_baseline_threshold_and_stats(
+            hr_arr=hr_arr,
+            enmo_arr=enmo_arr,
+            k=self.k,
+            kappa_hours=self.kappa_hours,
+            mu_pop=self.mu_pop,
+            sigma_pop=self.sigma_pop,
+            theta_rest=0.05,
+            tau_floor=self.tau_floor,
+            step_sec=self.step_sec,
+        )
+
+        safe_mu = np.maximum(1.0, mu_hat)
+        safe_std = np.maximum(1.0, std_hat)
+        u_t = safe_std / safe_mu
+        u_total = u_t + self.lambda_trust * (1.0 - trust_arr)
+
+        band_lo = mu_hat - self.q_calib * safe_std
+        band_hi = mu_hat + self.q_calib * safe_std
+
+        # Abstain if prediction band spans threshold or augmented uncertainty exceeds threshold
+        spans_tau = (band_lo <= tau_series) & (tau_series <= band_hi)
+        excessive_unc = (u_total > self.theta_unc)
+        abstain_mask = spans_tau | excessive_unc
+
+        raw_mask = (hr_arr > tau_series) & np.isfinite(hr_arr) & (~abstain_mask)
+        alert_mask = emitter.emit(raw_mask) if emitter is not None else raw_mask
+
+        return ArmOutput(
+            alert_mask=alert_mask,
+            raw_alert_mask=raw_mask,
+            threshold_series=tau_series,
+            abstain_mask=abstain_mask,
+            metadata={
+                "arm": "Arm4_ConformalAbstention",
+                "k": self.k,
+                "kappa_hours": self.kappa_hours,
+                "alpha": self.alpha,
+                "lambda_trust": self.lambda_trust,
+                "theta_unc": self.theta_unc,
+                "q_calib": self.q_calib,
                 "mu_pop": self.mu_pop,
                 "sigma_pop": self.sigma_pop,
             },

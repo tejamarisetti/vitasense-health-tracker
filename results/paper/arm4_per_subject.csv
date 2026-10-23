@@ -1,0 +1,61 @@
+Condition,Subject,Recall_pct,FA_hr,TP,FP
+Condition 0 (No-Fault),S1,62.5,0.44,5,1
+Condition 0 (No-Fault),S2,85.7,0.0,6,0
+Condition 0 (No-Fault),S3,80.0,0.0,8,0
+Condition 0 (No-Fault),S4,85.7,0.44,6,1
+Condition 0 (No-Fault),S5,100.0,1.26,4,2
+Condition 0 (No-Fault),S6,100.0,4.15,4,5
+Condition 0 (No-Fault),S7,83.3,1.67,5,4
+Condition 0 (No-Fault),S8,57.1,0.0,4,0
+Condition 0 (No-Fault),S9,33.3,0.95,3,2
+Condition 0 (No-Fault),S10,70.0,0.0,7,0
+Condition 0 (No-Fault),S11,80.0,0.95,8,2
+Condition 0 (No-Fault),S12,40.0,0.0,2,0
+Condition 0 (No-Fault),S13,85.7,0.86,6,2
+Condition 0 (No-Fault),S14,77.8,1.38,7,3
+Condition 0 (No-Fault),S15,66.7,0.0,6,0
+Regime A (Low Duty ~10%),S1,62.5,0.44,5,1
+Regime A (Low Duty ~10%),S2,85.7,0.0,6,0
+Regime A (Low Duty ~10%),S3,50.0,0.47,5,1
+Regime A (Low Duty ~10%),S4,57.1,0.0,4,0
+Regime A (Low Duty ~10%),S5,100.0,1.26,4,2
+Regime A (Low Duty ~10%),S6,100.0,2.49,4,3
+Regime A (Low Duty ~10%),S7,66.7,1.67,4,4
+Regime A (Low Duty ~10%),S8,42.9,0.0,3,0
+Regime A (Low Duty ~10%),S9,11.1,0.48,1,1
+Regime A (Low Duty ~10%),S10,70.0,0.38,7,1
+Regime A (Low Duty ~10%),S11,70.0,0.95,7,2
+Regime A (Low Duty ~10%),S12,40.0,0.0,2,0
+Regime A (Low Duty ~10%),S13,71.4,1.3,5,3
+Regime A (Low Duty ~10%),S14,77.8,1.38,7,3
+Regime A (Low Duty ~10%),S15,66.7,0.0,6,0
+Regime B (Nominal ~25-30%),S1,62.5,0.0,5,0
+Regime B (Nominal ~25-30%),S2,57.1,0.49,4,1
+Regime B (Nominal ~25-30%),S3,50.0,0.0,5,0
+Regime B (Nominal ~25-30%),S4,42.9,0.0,3,0
+Regime B (Nominal ~25-30%),S5,100.0,1.89,4,3
+Regime B (Nominal ~25-30%),S6,100.0,3.32,4,4
+Regime B (Nominal ~25-30%),S7,66.7,1.25,4,3
+Regime B (Nominal ~25-30%),S8,42.9,0.0,3,0
+Regime B (Nominal ~25-30%),S9,11.1,0.48,1,1
+Regime B (Nominal ~25-30%),S10,70.0,0.38,7,1
+Regime B (Nominal ~25-30%),S11,70.0,0.95,7,2
+Regime B (Nominal ~25-30%),S12,40.0,0.0,2,0
+Regime B (Nominal ~25-30%),S13,28.6,1.3,2,3
+Regime B (Nominal ~25-30%),S14,55.6,1.38,5,3
+Regime B (Nominal ~25-30%),S15,66.7,0.53,6,1
+F7 (High-Motion BVP Noise),S1,62.5,0.0,5,0
+F7 (High-Motion BVP Noise),S2,71.4,0.0,5,0
+F7 (High-Motion BVP Noise),S3,40.0,0.0,4,0
+F7 (High-Motion BVP Noise),S4,57.1,0.0,4,0
+F7 (High-Motion BVP Noise),S5,100.0,0.63,4,1
+F7 (High-Motion BVP Noise),S6,100.0,1.66,4,2
+F7 (High-Motion BVP Noise),S7,50.0,1.25,3,3
+F7 (High-Motion BVP Noise),S8,14.3,0.0,1,0
+F7 (High-Motion BVP Noise),S9,11.1,0.48,1,1
+F7 (High-Motion BVP Noise),S10,60.0,0.0,6,0
+F7 (High-Motion BVP Noise),S11,80.0,0.95,8,2
+F7 (High-Motion BVP Noise),S12,20.0,0.0,1,0
+F7 (High-Motion BVP Noise),S13,85.7,0.43,6,1
+F7 (High-Motion BVP Noise),S14,55.6,0.46,5,1
+F7 (High-Motion BVP Noise),S15,44.4,0.0,4,0

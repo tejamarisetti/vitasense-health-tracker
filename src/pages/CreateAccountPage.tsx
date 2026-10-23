@@ -52,19 +52,44 @@ export function CreateAccountPage({
   const [errorMsg, setErrorMsg] = useState<string | null>(null);
   const [isSubmitting, setIsSubmitting] = useState(false);
 
+  const handleQuickDemoFill = () => {
+    setAge(29);
+    setSex('Other');
+    setHeight('175 cm');
+    setWeight('70 kg');
+    setRestingHr(65);
+    setActivityLevel('Moderately Active');
+    setHealthGoal('Cardiovascular Wellness');
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setErrorMsg(null);
+
+    const regName = name.trim();
+    const regEmail = email.trim();
+    const regPass = password;
+
+    if (!regName || !regEmail || !regPass) {
+      setErrorMsg('Please enter your full name, email address, and password.');
+      return;
+    }
+
+    if (regPass.length < 6) {
+      setErrorMsg('Password must be at least 6 characters.');
+      return;
+    }
+
     setIsSubmitting(true);
 
     const newProfile: UserProfile = {
-      name: name.trim() || 'Health Explorer',
-      email: email.trim() || 'user@example.com',
+      name: regName,
+      email: regEmail,
       age: Number(age) || 29,
       sex,
       height: height.trim() || '175 cm',
       weight: weight.trim() || '70 kg',
-      restingHr: Number(restingHr) || 64,
+      restingHr: Number(restingHr) || 65,
       activityLevel,
       healthGoal,
       provider: 'email',
@@ -76,7 +101,7 @@ export function CreateAccountPage({
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
           email: newProfile.email,
-          password: password || 'SecurePass123!',
+          password: regPass,
           name: newProfile.name,
           age: newProfile.age,
           sex: newProfile.sex,
@@ -99,28 +124,9 @@ export function CreateAccountPage({
       }
 
       const err = await res.json().catch(() => ({}));
-      if (err.detail?.includes('already exists')) {
-        // Attempt login if already registered
-        const loginRes = await fetch('/api/auth/login', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ email: newProfile.email, password: password || 'SecurePass123!' }),
-        });
-        if (loginRes.ok) {
-          const loginData = await loginRes.json();
-          setAuthToken(loginData.token);
-          saveUserProfile(newProfile);
-          onAccountCreated(newProfile);
-          go('overview');
-          return;
-        }
-      }
-      setErrorMsg(err.detail || 'Registration failed. Please check inputs.');
-    } catch (err) {
-      console.warn('Backend unavailable, saving locally', err);
-      saveUserProfile(newProfile);
-      onAccountCreated(newProfile);
-      go('overview');
+      setErrorMsg(err.detail || 'Registration encountered an issue. Please verify fields or sign in.');
+    } catch {
+      setErrorMsg('Network error: Unable to connect to registration server. Please check your connection and retry.');
     } finally {
       setIsSubmitting(false);
     }
@@ -291,6 +297,52 @@ export function CreateAccountPage({
           <h2>Create account.</h2>
           <p>Fill in your basic credentials and physiological baseline.</p>
 
+          {errorMsg && (
+            <div
+              className="registration-error-banner"
+              style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#ef4444',
+                padding: '10px 14px',
+                borderRadius: '8px',
+                marginBottom: '16px',
+                fontSize: '13px',
+                display: 'flex',
+                alignItems: 'center',
+                gap: '8px',
+              }}
+            >
+              <Icon name="shield" size={16} />
+              <span>{errorMsg}</span>
+            </div>
+          )}
+
+          <div style={{ marginBottom: '14px' }}>
+            <button
+              type="button"
+              onClick={handleQuickDemoFill}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '9px 14px',
+                background: 'rgba(59, 130, 246, 0.08)',
+                border: '1px solid rgba(59, 130, 246, 0.3)',
+                color: '#3b82f6',
+                fontWeight: 600,
+                fontSize: '12.5px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+              }}
+            >
+              <Icon name="sparkles" size={15} />
+              <span>Auto-Fill Demo Baseline Biometrics</span>
+            </button>
+          </div>
+
           {/* Functional Social Login Buttons */}
           <div className="social-login">
             <button
@@ -315,6 +367,46 @@ export function CreateAccountPage({
             <span>or sign up with email</span>
           </div>
 
+          {errorMsg && (
+            <div
+              className="registration-error-banner"
+              style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#ef4444',
+                padding: '12px 14px',
+                borderRadius: '8px',
+                marginBottom: '16px',
+                fontSize: '13px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Icon name="shield" size={16} />
+                <span style={{ flex: 1 }}>{errorMsg}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setErrorMsg(null); }}
+                style={{
+                  alignSelf: 'flex-start',
+                  background: 'rgba(239, 68, 68, 0.2)',
+                  border: '1px solid #ef4444',
+                  color: '#ef4444',
+                  borderRadius: '6px',
+                  padding: '4px 10px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
           <form onSubmit={handleSubmit}>
             {/* Step 1: Account Credentials */}
             <div className="form-subheading">
@@ -332,7 +424,7 @@ export function CreateAccountPage({
                   onChange={(e) => setName(e.target.value)}
                   onFocus={() => setFocusField('name')}
                   onBlur={() => setFocusField(null)}
-                  placeholder="e.g. Alex Morgan"
+                  placeholder="e.g. Jane Doe"
                   required
                 />
               </div>
@@ -348,7 +440,7 @@ export function CreateAccountPage({
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setFocusField('email')}
                   onBlur={() => setFocusField(null)}
-                  placeholder="alex@example.com"
+                  placeholder="user@example.com"
                   required
                 />
               </div>

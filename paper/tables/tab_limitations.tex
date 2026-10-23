@@ -7,15 +7,19 @@
 \hline
 \textbf{Threat Domain} & \textbf{Empirical Limitation and Mitigation} \\
 \hline
-Synthetic Events & True resting tachycardia absent in cohort; 112 episodes injected into derived stream ($105$--$135$\,bpm). \\
+Synthetic Events & True resting tachycardia absent in cohort; 112 episodes injected into derived stream ($105$--$135$\,bpm). Arm 1 recall directly depends on this injection range vs 100\,bpm floor. \\
 \hline
-Cohort Size & $N = 15$ healthy young adults limits power for small paired differences (reported with 95\% bootstrap CIs). \\
+Cohort Size & $N = 15$ healthy young adults in PPG-DaLiA protocol only; free-living 24/7 unconstrained monitoring unproven. Reported with 95\% bootstrap CIs. \\
+\hline
+Subject S5 Outlier & Subject S5 exhibited severe sensor drift and motion artifacts; results reported both pooled and without S5. \\
+\hline
+Unopened Sources & Threshold values ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices with unopened sources; evaluated via sensitivity grids. \\
 \hline
 Noise Coupling & Estimator tracking errors and motion artifacts interact directly with downstream thresholding logic. \\
 \hline
 Grid Boundaries & Tuning selected boundaries ($\tau_{\text{pop}} = 100$, $k = 2.0$, $P = 10$\,s / $30$\,s), reflecting trade-offs. \\
 \hline
-Scope \& Datasets & PhysioNet 1.0.1 and WESAD unanalyzed; Arm 4 conformal abstention deferred. Academic benchmark only. \\
+Arm 4 Status & Arm 4 inductive conformal abstention evaluated post hoc with $\alpha = 0.15$ (unratified). Academic benchmark only. \\
 \hline
 \end{tabular}
 \end{table}

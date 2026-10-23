@@ -7,15 +7,19 @@
 \hline
 \textbf{Milestone [Commit]} & \textbf{Ratified Scope and Description} \\
 \hline
-Protocol v1.0.0 [\texttt{41eff1e}] & Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
+Protocol v1.0.0 [\texttt{41eff1e}] & 2026-10-18: Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
 \hline
-Amendment 1 [\texttt{3b1f2f6}] & Resting alert ground truth; non-penalization of motion; corrected accel scale [\texttt{3a5ccc2}]. \\
+ENMO Scale Fix [\texttt{3a5ccc2}, \texttt{1dd80b2}] & 2026-10-19: Removed redundant /64 accelerometer division, enforced median norm check $[0.8, 1.2]$\,g. \\
 \hline
-Amendment 2 [\texttt{696fd00}] & Labelled synthetic tachycardia injection; adaptive ramps ($r_{\text{lo}}, r_{\text{hi}}$); S5 outlier handling rule. \\
+Adaptive Ramp [\texttt{e358bf1}] & 2026-10-19: Adapted synthetic tachycardia ramp rates ($r_{\text{lo}}, r_{\text{hi}}$) clamped to $[105, 135]$\,bpm. \\
 \hline
-Amendment 3 [\texttt{a0d682a}] & Restated $H_1$ as estimation; 15-subject LOSO; Arm 3b-noMotion ablation; $\ge 60$\,s gap [\texttt{0bf4ca4}]. \\
+Persistence \& Refractory [\texttt{cad4c7f}, \texttt{d55d432}] & 2026-10-19: StandardAlertEmitter with $P \in \{10, 20, 30\}$\,s and refractory $R = 60$\,s across all arms. \\
 \hline
-Amendment 4 [\texttt{a9ce657}] & Standard emitter: $P \in \{10,20,30\}$\,s, $R=60$\,s; Arm 2 fallback rule invoked in 100\% of folds [\texttt{f92ca8d}]. \\
+Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids for $\tau_{\text{pop}}$ and $k$ following boundary selection. \\
+\hline
+Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
+\hline
+Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha = 0.15$ (unratified exploratory). \\
 \hline
 \end{tabular}
 \end{table}

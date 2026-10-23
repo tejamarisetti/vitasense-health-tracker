@@ -371,10 +371,10 @@ export function BenchmarkPage() {
                 <strong>FR-04 (Data Quality):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented</span> — Automated inference exclusion active via <code>/api/measurements/inference-dataset</code>; low-trust and flagged segments strictly quarantined.
               </li>
               <li>
-                <strong>FR-06 (Symptom Assessment):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented</span> — Guided questionnaire with mandatory answer review/edit step, screening risk signal, and clinical advice disclaimer in Symptom Lab.
+                <strong>FR-06 (Symptom Assessment):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented as demo ruleset, not evaluated</span> — Guided questionnaire with answer review/edit step and non-diagnostic disclaimer in Symptom Lab.
               </li>
               <li>
-                <strong>FR-07 (AI/ML Explanation):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented</span> — Transparent local feature attribution, calibrated prediction uncertainty intervals (±8%), and model provenance.
+                <strong>FR-07 (AI/ML Explanation):</strong> <span style={{ color: 'var(--brand-mint)', fontWeight: 700 }}>Implemented as demo ruleset, not evaluated</span> — Transparent local feature attribution, uncertainty not estimated for this demo ruleset, and model labelled "DEMO RULESET v2.1, not evaluated".
               </li>
               <li>
                 <strong>External Datasets:</strong> PhysioNet Wearable Device Dataset 1.0.1 and WESAD scoped for future external validation (PPG-DaLiA benchmark evaluated).

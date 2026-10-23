@@ -23,7 +23,8 @@ interface AssessmentResult {
   risk_score: number;
   contributing_factors: string[];
   feature_contributions: Record<string, number>;
-  uncertainty_range: [number, number];
+  uncertainty_range?: [number, number] | null;
+  uncertainty_note?: string;
   model_version: string;
   is_demo: boolean;
   missing_data_notes: string[];
@@ -184,7 +185,7 @@ export function AssessmentPage({ go }: AssessmentPageProps) {
             </h1>
             <p style={{ margin: 0, color: 'var(--text-secondary)', fontSize: '14px', maxWidth: '700px' }}>
               Guided symptom questionnaire with mandatory answer review, rule-based screening risk categorization,
-              and transparent AI/ML feature attribution with calibrated uncertainty intervals.
+              and transparent AI/ML feature attribution (uncertainty not estimated for this demo ruleset).
             </p>
           </div>
           <div style={{ display: 'flex', gap: '10px' }}>
@@ -631,7 +632,7 @@ export function AssessmentPage({ go }: AssessmentPageProps) {
                 </p>
               </div>
 
-              {/* Calibrated Uncertainty Interval (FR-07) */}
+              {/* Prediction Uncertainty (FR-07) */}
               <div
                 style={{
                   background: 'var(--surface-card)',
@@ -639,17 +640,19 @@ export function AssessmentPage({ go }: AssessmentPageProps) {
                   borderRadius: '10px',
                   border: '1px solid var(--border-color)',
                   textAlign: 'right',
-                  minWidth: '220px',
+                  minWidth: '240px',
                 }}
               >
                 <div style={{ fontSize: '11px', fontWeight: 700, color: 'var(--text-muted)', textTransform: 'uppercase' }}>
-                  Calibrated Uncertainty Range (FR-07)
+                  Prediction Uncertainty (FR-07)
                 </div>
-                <div style={{ fontSize: '18px', fontWeight: 800, color: 'var(--brand-mint)', margin: '4px 0' }}>
-                  [{(result.uncertainty_range[0] * 100).toFixed(0)}% — {(result.uncertainty_range[1] * 100).toFixed(0)}%]
+                <div style={{ fontSize: '13px', fontWeight: 600, color: '#f59e0b', margin: '6px 0' }}>
+                  {result.uncertainty_range
+                    ? `[${(result.uncertainty_range[0] * 100).toFixed(0)}% — ${(result.uncertainty_range[1] * 100).toFixed(0)}%]`
+                    : (result.uncertainty_note || 'uncertainty not estimated for this demo ruleset')}
                 </div>
                 <div style={{ fontSize: '11px', color: 'var(--text-muted)' }}>
-                  Model Version: <b>{result.model_version}</b>
+                  Model Version: <b>{result.model_version || 'DEMO RULESET v2.1, not evaluated'}</b>
                 </div>
               </div>
             </div>
@@ -768,7 +771,10 @@ export function AssessmentPage({ go }: AssessmentPageProps) {
                 <div>
                   <span style={{ fontWeight: 700, color: 'var(--text-primary)' }}>{h.risk_level}</span>
                   <span style={{ color: 'var(--text-muted)', marginLeft: '10px' }}>
-                    Score: {(h.risk_score * 100).toFixed(0)}% (Uncertainty: [{(h.uncertainty_range[0] * 100).toFixed(0)}% - {(h.uncertainty_range[1] * 100).toFixed(0)}%])
+                    Score: {(h.risk_score * 100).toFixed(0)}%
+                    {h.uncertainty_range && h.uncertainty_range.length === 2
+                      ? ` (Uncertainty: [${(h.uncertainty_range[0] * 100).toFixed(0)}% - ${(h.uncertainty_range[1] * 100).toFixed(0)}%])`
+                      : ` (${h.uncertainty_note || 'uncertainty not estimated for this demo ruleset'})`}
                   </span>
                   {h.is_demo && <span className="tag-badge" style={{ marginLeft: '10px', fontSize: '10px' }}>DEMO</span>}
                 </div>

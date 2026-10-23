@@ -1,0 +1,26 @@
+\begin{table}[htbp]
+\caption{PPG-DaLiA Benchmark Dataset \& Injected Fault Regimes}
+\label{tab:dataset_and_faults}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.10}
+\setlength{\tabcolsep}{3.0pt}
+\begin{tabular}{|l|p{4.75cm}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Part A: PPG-DaLiA Benchmark Dataset Characteristics \cite{ref_reiss_dalia}}} \\
+\hline
+Subjects & $N = 15$ healthy individuals (7 male, 8 female, age 21--55) \\
+Duration & $\approx 2.4$\,h per subject ($35.94$ total recording hours; $31.27$ non-event exposure hours) \\
+Activities & Sitting, Walking, Stairs, Cycling, Driving, Lunch, Soccer \\
+Sensors & Wrist Empatica E4 (BVP: 64\,Hz, 3D ACC: 32\,Hz) \\
+Ground Truth & Chest ECG (RespiBAN, 700\,Hz, strictly quarantined) \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Part B: Evaluated Telemetry \& Sensor Fault Regimes (Amendment 3)}} \\
+\hline
+Condition 0 & Clean ambulatory background ($31.27$\,h non-event exposure) \\
+Regime A & Low-duty ($\approx 10\%$ faults): sporadic gaps (F1), freeze (F2), duplicates (F3), drift (F5), scale errors (F6) \\
+Regime B & Nominal-duty ($\approx 25\text{--}30\%$ faults): prolonged flatlines, frequent dropouts, scale errors (seed 42) \\
+F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D acceleration injected into raw BVP (SNR $+5$\,dB) \\
+\hline
+\end{tabular}
+\end{table}

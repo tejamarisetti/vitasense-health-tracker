@@ -1,6 +1,8 @@
 Claim_Or_Number,Value,Location,Generating_Script,Output_File,Status
 Subject Count N=15,15,"Sec. III, Tab. I",scripts/prepare_benchmark_ground_truth.py,data/processed/benchmark_ground_truth.pkl,VERIFIED
-Total Monitoring Exposure,31.25 hours,"Sec. III, Tab. I",scripts/export_paper_data.py,results/paper/fault_disaggregated.csv,VERIFIED
+Total Recording Time,35.94 hours,"Sec. III, Tab. I",scripts/export_paper_data.py,results/paper/fault_disaggregated.csv,VERIFIED
+Non-event Exposure Time,31.27 hours,"Sec. III, Tab. I",scripts/export_paper_data.py,results/paper/fault_disaggregated.csv,VERIFIED
+Bootstrap Resample Count,"10,000","Sec. V, Sec. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
 Injected Tachycardia Episodes,112,"Sec. III, Sec. V",scripts/generate_injection_audit.py,results/synthetic_injection_audit.csv,VERIFIED
 Injected Peak HR Floor/Ceil,"[105, 135] bpm","Sec. III, Sec. V",vitasense/benchmarks/synthetic_injection.py,docs/RESULTS_SUMMARY.md,VERIFIED
 Inter-episode Gap Floor,60 s,"Sec. III, Sec. V",vitasense/benchmarks/synthetic_injection.py,docs/RESULTS_SUMMARY.md,VERIFIED

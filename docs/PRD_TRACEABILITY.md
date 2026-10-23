@@ -10,8 +10,9 @@
 ## 1. Summary of Functional Requirements Status
 
 - **Total Functional Requirements:** 13
-- **Implemented (13):** FR-01, FR-02, FR-03, FR-04, FR-05, FR-06, FR-07, FR-08, FR-09, FR-10, FR-11, FR-12, FR-13 (All 13 requirements fully implemented & automated test verified)
-- **Partial (0):** None
+- **Implemented (5):** FR-01, FR-02, FR-04, FR-10, FR-11
+- **Implemented as Demo Ruleset, Not Evaluated (2):** FR-06, FR-07
+- **Partial (6):** FR-03, FR-05, FR-08, FR-09, FR-12, FR-13
 - **Not Started (0):** None
 
 ---
@@ -34,9 +35,12 @@
 * **Automated Test References:**
   - [tests/test_phase2_auth_measurements.py:L27-L86](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L27-L86) (registration, password hashing, session tokens, login/logout)
   - [tests/test_phase2_auth_measurements.py:L441-L573](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L441-L573) (rate-limiting on register & login, cross-user isolation)
+  - [tests/test_auth_offline.py](file:///d:/projects/health%20tracker/tests/test_auth_offline.py) (backend down never yields session, zero credentials in src/)
 * **Evidence / Notes:**
   - Server-side PBKDF2-HMAC-SHA256 with 600,000 iterations and per-user salt.
   - Hashed session tokens stored with expiration and revocation support in SQLite.
+  - Real error reporting on connection failure with retry; offline fallback session bypass completely removed.
+  - Server-side `POST /api/auth/demo` creates/reuses DEMO account without client credentials.
   - Password reset modal explicitly states "Password reset is not enabled in this build."
 
 ---
@@ -68,7 +72,7 @@
   - Support the initial agreed health measures only. Candidate measures may include heart rate, SpO₂, temperature, activity, and other values when data and units are defined; do not display unavailable values as real.
   - Validate numeric types, required fields, units, timestamps, and reasonable configurable ranges.
   - Permit authorized users to inspect, correct, or delete their own entries; preserve appropriate audit events if required.
-* **Status:** **Implemented**
+* **Status:** **Partial**
 * **Implementation Files:**
   - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
@@ -76,8 +80,8 @@
 * **Automated Test References:**
   - [tests/test_phase2_auth_measurements.py:L126-L230](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L126-L230) (`test_measurement_ingestion_and_user_isolation`, `test_measurement_server_side_validation_errors`, `test_user_cannot_read_another_users_measurements`)
 * **Evidence / Notes:**
-  - Server validation enforces supported types (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`), positive numeric values, unit consistency, timestamp bounds (no future timestamps >5 min skew), and sources (`manual`, `import`, `demo`).
-  - Strict SQL row-level isolation (`WHERE user_id = :uid`).
+  - **Implemented:** Ingestion, validation, range checking, and inspection of supported measures (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`) with row-level user isolation.
+  - **Missing Evidence (Partial):** Individual measurement editing (`PUT /api/measurements/{id}`) and individual entry deletion (`DELETE /api/measurements/{id}`) are not implemented. Users can view entries and delete their entire account or clear demo records, but cannot correct or delete individual recorded points.
 
 ---
 
@@ -98,7 +102,7 @@
   - [tests/test_phase4_assessment_and_inference_exclusion.py:L31-L71](file:///d:/projects/health%20tracker/tests/test_phase4_assessment_and_inference_exclusion.py#L31-L71) (`test_fr04_inference_exclusion_and_dataset_endpoint`)
   - [tests/test_trust_score.py](file:///d:/projects/health%20tracker/tests/test_trust_score.py)
 * **Evidence / Notes:**
-  - **Implemented:** Deterministic detection of `missing`, `stale` (sensor flatline), `duplicate` (exact timestamp collisions), `implausible` (bounds), and `sudden_change` (>40 bpm/s jump rate). Trust score and component checks breakdown are rendered in the UI inspection drawer.
+  - Deterministic detection of `missing`, `stale` (sensor flatline), `duplicate` (timestamp collisions), `implausible` (bounds), and `sudden_change` (>40 bpm/s jump rate). Trust score and component checks breakdown are rendered in the UI inspection drawer.
   - Automated inference exclusion: `exclude_from_inference` boolean and `limitation_note` are populated on every measurement. The endpoint `GET /api/measurements/inference-dataset` programmatically quarantines and drops any low-quality segments from downstream ML model batch inference.
 
 ---
@@ -110,14 +114,15 @@
   - Show empty states when there are no records and provide a clear action to add data or load demo data.
   - Provide quick links to symptom assessment, add measurement, history, and trends.
   - Demo/simulated values must be visibly marked as demo data.
-* **Status:** **Implemented**
+* **Status:** **Partial**
 * **Implementation Files:**
   - [src/pages/OverviewPage.tsx](file:///d:/projects/health%20tracker/src/pages/OverviewPage.tsx)
   - [src/components/Waveform.tsx](file:///d:/projects/health%20tracker/src/components/Waveform.tsx)
 * **Automated Test References:**
   - Verified via frontend build `npm.cmd run build` (0 TypeScript / JSX errors)
 * **Evidence / Notes:**
-  - Shows latest readings, animated SVG waveform, daily activity cards, trust indicators, and quick links including "Assess Symptoms (FR-06)". Demo values are labelled with DEMO badges.
+  - **Implemented:** Displays latest available readings, recent alerts, animated waveform, trust indicators, and quick links to Symptom Lab and Trends. Demo data is clearly tagged.
+  - **Missing Evidence (Partial):** Missing dedicated empty state when zero records exist offering a direct action to add data or load demo data; missing explicit quick link to "Add Measurement" modal/flow from the dashboard.
 
 ---
 
@@ -130,7 +135,7 @@
   - Show the factors that contributed to the result, relevant missing data, model limitations, and when to seek professional advice.
   - Do not state or imply that the user has a disease; use language such as “estimated risk signal” or “screening-style result,” not “diagnosis.”
   - If no validated model is configured, provide a clearly labelled demo/rules-based result rather than pretending a trained clinical model exists.
-* **Status:** **Implemented**
+* **Status:** **Implemented as demo ruleset, not evaluated**
 * **Implementation Files:**
   - [vitasense/api/assessment.py](file:///d:/projects/health%20tracker/vitasense/api/assessment.py)
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
@@ -140,9 +145,9 @@
   - [tests/test_phase4_assessment_and_inference_exclusion.py:L100-L148](file:///d:/projects/health%20tracker/tests/test_phase4_assessment_and_inference_exclusion.py#L100-L148) (`test_fr06_fr07_assessment_submission_and_explanation`)
   - [tests/test_phase4_assessment_and_inference_exclusion.py:L150-L179](file:///d:/projects/health%20tracker/tests/test_phase4_assessment_and_inference_exclusion.py#L150-L179) (`test_fr06_user_isolation_for_assessments`)
 * **Evidence / Notes:**
-  - Guided questionnaire covering primary sensation, intensity, duration, activity context, and acute red flags.
-  - Mandatory Step 2 Review screen allowing inspection and edits before submission.
-  - Rule-based risk signal calculation (`Low Risk Signal`, `Moderate Risk Signal`, `Elevated Risk Signal`) strictly utilizing non-diagnostic terminology, bulleted contributing factors, and explicit emergency guidance.
+  - Guided questionnaire covering sensation, severity, duration, context, and red flags with review and edit step prior to submission.
+  - Results use screening risk signal terminology ("estimated risk signal", "Low/Moderate/Elevated Risk Signal"), never diagnosis.
+  - Because no clinically evaluated or trained machine learning model is configured, the engine is explicitly identified and labelled as `"DEMO RULESET v2.1, not evaluated"`.
 
 ---
 
@@ -153,16 +158,16 @@
   - Identify the model version, timestamp, and whether the result used demo or user-entered data.
   - Do not fabricate feature importance, confidence percentages, model accuracy, or evidence.
   - If the model cannot explain an individual result reliably, state that limitation.
-* **Status:** **Implemented**
+* **Status:** **Implemented as demo ruleset, not evaluated**
 * **Implementation Files:**
   - [vitasense/api/assessment.py](file:///d:/projects/health%20tracker/vitasense/api/assessment.py)
   - [src/pages/AssessmentPage.tsx](file:///d:/projects/health%20tracker/src/pages/AssessmentPage.tsx)
 * **Automated Test References:**
   - [tests/test_phase4_assessment_and_inference_exclusion.py:L100-L148](file:///d:/projects/health%20tracker/tests/test_phase4_assessment_and_inference_exclusion.py#L100-L148) (`test_fr06_fr07_assessment_submission_and_explanation`)
 * **Evidence / Notes:**
-  - Plain-language deterministic local feature attributions (`symptom_severity_factor`, `activity_context_factor`, `duration_persistence_factor`, `red_flag_indicators_factor`).
-  - Calibrated uncertainty interval (`uncertainty_range` `[lower, upper]` margin $\pm 0.08$) representing self-reporting variance.
-  - Transparent model metadata (`model_version = "vitasense-ruleset-v2.1"`, ISO timestamp, `is_demo` flag, and clear model limitation notices).
+  - Deterministic local feature contributions based on submitted inputs.
+  - Arbitrary fixed margins ($\pm 0.08$) and "calibrated" claims have been removed. System now displays `"uncertainty not estimated for this demo ruleset"` (`uncertainty_range = None`).
+  - Model version is explicitly reported as `"DEMO RULESET v2.1, not evaluated"`, avoiding fabricated confidence or calibration claims.
 
 ---
 
@@ -173,7 +178,7 @@
   - Summaries may include min/max/average and direction of change only when enough valid data exists.
   - Distinguish observed historical trends from future predictions.
   - Do not fill missing data in a way that makes it appear measured; any interpolation must be explicitly marked.
-* **Status:** **Implemented**
+* **Status:** **Partial**
 * **Implementation Files:**
   - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
   - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
@@ -181,7 +186,8 @@
   - [tests/test_phase2_auth_measurements.py](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py)
   - Frontend build verification (`npm.cmd run build`)
 * **Evidence / Notes:**
-  - Interactive observation ranges (24H, 7D, 30D, 3M), baseline deviation charts, summary metrics, and JSON/CSV data export.
+  - **Implemented:** Supports 24H, 7D, 30D, 3M views, summary metrics, units, and data export.
+  - **Missing Evidence (Partial):** Discrete raw points are not plotted separately from continuous interpolated lines; missing intervals/interpolations are not visually marked on charts; future predictions are not separated from historical observations.
 
 ---
 
@@ -193,22 +199,17 @@
   - Allow configuration of supported alert preferences and avoid repeated duplicate alerts for the same event.
   - Use cautious wording and state that alerts are informational, not emergency monitoring.
   - Do not imply continuous monitoring when the application only processes data on entry/import or during a demo.
-* **Status:** **Implemented**
+* **Status:** **Partial**
 * **Implementation Files:**
   - [vitasense/api/alerts.py](file:///d:/projects/health%20tracker/vitasense/api/alerts.py)
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
   - [src/pages/AlertsPage.tsx](file:///d:/projects/health%20tracker/src/pages/AlertsPage.tsx)
   - [vitasense/benchmarks/alert_emitter.py](file:///d:/projects/health%20tracker/vitasense/benchmarks/alert_emitter.py)
 * **Automated Test References:**
-  - [tests/test_phase3_features.py:L106-L167](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L106-L167) (`test_user_alerts_crud_acknowledge_dismiss`)
-  - [tests/test_phase3_features.py:L169-L203](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L169-L203) (`test_user_alerts_duplicate_suppression`)
-  - [tests/test_phase3_features.py:L205-L230](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L205-L230) (`test_user_alerts_isolation`)
-  - [tests/test_alert_emitter.py](file:///d:/projects/health%20tracker/tests/test_alert_emitter.py)
+  - [tests/test_phase3_features.py:L106-L230](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L106-L230) (`test_user_alerts_crud_acknowledge_dismiss`, duplicate suppression, isolation)
 * **Evidence / Notes:**
-  - `GET /api/alerts`, `POST /api/alerts`, `POST /api/alerts/{id}/acknowledge`, and `POST /api/alerts/{id}/dismiss`.
-  - Non-destructive updates: records `acknowledged_at` and `dismissed_at` timestamps without deleting the event.
-  - Duplicate suppression within 60-second window.
-  - Prominent informational disclaimer displayed on all alert responses and UI views.
+  - **Implemented:** Alert retrieval, ingestion, non-destructive acknowledgment/dismissal, duplicate suppression (60s refractory), and informational disclaimers.
+  - **Missing Evidence (Partial):** Automated background rule-generation of alerts directly upon measurement ingestion is missing; user configuration of alert threshold preferences is not supported in the UI or backend.
 
 ---
 
@@ -224,10 +225,9 @@
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
   - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
 * **Automated Test References:**
-  - [tests/test_phase3_features.py:L232-L287](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L232-L287) (`test_user_history_pagination_and_filtering`)
-  - [tests/test_phase3_features.py:L289-L321](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L289-L321) (`test_user_history_isolation`)
+  - [tests/test_phase3_features.py:L232-L321](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L232-L321) (`test_user_history_pagination_and_filtering`, isolation)
 * **Evidence / Notes:**
-  - Unified `GET /api/history` endpoint with category filtering (`all`, `measurements`, `alerts`), metric type filtering, and pagination metadata (`page`, `limit`, `total_items`, `total_pages`, `has_next`, `has_prev`).
+  - Unified `GET /api/history` with category filtering, type filtering, pagination metadata, and owner isolation.
   - Interactive UI with expandable payload view and page controls in `TrendsPage.tsx`.
 
 ---
@@ -259,7 +259,7 @@
   - Offer optional demo data so evaluators can explore the UI without entering personal data.
   - Clearly label demo accounts, demo measurements, and simulated model outputs.
   - Provide a reset/clear-demo option that does not delete real user data.
-* **Status:** **Implemented**
+* **Status:** **Partial**
 * **Implementation Files:**
   - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
   - [src/pages/LandingPage.tsx](file:///d:/projects/health%20tracker/src/pages/LandingPage.tsx)
@@ -267,8 +267,8 @@
 * **Automated Test References:**
   - [tests/test_phase2_auth_measurements.py:L322-L379](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L322-L379) (`test_demo_data_population_and_non_destructive_reset`)
 * **Evidence / Notes:**
-  - Seeded demo telemetry labelled with DEMO badge.
-  - `POST /api/measurements/demo/reset` deletes only records where `source = 'demo'`, preserving real user records (`manual` and `import`).
+  - **Implemented:** Demo accounts, demo data seeding, clear DEMO tags, and non-destructive demo reset.
+  - **Missing Evidence (Partial):** Guided first-run onboarding state explaining the application, data sources, and non-diagnostic purpose to a first-time user is not implemented.
 
 ---
 
@@ -278,17 +278,17 @@
   - Provide data export/deletion controls if feasible for the selected architecture and document any limitations.
   - Keep secrets and credentials out of frontend source code and version control.
   - Use secure transport in deployment and avoid sensitive information in application logs.
-* **Status:** **Implemented**
+* **Status:** **Partial**
 * **Implementation Files:**
   - [vitasense/api/auth.py](file:///d:/projects/health%20tracker/vitasense/api/auth.py)
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
   - [src/pages/SettingsPage.tsx](file:///d:/projects/health%20tracker/src/pages/SettingsPage.tsx)
 * **Automated Test References:**
   - [tests/test_phase3_features.py:L323-L376](file:///d:/projects/health%20tracker/tests/test_phase3_features.py#L323-L376) (`test_data_export_and_account_deletion`)
+  - [tests/test_auth_offline.py](file:///d:/projects/health%20tracker/tests/test_auth_offline.py) (`test_no_credentials_in_frontend_source`)
 * **Evidence / Notes:**
-  - `GET /api/auth/export` generates a sanitized JSON export of the user's profile, measurements, and alerts (excluding password hashes and secrets).
-  - `DELETE /api/auth/account` permanently deletes user credentials, sessions, profile, measurements, and alerts with foreign key cascades.
-  - No credentials or sensitive request bodies appear in application logs.
+  - **Implemented:** Data export (`GET /api/auth/export`), account deletion (`DELETE /api/auth/account`), no credentials in frontend code or logs.
+  - **Missing Evidence (Partial):** An explicit explanation of what information is collected and why shown *before* collecting it is missing from registration and measurement forms.
 
 ---
 

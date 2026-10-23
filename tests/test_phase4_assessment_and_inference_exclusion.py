@@ -123,18 +123,17 @@ def test_fr06_fr07_assessment_submission_and_explanation():
     assert "NOT a medical diagnosis" in res_data["disclaimer"]
     assert "Seek immediate emergency medical care" in res_data["when_to_seek_care"]
 
-    # FR-07 Validation
-    assert res_data["model_version"] == "vitasense-ruleset-v2.1"
+    # FR-07 Validation: Model labelled as DEMO RULESET v2.1, not evaluated
+    assert res_data["model_version"] == "DEMO RULESET v2.1, not evaluated"
     feat_contribs = res_data["feature_contributions"]
     assert "symptom_severity_factor" in feat_contribs
     assert "activity_context_factor" in feat_contribs
     assert "red_flag_indicators_factor" in feat_contribs
     assert feat_contribs["symptom_severity_factor"] > 0.0
 
-    # Uncertainty interval
-    uncert = res_data["uncertainty_range"]
-    assert len(uncert) == 2
-    assert uncert[0] <= res_data["risk_score"] <= uncert[1]
+    # Uncertainty note: uncertainty not estimated for this demo ruleset
+    assert res_data["uncertainty_note"] == "uncertainty not estimated for this demo ruleset"
+    assert res_data["uncertainty_range"] is None
 
     # History & Latest checks
     latest_res = client.get("/api/assessment/latest", headers=headers)

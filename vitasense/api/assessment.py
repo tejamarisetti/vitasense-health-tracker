@@ -18,7 +18,7 @@ from vitasense.api.auth import get_current_user
 
 router = APIRouter(prefix="/api/assessment", tags=["assessment"])
 
-MODEL_VERSION = "vitasense-ruleset-v2.1"
+MODEL_VERSION = "DEMO RULESET v2.1, not evaluated"
 CLINICAL_DISCLAIMER = (
     "Informational screening only: This result reflects a rule-based screening risk signal "
     "and is NOT a medical diagnosis, clinical prognosis, or treatment directive. If you experience "
@@ -76,7 +76,8 @@ class AssessmentResult(BaseModel):
     risk_score: float
     contributing_factors: List[str]
     feature_contributions: Dict[str, float]
-    uncertainty_range: Tuple[float, float]
+    uncertainty_range: Optional[Tuple[float, float]] = None
+    uncertainty_note: str = "uncertainty not estimated for this demo ruleset"
     model_version: str
     is_demo: bool
     missing_data_notes: List[str]
@@ -91,10 +92,10 @@ class AssessmentResult(BaseModel):
 def compute_screening_risk(
     answers: SymptomQuestionnaireInput,
     user_baseline_hr: Optional[int] = None,
-) -> Tuple[str, float, List[str], Dict[str, float], Tuple[float, float], List[str]]:
+) -> Tuple[str, float, List[str], Dict[str, float], Optional[Tuple[float, float]], str, List[str]]:
     """
     Evaluates rule-based screening score in range [0.0, 1.0] and computes
-    transparent feature attributions (FR-07) and uncertainty bounds.
+    transparent feature attributions (FR-07) without fabricated calibration.
     """
     factors: List[str] = []
     missing_data: List[str] = []
@@ -187,14 +188,11 @@ def compute_screening_risk(
         "red_flag_indicators_factor": round(w_red_flags, 3),
     }
 
-    # Calibrated uncertainty interval [lower, upper] (FR-07)
-    # Heuristic uncertainty margin is +/- 0.08 based on self-reported variance
-    uncertainty_margin = 0.08
-    lower_bound = round(max(0.0, total_score - uncertainty_margin), 3)
-    upper_bound = round(min(1.0, total_score + uncertainty_margin), 3)
-    uncertainty_range = (lower_bound, upper_bound)
+    # Prediction uncertainty (FR-07): removed fixed +/- 0.08 margin; uncertainty is not estimated for this demo ruleset
+    uncertainty_range = None
+    uncertainty_note = "uncertainty not estimated for this demo ruleset"
 
-    return risk_level, round(total_score, 3), factors, feature_contributions, uncertainty_range, missing_data
+    return risk_level, round(total_score, 3), factors, feature_contributions, uncertainty_range, uncertainty_note, missing_data
 
 
 # --- API Endpoints ---
@@ -243,12 +241,12 @@ def submit_symptom_assessment(
         if prof and prof["resting_hr"]:
             baseline_hr = prof["resting_hr"]
 
-    risk_lvl, score, factors, feat_contribs, uncert, missing = compute_screening_risk(payload, baseline_hr)
+    risk_lvl, score, factors, feat_contribs, uncert, uncert_note, missing = compute_screening_risk(payload, baseline_hr)
 
     limitations = (
-        "Calculated by rule-based heuristic screening model (vitasense-ruleset-v2.1). "
+        "Calculated by demo rule-based heuristic screening ruleset (DEMO RULESET v2.1, not evaluated). "
         "Inputs are self-reported and not verified by 12-lead ECG or clinical auscultation. "
-        "Prediction uncertainty bounds reflect subjective reporting variability."
+        "Uncertainty not estimated for this demo ruleset."
     )
     when_to_seek = (
         "Seek immediate emergency medical care if you experience acute chest tightness radiating to the jaw/arm, "
@@ -272,7 +270,7 @@ def submit_symptom_assessment(
                 score,
                 json.dumps(factors),
                 json.dumps(feat_contribs),
-                json.dumps(list(uncert)),
+                json.dumps(list(uncert)) if uncert else "[]",
                 MODEL_VERSION,
                 1 if payload.is_demo else 0,
                 CLINICAL_DISCLAIMER,
@@ -289,6 +287,7 @@ def submit_symptom_assessment(
         contributing_factors=factors,
         feature_contributions=feat_contribs,
         uncertainty_range=uncert,
+        uncertainty_note=uncert_note,
         model_version=MODEL_VERSION,
         is_demo=payload.is_demo,
         missing_data_notes=missing,
@@ -318,7 +317,9 @@ def list_user_assessments(
     for r in rows:
         factors = json.loads(r["contributing_factors"])
         feat_contribs = json.loads(r["feature_contributions"])
-        uncert = tuple(json.loads(r["uncertainty_range"]))
+        raw_uncert = r["uncertainty_range"]
+        parsed = json.loads(raw_uncert) if raw_uncert else []
+        uncert = tuple(parsed) if isinstance(parsed, list) and len(parsed) == 2 else None
 
         results.append(
             AssessmentResult(
@@ -329,13 +330,11 @@ def list_user_assessments(
                 contributing_factors=factors,
                 feature_contributions=feat_contribs,
                 uncertainty_range=uncert,
+                uncertainty_note="uncertainty not estimated for this demo ruleset",
                 model_version=r["model_version"],
                 is_demo=bool(r["is_demo"]),
                 missing_data_notes=[],
-                model_limitations=(
-                    "Rule-based screening evaluation (vitasense-ruleset-v2.1). "
-                    "Uncertainty interval indicates self-report variance."
-                ),
+                model_limitations="Demo screening ruleset (DEMO RULESET v2.1, not evaluated).",
                 when_to_seek_care="Consult a medical professional if symptoms recur or cause discomfort.",
                 disclaimer=r["disclaimer"],
                 created_at=r["created_at"],

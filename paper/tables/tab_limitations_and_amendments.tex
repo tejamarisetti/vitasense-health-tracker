@@ -1,0 +1,39 @@
+\begin{table}[htbp]
+\caption{Methodological Limitations \& Protocol Amendments (from git log)}
+\label{tab:limitations_and_amendments}
+\centering
+\scriptsize
+\renewcommand{\arraystretch}{1.08}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{|l|p{5.1cm}|}
+\hline
+\multicolumn{2}{|c|}{\textbf{Part A: Methodological Constraints and Threats to Validity}} \\
+\hline
+Synthetic Injection & 112 episodes ($105$--$135$\,bpm); Arm 1 recall is directly tied to this injection range vs 100\,bpm floor. \\
+\hline
+Cohort \& Protocol & $N = 15$ healthy adults in PPG-DaLiA protocol; free-living unconstrained 24/7 monitoring unproven. \\
+\hline
+Subject S5 Outlier & Severe baseline drift and motion artifact; metrics reported both pooled (All-15) and without S5. \\
+\hline
+Design Choice Bounds & Cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices with unopened sources; evaluated via sensitivity grids. \\
+\hline
+Grid Boundaries & Tuning selected lower boundary ($\tau_{\text{pop}}=100$\,bpm, $k=2.0$, $P=10$\,s); fallback rule activated in 100\% of Arm 2 folds. \\
+\hline
+\multicolumn{2}{|c|}{\textbf{Part B: Protocol Amendments and Provenance (from git log)}} \\
+\hline
+Protocol Freeze [\texttt{41eff1e}] & 2026-10-18: Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
+\hline
+ENMO Scale Fix [\texttt{3a5ccc2}] & 2026-10-19: Removed redundant /64 accelerometer division, enforced median norm check $[0.8, 1.2]$\,g. \\
+\hline
+Adaptive Ramp [\texttt{e358bf1}] & 2026-10-19: Adapted synthetic tachycardia ramp rates ($r_{\text{lo}}, r_{\text{hi}}$) clamped to $[105, 135]$\,bpm. \\
+\hline
+Emitter Rules [\texttt{cad4c7f}] & 2026-10-19: StandardAlertEmitter with $P \in \{10, 20, 30\}$\,s and refractory $R = 60$\,s across all arms. \\
+\hline
+Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids for $\tau_{\text{pop}}$ and $k$ following boundary selection. \\
+\hline
+Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
+\hline
+Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha = 0.15$ (unratified exploratory). \\
+\hline
+\end{tabular}
+\end{table}

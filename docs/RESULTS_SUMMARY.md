@@ -10,7 +10,7 @@
 - **Arm 3b (Software Trust Gate):** Arm 2 personal baseline paired with a multi-signal software trust score gate ($S_{\text{trust}}(t) \ge \theta_{\text{trust}}$).
 - **Arm 3b-noMotion (Trust Gate Ablation):** Arm 3b trust score gate with the accelerometer kinematic term ablated ($w_{\text{mot}} = 0$).
 
-*(Note: Arm 4 Conformal Abstention was not evaluated per experimental hold).*
+- **Arm 4 (added post hoc):** Inductive conformal calibration on low-motion training windows with selective multi-attribute trust defect penalty.
 
 ---
 
@@ -40,21 +40,25 @@ Precision is defined on clean alerts: $\text{Precision} = \frac{TP_{\text{alerts
 | | Arm 3a (+Kinematic) | 80.4% | 1.47 | 133 | 46 | 74.3% | 0.772 |
 | | Arm 3b (+Trust Score) | 79.5% | 1.69 | 130 | 53 | 71.0% | 0.750 |
 | | Arm 3b-noMotion | 79.5% | 2.91 | 130 | 91 | 58.8% | 0.676 |
+| | Arm 4 (added post hoc) | 72.3% | 0.70 | 81 | 22 | 78.6% | 0.753 |
 | **Regime A (Low Duty ~10%)** | Arm 1 (Fixed) | 91.1% | 3.58 | 132 | 112 | 54.1% | 0.679 |
 | | Arm 2 (Personal) | 80.4% | 6.08 | 132 | 190 | 41.0% | 0.543 |
 | | Arm 3a (+Kinematic) | 80.4% | 1.63 | 132 | 51 | 72.1% | 0.760 |
 | | Arm 3b (+Trust Score) | 79.5% | 1.82 | 129 | 57 | 69.4% | 0.741 |
 | | Arm 3b-noMotion | 79.5% | 3.07 | 129 | 96 | 57.3% | 0.666 |
+| | Arm 4 (added post hoc) | 62.5% | 0.67 | 70 | 21 | 76.9% | 0.690 |
 | **Regime B (Nominal ~25-30%)** | Arm 1 (Fixed) | 91.1% | 4.51 | 132 | 141 | 48.4% | 0.632 |
 | | Arm 2 (Personal) | 75.9% | 7.16 | 125 | 224 | 35.8% | 0.487 |
 | | Arm 3a (+Kinematic) | 75.9% | 2.30 | 125 | 72 | 63.5% | 0.691 |
 | | Arm 3b (+Trust Score) | 75.0% | 2.37 | 122 | 74 | 62.2% | 0.680 |
 | | Arm 3b-noMotion | 75.0% | 3.61 | 122 | 113 | 51.9% | 0.614 |
+| | Arm 4 (added post hoc) | 55.4% | 0.70 | 62 | 22 | 73.8% | 0.633 |
 | **F7 (High-Motion BVP Noise)** | Arm 1 (Fixed) | 92.0% | 3.07 | 131 | 96 | 57.7% | 0.709 |
 | | Arm 2 (Personal) | 64.3% | 4.61 | 100 | 144 | 41.0% | 0.501 |
 | | Arm 3a (+Kinematic) | 64.3% | 1.57 | 100 | 49 | 67.1% | 0.657 |
 | | Arm 3b (+Trust Score) | 58.0% | 1.28 | 90 | 40 | 69.2% | 0.631 |
 | | Arm 3b-noMotion | 58.0% | 2.05 | 90 | 64 | 58.4% | 0.582 |
+| | Arm 4 (added post hoc) | 54.5% | 0.35 | 61 | 11 | 84.7% | 0.663 |
 
 ---
 

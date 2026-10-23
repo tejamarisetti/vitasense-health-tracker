@@ -654,3 +654,76 @@ def delete_user_account(current_user: dict = Depends(get_current_user)):
         "message": "Account and all associated health records permanently deleted.",
     }
 
+
+@router.post("/demo", response_model=AuthResponse)
+def demo_login():
+    """
+    Creates or reuses a server-side account labelled DEMO (no 'Dr.' persona, no fixed password in client code).
+    Returns a valid session token.
+    """
+    demo_email = "demo@vitasense.local"
+    demo_name = "DEMO"
+    now_iso = datetime.now(timezone.utc).isoformat()
+    raw_token = secrets.token_urlsafe(32)
+    token_h = hash_token(raw_token)
+    expires_at = (datetime.now(timezone.utc) + timedelta(days=7)).isoformat()
+
+    with get_db_connection() as conn:
+        user_row = conn.execute("SELECT id, created_at FROM users WHERE email = ?", (demo_email,)).fetchone()
+        if user_row:
+            user_id = user_row["id"]
+            created_at = user_row["created_at"]
+        else:
+            # Generate random secure hash since password is never used or stored in client
+            random_pw = secrets.token_urlsafe(24)
+            pw_hash, salt = hash_password(random_pw)
+            cur = conn.execute(
+                "INSERT INTO users (email, password_hash, salt, created_at) VALUES (?, ?, ?, ?)",
+                (demo_email, pw_hash, salt, now_iso),
+            )
+            user_id = cur.lastrowid
+            created_at = now_iso
+            conn.execute(
+                """
+                INSERT INTO user_profiles (
+                    user_id, name, age, sex, height, weight,
+                    resting_hr, activity_level, health_goal, provider, updated_at
+                ) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)
+                """,
+                (user_id, demo_name, 29, "Other", "175 cm", "70 kg", 65, "Moderately Active", "Cardiovascular Wellness", "email", now_iso),
+            )
+
+        conn.execute(
+            """
+            INSERT INTO sessions (token_hash, user_id, created_at, expires_at)
+            VALUES (?, ?, ?, ?)
+            """,
+            (token_h, user_id, now_iso, expires_at),
+        )
+
+        prof_row = conn.execute(
+            """
+            SELECT name, age, sex, height, weight, resting_hr, activity_level, health_goal, provider
+            FROM user_profiles WHERE user_id = ?
+            """,
+            (user_id,),
+        ).fetchone()
+
+    profile = ProfileSchema(
+        name=prof_row["name"] if prof_row else demo_name,
+        age=prof_row["age"] if prof_row else 29,
+        sex=prof_row["sex"] if prof_row else "Other",
+        height=prof_row["height"] if prof_row else "175 cm",
+        weight=prof_row["weight"] if prof_row else "70 kg",
+        resting_hr=prof_row["resting_hr"] if prof_row else 65,
+        activity_level=prof_row["activity_level"] if prof_row else "Moderately Active",
+        health_goal=prof_row["health_goal"] if prof_row else "Cardiovascular Wellness",
+        provider=prof_row["provider"] if prof_row else "email",
+    )
+
+    return AuthResponse(
+        token=raw_token,
+        user=UserResponse(id=user_id, email=demo_email, created_at=created_at),
+        profile=profile,
+    )
+

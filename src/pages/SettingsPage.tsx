@@ -396,7 +396,7 @@ export function SettingsPage({ go, theme = 'dark', setTheme }: SettingsPageProps
                     type="email"
                     value={contactEmail}
                     onChange={(e) => setContactEmail(e.target.value)}
-                    placeholder="alex@example.com"
+                    placeholder="user@example.com"
                     required
                     style={{
                       width: '100%',

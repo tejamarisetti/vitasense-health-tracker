@@ -12,13 +12,13 @@ export interface UserProfile {
 }
 
 export const defaultUserProfile: UserProfile = {
-  name: 'Alex Morgan',
-  email: 'alex@example.com',
+  name: 'DEMO User',
+  email: 'demo@vitasense.local',
   age: 29,
-  sex: 'Male',
-  height: '178 cm',
-  weight: '72 kg',
-  restingHr: 64,
+  sex: 'Other',
+  height: '175 cm',
+  weight: '70 kg',
+  restingHr: 65,
   activityLevel: 'Moderately Active',
   healthGoal: 'Cardiovascular Wellness',
   provider: 'email',

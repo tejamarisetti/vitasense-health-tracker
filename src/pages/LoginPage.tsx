@@ -23,23 +23,69 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
   const [authError, setAuthError] = useState<string | null>(null);
   const [isLoading, setIsLoading] = useState(false);
 
+  const handleQuickDemoLogin = async () => {
+    setAuthError(null);
+    setIsLoading(true);
+    try {
+      const res = await fetch('/api/auth/demo', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setAuthToken(data.token);
+        const p: UserProfile = {
+          name: data.profile.name || 'DEMO',
+          email: data.user.email,
+          age: data.profile.age || 29,
+          sex: data.profile.sex || 'Other',
+          height: data.profile.height || '175 cm',
+          weight: data.profile.weight || '70 kg',
+          restingHr: data.profile.resting_hr || 65,
+          activityLevel: data.profile.activity_level || 'Moderately Active',
+          healthGoal: data.profile.health_goal || 'Cardiovascular Wellness',
+          provider: data.profile.provider || 'email',
+        };
+        saveUserProfile(p);
+        if (onLoginSuccess) onLoginSuccess(p);
+        go('overview');
+        return;
+      }
+      const errData = await res.json().catch(() => ({}));
+      setAuthError(errData.detail || 'Demo authentication failed on server. Please retry.');
+    } catch {
+      setAuthError('Network error: Unable to connect to authentication server. Please check your connection and retry.');
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setAuthError(null);
+
+    const loginEmail = email.trim();
+    const loginPass = password;
+
+    if (!loginEmail || !loginPass) {
+      setAuthError('Please enter both email and password.');
+      return;
+    }
+
     setIsLoading(true);
 
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ email: loginEmail, password: loginPass }),
       });
 
       if (res.ok) {
         const data = await res.json();
         setAuthToken(data.token);
         const p: UserProfile = {
-          name: data.profile.name || email.split('@')[0],
+          name: data.profile.name || loginEmail.split('@')[0],
           email: data.user.email,
           age: data.profile.age || 29,
           sex: data.profile.sex || 'Male',
@@ -56,59 +102,10 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
         return;
       }
 
-      // If user doesn't exist yet, attempt registration for smooth experience
       const errData = await res.json().catch(() => ({}));
-      if (res.status === 401 && errData.detail?.includes('Invalid email or password')) {
-        const regRes = await fetch('/api/auth/register', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({
-            email,
-            password: password.length >= 6 ? password : `${password}123!`,
-            name: email.split('@')[0],
-          }),
-        });
-
-        if (regRes.ok) {
-          const regData = await regRes.json();
-          setAuthToken(regData.token);
-          const p: UserProfile = {
-            name: regData.profile.name || email.split('@')[0],
-            email: regData.user.email,
-            age: regData.profile.age || 29,
-            sex: regData.profile.sex || 'Male',
-            height: regData.profile.height || '178 cm',
-            weight: regData.profile.weight || '72 kg',
-            restingHr: regData.profile.resting_hr || 64,
-            activityLevel: regData.profile.activity_level || 'Moderately Active',
-            healthGoal: regData.profile.health_goal || 'Cardiovascular Wellness',
-            provider: 'email',
-          };
-          saveUserProfile(p);
-          if (onLoginSuccess) onLoginSuccess(p);
-          go('overview');
-          return;
-        }
-      }
-
       setAuthError(errData.detail || 'Authentication failed. Please verify your credentials.');
-    } catch (err) {
-      console.warn('Backend authentication unreachable; proceeding locally.', err);
-      const updatedProfile: UserProfile = {
-        name: email.split('@')[0] || 'Alex Morgan',
-        email: email || 'alex@example.com',
-        age: 29,
-        sex: 'Male',
-        height: '178 cm',
-        weight: '72 kg',
-        restingHr: 64,
-        activityLevel: 'Moderately Active',
-        healthGoal: 'Cardiovascular Wellness',
-        provider: 'email',
-      };
-      saveUserProfile(updatedProfile);
-      if (onLoginSuccess) onLoginSuccess(updatedProfile);
-      go('overview');
+    } catch {
+      setAuthError('Network error: Unable to connect to authentication server. Please check your connection and retry.');
     } finally {
       setIsLoading(false);
     }
@@ -246,6 +243,74 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
           <h2>Welcome back.</h2>
           <p>Enter your details to continue to your health workspace.</p>
 
+          {authError && (
+            <div
+              className="login-error-banner"
+              style={{
+                backgroundColor: 'rgba(239, 68, 68, 0.12)',
+                border: '1px solid rgba(239, 68, 68, 0.4)',
+                color: '#ef4444',
+                padding: '12px 14px',
+                borderRadius: '8px',
+                marginBottom: '16px',
+                fontSize: '13px',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '8px',
+              }}
+            >
+              <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
+                <Icon name="shield" size={16} />
+                <span style={{ flex: 1 }}>{authError}</span>
+              </div>
+              <button
+                type="button"
+                onClick={() => { setAuthError(null); }}
+                style={{
+                  alignSelf: 'flex-start',
+                  background: 'rgba(239, 68, 68, 0.2)',
+                  border: '1px solid #ef4444',
+                  color: '#ef4444',
+                  borderRadius: '6px',
+                  padding: '4px 10px',
+                  fontSize: '12px',
+                  fontWeight: 600,
+                  cursor: 'pointer',
+                }}
+              >
+                Retry
+              </button>
+            </div>
+          )}
+
+          <div style={{ marginBottom: '14px' }}>
+            <button
+              type="button"
+              id="quick-demo-login-btn"
+              onClick={handleQuickDemoLogin}
+              disabled={isLoading}
+              style={{
+                width: '100%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                gap: '8px',
+                padding: '11px 16px',
+                background: 'linear-gradient(135deg, rgba(16, 185, 129, 0.15), rgba(6, 95, 70, 0.25))',
+                border: '1px solid rgba(16, 185, 129, 0.4)',
+                color: '#10b981',
+                fontWeight: 600,
+                fontSize: '13.5px',
+                borderRadius: '8px',
+                cursor: 'pointer',
+                transition: 'all 0.2s ease',
+              }}
+            >
+              <Icon name="sparkles" size={16} />
+              <span>{isLoading ? 'Connecting...' : 'Instant Demo Access (DEMO)'}</span>
+            </button>
+          </div>
+
           <form onSubmit={handleSubmit}>
             <label className={focusField === 'email' ? 'field-active' : ''}>
               <span>Email address</span>
@@ -257,7 +322,7 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
                   onChange={(e) => setEmail(e.target.value)}
                   onFocus={() => setFocusField('email')}
                   onBlur={() => setFocusField(null)}
-                  placeholder="alex@example.com"
+                  placeholder="user@example.com"
                   required
                 />
               </div>
@@ -303,8 +368,8 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
               <i /> Keep me signed in on this device
             </label>
 
-            <button className="login-submit" type="submit">
-              Enter VitaSense <Icon name="arrow" />
+            <button className="login-submit" type="submit" disabled={isLoading}>
+              {isLoading ? 'Verifying...' : 'Enter VitaSense'} <Icon name="arrow" />
             </button>
           </form>
 
