@@ -66,6 +66,7 @@ data/*.db
 *.log
 *.synctex.gz
 paper/page*.png
+paper/paper_pages_png/
 paper/test_tikz.*
 
 # Temporary extraction files

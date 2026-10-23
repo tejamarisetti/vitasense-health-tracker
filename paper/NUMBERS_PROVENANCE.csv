@@ -94,3 +94,10 @@ Arm 4 F7 True Alerts,82,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,resul
 Arm 4 F7 False Alerts,11,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
 Arm 4 F7 Precision,88.2%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
 Arm 4 F7 F1 Score,0.673,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
+Bent 2020 Motion Quote,"Potential inaccuracies in PPG stem from... motion artifacts",Sec. II,read_url_content,paper/verified_sources/ref_bent_sources.txt,VERIFIED
+Karlen 2012 Quality Quote,"signal quality estimation using repeated Gaussian filters and cross-correlation",Sec. II,read_url_content,paper/verified_sources/ref_karlen_sqi.txt,VERIFIED
+Li 2012 False Alarm Quote,"Signal quality and data fusion for false alarm reduction",Sec. II,read_url_content,paper/verified_sources/ref_li_clifford_fusion.txt,VERIFIED
+Cvach 2012 Alarm Fatigue Quote,"Monitor Alarm Fatigue: An Integrative Review",Sec. II,read_url_content,paper/verified_sources/ref_cvach_alarm_fatigue.txt,VERIFIED
+Clifford 2016 Challenge Quote,"address the issue of false alarm suppression using all available signals",Sec. II,read_url_content,paper/verified_sources/ref_clifford_challenge.txt,VERIFIED
+Zhang 2015 TROIKA Quote,"TROIKA: A general framework for heart rate monitoring using wrist-type photoplethysmographic signals",Sec. II,read_url_content,paper/verified_sources/ref_zhang_troika.txt,VERIFIED
+Orphanidou 2014 SQI Quote,"Signal Quality Indices for the Electrocardiogram and Photoplethysmogram",Sec. II,read_url_content,paper/verified_sources/ref_orphanidou_sqi.txt,VERIFIED
