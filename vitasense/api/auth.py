@@ -663,7 +663,7 @@ def demo_login(request: Request):
     Rate limited and protected by ENABLE_DEMO_LOGIN environment switch.
     Returns a valid session token.
     """
-    enable_demo = os.getenv("ENABLE_DEMO_LOGIN", "true").strip().lower() in ("true", "1", "yes")
+    enable_demo = os.getenv("ENABLE_DEMO_LOGIN", "false").strip().lower() in ("true", "1", "yes")
     if not enable_demo:
         raise HTTPException(
             status_code=status.HTTP_403_FORBIDDEN,

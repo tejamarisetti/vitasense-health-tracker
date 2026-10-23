@@ -37,11 +37,29 @@ def test_backend_down_never_yields_session():
     assert "token" not in data, "Backend down/error must never return an authentication token"
 
 
-def test_demo_endpoint_creates_or_reuses_demo_account():
+def test_demo_default_is_disabled(monkeypatch):
+    """
+    Verifies that when ENABLE_DEMO_LOGIN is unset (defaulting to false),
+    POST /api/auth/demo returns HTTP 403 Forbidden.
+    """
+    from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+
+    monkeypatch.delenv("ENABLE_DEMO_LOGIN", raising=False)
+    res = client.post("/api/auth/demo")
+    assert res.status_code == 403
+    assert "Demo account access is disabled" in res.json()["detail"]
+
+
+def test_demo_endpoint_creates_or_reuses_demo_account(monkeypatch):
     """
     Verifies that POST /api/auth/demo creates or reuses an account labelled DEMO
-    with no 'Dr.' persona and returns a valid server-side session token.
+    with no 'Dr.' persona and returns a valid server-side session token when enabled.
     """
+    from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+    monkeypatch.setenv("ENABLE_DEMO_LOGIN", "true")
+
     res = client.post("/api/auth/demo")
     assert res.status_code == 200, f"Demo endpoint failed: {res.text}"
     data = res.json()
@@ -97,11 +115,15 @@ def test_no_credentials_strings_in_src():
     )
 
 
-def test_demo_no_fixed_password():
+def test_demo_no_fixed_password(monkeypatch):
     """
     Verifies that the demo account uses a random, salted, PBKDF2-hashed password
     generated server-side and never leaks a fixed password or password hash.
     """
+    from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+    monkeypatch.setenv("ENABLE_DEMO_LOGIN", "true")
+
     res = client.post("/api/auth/demo")
     assert res.status_code == 200
     data = res.json()
@@ -120,13 +142,14 @@ def test_demo_no_fixed_password():
         assert len(row["salt"]) >= 16
 
 
-def test_demo_rate_limiting():
+def test_demo_rate_limiting(monkeypatch):
     """
     Verifies that POST /api/auth/demo enforces rate limiting (10 requests per minute)
     and returns HTTP 429 when the limit is exceeded.
     """
     from vitasense.api.auth import demo_limiter
     demo_limiter.reset()
+    monkeypatch.setenv("ENABLE_DEMO_LOGIN", "true")
 
     # Make 10 allowed calls
     for i in range(10):
@@ -156,13 +179,15 @@ def test_demo_environment_switch_disabled(monkeypatch):
     assert "Demo account access is disabled" in res.json()["detail"]
 
 
-def test_demo_cannot_access_other_users_data():
+def test_demo_cannot_access_other_users_data(monkeypatch):
     """
     Verifies strict multi-tenant isolation:
     A session obtained via POST /api/auth/demo cannot read, list, or export
     measurements or alerts belonging to another registered user.
     """
     from vitasense.api.auth import demo_limiter
+    demo_limiter.reset()
+    monkeypatch.setenv("ENABLE_DEMO_LOGIN", "true")
     demo_limiter.reset()
 
     # 1. Register a private user and insert a private measurement and alert

@@ -500,7 +500,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
         c_short = cond_short_map.get(r['Condition'], r['Condition'])
         ci_str = f"[{r['CI95_Mean_Low']:+.2f}, {r['CI95_Mean_High']:+.2f}]"
         lines.append(
-            f"{c_short:<22} & {r['Mean_Diff_FA_hr']:>+5.2f} & {ci_str} & {r['Wilcoxon_W']:>5.1f} & {r['Wilcoxon_p']:>6.4f} \\\\"
+            f"{c_short:<22} & {r['Mean_Diff_FA_hr']:>+5.2f} & {ci_str} & {r['Wilcoxon_W']:>5.1f} & {r['Wilcoxon_p']:>4.2f} \\\\"
         )
     lines.extend([
         r"\hline",
@@ -719,7 +719,7 @@ Synthetic Injection & 112 episodes ($105$--$135$\,bpm); Arm 1 recall is directly
 \hline
 Cohort \& Protocol & $N = 15$ healthy adults in PPG-DaLiA protocol; free-living unconstrained 24/7 monitoring unproven. \\
 \hline
-Subject S5 Outlier & Severe baseline drift and motion artifact; metrics reported both pooled (All-15) and without S5. \\
+Subject S5 Outlier & Sustained elevated resting heart rate of unknown cause; reference ECG verified clean; metrics reported both pooled (All-15) and without S5. \\
 \hline
 Design Choice Bounds & Cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices with unopened sources; evaluated via sensitivity grids. \\
 \hline
@@ -747,6 +747,45 @@ Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abste
 """
     (TAB_DIR / "tab_limitations_and_amendments.tex").write_text(tab_limitations_and_amendments, encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_limitations_and_amendments.tex'}")
+
+    # 13. Combined Statistical and Strata Table (Table V)
+    tab_statistical_and_strata = r"""\begin{table}[htbp]
+\caption{Paired Statistical Comparison \& Subgroup Stratification}
+\label{tab:statistical_and_strata}
+\centering
+\footnotesize
+\renewcommand{\arraystretch}{1.14}
+\setlength{\tabcolsep}{3.5pt}
+\begin{tabular}{|l|c|c|c|c|}
+\hline
+\multicolumn{5}{|c|}{\textbf{Part A: Paired Difference ($\Delta = \text{Arm 3b} - \text{Arm 3a}$)}} \\
+\hline
+\textbf{Condition} & \textbf{Mean $\Delta$} & \textbf{95\% CI} & \textbf{$W$} & \textbf{$p$-value} \\
+\hline
+Clean (Cond 0)       & $+0.13$ & $[-0.54, +0.89]$ & 31.0 & $0.86$ \\
+Regime A ($\approx 10\%$) & $+0.05$ & $[-0.66, +0.82]$ & 40.0 & $0.70$ \\
+Regime B ($\approx 25\%$) & $-0.04$ & $[-0.78, +0.69]$ & 52.0 & $0.98$ \\
+F7 Optical ($+5$\,dB)& $-0.49$ & $[-1.47, +0.38]$ & 17.0 & $0.28$ \\
+\hline
+\multicolumn{5}{|c|}{\textbf{Part B: Stratified Event Recall (\%) / Clean FA/hr}} \\
+\hline
+\textbf{Stratum} & \textbf{Arm 1} & \textbf{Arm 2} & \textbf{Arm 3a} & \textbf{Arm 3b} \\
+\hline
+Clean: All-15      & 91 / 3.2  & 80 / 5.7  & 80 / 1.5  & 80 / 1.7  \\
+Clean: without S5   & 91 / 2.9  & 80 / 5.3  & 80 / 1.4  & 79 / 1.7  \\
+Clean: S5/6/11     & 100 / 9.4 & 94 / 16.1 & 94 / 5.1  & 94 / 3.9  \\
+\hline
+Reg B: All-15      & 91 / 4.5  & 76 / 7.2  & 76 / 2.3  & 75 / 2.4  \\
+Reg B: without S5   & 91 / 4.1  & 75 / 6.4  & 75 / 2.2  & 74 / 2.3  \\
+\hline
+F7: All-15         & 92 / 3.1  & 64 / 4.6  & 64 / 1.6  & 58 / 1.3  \\
+F7: without S5      & 92 / 2.7  & 63 / 4.0  & 63 / 1.2  & 56 / 1.1  \\
+\hline
+\end{tabular}
+\end{table}
+"""
+    (TAB_DIR / "tab_statistical_and_strata.tex").write_text(tab_statistical_and_strata, encoding="utf-8")
+    print(f"Saved: {TAB_DIR / 'tab_statistical_and_strata.tex'}")
 
 
 
@@ -820,12 +859,44 @@ def generate_provenance_csv():
         {"Claim_Or_Number": "F7 Wilcoxon p", "Value": "0.2845", "Location": "Sec. VII, Tab. VI", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/paired_3b_vs_3a.csv", "Status": "VERIFIED"},
         {"Claim_Or_Number": "F7 95% Bootstrap CI", "Value": "[-1.47, +0.38]", "Location": "Sec. VII, Tab. VI", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/paired_3b_vs_3a.csv", "Status": "VERIFIED"},
 
+        # Table I Related Work Literature Provenance (opened & verified)
+        {"Claim_Or_Number": "Reiss 2019 Cohort N=15", "Value": "15 subjects", "Location": "Sec. II, Tab. I", "Generating_Script": "scripts/prepare_benchmark_ground_truth.py", "Output_File": "https://archive.ics.uci.edu/dataset/495/ppg+dalia", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Elgendi 2016 SQI count", "Value": "8 SQIs", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Charlton 2023 roadmap claim", "Value": "Benchmark & evaluation needs", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Vazquez & Facelli 2022 study count", "Value": "14 clinical studies", "Location": "Sec. II, Tab. I", "Generating_Script": "read_url_content", "Output_File": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/", "Status": "VERIFIED"},
+
         # Edge of Grid
         {"Claim_Or_Number": "Arm 1 tau_pop boundary 100", "Value": "100.0% (15/15)", "Location": "Sec. VII, Tab. VII", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/edge_of_grid.csv", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Arm 1 Persistence boundary 30", "Value": "100.0% (15/15)", "Location": "Sec. VII, Tab. VII", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/edge_of_grid.csv", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Arm 2 k boundary 2.0", "Value": "100.0% (15/15)", "Location": "Sec. VII, Tab. VII", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/edge_of_grid.csv", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Arm 2 Persistence boundary 10", "Value": "100.0% (15/15)", "Location": "Sec. VII, Tab. VII", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "results/paper/edge_of_grid.csv", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Arm 2 Fallback Rule Invocations", "Value": "100% (15/15)", "Location": "Sec. VII, Sec. VIII", "Generating_Script": "scripts/run_fault_regimes_benchmark.py", "Output_File": "docs/RESULTS_SUMMARY.md", "Status": "VERIFIED"},
+
+        # Arm 4 (added post hoc) - Recomputed comparable alert counts
+        {"Claim_Or_Number": "Arm 4 Clean Recall", "Value": "72.3%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Clean FA/hr", "Value": "0.70", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Clean True Alerts", "Value": "113", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Clean False Alerts", "Value": "22", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Clean Precision", "Value": "83.7%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Clean F1 Score", "Value": "0.776", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime A Recall", "Value": "62.5%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime A FA/hr", "Value": "0.67", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime A True Alerts", "Value": "96", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime A False Alerts", "Value": "21", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime A Precision", "Value": "82.1%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime A F1 Score", "Value": "0.710", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime B Recall", "Value": "55.4%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime B FA/hr", "Value": "0.70", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime B True Alerts", "Value": "83", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime B False Alerts", "Value": "22", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime B Precision", "Value": "79.0%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 Regime B F1 Score", "Value": "0.651", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 F7 Recall", "Value": "54.5%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 F7 FA/hr", "Value": "0.35", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 F7 True Alerts", "Value": "82", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 F7 False Alerts", "Value": "11", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 F7 Precision", "Value": "88.2%", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
+        {"Claim_Or_Number": "Arm 4 F7 F1 Score", "Value": "0.673", "Location": "Sec. VII, Tab. IV", "Generating_Script": "scripts/run_arm4_evaluation.py", "Output_File": "results/paper/combined_metrics.csv", "Status": "VERIFIED"},
     ]
 
     df_prov = pd.DataFrame(rows)

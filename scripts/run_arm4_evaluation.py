@@ -188,18 +188,22 @@ def evaluate_arm4_condition(condition_name: str, dataset: Dict[str, Any]):
 
     elapsed = time.time() - t0
     m = pool_metrics(all_sids, res_a4)
-    tp = m["tp"]
-    fn = m["fn"]
-    fa = m["false_alerts"]
-    prec = (tp / (tp + fa) * 100.0) if (tp + fa) > 0 else 0.0
-    f1 = (2 * tp / (2 * tp + fa + fn)) if (2 * tp + fa + fn) > 0 else 0.0
+    true_al = sum(res_a4[s].alert_rate.true_alerts for s in all_sids)
+    false_al = sum(res_a4[s].alert_rate.false_alerts for s in all_sids)
+    rec = (m["tp"] / m["n_episodes"]) if m["n_episodes"] > 0 else 0.0
+    prec = (true_al / (true_al + false_al) * 100.0) if (true_al + false_al) > 0 else 0.0
+    prec_ratio = prec / 100.0
+    f1 = (2 * prec_ratio * rec) / (prec_ratio + rec) if (prec_ratio + rec) > 0 else 0.0
 
+    m["true_alerts"] = true_al
+    m["false_alerts"] = false_al
     m["precision_pct"] = prec
     m["f1_score"] = f1
 
     print(f"[{condition_name}] Arm 4 Completed in {elapsed:.1f}s:")
-    print(f"  Recall: {m['recall']:.1f}% ({tp}/{m['n_episodes']})")
-    print(f"  Clean FA/hr: {m['fa_per_hour']:.2f} ({fa} FA in {m['non_event_hours']:.2f}h)")
+    print(f"  Recall: {m['recall']:.1f}% ({m['tp']}/{m['n_episodes']} episodes)")
+    print(f"  Clean FA/hr: {m['fa_per_hour']:.2f} ({false_al} FA in {m['non_event_hours']:.2f}h)")
+    print(f"  Alerts: True Alerts={true_al}, False Alerts={false_al}")
     print(f"  Precision: {prec:.1f}% | F1: {f1:.3f}")
 
     return res_a4, sel_a4, m
@@ -227,10 +231,10 @@ def main():
     res_f7, sel_f7, m_f7 = evaluate_arm4_condition("F7 (High-Motion BVP Noise)", data_f7)
 
     arm4_summary = [
-        {"Condition": "Condition 0 (No-Fault)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_c0["recall"], 1), "Clean_FA_hr": round(m_c0["fa_per_hour"], 2), "True_Alerts_TP": m_c0["tp"], "False_Alerts_FP": m_c0["false_alerts"], "Precision_pct": round(m_c0["precision_pct"], 1), "F1_Score": round(m_c0["f1_score"], 3)},
-        {"Condition": "Regime A (Low Duty ~10%)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_ra["recall"], 1), "Clean_FA_hr": round(m_ra["fa_per_hour"], 2), "True_Alerts_TP": m_ra["tp"], "False_Alerts_FP": m_ra["false_alerts"], "Precision_pct": round(m_ra["precision_pct"], 1), "F1_Score": round(m_ra["f1_score"], 3)},
-        {"Condition": "Regime B (Nominal ~25-30%)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_rb["recall"], 1), "Clean_FA_hr": round(m_rb["fa_per_hour"], 2), "True_Alerts_TP": m_rb["tp"], "False_Alerts_FP": m_rb["false_alerts"], "Precision_pct": round(m_rb["precision_pct"], 1), "F1_Score": round(m_rb["f1_score"], 3)},
-        {"Condition": "F7 (High-Motion BVP Noise)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_f7["recall"], 1), "Clean_FA_hr": round(m_f7["fa_per_hour"], 2), "True_Alerts_TP": m_f7["tp"], "False_Alerts_FP": m_f7["false_alerts"], "Precision_pct": round(m_f7["precision_pct"], 1), "F1_Score": round(m_f7["f1_score"], 3)},
+        {"Condition": "Condition 0 (No-Fault)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_c0["recall"], 1), "Clean_FA_hr": round(m_c0["fa_per_hour"], 2), "True_Alerts_TP": m_c0["true_alerts"], "False_Alerts_FP": m_c0["false_alerts"], "Precision_pct": round(m_c0["precision_pct"], 1), "F1_Score": round(m_c0["f1_score"], 3)},
+        {"Condition": "Regime A (Low Duty ~10%)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_ra["recall"], 1), "Clean_FA_hr": round(m_ra["fa_per_hour"], 2), "True_Alerts_TP": m_ra["true_alerts"], "False_Alerts_FP": m_ra["false_alerts"], "Precision_pct": round(m_ra["precision_pct"], 1), "F1_Score": round(m_ra["f1_score"], 3)},
+        {"Condition": "Regime B (Nominal ~25-30%)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_rb["recall"], 1), "Clean_FA_hr": round(m_rb["fa_per_hour"], 2), "True_Alerts_TP": m_rb["true_alerts"], "False_Alerts_FP": m_rb["false_alerts"], "Precision_pct": round(m_rb["precision_pct"], 1), "F1_Score": round(m_rb["f1_score"], 3)},
+        {"Condition": "F7 (High-Motion BVP Noise)", "Arm": "Arm 4 (Conformal Abstention)", "Event_Recall_pct": round(m_f7["recall"], 1), "Clean_FA_hr": round(m_f7["fa_per_hour"], 2), "True_Alerts_TP": m_f7["true_alerts"], "False_Alerts_FP": m_f7["false_alerts"], "Precision_pct": round(m_f7["precision_pct"], 1), "F1_Score": round(m_f7["f1_score"], 3)},
     ]
 
     df_arm4 = pd.DataFrame(arm4_summary)
@@ -240,6 +244,23 @@ def main():
     # Save to disk
     df_arm4.to_csv(OUT_DIR / "arm4_metrics.csv", index=False)
     print(f"\nSaved Arm 4 metrics to {OUT_DIR / 'arm4_metrics.csv'}")
+
+    # Update combined_metrics.csv with comparable Arm 4 figures
+    comb_path = OUT_DIR / "combined_metrics.csv"
+    if comb_path.exists():
+        df_comb = pd.read_csv(comb_path)
+        for _, r in df_arm4.iterrows():
+            cond = r["Condition"]
+            mask = (df_comb["Condition"] == cond) & (df_comb["Arm"].str.contains("Arm 4"))
+            if mask.any():
+                df_comb.loc[mask, "Event_Recall_pct"] = r["Event_Recall_pct"]
+                df_comb.loc[mask, "Clean_FA_hr"] = r["Clean_FA_hr"]
+                df_comb.loc[mask, "True_Alerts_TP"] = r["True_Alerts_TP"]
+                df_comb.loc[mask, "False_Alerts_FP"] = r["False_Alerts_FP"]
+                df_comb.loc[mask, "Precision_pct"] = r["Precision_pct"]
+                df_comb.loc[mask, "F1_Score"] = r["F1_Score"]
+        df_comb.to_csv(comb_path, index=False)
+        print(f"Updated Arm 4 in {comb_path}")
 
     # Save detailed per-subject Arm 4 results for provenance
     arm4_persub = []
@@ -255,8 +276,9 @@ def main():
                 "Subject": sid,
                 "Recall_pct": round(res.event_scoring.recall * 100.0, 1),
                 "FA_hr": round(res.alert_rate.false_alerts_per_hour, 2),
-                "TP": res.event_scoring.true_positives,
-                "FP": res.alert_rate.false_alerts,
+                "True_Alerts": res.alert_rate.true_alerts,
+                "False_Alerts": res.alert_rate.false_alerts,
+                "Episodes_Detected_TP": res.event_scoring.true_positives,
             })
     df_persub = pd.DataFrame(arm4_persub)
     df_persub.to_csv(OUT_DIR / "arm4_per_subject.csv", index=False)
