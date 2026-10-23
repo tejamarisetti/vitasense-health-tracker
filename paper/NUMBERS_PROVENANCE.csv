@@ -1,96 +1,17 @@
-Claim_Or_Number,Value,Location,Generating_Script,Output_File,Status
-Subject Count N=15,15,"Sec. III, Tab. I",scripts/prepare_benchmark_ground_truth.py,data/processed/benchmark_ground_truth.pkl,VERIFIED
-Total Recording Time,35.94 hours,"Sec. III, Tab. I",scripts/export_paper_data.py,results/paper/fault_disaggregated.csv,VERIFIED
-Non-event Exposure Time,31.27 hours,"Sec. III, Tab. I",scripts/export_paper_data.py,results/paper/fault_disaggregated.csv,VERIFIED
-Bootstrap Resample Count,"10,000","Sec. V, Sec. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Injected Tachycardia Episodes,112,"Sec. III, Sec. V",scripts/generate_injection_audit.py,results/synthetic_injection_audit.csv,VERIFIED
-Injected Peak HR Floor/Ceil,"[105, 135] bpm","Sec. III, Sec. V",vitasense/benchmarks/synthetic_injection.py,docs/RESULTS_SUMMARY.md,VERIFIED
-Inter-episode Gap Floor,60 s,"Sec. III, Sec. V",vitasense/benchmarks/synthetic_injection.py,docs/RESULTS_SUMMARY.md,VERIFIED
-Arm 1 Clean Recall,91.1%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 1 Clean FA/hr,3.20,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 1 Clean F1 Score,0.700,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 2 Clean Recall,80.4%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 2 Clean FA/hr,5.69,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 2 Clean F1 Score,0.558,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a Clean Recall,80.4%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a Clean FA/hr,1.47,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a Clean F1 Score,0.772,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b Clean Recall,79.5%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b Clean FA/hr,1.69,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b Clean F1 Score,0.750,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b-noMotion Clean Recall,79.5%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b-noMotion Clean FA/hr,2.91,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b-noMotion Clean F1 Score,0.676,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 1 Regime B Recall,91.1%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 1 Regime B FA/hr,4.51,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 2 Regime B Recall,75.9%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 2 Regime B FA/hr,7.16,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a Regime B Recall,75.9%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a Regime B FA/hr,2.30,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b Regime B Recall,75.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b Regime B FA/hr,2.37,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b-noMotion Regime B Recall,75.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b-noMotion Regime B FA/hr,3.61,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 1 F7 Recall,92.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 1 F7 FA/hr,3.07,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a F7 Recall,64.3%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3a F7 FA/hr,1.57,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b F7 Recall,58.0%,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 3b F7 FA/hr,1.28,"Sec. VII, Tab. IV",scripts/run_fault_regimes_benchmark.py,results/paper/combined_metrics.csv,VERIFIED
-Condition 0 Paired Mean Diff,+0.13 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Condition 0 Wilcoxon W,31.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Condition 0 Wilcoxon p,0.8589,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Condition 0 95% Bootstrap CI,"[-0.54, +0.89]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime A Paired Mean Diff,+0.05 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime A Wilcoxon W,40.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime A Wilcoxon p,0.7007,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime A 95% Bootstrap CI,"[-0.66, +0.82]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime B Paired Mean Diff,-0.04 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime B Wilcoxon W,52.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime B Wilcoxon p,0.9750,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Regime B 95% Bootstrap CI,"[-0.78, +0.69]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-F7 Paired Mean Diff,-0.49 FA/hr,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-F7 Wilcoxon W,17.0,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-F7 Wilcoxon p,0.2845,"Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-F7 95% Bootstrap CI,"[-1.47, +0.38]","Sec. VII, Tab. VI",scripts/run_fault_regimes_benchmark.py,results/paper/paired_3b_vs_3a.csv,VERIFIED
-Reiss 2019 Cohort N=15,15 subjects,"Sec. II, Tab. I",scripts/prepare_benchmark_ground_truth.py,https://archive.ics.uci.edu/dataset/495/ppg+dalia,VERIFIED
-Elgendi 2016 SQI count,8 SQIs,"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/,VERIFIED
-Elgendi 2016 8 SQIs Quote,Eight SQIs were tested and evaluated. (Sec. 2.3),"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/,VERIFIED
-Charlton 2023 roadmap claim,Benchmark & evaluation needs,"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/,VERIFIED
-Vazquez & Facelli 2022 study count,14 clinical studies,"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/,VERIFIED
-Vazquez & Facelli 14 Studies Quote,We identified 14 papers reporting the use of CP for clinical applications (Abstract),"Sec. II, Tab. I",read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/,VERIFIED
-Ref ref_reiss_dalia,"Sensors 19(14):3079 (2019), DOI: 10.3390/s19143079",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC6679242/,VERIFIED
-Ref ref_elgendi_sqi,"Bioengineering 3(4):21 (2016), DOI: 10.3390/bioengineering3040021",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC5597264/,VERIFIED
-Ref ref_charlton_roadmap,"Physiol. Meas. 44(11):111001 (2023), DOI: 10.1088/1361-6579/acead2",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC10686289/,VERIFIED
-Ref ref_vazquez_conformal,"J. Healthc. Inform. Res. 6(3):257-285 (2022), DOI: 10.1007/s41666-021-00113-8",Bibliography,read_url_content,https://www.ncbi.nlm.nih.gov/pmc/articles/PMC9309105/,VERIFIED
-Ref ref_uci_dalia,"UCI Machine Learning Repository (2019), DOI: 10.24432/C53890",Bibliography,read_url_content,https://archive.ics.uci.edu/dataset/495/ppg+dalia,VERIFIED
-Ref ref_physionet_wearable,"PhysioNet Version 1.0.1 (2025), DOI: 10.13026/he0v-tf17",Bibliography,read_url_content,https://physionet.org/content/wearable-device-dataset/1.0.1/,VERIFIED
-Arm 1 tau_pop boundary 100,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
-Arm 1 Persistence boundary 30,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
-Arm 2 k boundary 2.0,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
-Arm 2 Persistence boundary 10,100.0% (15/15),"Sec. VII, Tab. VII",scripts/run_fault_regimes_benchmark.py,results/paper/edge_of_grid.csv,VERIFIED
-Arm 2 Fallback Rule Invocations,100% (15/15),"Sec. VII, Sec. VIII",scripts/run_fault_regimes_benchmark.py,docs/RESULTS_SUMMARY.md,VERIFIED
-Arm 4 Clean Recall,72.3%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Clean FA/hr,0.70,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Clean True Alerts,113,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Clean False Alerts,22,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Clean Precision,83.7%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Clean F1 Score,0.776,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime A Recall,62.5%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime A FA/hr,0.67,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime A True Alerts,96,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime A False Alerts,21,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime A Precision,82.1%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime A F1 Score,0.710,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime B Recall,55.4%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime B FA/hr,0.70,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime B True Alerts,83,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime B False Alerts,22,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime B Precision,79.0%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 Regime B F1 Score,0.651,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 F7 Recall,54.5%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 F7 FA/hr,0.35,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 F7 True Alerts,82,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 F7 False Alerts,11,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 F7 Precision,88.2%,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
-Arm 4 F7 F1 Score,0.673,"Sec. VII, Tab. IV",scripts/run_arm4_evaluation.py,results/paper/combined_metrics.csv,VERIFIED
+Source_Paper,Claim_or_Number,Supporting_Passage_Under_15_Words,Verification_URL_or_DOI
+"Zhang et al. (2015)","N=12 treadmill","recorded from 12 subjects during fast running on a treadmill","https://doi.org/10.1109/TBME.2014.2359372"
+"Zhang et al. (2015)","TROIKA sparse reconstruction","consists of signal decomposition for denoising, sparse signal reconstruction","https://doi.org/10.1109/TBME.2014.2359372"
+"Reiss et al. (2019)","15-subject PPG-DaLiA","novel large-scale dataset (called PPG-DaLiA), including a wide range of activities","https://doi.org/10.3390/s19143079"
+"Reiss et al. (2019)","Deep PPG CNN tracking MAE","investigate various convolutional neural network architectures. The mean absolute error could be reduced","https://doi.org/10.3390/s19143079"
+"Bent et al. (2020)","Motion primary source of inaccuracy","absolute error during activity was, on average, 30% higher than during rest","https://doi.org/10.1038/s41746-020-0226-6"
+"Bent et al. (2020)","Three inaccuracy sources","Potential inaccuracies in PPG stem from three major areas... motion artifacts","https://doi.org/10.1038/s41746-020-0226-6"
+"Elgendi (2016)","8 SQIs evaluated","Eight SQIs were developed and tested based on: perfusion, kurtosis, skewness","https://doi.org/10.3390/bioengineering3040021"
+"Karlen et al. (2013)","Gaussian filters and cross-correlation SQI","adaptive set of repeated Gaussian filters... Cross-correlation of consecutive pulse segments","https://doi.org/10.1088/0967-3334/33/10/1617"
+"Orphanidou et al. (2015)","ECG and PPG quality indexing for wireless monitoring","Sensitivities and specificities of 94% and 97% were achieved for the ECG","https://doi.org/10.1109/JBHI.2014.2338351"
+"Li & Clifford (2012)","Multi-parameter fusion for ICU false alarm reduction","combine up to 114 signal quality and physiological features extracted from the electrocardiogram, photoplethysmograph","https://doi.org/10.1016/j.jelectrocard.2012.07.015"
+"Cvach (2012)","High false alarm rates cause alarm fatigue","related to a high false alarm rate, poor positive predictive value","https://doi.org/10.2345/0899-8205-46.4.268"
+"Clifford et al. (2016)","N=1250 multi-parameter ICU recordings","provides a set of 1250 multi-parameter ICU data segments associated with critical arrhythmia alarms","https://doi.org/10.1088/0967-3334/37/8/e5"
+"Vazquez & Facelli (2022)","Fourteen clinical applications","identified 14 papers reporting the use of CP for clinical applications","https://doi.org/10.1007/s41666-021-00113-8"
+"Angelopoulos & Bates (2023)","Distribution-free conformal guarantees","valid in a distribution-free sense: they possess explicit, non-asymptotic guarantees","https://doi.org/10.1561/2200000101"
+"PhysioNet Wearable (2025)","36 healthy volunteers structured exercise","from 36 healthy volunteers collected during structured acute stress induction and aerobic/anaerobic exercise","https://doi.org/10.13026/0m13-7r86"
+"Charlton et al. (2023)","Wearable PPG roadmap","Photoplethysmography is a key sensing technology which is used in wearable devices","https://doi.org/10.1088/1361-6579/acead2"

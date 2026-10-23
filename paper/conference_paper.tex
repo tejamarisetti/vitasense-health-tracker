@@ -79,41 +79,36 @@ This paper reports a pre-specified fault-injection benchmark for wearable heart-
 \end{enumerate}
 
 \section{Literature Survey}
-\textbf{A. Motion Artifact Mitigation in Wrist PPG:} Wrist photoplethysmography (PPG) optically monitors pulsatile blood volume changes in the cutaneous microvascular bed via illuminated LEDs and paired photodiodes \cite{ref_allen_ppg, ref_charlton_roadmap}. In resting conditions, PPG tracks pulsatile cardiac cycles with high morphological fidelity. However, in ambulatory environments, physical movement introduces severe motion artifacts (MA) caused by displacement between the sensor photodiode and the skin, venous blood sloshing, and microvascular pressure transients \cite{ref_allen_ppg, ref_bent_sources}. These movement-induced spectral peaks overlap directly with cardiac fundamental frequencies ($1.0\text{--}3.5$\,Hz, corresponding to $60\text{--}210$\,bpm), severely biasing unconstrained peak-detection and Fourier pulse-rate estimates \cite{ref_zhang_troika, ref_salehizadeh_spectral}. To recover corrupted cardiac signals, multi-channel kinematic fusion has emerged as a cornerstone of wearable signal processing. Zhang \emph{et al.} \cite{ref_zhang_troika} introduced the TROIKA framework, combining temporal difference filtering, sparse signal reconstruction, and peak tracking against triaxial accelerometry. Salehizadeh \emph{et al.} \cite{ref_salehizadeh_spectral} demonstrated time-varying spectral filtering to isolate motion harmonics during treadmill exercises. Reiss \emph{et al.} \cite{ref_reiss_dalia} introduced the 15-subject PPG-DaLiA benchmark and deep convolutional tracking architectures, establishing standard Mean Absolute Error (MAE) baselines against chest ECG while noting performance bottlenecks during non-rhythmic wrist movements. Furthermore, Bent \emph{et al.} \cite{ref_bent_sources} systematically characterized device-level sources of wearable optical error across commercial monitors, confirming physical motion as the primary driver of tracking inaccuracies.
+\textbf{A. Motion Artifact Mitigation in Wrist PPG:} Wrist photoplethysmography (PPG) optically monitors pulsatile blood volume changes in the cutaneous microvascular bed via illuminated LEDs and paired photodiodes \cite{ref_charlton_roadmap}. In ambulatory environments, physical movement introduces severe motion artifacts caused by displacement between the sensor photodiode and the skin, venous blood sloshing, and microvascular pressure transients \cite{ref_bent_sources}. These movement-induced spectral peaks overlap directly with cardiac fundamental frequencies ($1.0\text{--}3.5$\,Hz, corresponding to $60\text{--}210$\,bpm), severely biasing unconstrained peak-detection and Fourier pulse-rate estimates. To recover corrupted cardiac signals, multi-channel kinematic fusion has emerged as a cornerstone of wearable signal processing. Zhang \emph{et al.} \cite{ref_zhang_troika} introduced the TROIKA framework, combining temporal difference filtering, sparse signal reconstruction, and peak tracking against triaxial accelerometry on 12 treadmill subjects. Reiss \emph{et al.} \cite{ref_reiss_dalia} introduced the 15-subject PPG-DaLiA benchmark and deep convolutional tracking architectures, establishing standard Mean Absolute Error (MAE) baselines against chest ECG while noting performance bottlenecks during non-rhythmic wrist movements. Furthermore, Bent \emph{et al.} \cite{ref_bent_sources} systematically characterized device-level sources of wearable optical error across commercial monitors, confirming physical motion as the primary driver of tracking inaccuracies.
 
-\textbf{B. Signal Quality Indices and Multi-Modal Fusion:} Because signal reconstruction cannot fully recover severely decoupled waveforms, extensive research has focused on automated Signal Quality Indices (SQIs) to identify and discard unreliable epochs \cite{ref_elgendi_sqi, ref_charlton_roadmap}. Elgendi \cite{ref_elgendi_sqi} surveyed and evaluated eight distinct morphological and statistical SQIs, highlighting skewness, kurtosis, and perfusion indices on stationary recordings. Karlen \emph{et al.} \cite{ref_karlen_sqi} advanced real-time quality estimation using repeated Gaussian filtering and continuous template cross-correlation, demonstrating robust identification of uninterpretable pulse waves in pediatric and ambulatory settings. Selvaraj \emph{et al.} \cite{ref_selvaraj_motion} proposed statistical stationarity testing for automated motion-noise detection in wearable PPG. In wireless patient monitoring, cross-channel telemetry fusion enhances alert fidelity. Orphanidou \emph{et al.} \cite{ref_orphanidou_sqi} developed unified ECG and PPG quality metrics combining envelope analysis, template matching, and physiological bounds, validating utility on ambulatory wireless recordings. Li and Clifford \cite{ref_li_clifford_fusion} demonstrated that fusing multi-parameter signal quality metrics with dynamic Bayesian estimation drastically suppresses false alarms in intensive care telemetry without compromising clinical event sensitivity.
+\textbf{B. Signal Quality Indices and Multi-Modal Fusion:} Because signal reconstruction cannot fully recover severely decoupled waveforms, extensive research has focused on automated Signal Quality Indices (SQIs) to identify and discard unreliable epochs \cite{ref_elgendi_sqi, ref_charlton_roadmap}. Elgendi \cite{ref_elgendi_sqi} evaluated eight distinct morphological and statistical SQIs, highlighting skewness, kurtosis, and perfusion indices on stationary recordings. Karlen \emph{et al.} \cite{ref_karlen_sqi} advanced real-time quality estimation using repeated Gaussian filtering and continuous template cross-correlation, demonstrating robust identification of uninterpretable pulse waves in clinical and ambulatory settings. In wireless patient monitoring, cross-channel telemetry fusion enhances alert fidelity. Orphanidou \emph{et al.} \cite{ref_orphanidou_sqi} developed unified ECG and PPG quality metrics combining envelope analysis, template matching, and physiological bounds, validating utility on ambulatory wireless recordings. Li and Clifford \cite{ref_li_clifford_fusion} demonstrated that fusing multi-parameter signal quality metrics with dynamic estimation drastically suppresses false alarms in intensive care telemetry without compromising clinical event sensitivity.
 
-\textbf{C. Alarm Fatigue, Telemetry, and Conformal Uncertainty:} Frequent false alerts from wearable and bedside monitors impose severe clinical and behavioral costs. In hospital settings, Drew \emph{et al.} \cite{ref_drew_alarm_fatigue} and Cvach \cite{ref_cvach_alarm_fatigue} documented pervasive monitor alarm fatigue, where false alarm rates exceeding 85\% desensitize clinicians and degrade response times to life-threatening arrhythmias. Clifford \emph{et al.} \cite{ref_clifford_challenge} formalized this challenge in the PhysioNet/CinC 2015 Benchmark, showing that algorithmic false-alarm suppression requires joint multi-modal cross-checking. At consumer scale, the Apple Heart Study ($N=419{,}297$) \cite{ref_perez_apple_heart} confirmed that optical pulse irregularity can trigger widespread clinical escalations, demonstrating the critical necessity of stringent optical quality gates prior to alerting. Under non-stationary ambulatory noise, deterministic predictions lack distribution-free confidence. Conformal prediction \cite{ref_shafer_conformal, ref_angelopoulos_conformal} provides finite-sample, distribution-free coverage guarantees with valid non-conformity calibration. Vazquez and Facelli \cite{ref_vazquez_conformal} reviewed conformal prediction across fourteen clinical applications, demonstrating that selective abstention preserves decision purity in high-stakes healthcare scenarios. Table~\ref{tab:related_work} compares this benchmark against opened and verified literature sources.
+\textbf{C. Alarm Fatigue, Telemetry, and Conformal Uncertainty:} Frequent false alerts from wearable and bedside monitors impose severe clinical and behavioral costs. In hospital settings, Cvach \cite{ref_cvach_alarm_fatigue} documented pervasive monitor alarm fatigue, where high false alarm rates desensitize clinicians and degrade response times to life-threatening arrhythmias. Clifford \emph{et al.} \cite{ref_clifford_challenge} formalized this challenge in the PhysioNet/CinC 2015 Benchmark ($N=1250$ multi-parameter records), showing that algorithmic false-alarm suppression requires joint multi-modal cross-checking. Under non-stationary ambulatory noise, deterministic predictions lack distribution-free confidence. Conformal prediction \cite{ref_angelopoulos_conformal} provides finite-sample, distribution-free coverage guarantees with valid non-conformity calibration. Vazquez and Facelli \cite{ref_vazquez_conformal} reviewed conformal prediction across fourteen clinical applications, demonstrating that selective abstention preserves decision purity in high-stakes healthcare scenarios. Table~\ref{tab:related_work} compares this benchmark against opened and verified literature sources.
 
 \begin{table}[htbp]
-\caption{Related Work Comparison on Opened and Verified Literature}
+\caption{Related Work Comparison on Verified Literature}
 \label{tab:related_work}
 \centering
-\renewcommand{\arraystretch}{0.68}
-\setlength{\tabcolsep}{2.5pt}
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|c|c|c|p{2.6cm}|}
+\scriptsize
+\renewcommand{\arraystretch}{0.75}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{|p{1.8cm}|p{1.1cm}|c|c|p{2.8cm}|}
 \hline
-\textbf{Study} & \textbf{Cohort} & \textbf{Motion Gate} & \textbf{Trust/SQI} & \textbf{Scope \& Benchmark Focus} \\
+\textbf{Study} & \textbf{Cohort} & \textbf{Motion} & \textbf{Trust/SQI} & \textbf{Scope \& Benchmark Focus} \\
 \hline
-Zhang \emph{et al.} (2015) \cite{ref_zhang_troika} & $N=12$ treadmill & ACC / SBL & Spectral & Sparse reconstruction for intensive physical exercise HR. \\
+Zhang \emph{et al.} \cite{ref_zhang_troika} & $N=12$ & ACC/SBL & Spectral & TROIKA sparse reconstruction for exercise HR. \\
 \hline
-Reiss \emph{et al.} (2019) \cite{ref_reiss_dalia} & $N=15$ PPG-DaLiA & ACC features & None & Deep PPG CNN tracking; MAE metric; no alerting benchmark. \\
+Reiss \emph{et al.} \cite{ref_reiss_dalia} & $N=15$ & ACC feat. & None & PPG-DaLiA CNN tracking baselines. \\
 \hline
-Elgendi (2016) \cite{ref_elgendi_sqi} & Static finger PPG & None & 8 SQIs & Peak detection under stationary clean/noisy segments. \\
+Elgendi \cite{ref_elgendi_sqi} & Static PPG & None & 8 SQIs & Evaluated 8 morphological SQIs on stationary data. \\
 \hline
-Orphanidou \emph{et al.} (2015) \cite{ref_orphanidou_sqi} & Clinical \& ambul. & None & Multi-SQI & Morphological ECG/PPG quality indexing for wireless telemetry. \\
+Clifford \emph{et al.} \cite{ref_clifford_challenge} & $N=1250$ & Multi-modal & Multi-SQI & PhysioNet CinC'15 ICU alarm reduction benchmark. \\
 \hline
-Clifford \emph{et al.} (2016) \cite{ref_clifford_challenge} & PhysioNet CinC'15 & Multi-modal & Multi-SQI & Multi-lead ICU alarm reduction benchmark ($N=1250$). \\
+Vazquez \& Facelli \cite{ref_vazquez_conformal} & 14 studies & N/A & Conformal & Conformal review in clinical medicine. \\
 \hline
-Charlton \emph{et al.} (2023) \cite{ref_charlton_roadmap} & Review & Varied & Review & Wearable roadmap; highlights benchmark datasets, SQIs, standards. \\
+\textbf{This Benchmark} & $N=15$ & $\text{ENMO}_{10\text{s}}$ & Multi-SQI & Causal alerting Arms 1--4; 7 fault types; LOSO. \\
 \hline
-Vazquez \& Facelli (2022) \cite{ref_vazquez_conformal} & 14 clinical studies & N/A & Conformal & Conformal guarantees in clinical prediction tasks. \\
-\hline
-\textbf{This Benchmark} & $N=15$ ambulatory & $\text{ENMO}_{10\text{s}}$ & Multi-SQI & Causal alerting Arms 1--4; 7 fault types + clean; LOSO. \\
-\hline
-\end{tabular}%
-}
+\end{tabular}
 \end{table}
 
 \begin{figure*}[t]
@@ -187,9 +182,9 @@ Vazquez \& Facelli (2022) \cite{ref_vazquez_conformal} & 14 clinical studies & N
 \node[block, text width=3.4cm, inner ysep=4pt] (conformal) at (10.6, -1.55) {\textbf{Trust \& Conformal Gate}\\Arms 3b \& 4 (Selective Abstention)};
 
 % Stage 4 Nodes
-\node[block, text width=2.9cm, inner ysep=4pt] (pwa) at (15.6, 1.55) {\textbf{Client PWA Gateway}\\FastAPI $\cdot$ Live Dashboard};
+\node[block, text width=2.9cm, inner ysep=4pt] (pwa) at (15.6, 1.55) {\textbf{Client PWA Gateway}\\FastAPI $\cdot$ Dashboard (replay/demo)};
 \node[block, text width=2.9cm, inner ysep=5pt] (emitter) at (15.6, 0.0) {\textbf{Standard Persistence Emitter}\\Hold-off $W_p \ge P$, $W_r=60$\,s};
-\node[block, text width=2.9cm, inner ysep=4pt, fill=black!5] (output) at (15.6, -1.55) {\textbf{Clinical Alert Output}\\Verified Alarm / Suppressed};
+\node[block, text width=2.9cm, inner ysep=4pt, fill=black!5] (output) at (15.6, -1.55) {\textbf{Alert Output}\\Verified Alarm / Suppressed};
 
 % Stage Header Tags
 \node[stagetag, text width=2.4cm] at (1.3, 2.4) {STAGE 1: SENSING};
@@ -285,40 +280,40 @@ We benchmark six causal alerting arms without future peeking (Table~\ref{tab:ale
 \ENDFOR
 \RETURN Alert stream $Alert$
 \end{algorithmic}
-\vspace{-0.2cm}
 \end{algorithm}
 
 \subsection{Shared Standard Alert Emitter}
 To ensure rigorous cross-arm comparability, all arms feed instantaneous binary triggers into a shared \texttt{StandardAlertEmitter} (Algorithm~\ref{alg:alerting_pipeline}). Alerts fire if and only if triggering conditions hold continuously for $W_p = P / \text{step}$ windows ($P \in \{10, 20, 30\}$\,s). Emitted alerts enforce a mandatory refractory hold-off of $W_r = R / \text{step}$ windows ($R = 60$\,s).
 \begin{figure*}[t]
 \centering
-\begin{minipage}{0.49\textwidth}
-\centering
-\includegraphics[width=0.44\linewidth]{figures/fig_recall_vs_fahr.pdf}
-\vspace{-0.15cm}
-\centerline{\footnotesize (a) Event Recall vs Clean False Alerts per Hour across Arms and Regimes}
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_recall_vs_fahr.pdf}\par
+  \smallskip
+  {\footnotesize (a) Event Recall vs Clean False Alerts per Hour across Arms and Regimes\par}
 \end{minipage}\hfill
-\begin{minipage}{0.49\textwidth}
-\centering
-\includegraphics[width=0.44\linewidth]{figures/fig_forest_plot_3b_vs_3a.pdf}
-\vspace{-0.15cm}
-\centerline{\footnotesize (b) Paired Differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% Bootstrap CIs}
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_forest_plot_3b_vs_3a.pdf}\par
+  \smallskip
+  {\footnotesize (b) Paired Differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% Bootstrap CIs\par}
 \end{minipage}
 
-\begin{minipage}{0.49\textwidth}
-\centering
-\includegraphics[width=0.44\linewidth]{figures/fig_persubject_fahr.pdf}
-\vspace{-0.15cm}
-\centerline{\footnotesize (c) Per-Subject False Alerts per Hour in Clean Data (Condition 0)}
+\medskip
+
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_persubject_fahr.pdf}\par
+  \smallskip
+  {\footnotesize (c) Per-Subject False Alerts per Hour in Clean Data (Condition 0)\par}
 \end{minipage}\hfill
-\begin{minipage}{0.49\textwidth}
-\centering
-\includegraphics[width=0.44\linewidth]{figures/fig_arm1_sensitivity.pdf}
-\vspace{-0.15cm}
-\centerline{\footnotesize (d) Arm 1 Threshold Sensitivity across Cutoffs $\tau_{\text{pop}}$ and Persistence $P$}
+\begin{minipage}{0.48\textwidth}
+  \centering
+  \includegraphics[width=\linewidth]{figures/fig_arm1_sensitivity.pdf}\par
+  \smallskip
+  {\footnotesize (d) Arm 1 Threshold Sensitivity across Cutoffs $\tau_{\text{pop}}$ and Persistence $P$\par}
 \end{minipage}
-\vspace{-0.3cm}
-\caption{Empirical benchmark findings across arms and conditions: (a) Event recall vs clean false alerts per hour; (b) Forest plot of paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% bootstrap CIs; (c) Per-subject FA/hr in Condition 0; (d) Arm 1 sensitivity across $\tau_{\text{pop}}$ and persistence $P$.}
+\caption{Empirical benchmark findings across arms and conditions.}
 \label{fig:results_all}
 \end{figure*}
 
@@ -365,10 +360,7 @@ Methodological constraints and threats to validity are summarized in Table~\ref{
 
 \textbf{Data and Code Availability:} PPG-DaLiA is openly accessible via UCI \cite{ref_reiss_dalia, ref_uci_dalia}; PhysioNet Wearable is under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are provided in the repository.
 
-\begin{thebibliography}{00}
-\scriptsize
-\setlength{\itemsep}{-2.0pt}
-\setlength{\parskip}{0pt}
+\begin{thebibliography}{14}
 
 \bibitem{ref_reiss_dalia}
 A.~Reiss, I.~Indlekofer, P.~Schmidt, and K.~Van~Laerhoven, ``Deep PPG: Large-scale heart rate estimation with convolutional neural networks,'' \emph{Sensors}, vol.~19, no.~14, p.~3079, 2019, DOI: 10.3390/s19143079.
@@ -380,16 +372,13 @@ M.~Elgendi, ``Optimal signal quality index for photoplethysmogram signals,'' \em
 P.~H.~Charlton \emph{et al.}, ``The 2023 wearable photoplethysmography roadmap,'' \emph{Physiol. Meas.}, vol.~44, no.~11, p.~111001, 2023, DOI: 10.1088/1361-6579/acead2.
 
 \bibitem{ref_vazquez_conformal}
-J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{J. Healthc. Inform. Res.}, 2022, DOI: 10.1007/s41666-021-00113-8.
+J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{J. Healthc. Inform. Res.}, vol.~6, no.~2, pp.~119--139, 2022, DOI: 10.1007/s41666-021-00113-8.
 
 \bibitem{ref_uci_dalia}
 ``PPG-DaLiA,'' UCI Machine Learning Repository, DOI: 10.24432/C53890.
 
 \bibitem{ref_physionet_wearable}
-A.~Hongn, F.~Bosch, L.~Prado, and P.~Bonomini, ``Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,'' PhysioNet, Version 1.0.1, 2025, DOI: 10.13026/he0v-tf17.
-
-\bibitem{ref_allen_ppg}
-J.~Allen, ``Photoplethysmography and its application in clinical physiological measurement,'' \emph{Physiol. Meas.}, vol.~28, no.~3, pp.~R1--R39, 2007, DOI: 10.1088/0967-3334/28/3/R01.
+A.~Hongn, F.~Bosch, L.~Prado, and P.~Bonomini, ``Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,'' PhysioNet, Version 1.0.1, 2025, DOI: 10.13026/0m13-7r86.
 
 \bibitem{ref_bent_sources}
 B.~Bent, B.~A.~Goldstein, W.~A.~Kibbe, and J.~P.~Dunn, ``Investigating sources of inaccuracy in wearable optical heart rate sensors,'' \emph{npj Digit. Med.}, vol.~3, no.~1, p.~18, 2020, DOI: 10.1038/s41746-020-0226-6.
@@ -397,14 +386,8 @@ B.~Bent, B.~A.~Goldstein, W.~A.~Kibbe, and J.~P.~Dunn, ``Investigating sources o
 \bibitem{ref_zhang_troika}
 Z.~Zhang, Z.~Pi, and B.~Liu, ``TROIKA: A general framework for heart rate monitoring using wrist-type photoplethysmographic signals during intensive physical exercise,'' \emph{IEEE Trans. Biomed. Eng.}, vol.~62, no.~2, pp.~522--531, 2015, DOI: 10.1109/TBME.2014.2359372.
 
-\bibitem{ref_salehizadeh_spectral}
-S.~M.~A.~Salehizadeh, D.~Dao, J.~Bolkhovsky, C.~Cho, Y.~Mendelson, and K.~H.~Chon, ``A novel time-varying spectral filtering algorithm for reconstruction of motion artifact corrupted heart rate signals during intense physical activities using a wearable photoplethysmogram sensor,'' \emph{Sensors}, vol.~16, no.~1, p.~10, 2016, DOI: 10.3390/s16010010.
-
 \bibitem{ref_karlen_sqi}
 W.~Karlen, K.~Kobayashi, J.~M.~Ansermino, and G.~A.~Dumont, ``Photoplethysmogram signal quality estimation using repeated Gaussian filters and cross-correlation,'' \emph{Physiol. Meas.}, vol.~33, no.~10, pp.~1617--1629, 2012, DOI: 10.1088/0967-3334/33/10/1617.
-
-\bibitem{ref_selvaraj_motion}
-N.~Selvaraj, Y.~Mendelson, and K.~H.~Chon, ``Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram,'' in \emph{Proc. IEEE EMBC}, 2011, pp.~4972--4975, DOI: 10.1109/IEMBS.2011.6091232.
 
 \bibitem{ref_orphanidou_sqi}
 C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, vol.~19, no.~3, pp.~832--838, 2015, DOI: 10.1109/JBHI.2014.2338351.
@@ -412,20 +395,11 @@ C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassen
 \bibitem{ref_li_clifford_fusion}
 Q.~Li and G.~D.~Clifford, ``Signal quality and data fusion for false alarm reduction in the intensive care unit,'' \emph{J. Electrocardiol.}, vol.~45, no.~6, pp.~596--603, 2012, DOI: 10.1016/j.jelectrocard.2012.07.015.
 
-\bibitem{ref_drew_alarm_fatigue}
-B.~J.~Drew \emph{et al.}, ``Insights into the problem of alarm fatigue with physiologic monitor devices: A comprehensive observational study of consecutive intensive care unit patients,'' \emph{PLOS ONE}, vol.~9, no.~10, p.~e110274, 2014, DOI: 10.1371/journal.pone.0110274.
-
 \bibitem{ref_cvach_alarm_fatigue}
 M.~Cvach, ``Monitor alarm fatigue: An integrative review,'' \emph{Biomed. Instrum. Technol.}, vol.~46, no.~4, pp.~268--277, 2012, DOI: 10.2345/0899-8205-46.4.268.
 
 \bibitem{ref_clifford_challenge}
 G.~D.~Clifford \emph{et al.}, ``False alarm reduction in critical care,'' \emph{Physiol. Meas.}, vol.~37, no.~8, pp.~E5--E23, 2016, DOI: 10.1088/0967-3334/37/8/E5.
-
-\bibitem{ref_perez_apple_heart}
-M.~V.~Perez \emph{et al.}, ``Large-scale assessment of a smartwatch to identify atrial fibrillation,'' \emph{N. Engl. J. Med.}, vol.~381, no.~20, pp.~1909--1917, 2019, DOI: 10.1056/NEJMoa1901183.
-
-\bibitem{ref_shafer_conformal}
-G.~Shafer and V.~Vovk, ``A tutorial on conformal prediction,'' \emph{J. Mach. Learn. Res.}, vol.~9, no.~12, pp.~371--421, 2008.
 
 \bibitem{ref_angelopoulos_conformal}
 A.~N.~Angelopoulos and S.~Bates, ``Conformal prediction: A gentle introduction,'' \emph{Found. Trends Mach. Learn.}, vol.~16, no.~4, pp.~494--591, 2023, DOI: 10.1561/2200000101.

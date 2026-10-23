@@ -61,7 +61,7 @@ def generate_figures():
     # Fig 1: Recall vs FA/hr per Arm and Condition
     # -------------------------------------------------------------------------
     df_comb = pd.read_csv(OUT_DIR / "combined_metrics.csv")
-    fig, ax = plt.subplots(figsize=(4.3, 2.75))
+    fig, ax = plt.subplots(figsize=(4.3, 2.15))
 
     arm_styles = {
         "Arm 1 (Fixed)": {"color": "#1f77b4", "marker": "o", "label": "Arm 1: Fixed Pop"},
@@ -69,8 +69,7 @@ def generate_figures():
         "Arm 3a (+Kinematic)": {"color": "#2ca02c", "marker": "^", "label": "Arm 3a: +Kinematic"},
         "Arm 3b (+Trust Score)": {"color": "#9467bd", "marker": "D", "label": "Arm 3b: +Trust"},
         "Arm 3b-noMotion": {"color": "#ff7f0e", "marker": "v", "label": "Arm 3b: noMotion"},
-        "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)": {"color": "#0284c7", "marker": "P", "label": "Arm 4: Pre-spec. (Amend. 3, impl. after other arms)"},
-        "Arm 4 (added post hoc)": {"color": "#0284c7", "marker": "P", "label": "Arm 4: Pre-spec. (Amend. 3, impl. after other arms)"},
+        "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)": {"color": "#0284c7", "marker": "P", "label": "Arm 4 (conformal)"},
     }
 
     cond_alphas = {
@@ -122,7 +121,7 @@ def generate_figures():
         plt.Line2D([0], [0], color=s["color"], marker=s["marker"], linestyle="--", label=s["label"])
         for s in arm_styles.values()
     ]
-    ax.legend(handles=custom_handles, loc="lower right", framealpha=0.92, frameon=True, fontsize=7.8)
+    ax.legend(handles=custom_handles, loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=3, framealpha=0.92, frameon=True, fontsize=7.2)
 
     ax.set_xlabel("Clean False Alerts per Hour [FA/h]", fontweight="bold")
     ax.set_ylabel("Event Recall [%]", fontweight="bold")
@@ -138,7 +137,7 @@ def generate_figures():
     # Fig 2: Forest Plot of Paired Differences (3b minus 3a) with 95% CIs
     # -------------------------------------------------------------------------
     df_paired = pd.read_csv(OUT_DIR / "paired_3b_vs_3a.csv")
-    fig, ax = plt.subplots(figsize=(4.3, 2.75))
+    fig, ax = plt.subplots(figsize=(4.3, 2.15))
 
     cond_labels_short = [
         "F7: Optical (+5dB)",
@@ -213,7 +212,7 @@ def generate_figures():
     df_persub = pd.read_csv(OUT_DIR / "per_subject_metrics.csv")
     df_persub_c0 = df_persub[df_persub["Condition"] == "Condition 0 (No-Fault)"]
 
-    fig, ax = plt.subplots(figsize=(4.3, 2.75))
+    fig, ax = plt.subplots(figsize=(4.3, 2.15))
     sids = [f"S{i}" for i in range(1, 16)]
     x = np.arange(len(sids))
     width = 0.40
@@ -230,7 +229,7 @@ def generate_figures():
     ax.set_ylabel("Clean FA per Hour [FA/h]", fontweight="bold", fontsize=10.0)
     ax.set_xlim(-0.7, 14.7)
     ax.set_ylim(0, 13.5)
-    ax.legend(loc="upper right", framealpha=0.92, frameon=True, fontsize=8.2)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=2, framealpha=0.92, frameon=True, fontsize=7.8)
     ax.grid(True, linestyle=":", alpha=0.55, axis="y")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_persubject_fahr.pdf", dpi=300, bbox_inches="tight")
@@ -241,7 +240,7 @@ def generate_figures():
     # Fig 4: Arm 1 Sensitivity: Threshold by Persistence
     # -------------------------------------------------------------------------
     df_arm1 = pd.read_csv(OUT_DIR / "sensitivity_arm1.csv")
-    fig, ax1 = plt.subplots(figsize=(4.3, 2.75))
+    fig, ax1 = plt.subplots(figsize=(4.3, 2.15))
 
     p_styles = {
         10: {"color": "#1f77b4", "ls": "-", "m": "o"},
@@ -281,7 +280,7 @@ def generate_figures():
     ax2.set_ylabel("Clean FA/hr [FA/h] (dotted)", color="#333333", fontweight="bold", fontsize=10.0)
     ax2.set_ylim(0, 10)
 
-    ax1.legend(loc="lower left", framealpha=0.92, frameon=True, fontsize=8.0)
+    ax1.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=3, framealpha=0.92, frameon=True, fontsize=7.8)
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_arm1_sensitivity.pdf", dpi=300, bbox_inches="tight")
     plt.close(fig)
