@@ -30,30 +30,26 @@
 \title{\LARGE Motion Gating versus Signal Trust Scores for Wearable Heart-Rate Alerting: A Pre-Specified Fault-Injection Benchmark}
 
 \author{
-  \begin{minipage}[t]{0.315\textwidth}\centering
-    \textbf{Student 1} \\
-    \textit{Dept. of Computer Science \& Engineering} \\
-    \textit{Vel Tech Rangarajan Dr. Sagunthala} \\
-    \textit{R\&D Institute of Science and Technology} \\
-    Chennai, Tamil Nadu, India \\
-    email address
-  \end{minipage}\hfill
-  \begin{minipage}[t]{0.315\textwidth}\centering
-    \textbf{Student 2} \\
-    \textit{Dept. of Computer Science \& Engineering} \\
-    \textit{Vel Tech Rangarajan Dr. Sagunthala} \\
-    \textit{R\&D Institute of Science and Technology} \\
-    Chennai, Tamil Nadu, India \\
-    email address
-  \end{minipage}\hfill
-  \begin{minipage}[t]{0.315\textwidth}\centering
-    \textbf{Faculty Supervisor} \\
-    \textit{Dept. of Computer Science \& Engineering} \\
-    \textit{Vel Tech Rangarajan Dr. Sagunthala} \\
-    \textit{R\&D Institute of Science and Technology} \\
-    Chennai, Tamil Nadu, India \\
-    email address
-  \end{minipage}
+\IEEEauthorblockN{Student 1}
+\IEEEauthorblockA{\textit{Dept. of Computer Science \& Engineering} \\
+\textit{Vel Tech Rangarajan Dr. Sagunthala} \\
+\textit{R\&D Institute of Science and Technology} \\
+Chennai, Tamil Nadu, India \\
+email address}
+\and
+\IEEEauthorblockN{Student 2}
+\IEEEauthorblockA{\textit{Dept. of Computer Science \& Engineering} \\
+\textit{Vel Tech Rangarajan Dr. Sagunthala} \\
+\textit{R\&D Institute of Science and Technology} \\
+Chennai, Tamil Nadu, India \\
+email address}
+\and
+\IEEEauthorblockN{Faculty Supervisor}
+\IEEEauthorblockA{\textit{Dept. of Computer Science \& Engineering} \\
+\textit{Vel Tech Rangarajan Dr. Sagunthala} \\
+\textit{R\&D Institute of Science and Technology} \\
+Chennai, Tamil Nadu, India \\
+email address}
 }
 
 \maketitle
@@ -85,28 +81,30 @@ This paper reports a pre-specified fault-injection benchmark for wearable heart-
 
 \textbf{C. Alarm Fatigue, Telemetry, and Conformal Uncertainty:} Frequent false alerts from wearable and bedside monitors impose severe clinical and behavioral costs. In hospital settings, Cvach \cite{ref_cvach_alarm_fatigue} documented pervasive monitor alarm fatigue, where high false alarm rates desensitize clinicians and degrade response times to life-threatening arrhythmias. Clifford \emph{et al.} \cite{ref_clifford_challenge} formalized this challenge in the PhysioNet/CinC 2015 Benchmark ($N=1250$ multi-parameter records), showing that algorithmic false-alarm suppression requires joint multi-modal cross-checking. Under non-stationary ambulatory noise, deterministic predictions lack distribution-free confidence. Conformal prediction \cite{ref_angelopoulos_conformal} provides finite-sample, distribution-free coverage guarantees with valid non-conformity calibration. Vazquez and Facelli \cite{ref_vazquez_conformal} reviewed conformal prediction across fourteen clinical applications, demonstrating that selective abstention preserves decision purity in high-stakes healthcare scenarios. Table~\ref{tab:related_work} compares this benchmark against opened and verified literature sources.
 
-\begin{table}[htbp]
+\begin{table}[t]
 \caption{Related Work Comparison on Verified Literature}
 \label{tab:related_work}
 \centering
 \scriptsize
 \renewcommand{\arraystretch}{0.75}
 \setlength{\tabcolsep}{2.0pt}
-\begin{tabular}{|p{1.8cm}|p{1.1cm}|c|c|p{2.8cm}|}
+\begin{tabular}{|p{1.45cm}|p{1.30cm}|p{1.70cm}|p{1.60cm}|p{1.65cm}|}
 \hline
-\textbf{Study} & \textbf{Cohort} & \textbf{Motion} & \textbf{Trust/SQI} & \textbf{Scope \& Benchmark Focus} \\
+\textbf{Study} & \textbf{Data} & \textbf{Method} & \textbf{Quality/\allowbreak uncertainty} & \textbf{Relevance} \\[4pt]
 \hline
-Zhang \emph{et al.} \cite{ref_zhang_troika} & $N=12$ & ACC/SBL & Spectral & TROIKA sparse reconstruction for exercise HR. \\
+Zhang \emph{et al.} \cite{ref_zhang_troika} & 12 treadmill subjects & Sparse signal reconstruction & Accelerometer spectrum & Motion tracking during exercise \\[4pt]
 \hline
-Reiss \emph{et al.} \cite{ref_reiss_dalia} & $N=15$ & ACC feat. & None & PPG-DaLiA CNN tracking baselines. \\
+Reiss \emph{et al.} \cite{ref_reiss_dalia} & 15 ambulatory subjects & Deep convolutional network & None & Daily living tracking benchmark \\[4pt]
 \hline
-Elgendi \cite{ref_elgendi_sqi} & Static PPG & None & 8 SQIs & Evaluated 8 morphological SQIs on stationary data. \\
+Elgendi \cite{ref_elgendi_sqi} & Stationary recordings & Morphological feature ranking & 8 signal quality indices & Evaluation of optical indices \\[4pt]
 \hline
-Clifford \emph{et al.} \cite{ref_clifford_challenge} & $N=1250$ & Multi-modal & Multi-SQI & PhysioNet CinC'15 ICU alarm reduction benchmark. \\
+Charlton \emph{et al.} \cite{ref_charlton_roadmap} & Wearable literature & Roadmap and consensus & Signal quality assessment & Wearable photo\-plethys\-mography \\[4pt]
 \hline
-Vazquez \& Facelli \cite{ref_vazquez_conformal} & 14 studies & N/A & Conformal & Conformal review in clinical medicine. \\
+Clifford \emph{et al.} \cite{ref_clifford_challenge} & 1250 critical care records & Multi-parameter fusion & Multi-channel quality metrics & Critical care false alarm reduction \\[4pt]
 \hline
-\textbf{This Benchmark} & $N=15$ & $\text{ENMO}_{10\text{s}}$ & Multi-SQI & Causal alerting Arms 1--4; 7 fault types; LOSO. \\
+Vazquez \& Facelli \cite{ref_vazquez_conformal} & 14 clinical studies & Conformal prediction review & Non-conformity uncertainty & Medical decision abstention \\[4pt]
+\hline
+\textbf{This Benchmark} & 15 ambulatory subjects & Causal threshold and motion gating & Multi-attribute software trust & Controlled motion vs trust evaluation \\[4pt]
 \hline
 \end{tabular}
 \end{table}
@@ -189,7 +187,7 @@ Vazquez \& Facelli \cite{ref_vazquez_conformal} & 14 studies & N/A & Conformal &
 % Stage Header Tags
 \node[stagetag, text width=2.4cm] at (1.3, 2.4) {STAGE 1: SENSING};
 \node[stagetag, text width=3.0cm] at (5.6, 2.4) {STAGE 2: CONDITIONING};
-\node[stagetag, text width=3.4cm] at (10.6, 2.4) {STAGE 3: CAUSAL ALERTING};
+\node[stagetag, text width=3.8cm] at (10.6, 2.4) {STAGE 3: CAUSAL ALERTING};
 \node[stagetag, text width=2.9cm] at (15.6, 2.4) {STAGE 4: OUTPUTS};
 
 % Interconnections: Stage 1 -> Stage 2
@@ -224,9 +222,6 @@ We evaluate on the public PPG-DaLiA benchmark (UCI ID 495, CC BY 4.0) \cite{ref_
 \subsection{Labelled Synthetic Tachycardia Injection}
 Because natural resting tachycardia was virtually absent in this healthy volunteer cohort (manifesting in only 3 of 15 subjects), evaluating sensitivity on raw data is statistically uninformative. Per Amendment 2, we injected 112 labelled synthetic resting tachycardia episodes into derived pulse-rate streams during verified low-motion windows ($\text{ENMO}_{10\text{s}} \le 0.05$\,g). Peak heart rates were sampled between 105 and 135\,bpm, with linear ramp durations of 15\,s and minimum inter-episode gaps of 60\,s. To respect participant baseline heart rates $HR_{\text{base}}$, lower and upper ramp bounds were adaptively adjusted: $r_{\text{lo}} = \max(2.0, (105 - HR_{\text{base}})/15)$, $r_{\text{hi}} = \min(4.0, (135 - HR_{\text{base}})/15)$, with plateau peak heart rate clamped to $[105.0, 135.0]$\,bpm.
 
-\subsection{Seeded Fault Regimes}
-Telemetry faults were simulated under two pre-specified schedules alongside an optical corruption condition (Table~\ref{tab:dataset_and_faults}): Condition~0 (clean background, $31.27$\,h non-event exposure); Regime~A (low duty, $\approx 10\%$ faulted time); Regime~B (nominal duty, $\approx 25\text{--}30\%$ faulted time) injecting six deterministic fault types (F1 gaps, F2 frozen flatlines, F3 duplicates, F4 spikes, F5 drift, F6 scale errors; seed 42); and F7 high-motion optical noise (additive Gaussian noise continuously modulated by wrist 3D acceleration injected into raw 64\,Hz BVP at SNR $+5.0$\,dB prior to spectral estimation).
-
 \input{tables/tab_dataset_and_faults.tex}
 
 \section{System Architecture}
@@ -234,45 +229,29 @@ The experimental harness, telemetry platform, and symptom screening engine were 
 
 \section{Methods and Algorithms}
 \subsection{Evaluated Alerting Arms}
-We benchmark six causal alerting arms without future peeking (Table~\ref{tab:alerting_arms}):
+We benchmark six causal alerting arms without future peeking: Arm~1 (Fixed Population), Arm~2 (Personal Baseline), Arm~3a (+Kinematic Gating), Arm~3b (+Trust Score), Arm~3b-noMotion (Trust Ablation), and Arm~4 (Conformal Abstention). Decision rules, thresholds, and parameter tuning grids are detailed in Table~\ref{tab:alerting_arms}.
 
 \input{tables/tab_alerting_arms.tex}
-(1)~\textbf{Arm 1 (Fixed Pop.):} Standard clinical threshold $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm; (2)~\textbf{Arm 2 (Personal Baseline):} Dynamic cutoff $\tau_i(t) = \max(\tau_{\text{floor}}, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$ regularized toward training priors $(\mu_{\text{pop}}, \sigma_{\text{pop}})$ via empirical Bayes shrinkage $\kappa$ (Algorithm~\ref{alg:alerting_pipeline}); (3)~\textbf{Arm 3a (Kinematic Gating):} Arm 2 baseline with stillness gate: alerts trigger if $HR(t) > \tau_i(t)$ and $\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}}$; (4)~\textbf{Arm 3b (Trust Score Gating):} Arm 2 gated by software trust: alerts trigger if $HR(t) > \tau_i(t)$ and $S_{\text{trust}}(t) \ge \theta_{\text{trust}}$; (5)~\textbf{Arm 3b-noMotion (Trust Ablation):} Arm 3b with motion ablated ($w_{\text{mot}} = 0$); and (6)~\textbf{Arm 4 (Conformal Abstention, pre-specified in Amendment 3, implemented after the other arms' results were seen):} Arm 2 baseline with inductive conformal calibration on resting windows ($\alpha \in \{0.05, 0.10\}$, selecting $\alpha = 0.10$ across all 15 folds); abstains when non-conformity or multi-attribute trust defects exceed calibrated thresholds.
 
-\begin{algorithm}[htbp]
-\caption{Causal Heart-Rate Alerting Pipeline with Motion Gating and Conformal Abstention}
-\label{alg:alerting_pipeline}
-\scriptsize
-\renewcommand{\arraystretch}{0.70}
+\subsection{Shared Standard Alert Emitter}
+To ensure rigorous cross-arm comparability, all arms feed instantaneous binary triggers $C[t]$ into a shared \texttt{StandardAlertEmitter} (Algorithm~\ref{alg:alert_emitter}). Alerts fire if and only if triggering conditions hold continuously for persistence window $W_p = P / \Delta t$ ($P \in \{10, 20, 30\}$\,s). Emitted alerts enforce a mandatory refractory hold-off of $W_r = R / \Delta t$ ($R = 60$\,s).
+
+\begin{algorithm}[t]
+\caption{Shared Alert Emitter with Persistence and Refractory Hold-off}
+\label{alg:alert_emitter}
+\small
 \begin{algorithmic}[1]
-\REQUIRE Streaming pulse rate $HR[t]$, motion $\text{ENMO}[t]$, priors $(\mu_{\text{pop}}, \sigma_{\text{pop}})$, parameters $(k, \kappa, \theta_{\text{rest}}, \theta_{\text{trust}}, \alpha, \lambda, \theta_{\text{unc}}, P, R)$
-\STATE Initialize: $c \leftarrow 0$, running mean $\bar{x} \leftarrow \mu_{\text{pop}}$, running std $s \leftarrow \sigma_{\text{pop}}$, $run\_len \leftarrow 0$, $ref\_cnt \leftarrow 0$
+\REQUIRE Trigger stream $C[t]$, persistence window $W_p$, refractory window $W_r$
+\STATE Initialize: $run\_len \leftarrow 0, \quad ref\_cnt \leftarrow 0$
 \FOR{each window $t = 0, 1, \dots, N-1$}
-    \STATE \textbf{Update Resting Baseline:}
-    \IF{$\text{ENMO}[t] \le 0.05\,\text{g} \land \text{finite}(HR[t])$}
-        \STATE $c \leftarrow c + 1$; Update sample mean $\bar{x}$ and sample standard deviation $s$
-        \STATE Shrinkage weight: $w \leftarrow \frac{c \cdot \Delta t / 3600}{c \cdot \Delta t / 3600 + \kappa}$
-        \STATE $\hat{\mu}_i[t] \leftarrow w \bar{x} + (1-w)\mu_{\text{pop}}; \quad \hat{\sigma}_i[t] \leftarrow w s + (1-w)\sigma_{\text{pop}}$
-    \ENDIF
-    \STATE Causal threshold: $\tau_i[t] \leftarrow \max(100.0, \hat{\mu}_i[t] + k \cdot \hat{\sigma}_i[t])$
-    \STATE \textbf{Compute Quality and Gating Masks:}
-    \STATE $M_{\text{kin}}[t] \leftarrow \mathbb{I}(\text{ENMO}_{10\text{s}}[t] \le \theta_{\text{rest}})$
-    \STATE $S_{\text{trust}}[t] \leftarrow \text{clip}(S_{\text{gap}} \cdot S_{\text{stale}} \cdot S_{\text{phys}} \cdot S_{\text{mot}}, 0.0, 1.0); \quad M_{\text{trust}}[t] \leftarrow \mathbb{I}(S_{\text{trust}}[t] \ge \theta_{\text{trust}})$
-    \STATE Augmented uncertainty: $U_{\text{tot}}[t] \leftarrow (\hat{\sigma}_i[t] / \hat{\mu}_i[t]) + \lambda(1 - S_{\text{trust}}[t])$
-    \STATE Abstain condition: $Abstain[t] \leftarrow (\tau_i[t] \in [\hat{\mu}_i[t] \pm \hat{q}_{1-\alpha}\hat{\sigma}_i[t]]) \lor (U_{\text{tot}}[t] > \theta_{\text{unc}})$
-    \STATE \textbf{Evaluate Active Alerting Arm Trigger Condition $C[t]$:}
-    \STATE \textbf{case} Arm 1: $C[t] \leftarrow (HR[t] > \tau_{\text{pop}})$
-    \STATE \textbf{case} Arm 2: $C[t] \leftarrow (HR[t] > \tau_i[t])$
-    \STATE \textbf{case} Arm 3a: $C[t] \leftarrow (HR[t] > \tau_i[t]) \land M_{\text{kin}}[t]$
-    \STATE \textbf{case} Arm 3b: $C[t] \leftarrow (HR[t] > \tau_i[t]) \land M_{\text{trust}}[t]$
-    \STATE \textbf{case} Arm 4: $C[t] \leftarrow (HR[t] > \tau_i[t]) \land \neg Abstain[t]$
-    \STATE \textbf{Standard Emitter with Persistence and Refractory Hold-off:}
     \IF{$ref\_cnt > 0$}
         \STATE $ref\_cnt \leftarrow ref\_cnt - 1; \quad Alert[t] \leftarrow \text{FALSE}$
     \ELSIF{$C[t]$ is TRUE}
         \STATE $run\_len \leftarrow run\_len + 1$
-        \IF{$run\_len \ge P / \Delta t$}
-            \STATE $Alert[t] \leftarrow \text{TRUE}; \quad ref\_cnt \leftarrow R / \Delta t; \quad run\_len \leftarrow 0$
+        \IF{$run\_len \ge W_p$}
+            \STATE $Alert[t] \leftarrow \text{TRUE}; \quad ref\_cnt \leftarrow W_r; \quad run\_len \leftarrow 0$
+        \ELSE
+            \STATE $Alert[t] \leftarrow \text{FALSE}$
         \ENDIF
     \ELSE
         \STATE $run\_len \leftarrow 0; \quad Alert[t] \leftarrow \text{FALSE}$
@@ -281,9 +260,6 @@ We benchmark six causal alerting arms without future peeking (Table~\ref{tab:ale
 \RETURN Alert stream $Alert$
 \end{algorithmic}
 \end{algorithm}
-
-\subsection{Shared Standard Alert Emitter}
-To ensure rigorous cross-arm comparability, all arms feed instantaneous binary triggers into a shared \texttt{StandardAlertEmitter} (Algorithm~\ref{alg:alerting_pipeline}). Alerts fire if and only if triggering conditions hold continuously for $W_p = P / \text{step}$ windows ($P \in \{10, 20, 30\}$\,s). Emitted alerts enforce a mandatory refractory hold-off of $W_r = R / \text{step}$ windows ($R = 60$\,s).
 \begin{figure*}[t]
 \centering
 \begin{minipage}{0.48\textwidth}
@@ -328,11 +304,10 @@ Scoring assesses event-level recall (injected episodes within $[t_{\text{start}}
 
 \section{Results and Discussion}
 \subsection{Primary Hypothesis $H_1$ Outcome: Estimation Finding}
-In Protocol Amendment~3, the primary research question was formulated as an estimation question: ``\emph{What is the difference in False Alerts per Hour between Arm 3b and Arm 3a $(\Delta\text{FA/hr} = \text{FA/hr}_{\text{Arm 3b}} - \text{FA/hr}_{\text{Arm 3a}})$, quantified with a 95\% subject-bootstrap confidence interval?}'' with stated targets ($\ge 60\%$ reduction in FA/hr relative to kinematic-only gating, and $\ge 85\%$ recall on genuine synthetic alert events maintained as stated targets, not rigid pass/fail criteria). In paired comparisons (Table~\ref{tab:combined_metrics}, Table~\ref{tab:statistical_and_strata}, Fig.~\ref{fig:results_all}b), Arm 3b demonstrated no statistically detectable false-alert reduction over Arm 3a across any condition:
+In Protocol Amendment~3, the primary research question was formulated as an estimation question: ``\emph{What is the difference in False Alerts per Hour between Arm 3b and Arm 3a $(\Delta\text{FA/hr} = \text{FA/hr}_{\text{Arm 3b}} - \text{FA/hr}_{\text{Arm 3a}})$, quantified with a 95\% subject-bootstrap confidence interval?}'' with stated targets ($\ge 60\%$ reduction in FA/hr relative to kinematic-only gating, and $\ge 85\%$ recall on genuine synthetic alert events maintained as stated targets, not rigid pass/fail criteria). In paired comparisons across the four evaluated conditions (Table~\ref{tab:paired_comparison}, Fig.~\ref{fig:results_all}b), Arm~3b demonstrated no statistically detectable false-alert reduction over Arm~3a, with mean differences between $-0.49$ and $+0.13$\,FA/h, all 95\% CIs including zero, and Wilcoxon signed-rank $p$ ranging from $0.28$ to $0.98$ (Table~\ref{tab:paired_comparison}).
 
-specifically: Condition~0 (Clean) mean difference $+0.13$\,FA/h (95\% CI $[-0.54, +0.89]$, $W = 31.0$, $p = 0.86$); Regime~A ($\approx 10\%$ faults) $+0.05$\,FA/h (95\% CI $[-0.66, +0.82]$, $W = 40.0$, $p = 0.70$); Regime~B ($\approx 25\text{--}30\%$ faults) $-0.04$\,FA/h (95\% CI $[-0.78, +0.69]$, $W = 52.0$, $p = 0.98$); and F7 (Optical Noise) $-0.49$\,FA/h (95\% CI $[-1.47, +0.38]$, $W = 17.0$, $p = 0.28$). In every condition, 95\% bootstrap confidence intervals spanned zero, and Wilcoxon signed-rank tests yielded $p \ge 0.28$.
-
-\input{tables/tab_statistical_and_strata.tex}
+\input{tables/tab_paired_comparison.tex}
+\input{tables/tab_strata.tex}
 
 \subsection{Secondary Benchmark Findings}
 \textbf{Kinematic motion gating drives alert accuracy:} Kinematic stillness gating accounted for the largest share of false-alert suppression: relative to ungated Arm 2, Arm 3a reduced false alerts per hour by 74.2\% in clean data ($1.47$ vs $5.69$\,FA/h) and by 67.9\% in Regime B ($2.30$ vs $7.16$\,FA/h) (Table~\ref{tab:combined_metrics}). Furthermore, the no-motion trust ablation (Arm 3b-noMotion) alone reduced clean false alerts by about half ($5.69$ to $2.91$\,FA/h).
@@ -346,9 +321,16 @@ Hyperparameter tuning consistently selected parameter boundary values. Most nota
 To benchmark distribution-free selective alerting, Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen (Draft Amendment~5). Inductive conformal calibration was performed on resting training windows with miscoverage parameter $\alpha$ tuned over $\{0.05, 0.10\}$ ($\alpha = 0.10$, $\lambda = 0.5$, $\theta_{\text{unc}} = 0.30$, and $P = 10$\,s selected across all 15 LOSO training folds). Across all evaluated regimes, Arm 4 achieved the lowest clean false-alert frequency observed in the benchmark: $0.70$\,FA/h in clean data (a 52.4\% reduction over Arm 3a and an 87.7\% reduction over Arm 2), $0.67$\,FA/h in Regime A, and $0.35$\,FA/h under F7 optical noise (Table~\ref{tab:combined_metrics}). Precision reached 83.7\% in clean telemetry and 88.2\% under F7 noise ($F_1 = 0.776$ clean, $0.673$ F7) on the alert-count basis (Table~\ref{tab:combined_metrics}); Arm~4's clean $F_1$ differs from Arm~3a (0.772) by 0.004 with no confidence interval and is not claimed as an improvement. However, conservative abstention came at the expense of sensitivity: episode recall dropped from 80.4\% to 72.3\% (81/112 episodes) in clean data, and to 54.5\% (61/112 episodes) in F7 noise, demonstrating the fundamental trade-off between strict false-alert suppression and event sensitivity under non-stationary ambulatory noise.
 
 \section{Limitations}
-Methodological constraints and threats to validity are summarized in Table~\ref{tab:limitations_and_amendments}: (1) Resting tachycardia episodes were synthetically injected due to natural event sparsity, making Arm 1 recall ($>91\%$) intrinsically dependent on the synthetic $[105, 135]$\,bpm injection range relative to the $100$\,bpm floor; (2) Cohort is limited to 15 healthy young participants in the PPG-DaLiA protocol, leaving free-living 24/7 unconstrained monitoring unproven; (3) Front-end PPG tracking errors propagate to downstream logic; (4) Threshold cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) represent engineering design choices with unopened sources; (5) Subject S5 exhibited sustained elevated resting heart rate of unknown cause (reference ECG clean), necessitating dual pooled and stratified reporting; (6) Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen with inductive conformal calibration ($\alpha \in \{0.05, 0.10\}$); and (7) External datasets (PhysioNet Wearable, WESAD) were not evaluated.
+\begin{itemize}
+    \item \textbf{Synthetic Event Injection:} Resting tachycardia episodes were synthetically injected due to natural event sparsity in healthy volunteers; Arm~1 recall ($>91\%$) depends on the $[105, 135]$\,bpm injection range.
+    \item \textbf{Cohort Homogeneity:} Evaluated on 15 healthy young individuals in structured laboratory and ambulatory daily-life tasks; unconstrained 24/7 free-living tracking remains unproven.
+    \item \textbf{Error Propagation:} Front-end optical tracking inaccuracies propagate directly into downstream baseline and trust computation.
+    \item \textbf{Subject S5 Outlier:} Subject S5 exhibited sustained elevated resting pulse rate (reference ECG clean), necessitating dual pooled and stratified reporting.
+    \item \textbf{Post-Hoc Conformal Implementation:} Arm~4 was pre-specified in Amendment~3 but implemented after other arms' outcomes were observed.
+    \item \textbf{External Corpora:} Validation on external ambulatory cohorts (e.g., PhysioNet Wearable, WESAD) was deferred to future work.
+\end{itemize}
 
-\input{tables/tab_limitations_and_amendments.tex}
+\input{tables/tab_amendments.tex}
 
 \section{Future Scope and Conclusion}
 \textbf{Future Scope:} Future efforts will extend this benchmark along five technical avenues: (1)~online dynamic conformal martingales under covariate shifts \cite{ref_vazquez_conformal}; (2)~external wearable corpora evaluation, including PhysioNet Wearable \cite{ref_physionet_wearable} and WESAD; (3)~ambulatory inpatient holter validation with spontaneous arrhythmias; (4)~on-device microcontroller deployment of causal baseline and kinematic gating engines; and (5)~prospective clinical validation of operational symptom review (FR-06) and local explanation (FR-07) modules.
@@ -358,7 +340,7 @@ Methodological constraints and threats to validity are summarized in Table~\ref{
 \section*{Regulatory, Data, and Code Availability}
 \textbf{Regulatory Status (Not a Medical Device):} VitaSense AI software, alerting algorithms, and benchmark suite are academic research artifacts. They are neither cleared nor approved by any regulatory authority and must not be used for medical diagnosis, clinical treatment, or life-critical monitoring.
 
-\textbf{Data and Code Availability:} PPG-DaLiA is openly accessible via UCI \cite{ref_reiss_dalia, ref_uci_dalia}; PhysioNet Wearable is under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are provided in the repository.
+\textbf{Data and Code Availability:} PPG-DaLiA is openly accessible via UCI \cite{ref_reiss_dalia, ref_uci_dalia}; PhysioNet Wearable is under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are provided in the repository. Detailed alert counts are archived in \texttt{alert\_counts.csv}.
 
 \begin{thebibliography}{14}
 
@@ -372,13 +354,13 @@ M.~Elgendi, ``Optimal signal quality index for photoplethysmogram signals,'' \em
 P.~H.~Charlton \emph{et al.}, ``The 2023 wearable photoplethysmography roadmap,'' \emph{Physiol. Meas.}, vol.~44, no.~11, p.~111001, 2023, DOI: 10.1088/1361-6579/acead2.
 
 \bibitem{ref_vazquez_conformal}
-J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{J. Healthc. Inform. Res.}, vol.~6, no.~2, pp.~119--139, 2022, DOI: 10.1007/s41666-021-00113-8.
+J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{J. Healthc. Inform. Res.}, 2022, DOI: 10.1007/s41666-021-00113-8.
 
 \bibitem{ref_uci_dalia}
 ``PPG-DaLiA,'' UCI Machine Learning Repository, DOI: 10.24432/C53890.
 
 \bibitem{ref_physionet_wearable}
-A.~Hongn, F.~Bosch, L.~Prado, and P.~Bonomini, ``Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,'' PhysioNet, Version 1.0.1, 2025, DOI: 10.13026/0m13-7r86.
+A.~Hongn, F.~Bosch, L.~Prado, and P.~Bonomini, ``Wearable Device Dataset from Induced Stress and Structured Exercise Sessions,'' PhysioNet, Version 1.0.1, 2025, DOI: 10.13026/he0v-tf17.
 
 \bibitem{ref_bent_sources}
 B.~Bent, B.~A.~Goldstein, W.~A.~Kibbe, and J.~P.~Dunn, ``Investigating sources of inaccuracy in wearable optical heart rate sensors,'' \emph{npj Digit. Med.}, vol.~3, no.~1, p.~18, 2020, DOI: 10.1038/s41746-020-0226-6.
@@ -390,7 +372,7 @@ Z.~Zhang, Z.~Pi, and B.~Liu, ``TROIKA: A general framework for heart rate monito
 W.~Karlen, K.~Kobayashi, J.~M.~Ansermino, and G.~A.~Dumont, ``Photoplethysmogram signal quality estimation using repeated Gaussian filters and cross-correlation,'' \emph{Physiol. Meas.}, vol.~33, no.~10, pp.~1617--1629, 2012, DOI: 10.1088/0967-3334/33/10/1617.
 
 \bibitem{ref_orphanidou_sqi}
-C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, vol.~19, no.~3, pp.~832--838, 2015, DOI: 10.1109/JBHI.2014.2338351.
+C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, 2014, DOI: 10.1109/JBHI.2014.2338351.
 
 \bibitem{ref_li_clifford_fusion}
 Q.~Li and G.~D.~Clifford, ``Signal quality and data fusion for false alarm reduction in the intensive care unit,'' \emph{J. Electrocardiol.}, vol.~45, no.~6, pp.~596--603, 2012, DOI: 10.1016/j.jelectrocard.2012.07.015.

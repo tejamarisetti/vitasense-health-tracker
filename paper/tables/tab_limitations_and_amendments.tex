@@ -2,38 +2,38 @@
 \caption{Methodological Limitations \& Protocol Amendments (from git log)}
 \label{tab:limitations_and_amendments}
 \centering
-\scriptsize
-\renewcommand{\arraystretch}{0.75}
-\setlength{\tabcolsep}{2.0pt}
-\begin{tabular}{|p{2.5cm}|p{5.5cm}|}
+\renewcommand{\arraystretch}{0.92}
+\resizebox{\columnwidth}{!}{%
+\begin{tabular}{|l|p{5.4cm}|}
 \hline
 \multicolumn{2}{|c|}{\textbf{Part A: Methodological Constraints and Threats to Validity}} \\
 \hline
-Synthetic Injection & 112 episodes ($105$--$135$\,bpm); Arm 1 recall tied to range vs 100\,bpm floor. \\
+Synthetic Injection & 112 episodes ($105$--$135$\,bpm); Arm 1 recall is directly tied to this injection range vs 100\,bpm floor. \\
 \hline
-Cohort \& Protocol & $N = 15$ healthy adults in PPG-DaLiA; free-living unconstrained monitoring unproven. \\
+Cohort \& Protocol & $N = 15$ healthy adults in PPG-DaLiA protocol; free-living unconstrained 24/7 monitoring unproven. \\
 \hline
-Subject S5 Outlier & Elevated resting HR; reference ECG clean; reported pooled (All-15) and without S5. \\
+Subject S5 Outlier & Sustained elevated resting heart rate of unknown cause; reference ECG verified clean; metrics reported both pooled (All-15) and without S5. \\
 \hline
-Design Choice Bounds & Cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices evaluated via sensitivity grids. \\
+Design Choice Bounds & Cutoffs ($\tau_{\text{pop}}, \theta_{\text{rest}}, \theta_{\text{trust}}$) are design choices with unopened sources; evaluated via sensitivity grids. \\
 \hline
-Grid Boundaries & Boundary selections: Arm 1 ($\tau_{\text{pop}}=100$\,bpm); Arm 2 ($k=2.0$, max-recall fallback). \\
+Grid Boundaries & Tuning selected boundary values: Arm 1 ($\tau_{\text{pop}} = 100$\,bpm, $P = 30$\,s); Arm 2 ($k = 2.0$, $P = 10$\,s, triggering max-recall fallback in 100\% of folds). \\
 \hline
 \multicolumn{2}{|c|}{\textbf{Part B: Protocol Amendments and Provenance (from git log)}} \\
 \hline
-Protocol Freeze [\texttt{41eff1e}] & 2026-10-18: Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO CV. \\
+Protocol Freeze [\texttt{41eff1e}] & 2026-10-18: Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO cross-validation. \\
 \hline
-ENMO Scale Fix [\texttt{3a5ccc2}] & 2026-10-19: Removed /64 division; enforced median norm check $[0.8, 1.2]$\,g. \\
+ENMO Scale Fix [\texttt{3a5ccc2}] & 2026-10-19: Removed redundant /64 accelerometer division, enforced median norm check $[0.8, 1.2]$\,g. \\
 \hline
-Adaptive Ramp [\texttt{e358bf1}] & 2026-10-19: Adapted ramp rates ($r_{\text{lo}}, r_{\text{hi}}$) clamped to $[105, 135]$\,bpm. \\
+Adaptive Ramp [\texttt{e358bf1}] & 2026-10-19: Adapted synthetic tachycardia ramp rates ($r_{\text{lo}}, r_{\text{hi}}$) clamped to $[105, 135]$\,bpm. \\
 \hline
-Emitter Rules [\texttt{cad4c7f}] & 2026-10-19: StandardAlertEmitter ($P \in \{10, 20, 30\}$\,s, $R = 60$\,s) across all arms. \\
+Emitter Rules [\texttt{cad4c7f}] & 2026-10-19: StandardAlertEmitter with $P \in \{10, 20, 30\}$\,s and refractory $R = 60$\,s across all arms. \\
 \hline
-Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened search grids for $\tau_{\text{pop}}$ and $k$ following boundary selection. \\
+Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids for $\tau_{\text{pop}}$ and $k$ following boundary selection. \\
 \hline
-Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered fallback in 100\% of folds. \\
+Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
 \hline
-Arm 4 Impl. [Amend.~5] & 2026-10-22: Arm 4 (conformal) pre-specified Amend.~3, impl. after other arms ($\alpha = 0.10$). \\
+Arm 4 Implementation [Draft Amend.~5] & 2026-10-22: Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
 \hline
-\end{tabular}
+\end{tabular}%
+}
 \end{table}

@@ -1,0 +1,25 @@
+Condition,Alerting Arm,True Alerts,False Alerts
+Condition 0 (No-Fault),Arm 1 (Fixed),132,100
+Condition 0 (No-Fault),Arm 2 (Personal),133,178
+Condition 0 (No-Fault),Arm 3a (+Kinematic),133,46
+Condition 0 (No-Fault),Arm 3b (+Trust Score),130,53
+Condition 0 (No-Fault),Arm 3b-noMotion,130,91
+Condition 0 (No-Fault),Arm 4 (conformal),113,22
+Regime A (Low Duty ~10%),Arm 1 (Fixed),132,112
+Regime A (Low Duty ~10%),Arm 2 (Personal),132,190
+Regime A (Low Duty ~10%),Arm 3a (+Kinematic),132,51
+Regime A (Low Duty ~10%),Arm 3b (+Trust Score),129,57
+Regime A (Low Duty ~10%),Arm 3b-noMotion,129,96
+Regime A (Low Duty ~10%),Arm 4 (conformal),96,21
+Regime B (Nominal ~25-30%),Arm 1 (Fixed),132,141
+Regime B (Nominal ~25-30%),Arm 2 (Personal),125,224
+Regime B (Nominal ~25-30%),Arm 3a (+Kinematic),125,72
+Regime B (Nominal ~25-30%),Arm 3b (+Trust Score),122,74
+Regime B (Nominal ~25-30%),Arm 3b-noMotion,122,113
+Regime B (Nominal ~25-30%),Arm 4 (conformal),83,22
+F7 (High-Motion BVP Noise),Arm 1 (Fixed),131,96
+F7 (High-Motion BVP Noise),Arm 2 (Personal),100,144
+F7 (High-Motion BVP Noise),Arm 3a (+Kinematic),100,49
+F7 (High-Motion BVP Noise),Arm 3b (+Trust Score),90,40
+F7 (High-Motion BVP Noise),Arm 3b-noMotion,90,64
+F7 (High-Motion BVP Noise),Arm 4 (conformal),82,11

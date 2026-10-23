@@ -123,10 +123,10 @@ def generate_figures():
     ]
     ax.legend(handles=custom_handles, loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=3, framealpha=0.92, frameon=True, fontsize=7.2)
 
-    ax.set_xlabel("Clean False Alerts per Hour [FA/h]", fontweight="bold")
-    ax.set_ylabel("Event Recall [%]", fontweight="bold")
+    ax.set_xlabel("Clean False Alerts per Hour [FA/h]", fontweight="bold", fontsize=9.0)
+    ax.set_ylabel("Event Recall [%]", fontweight="bold", fontsize=9.0)
     ax.set_xlim(0.0, 8.0)
-    ax.set_ylim(45, 100)
+    ax.set_ylim(50, 100)
     ax.grid(True, linestyle=":", alpha=0.6)
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_recall_vs_fahr.pdf", dpi=300, bbox_inches="tight")
@@ -186,20 +186,20 @@ def generate_figures():
 
     for i, (m, p) in enumerate(zip(means, p_vals)):
         ax.text(
-            0.95,
+            4.3,
             i,
             f"Diff: {m:+.2f} (p={fmt_p(p)})",
             va="center",
-            ha="left",
-            fontsize=7.8,
+            ha="right",
+            fontsize=7.5,
             fontweight="bold",
             color="#111111",
         )
 
     ax.set_yticks(y_pos)
     ax.set_yticklabels(cond_labels_short, fontweight="medium")
-    ax.set_xlabel(r"Mean Diff in FA/hr ($\Delta = \mathrm{3b} - \mathrm{3a}$) [FA/h]", fontweight="bold", fontsize=9.8)
-    ax.set_xlim(-2.2, 3.65)
+    ax.set_xlabel(r"Mean Diff in FA/hr ($\Delta = \mathrm{3b} - \mathrm{3a}$) [FA/h]", fontweight="bold", fontsize=9.5)
+    ax.set_xlim(-2.2, 4.6)
     ax.grid(True, linestyle=":", alpha=0.55, axis="x")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_forest_plot_3b_vs_3a.pdf", dpi=300, bbox_inches="tight")
@@ -225,11 +225,11 @@ def generate_figures():
 
     ax.set_xticks(x)
     ax.set_xticklabels([f"S{i}" for i in range(1, 16)], fontsize=7.5, fontweight="semibold")
-    ax.set_xlabel("PPG-DaLiA Subject ID (S1–S15)", fontweight="bold", fontsize=10.0)
-    ax.set_ylabel("Clean FA per Hour [FA/h]", fontweight="bold", fontsize=10.0)
+    ax.set_xlabel("PPG-DaLiA Subject ID (S1–S15)", fontweight="bold", fontsize=9.5)
+    ax.set_ylabel("Clean False Alerts per Hour [FA/h]", fontweight="bold", fontsize=9.0)
     ax.set_xlim(-0.7, 14.7)
     ax.set_ylim(0, 13.5)
-    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=2, framealpha=0.92, frameon=True, fontsize=7.8)
+    ax.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=2, framealpha=0.92, frameon=True, fontsize=7.5)
     ax.grid(True, linestyle=":", alpha=0.55, axis="y")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_persubject_fahr.pdf", dpi=300, bbox_inches="tight")
@@ -261,8 +261,8 @@ def generate_figures():
             label=f"Rec (P={p}s)",
         )
 
-    ax1.set_xlabel(r"Population Cutoff $\tau_{\mathrm{pop}}$ [bpm]", fontweight="bold", fontsize=10.0)
-    ax1.set_ylabel("Event Recall [%]", color="#111111", fontweight="bold", fontsize=10.0)
+    ax1.set_xlabel(r"Population Cutoff $\tau_{\mathrm{pop}}$ [bpm]", fontweight="bold", fontsize=9.5)
+    ax1.set_ylabel("Event Recall [%]", color="#111111", fontweight="bold", fontsize=9.0)
     ax1.set_ylim(20, 100)
     ax1.grid(True, linestyle=":", alpha=0.55)
 
@@ -277,7 +277,7 @@ def generate_figures():
             linewidth=1.9,
             alpha=0.85,
         )
-    ax2.set_ylabel("Clean FA/hr [FA/h] (dotted)", color="#333333", fontweight="bold", fontsize=10.0)
+    ax2.set_ylabel("Clean False Alerts per Hour [FA/h] (dotted)", color="#333333", fontweight="bold", fontsize=9.0)
     ax2.set_ylim(0, 10)
 
     ax1.legend(loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=3, framealpha=0.92, frameon=True, fontsize=7.8)
@@ -380,7 +380,7 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     (TAB_DIR / "tab_parameter_grids.tex").write_text(tab_param_grids, encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_parameter_grids.tex'}")
 
-    # 4. Combined Metrics Table
+    # 4. Combined Metrics Table (6 columns, alert counts in alert_counts.csv)
     df_comb = pd.read_csv(OUT_DIR / "combined_metrics.csv")
     df_comb["Arm"] = df_comb["Arm"].replace({
         "Arm 4 (Conformal Abstention)": "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)",
@@ -405,44 +405,75 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     df_comb = df_comb.sort_values(["_cond_k", "_arm_k"]).drop(columns=["_cond_k", "_arm_k"])
     df_comb.to_csv(OUT_DIR / "combined_metrics.csv", index=False)
 
+    best_vals = {
+        "Condition 0 (No-Fault)": {"rec": 91.1, "fa": 0.70, "prec": 83.7, "f1": 0.776},
+        "Regime A (Low Duty ~10%)": {"rec": 91.1, "fa": 0.67, "prec": 82.1, "f1": 0.760},
+        "Regime B (Nominal ~25-30%)": {"rec": 91.1, "fa": 0.70, "prec": 79.0, "f1": 0.691},
+        "F7 (High-Motion BVP Noise)": {"rec": 92.0, "fa": 0.35, "prec": 88.2, "f1": 0.709},
+    }
+    short_arm_map = {
+        "Arm 1 (Fixed)": "Arm 1 (Fixed)",
+        "Arm 2 (Personal)": "Arm 2 (Personal)",
+        "Arm 3a (+Kinematic)": "Arm 3a (+Kinematic)",
+        "Arm 3b (+Trust Score)": "Arm 3b (+Trust Score)",
+        "Arm 3b-noMotion": "Arm 3b-noMotion",
+        "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)": r"Arm 4 (conformal)\textsuperscript{*}",
+    }
+
     lines = [
         r"\begin{table*}[t]",
-        r"\caption{Leave-One-Subject-Out Combined Alerting Benchmark Results Across Conditions (precision is alert-level and recall is episode-level)}",
+        r"\caption{Leave-One-Subject-Out Combined Alerting Benchmark Results Across Conditions (alert counts archived in alert\_counts.csv)}",
         r"\label{tab:combined_metrics}",
         r"\centering",
         r"\scriptsize",
-        r"\begin{tabular}{|l|p{4.7cm}|c|c|c|c|c|c|}",
+        r"\renewcommand{\arraystretch}{0.80}",
+        r"\setlength{\tabcolsep}{5.0pt}",
+        r"\begin{tabular}{|l|l|c|c|c|c|}",
         r"\hline",
-        r"\textbf{Condition} & \textbf{Alerting Arm} & \textbf{Recall (\%)} & \textbf{FA/hr} & \textbf{True Alerts} & \textbf{False Alerts} & \textbf{Precision (\%)} & \textbf{$F_1$ Score} \\",
+        r"\textbf{Condition} & \textbf{Alerting Arm} & \textbf{Recall (\%)} & \textbf{FA/hr} & \textbf{Precision (\%)} & \textbf{$F_1$ Score} \\",
         r"\hline",
     ]
     cur_cond = ""
+    counts_rows = []
     for _, r in df_comb.iterrows():
         raw_cond = str(r["Condition"]).replace("%", r"\%")
         cond_str = raw_cond if r["Condition"] != cur_cond else ""
         if r["Condition"] != cur_cond and cur_cond != "":
             lines.append(r"\hline")
         cur_cond = r["Condition"]
-        lines.append(
-            f"{cond_str:<28} & {r['Arm']:<24} & {r['Event_Recall_pct']:>5.1f} & {r['Clean_FA_hr']:>5.2f} & "
-            f"{r['True_Alerts_TP']:>4d} & {r['False_Alerts_FP']:>4d} & {r['Precision_pct']:>5.1f} & {r['F1_Score']:>5.3f} \\\\"
-        )
+        b = best_vals.get(r["Condition"], {})
+        rec_s = f"\\textbf{{{r['Event_Recall_pct']:.1f}}}" if abs(r["Event_Recall_pct"] - b.get("rec", -1)) < 0.05 else f"{r['Event_Recall_pct']:>5.1f}"
+        fa_s = f"\\textbf{{{r['Clean_FA_hr']:.2f}}}" if abs(r["Clean_FA_hr"] - b.get("fa", -1)) < 0.005 else f"{r['Clean_FA_hr']:>5.2f}"
+        pr_s = f"\\textbf{{{r['Precision_pct']:.1f}}}" if abs(r["Precision_pct"] - b.get("prec", -1)) < 0.05 else f"{r['Precision_pct']:>5.1f}"
+        f1_s = f"\\textbf{{{r['F1_Score']:.3f}}}" if abs(r["F1_Score"] - b.get("f1", -1)) < 0.0005 else f"{r['F1_Score']:>5.3f}"
+        arm_disp = short_arm_map.get(r["Arm"], r["Arm"])
+        lines.append(f"{cond_str:<28} & {arm_disp:<36} & {rec_s} & {fa_s} & {pr_s} & {f1_s} \\\\")
+        counts_rows.append({
+            "Condition": r["Condition"],
+            "Alerting Arm": "Arm 4 (conformal)" if "Arm 4" in r["Arm"] else r["Arm"],
+            "True Alerts": int(r["True_Alerts_TP"]),
+            "False Alerts": int(r["False_Alerts_FP"]),
+        })
     lines.extend([
+        r"\hline",
+        r"\multicolumn{6}{l}{\scriptsize *\textit{Pre-specified in Amendment 3, implemented after other arms' results were seen.}} \\",
         r"\hline",
         r"\end{tabular}",
         r"\end{table*}",
     ])
     (TAB_DIR / "tab_combined_metrics.tex").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_combined_metrics.tex'}")
+    pd.DataFrame(counts_rows).to_csv(TAB_DIR / "alert_counts.csv", index=False)
+    print(f"Saved: {TAB_DIR / 'alert_counts.csv'}")
 
     # 5. Strata Table (Single Column)
     df_strata = pd.read_csv(OUT_DIR / "strata_metrics.csv")
     lines = [
-        r"\begin{table}[htbp]",
+        r"\begin{table}[t]",
         r"\caption{Stratified Alerting Metrics (Recall \% / FA per Hour)}",
         r"\label{tab:strata}",
         r"\centering",
-        r"\tiny",
+        r"\scriptsize",
         r"\setlength{\tabcolsep}{1.8pt}",
         r"\begin{tabular}{|l|l|c|c|c|c|c|}",
         r"\hline",
@@ -469,11 +500,11 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
             lines.append(r"\hline")
         cur_cond = r["Condition"]
         s_name = strata_short.get(r["Stratum"], r["Stratum"])
-        c1 = f"{r['Arm 1_Recall_pct']:.0f}\\%/{r['Arm 1_FA_hr']:.1f}"
-        c2 = f"{r['Arm 2_Recall_pct']:.0f}\\%/{r['Arm 2_FA_hr']:.1f}"
-        c3 = f"{r['Arm 3a_Recall_pct']:.0f}\\%/{r['Arm 3a_FA_hr']:.1f}"
-        c4 = f"{r['Arm 3b_Recall_pct']:.0f}\\%/{r['Arm 3b_FA_hr']:.1f}"
-        c5 = f"{r['Arm 3b-noMotion_Recall_pct']:.0f}\\%/{r['Arm 3b-noMotion_FA_hr']:.1f}"
+        c1 = f"{r['Arm 1_Recall_pct']:.1f}/{r['Arm 1_FA_hr']:.1f}"
+        c2 = f"{r['Arm 2_Recall_pct']:.1f}/{r['Arm 2_FA_hr']:.1f}"
+        c3 = f"{r['Arm 3a_Recall_pct']:.1f}/{r['Arm 3a_FA_hr']:.1f}"
+        c4 = f"{r['Arm 3b_Recall_pct']:.1f}/{r['Arm 3b_FA_hr']:.1f}"
+        c5 = f"{r['Arm 3b-noMotion_Recall_pct']:.1f}/{r['Arm 3b-noMotion_FA_hr']:.1f}"
         lines.append(f"{cond_str:<16} & {s_name:<11} & {c1} & {c2} & {c3} & {c4} & {c5} \\\\")
     lines.extend([
         r"\hline",
@@ -486,7 +517,7 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     # 6. Paired Comparison Table (Single Column)
     df_paired = pd.read_csv(OUT_DIR / "paired_3b_vs_3a.csv")
     lines = [
-        r"\begin{table}[htbp]",
+        r"\begin{table}[t]",
         r"\caption{Paired Statistical Comparison: Arm 3b vs Arm 3a}",
         r"\label{tab:paired_comparison}",
         r"\centering",
@@ -586,35 +617,31 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     (TAB_DIR / "tab_fault_disaggregated.tex").write_text("\n".join(lines) + "\n", encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_fault_disaggregated.tex'}")
 
-    # 8b. Alerting Arms Table (Table II)
-    tab_alerting_arms = r"""\begin{table}[htbp]
-\caption{Evaluated Alerting Arms, Decision Rules \& Tuning Grids}
+    # 8b. Alerting Arms Table
+    tab_alerting_arms = r"""\begin{table}[t]
+\caption{Evaluated Alerting Arms, Decision Rules, and Tuning Grids (refractory $60$\,s for all arms)}
 \label{tab:alerting_arms}
 \centering
-\footnotesize
-\renewcommand{\arraystretch}{1.0}
-\setlength{\tabcolsep}{2.0pt}
-\begin{tabular}{|p{2.95cm}|p{4.1cm}|c|}
+\scriptsize
+\renewcommand{\arraystretch}{0.85}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{|p{2.6cm}|p{5.4cm}|}
 \hline
-\textbf{Alerting Arm} & \textbf{Decision Rule \& Tuning Grid} & \textbf{Hold-off $R$} \\
+\textbf{Alerting Arm} & \textbf{Decision Rule \& Tuning Grid} \\
 \hline
-\textbf{Arm 1: Fixed Pop.} & $HR(t) > \tau_{\text{pop}}$ & 60\,s \\
- & $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 1: Fixed Pop.} & $HR(t) > \tau_{\text{pop}}$;\newline $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 2: Personal} & $HR(t) > \max(\tau_{\text{flr}}, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$ & 60\,s \\
- & $k \in \{2.0, \dots, 4.0\}$, $\kappa \in \{0.5, 1, 2\}$\,h, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 2: Personal} & $HR(t) > \max(\tau_{\text{flr}}, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$;\newline $k \in \{2.0, \dots, 4.0\}$, $\kappa \in \{0.5, 1, 2\}$\,h, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 3a: +Kinematic} & Arm 2 $\land\; (\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}})$ & 60\,s \\
- & $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}$\,g, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 3a: +Kinematic} & Arm 2 $\land\; (\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}})$;\newline $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}$\,g, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 3b: +Trust} & Arm 2 $\land\; (S_{\text{trust}}(t) \ge \theta_{\text{trust}})$ & 60\,s \\
- & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 3b: +Trust} & Arm 2 $\land\; (S_{\text{trust}}(t) \ge \theta_{\text{trust}})$;\newline $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 3b-noMot} & Arm 2 $\land\; (S_{\text{gap}} S_{\text{stale}} S_{\text{phys}} \ge \theta_{\text{trust}})$ & 60\,s \\
-(Motion Ablated) & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 3b-noMotion} & Arm 2 $\land\; (S_{\text{gap}} S_{\text{stale}} S_{\text{phys}} \ge \theta_{\text{trust}})$;\newline $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 4: Conformal} & Arm 2 $\land\; \neg \text{Abstain}(t)$ & 60\,s \\
-\scriptsize (pre-specified in Amend.~3, impl.~after other arms' results seen) & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
+\textbf{Arm 4: Conformal}\textsuperscript{*} & Arm 2 $\land\; \neg \text{Abstain}(t)$;\newline $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ \\
+\hline
+\multicolumn{2}{|p{8.0cm}|}{\scriptsize *\textit{Pre-specified in Amendment 3, implemented after other arms' results were seen.}} \\
 \hline
 \end{tabular}
 \end{table}
@@ -682,13 +709,15 @@ Arm 4 Status & Arm 4 pre-specified in Amendment 3, implemented after other arms'
     (TAB_DIR / "tab_limitations.tex").write_text(tab_limitations, encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_limitations.tex'}")
 
-    # 11. Dataset and Faults Combined Table
-    tab_dataset_and_faults = r"""\begin{table}[htbp]
-\caption{PPG-DaLiA Benchmark Dataset \& Injected Fault Regimes}
+    # 11. Dataset and Faults Combined Table (No resizebox, [t])
+    tab_dataset_and_faults = r"""\begin{table}[t]
+\caption{PPG-DaLiA Benchmark Dataset Characteristics \& Evaluated Fault Regimes}
 \label{tab:dataset_and_faults}
 \centering
-\resizebox{\columnwidth}{!}{%
-\begin{tabular}{|l|p{5.0cm}|}
+\scriptsize
+\renewcommand{\arraystretch}{0.80}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{|p{2.0cm}|p{6.0cm}|}
 \hline
 \multicolumn{2}{|c|}{\textbf{Part A: PPG-DaLiA Benchmark Dataset Characteristics \cite{ref_reiss_dalia}}} \\
 \hline
@@ -705,12 +734,43 @@ Regime A & Low-duty ($\approx 10\%$ faults): sporadic gaps (F1), freeze (F2), du
 Regime B & Nominal-duty ($\approx 25\text{--}30\%$ faults): prolonged flatlines, frequent dropouts, scale errors (seed 42) \\
 F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D acceleration injected into raw BVP (SNR $+5$\,dB) \\
 \hline
-\end{tabular}%
-}
+\end{tabular}
 \end{table}
 """
     (TAB_DIR / "tab_dataset_and_faults.tex").write_text(tab_dataset_and_faults, encoding="utf-8")
     print(f"Saved: {TAB_DIR / 'tab_dataset_and_faults.tex'}")
+
+    # 11b. Compact Amendments Table
+    tab_amendments = r"""\begin{table}[t]
+\caption{Protocol Amendments and Provenance (from Git Log)}
+\label{tab:amendments}
+\centering
+\scriptsize
+\renewcommand{\arraystretch}{0.85}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{|p{1.7cm}|p{1.3cm}|p{4.8cm}|}
+\hline
+\textbf{Commit} & \textbf{Date} & \textbf{Change} \\
+\hline
+\texttt{41eff1e} & 2026-10-18 & Frozen protocol: $H_1$--$H_3$, faults F1--F7, LOSO CV. \\
+\hline
+\texttt{3a5ccc2} & 2026-10-19 & Enforced median norm check $[0.8, 1.2]$\,g on ENMO. \\
+\hline
+\texttt{e358bf1} & 2026-10-19 & Adapted ramp rates clamped to $[105, 135]$\,bpm. \\
+\hline
+\texttt{cad4c7f} & 2026-10-19 & StandardAlertEmitter ($P \in \{10, 20, 30\}$\,s, $R = 60$\,s). \\
+\hline
+\texttt{a9ce657} & 2026-10-19 & Widened search grids for $\tau_{\text{pop}}$ and $k$ on boundaries. \\
+\hline
+\texttt{f92ca8d} & 2026-10-19 & Fallback rule invoked for Arm 2 in 100\% of folds. \\
+\hline
+(no commit) & 2026-10-22 & draft Amendment 5, no commit: Arm 4 (conformal) pre-specified Amend. 3, impl. after other arms ($\alpha = 0.10$). \\
+\hline
+\end{tabular}
+\end{table}
+"""
+    (TAB_DIR / "tab_amendments.tex").write_text(tab_amendments, encoding="utf-8")
+    print(f"Saved: {TAB_DIR / 'tab_amendments.tex'}")
 
     # 12. Combined Limitations and Amendments Table
     tab_limitations_and_amendments = r"""\begin{table}[htbp]

@@ -1,32 +1,27 @@
-\begin{table}[htbp]
-\caption{Evaluated Alerting Arms, Decision Rules \& Tuning Grids}
+\begin{table}[t]
+\caption{Evaluated Alerting Arms, Decision Rules, and Tuning Grids (refractory $60$\,s for all arms)}
 \label{tab:alerting_arms}
 \centering
 \scriptsize
-\renewcommand{\arraystretch}{0.75}
-\setlength{\tabcolsep}{2.0pt}
-\begin{tabular}{|p{2.95cm}|p{4.1cm}|c|}
+\renewcommand{\arraystretch}{0.85}
+\setlength{\tabcolsep}{2.5pt}
+\begin{tabular}{|p{2.6cm}|p{5.4cm}|}
 \hline
-\textbf{Alerting Arm} & \textbf{Decision Rule \& Tuning Grid} & \textbf{Hold-off $R$} \\
+\textbf{Alerting Arm} & \textbf{Decision Rule \& Tuning Grid} \\
 \hline
-\textbf{Arm 1: Fixed Pop.} & $HR(t) > \tau_{\text{pop}}$ & 60\,s \\
- & $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 1: Fixed Pop.} & $HR(t) > \tau_{\text{pop}}$;\newline $\tau_{\text{pop}} \in \{100, 110, 120, 125, 130\}$\,bpm, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 2: Personal} & $HR(t) > \max(\tau_{\text{flr}}, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$ & 60\,s \\
- & $k \in \{2.0, \dots, 4.0\}$, $\kappa \in \{0.5, 1, 2\}$\,h, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 2: Personal} & $HR(t) > \max(\tau_{\text{flr}}, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t))$;\newline $k \in \{2.0, \dots, 4.0\}$, $\kappa \in \{0.5, 1, 2\}$\,h, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 3a: +Kinematic} & Arm 2 $\land\; (\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}})$ & 60\,s \\
- & $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}$\,g, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 3a: +Kinematic} & Arm 2 $\land\; (\text{ENMO}_{10\text{s}}(t) \le \theta_{\text{rest}})$;\newline $\theta_{\text{rest}} \in \{0.03, 0.05, 0.08\}$\,g, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 3b: +Trust} & Arm 2 $\land\; (S_{\text{trust}}(t) \ge \theta_{\text{trust}})$ & 60\,s \\
- & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 3b: +Trust} & Arm 2 $\land\; (S_{\text{trust}}(t) \ge \theta_{\text{trust}})$;\newline $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 3b-noMot} & Arm 2 $\land\; (S_{\text{gap}} S_{\text{stale}} S_{\text{phys}} \ge \theta_{\text{trust}})$ & 60\,s \\
-(Motion Ablated) & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
+\textbf{Arm 3b-noMotion} & Arm 2 $\land\; (S_{\text{gap}} S_{\text{stale}} S_{\text{phys}} \ge \theta_{\text{trust}})$;\newline $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s \\
 \hline
-\textbf{Arm 4: Conformal}\textsuperscript{*} & Arm 2 $\land\; \neg \text{Abstain}(t)$ & 60\,s \\
- & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
+\textbf{Arm 4: Conformal}\textsuperscript{*} & Arm 2 $\land\; \neg \text{Abstain}(t)$;\newline $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ \\
 \hline
-\multicolumn{3}{l}{\scriptsize *\textit{Pre-specified in Amendment 3, implemented after other arms' results were seen.}} \\
+\multicolumn{2}{|p{8.0cm}|}{\scriptsize *\textit{Pre-specified in Amendment 3, implemented after other arms' results were seen.}} \\
+\hline
 \end{tabular}
 \end{table}
