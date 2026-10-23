@@ -1,0 +1,649 @@
+Source: https://api.crossref.org/works/10.3390/s16010010
+Title: A Novel Time-Varying Spectral Filtering Algorithm for Reconstruction of Motion Artifact Corrupted Heart Rate Signals During Intense Physical Activities Using a Wearable Photoplethysmogram Sensor
+Authors: Seyed Salehizadeh, Duy Dao, Jeffrey Bolkhovsky, Chae Cho, Yitzhak Mendelson, Ki Chon
+Journal: Sensors
+Volume: 16
+Issue: 1
+Page: 10
+Year: 2015
+DOI: 10.3390/s16010010
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        9,
+        12
+      ]
+    ],
+    "date-time": "2026-09-12T17:09:37Z",
+    "timestamp": 1789232977764,
+    "version": "build-2803163510"
+  },
+  "reference-count": 38,
+  "publisher": "MDPI AG",
+  "issue": "1",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2015,
+            12,
+            23
+          ]
+        ],
+        "date-time": "2015-12-23T00:00:00Z",
+        "timestamp": 1450828800000
+      },
+      "content-version": "vor",
+      "delay-in-days": 0,
+      "URL": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "funder": [
+    {
+      "DOI": "10.13039/100000182",
+      "name": "US Army Medical Research and Materiel Command",
+      "doi-asserted-by": "publisher",
+      "award": [
+        "W81XWH-12-1-0541"
+      ],
+      "award-info": [
+        {
+          "award-number": [
+            "W81XWH-12-1-0541"
+          ]
+        }
+      ],
+      "id": [
+        {
+          "id": "10.13039/100000182",
+          "id-type": "DOI",
+          "asserted-by": "publisher"
+        }
+      ]
+    }
+  ],
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "Sensors"
+  ],
+  "abstract": "<jats:p>Accurate estimation of heart rates from photoplethysmogram (PPG) signals during intense physical activity is a very challenging problem. This is because strenuous and high intensity exercise can result in severe motion artifacts in PPG signals, making accurate heart rate (HR) estimation difficult. In this study we investigated a novel technique to accurately reconstruct motion-corrupted PPG signals and HR based on time-varying spectral analysis. The algorithm is called Spectral filter algorithm for Motion Artifacts and heart rate reconstruction (SpaMA). The idea is to calculate the power spectral density of both PPG and accelerometer signals for each time shift of a windowed data segment. By comparing time-varying spectra of PPG and accelerometer data, those frequency peaks resulting from motion artifacts can be distinguished from the PPG spectrum. The SpaMA approach was applied to three different datasets and four types of activities: (1) training datasets from the 2015 IEEE Signal Process. Cup Database recorded from 12 subjects while performing treadmill exercise from 1 km/h to 15 km/h; (2) test datasets from the 2015 IEEE Signal Process. Cup Database recorded from 11 subjects while performing forearm and upper arm exercise. (3) Chon Lab dataset including 10 min recordings from 10 subjects during treadmill exercise. The ECG signals from all three datasets provided the reference HRs which were used to determine the accuracy of our SpaMA algorithm. The performance of the SpaMA approach was calculated by computing the mean absolute error between the estimated HR from the PPG and the reference HR from the ECG. The average estimation errors using our method on the first, second and third datasets are 0.89, 1.93 and 1.38 beats/min respectively, while the overall error on all 33 subjects is 1.86 beats/min and the performance on only treadmill experiment datasets (22 subjects) is 1.11 beats/min. Moreover, it was found that dynamics of heart rate variability can be accurately captured using the algorithm where the mean Pearson\u2019s correlation coefficient between the power spectral densities of the reference and the reconstructed heart rate time series was found to be 0.98. These results show that the SpaMA method has a potential for PPG-based HR monitoring in wearable devices for fitness tracking and health monitoring during intense physical activities.</jats:p>",
+  "DOI": "10.3390/s16010010",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2015,
+        12,
+        23
+      ]
+    ],
+    "date-time": "2015-12-23T07:10:20Z",
+    "timestamp": 1450854620000
+  },
+  "page": "10",
+  "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 145,
+  "title": [
+    "A Novel Time-Varying Spectral Filtering Algorithm for Reconstruction of Motion Artifact Corrupted Heart Rate Signals During Intense Physical Activities Using a Wearable Photoplethysmogram Sensor"
+  ],
+  "prefix": "10.3390",
+  "volume": "16",
+  "author": [
+    {
+      "given": "Seyed",
+      "family": "Salehizadeh",
+      "sequence": "first",
+      "affiliation": [
+        {
+          "name": "Department of Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Duy",
+      "family": "Dao",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Department of Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Jeffrey",
+      "family": "Bolkhovsky",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Department of Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Chae",
+      "family": "Cho",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Department of Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Yitzhak",
+      "family": "Mendelson",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Department of Biomedical Engineering, Worcester Polytechnic Institution, Worcester, MA 01609, USA"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Ki",
+      "family": "Chon",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Department of Biomedical Engineering, University of Connecticut, Storrs, CT 06269, USA"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "1968",
+  "published-online": {
+    "date-parts": [
+      [
+        2015,
+        12,
+        23
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "ref_1",
+      "doi-asserted-by": "crossref",
+      "first-page": "517",
+      "DOI": "10.2165/00007256-200333070-00004",
+      "article-title": "Heart rate monitoring: Applications and limitations",
+      "volume": "33",
+      "author": "Achten",
+      "year": "2003",
+      "journal-title": "Sports Med."
+    },
+    {
+      "key": "ref_2",
+      "doi-asserted-by": "crossref",
+      "first-page": "10837",
+      "DOI": "10.3390/s101210837",
+      "article-title": "Detecting Vital Signs with Wearable Wireless Sensors",
+      "volume": "10",
+      "author": "Yilmaz",
+      "year": "2010",
+      "journal-title": "Sensors"
+    },
+    {
+      "key": "ref_3",
+      "doi-asserted-by": "crossref",
+      "first-page": "2054",
+      "DOI": "10.1109/TBME.2009.2019766",
+      "article-title": "Estimation of Respiratory Rate from Photoplethysmogram Data Using Time-Frequency Spectral Estimation",
+      "volume": "56",
+      "author": "Chon",
+      "year": "2009",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_4",
+      "doi-asserted-by": "crossref",
+      "first-page": "2251",
+      "DOI": "10.1007/s10439-014-1030-8",
+      "article-title": "Photoplethysmograph Signal Reconstruction based on a Novel Motion Artifact Detection-Reduction Approach. Part II: Motion and Noise Artifact Removal",
+      "volume": "42",
+      "author": "Dao",
+      "year": "2014",
+      "journal-title": "Ann. Biomed. Eng."
+    },
+    {
+      "key": "ref_5",
+      "doi-asserted-by": "crossref",
+      "first-page": "3218",
+      "DOI": "10.1007/s10439-010-0080-9",
+      "article-title": "Respiratory Rate Extraction via an Autoregressive Model Using the Optimal Parameter Search Criterion",
+      "volume": "38",
+      "author": "Lee",
+      "year": "2010",
+      "journal-title": "Ann. Biomed. Eng."
+    },
+    {
+      "key": "ref_6",
+      "doi-asserted-by": "crossref",
+      "first-page": "1099",
+      "DOI": "10.1109/TBME.2009.2038226",
+      "article-title": "Estimation of Respiratory Rate from ECG, Photoplethysmogram, and Piezoelectric Pulse Transducer Signals: A Comparative Study of Time-Frequency Methods",
+      "volume": "57",
+      "author": "Chon",
+      "year": "2010",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_7",
+      "doi-asserted-by": "crossref",
+      "first-page": "790",
+      "DOI": "10.1109/TBME.2010.2085437",
+      "article-title": "Time-Varying Autoregressive Model-Based Multiple Modes Particle Filtering Algorithm for Respiratory Rate Extraction From Pulse Oximeter",
+      "volume": "58",
+      "author": "Jinseok",
+      "year": "2011",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_8",
+      "first-page": "815",
+      "article-title": "Arrhythmia Discrimination Using a Smart Phone",
+      "volume": "19",
+      "author": "Chong",
+      "year": "2015",
+      "journal-title": "IEEE J. Biomed Health Inf."
+    },
+    {
+      "key": "ref_9",
+      "first-page": "S244",
+      "article-title": "Cardiovascular response to exercise",
+      "volume": "277",
+      "author": "Laughlin",
+      "year": "1999",
+      "journal-title": "Am. J. Physiol."
+    },
+    {
+      "key": "ref_10",
+      "doi-asserted-by": "crossref",
+      "first-page": "R11",
+      "DOI": "10.1186/cc341",
+      "article-title": "Pulse oximetry",
+      "volume": "3",
+      "author": "Jubran",
+      "year": "1999",
+      "journal-title": "Crit. Care"
+    },
+    {
+      "key": "ref_11",
+      "doi-asserted-by": "crossref",
+      "first-page": "969",
+      "DOI": "10.1007/s10916-010-9505-0",
+      "article-title": "Relationship between measurement site and motion artifacts in wearable reflected photoplethysmography",
+      "volume": "35",
+      "author": "Maeda",
+      "year": "2011",
+      "journal-title": "J. Med. Syst."
+    },
+    {
+      "key": "ref_12",
+      "doi-asserted-by": "crossref",
+      "first-page": "785",
+      "DOI": "10.1109/10.83591",
+      "article-title": "Applications of adaptive filtering to ECG analysis: Noise cancellation and arrhythmia detection",
+      "volume": "38",
+      "author": "Thakor",
+      "year": "1991",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_13",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Diniz, P. (2008). Adaptive Filtering: Algorithms and Practical Implementation, Springer Science, Business Media L.L.C.",
+      "DOI": "10.1007/978-0-387-68606-6"
+    },
+    {
+      "key": "ref_14",
+      "doi-asserted-by": "crossref",
+      "first-page": "35",
+      "DOI": "10.1115/1.3662552",
+      "article-title": "A New Approach to Linear Filtering and Prediction Problems",
+      "volume": "82",
+      "author": "Kalman",
+      "year": "1960",
+      "journal-title": "Trans. ASME J. Basic Eng."
+    },
+    {
+      "key": "ref_15",
+      "doi-asserted-by": "crossref",
+      "first-page": "1360",
+      "DOI": "10.1109/TCST.2008.921814",
+      "article-title": "Application of Kalman Filter to Remove TMS-Induced Artifacts from EEG Recordings",
+      "volume": "16",
+      "author": "Morbidi",
+      "year": "2008",
+      "journal-title": "IEEE Trans. Control Syst. Technol."
+    },
+    {
+      "key": "ref_16",
+      "first-page": "136",
+      "article-title": "Kalman filter based adaptive reduction of motion artifact from photoplethysmographic signal",
+      "volume": "37",
+      "author": "Seyedtabaii",
+      "year": "2008",
+      "journal-title": "World Acad. Sci. Eng. Technol."
+    },
+    {
+      "key": "ref_17",
+      "doi-asserted-by": "crossref",
+      "first-page": "287",
+      "DOI": "10.1016/0165-1684(94)90029-9",
+      "article-title": "Independent component analysis, A new concept?",
+      "volume": "36",
+      "author": "Comon",
+      "year": "1994",
+      "journal-title": "Signal Process."
+    },
+    {
+      "key": "ref_18",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Thompson, B. (1984). Canonical Correlation Analysis: Uses and Interpretation, SAGE Publications.",
+      "DOI": "10.4135/9781412983570"
+    },
+    {
+      "key": "ref_19",
+      "unstructured": "Jolliffe, I.T. (2002). Principal Component Analysis, Springer-Verlag. [2nd ed.]."
+    },
+    {
+      "key": "ref_20",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Elsner, J.B., and Tsonis, A.A. (1996). Singular Spectrum Analysis: A New Tool in Time Series Analysis, Springer.",
+      "DOI": "10.1007/978-1-4757-2514-8"
+    },
+    {
+      "key": "ref_21",
+      "doi-asserted-by": "crossref",
+      "first-page": "566",
+      "DOI": "10.1109/TBME.2005.869784",
+      "article-title": "Motion artifact reduction in photoplethysmography using independent component analysis",
+      "volume": "53",
+      "author": "Kim",
+      "year": "2006",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_22",
+      "doi-asserted-by": "crossref",
+      "first-page": "1867",
+      "DOI": "10.1109/TBME.2009.2039568",
+      "article-title": "Two-Stage Approach for Detection and Reduction of Motion Artifacts in Photoplethysmographic Data",
+      "volume": "57",
+      "author": "Krishnan",
+      "year": "2010",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_23",
+      "first-page": "3585",
+      "article-title": "A short study to assess the potential of independent component analysis for motion artifact separation in wearable pulse oximeter signals",
+      "volume": "4",
+      "author": "Yao",
+      "year": "2005",
+      "journal-title": "IEEE Eng. Med. Biol. Soc. Conf. Proc."
+    },
+    {
+      "key": "ref_24",
+      "first-page": "2901",
+      "article-title": "Estimating heart rate using wrist-type Photoplethysmography and acceleration sensor while running",
+      "volume": "2012",
+      "author": "Fukushima",
+      "year": "2012",
+      "journal-title": "IEEE Eng. Med. Biol. Soc. Conf. Proc."
+    },
+    {
+      "key": "ref_25",
+      "doi-asserted-by": "crossref",
+      "first-page": "1585",
+      "DOI": "10.1088/0967-3334/31/12/003",
+      "article-title": "Improved elimination of motion artifacts from a photoplethysmographic signal using a Kalman smoother with simultaneous accelerometry",
+      "volume": "31",
+      "author": "Boreom",
+      "year": "2010",
+      "journal-title": "Physiol. Meas."
+    },
+    {
+      "key": "ref_26",
+      "doi-asserted-by": "crossref",
+      "first-page": "522",
+      "DOI": "10.1109/TBME.2014.2359372",
+      "article-title": "TROIKA: A General Framework for Heart Rate Monitoring Using Wrist-Type Photoplethysmographic Signals During Intensive Physical Exercise",
+      "volume": "62",
+      "author": "Zhang",
+      "year": "2015",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_27",
+      "doi-asserted-by": "crossref",
+      "first-page": "1902",
+      "DOI": "10.1109/TBME.2015.2406332",
+      "article-title": "Photoplethysmography-Based Heart Rate Monitoring in Physical Activities via Joint Sparse Spectrum Reconstruction",
+      "volume": "62",
+      "author": "Zhang",
+      "year": "2015",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_28",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Temko, A. (2015, January 25\u201329). Estimation of Heart Rate from Photoplethysmography during Physical Exercise using Wiener Filtering and the Phase Vocoder. Proceedings of the IEEE EMBS International Conference on Engineering in Medicine and Biology, Milan, Italy.",
+      "DOI": "10.1109/EMBC.2015.7318655"
+    },
+    {
+      "key": "ref_29",
+      "unstructured": "Stoica, P., and Moses, R.L. (1997). Introduction to Spectral Analysis, Prentice Hall."
+    },
+    {
+      "key": "ref_30",
+      "unstructured": "2015 IEEE Signal Processing Cup. Available online: http://www.signalprocessingsociety.org/spcup2015/index.html."
+    },
+    {
+      "key": "ref_31",
+      "doi-asserted-by": "crossref",
+      "first-page": "591",
+      "DOI": "10.1007/BF02368640",
+      "article-title": "Nonlinear analysis of renal autoregulation under broadband forcing conditions",
+      "volume": "21",
+      "author": "Marmarelis",
+      "year": "1993",
+      "journal-title": "Ann. Biomed. Eng."
+    },
+    {
+      "key": "ref_32",
+      "first-page": "230",
+      "article-title": "A real-time QRS detection algorithm",
+      "volume": "32",
+      "year": "1985",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_33",
+      "doi-asserted-by": "crossref",
+      "first-page": "143",
+      "DOI": "10.1007/BF00236709",
+      "article-title": "The influence of exercise intensity on the power spectrum of heart rate variability",
+      "volume": "61",
+      "author": "Perini",
+      "year": "1990",
+      "journal-title": "Eur. J. Appl. Physiol. Occup. Physiol."
+    },
+    {
+      "key": "ref_34",
+      "doi-asserted-by": "crossref",
+      "first-page": "66",
+      "DOI": "10.1016/S1566-0702(01)00269-7",
+      "article-title": "Neural mechanisms of cardiovascular regulation during exercise",
+      "volume": "90",
+      "author": "Iellamo",
+      "year": "2001",
+      "journal-title": "Auton. Neurosci."
+    },
+    {
+      "key": "ref_35",
+      "first-page": "831",
+      "article-title": "Autonomic nervous system adaptation during physical exercise",
+      "volume": "2",
+      "author": "Bernardi",
+      "year": "2001",
+      "journal-title": "Ital. Heart J. Suppl."
+    },
+    {
+      "key": "ref_36",
+      "doi-asserted-by": "crossref",
+      "first-page": "104",
+      "DOI": "10.1007/s11424-013-2287-y",
+      "article-title": "Heart rate variability during high-intensity exercise",
+      "volume": "26",
+      "author": "Sarmiento",
+      "year": "2013",
+      "journal-title": "J. Syst. Sci. Complexity"
+    },
+    {
+      "key": "ref_37",
+      "doi-asserted-by": "crossref",
+      "first-page": "99",
+      "DOI": "10.1007/s004210050393",
+      "article-title": "Autonomic nervous system responses correlate with mental rehearsal in volleyball training",
+      "volume": "78",
+      "author": "Roure",
+      "year": "1998",
+      "journal-title": "Eur. J. Appl. Physiol. Occup. Physiol."
+    },
+    {
+      "key": "ref_38",
+      "doi-asserted-by": "crossref",
+      "first-page": "889",
+      "DOI": "10.2165/00007256-200333120-00003",
+      "article-title": "Heart rate variability in athletes",
+      "volume": "33",
+      "author": "Aubert",
+      "year": "2003",
+      "journal-title": "Sports Med."
+    }
+  ],
+  "container-title": [
+    "Sensors"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "https://www.mdpi.com/1424-8220/16/1/10/pdf",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2025,
+        10,
+        11
+      ]
+    ],
+    "date-time": "2025-10-11T20:54:37Z",
+    "timestamp": 1760216077000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://www.mdpi.com/1424-8220/16/1/10"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2015,
+        12,
+        23
+      ]
+    ]
+  },
+  "references-count": 38,
+  "journal-issue": {
+    "issue": "1",
+    "published-online": {
+      "date-parts": [
+        [
+          2016,
+          1
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "s16010010"
+  ],
+  "URL": "https://doi.org/10.3390/s16010010",
+  "relation": {},
+  "ISSN": [
+    "1424-8220"
+  ],
+  "issn-type": [
+    {
+      "value": "1424-8220",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2015,
+        12,
+        23
+      ]
+    ]
+  }
+}

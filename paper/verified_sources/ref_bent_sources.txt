@@ -1,0 +1,725 @@
+Source: https://api.crossref.org/works/10.1038/s41746-020-0226-6
+Title: Investigating sources of inaccuracy in wearable optical heart rate sensors
+Authors: Brinnae Bent, Benjamin A. Goldstein, Warren A. Kibbe, Jessilyn P. Dunn
+Journal: npj Digital Medicine
+Volume: 3
+Issue: 1
+Page: 18
+Year: 2020
+DOI: 10.1038/s41746-020-0226-6
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        22
+      ]
+    ],
+    "date-time": "2026-10-22T08:39:41Z",
+    "timestamp": 1792658381010,
+    "version": "4.5.0"
+  },
+  "reference-count": 60,
+  "publisher": "Springer Science and Business Media LLC",
+  "issue": "1",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2020,
+            2,
+            10
+          ]
+        ],
+        "date-time": "2020-02-10T00:00:00Z",
+        "timestamp": 1581292800000
+      },
+      "content-version": "tdm",
+      "delay-in-days": 0,
+      "URL": "https://creativecommons.org/licenses/by/4.0"
+    },
+    {
+      "start": {
+        "date-parts": [
+          [
+            2020,
+            2,
+            10
+          ]
+        ],
+        "date-time": "2020-02-10T00:00:00Z",
+        "timestamp": 1581292800000
+      },
+      "content-version": "vor",
+      "delay-in-days": 0,
+      "URL": "https://creativecommons.org/licenses/by/4.0"
+    }
+  ],
+  "funder": [
+    {
+      "name": "Duke FORGE Fellowship"
+    }
+  ],
+  "content-domain": {
+    "domain": [
+      "link.springer.com"
+    ],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "npj Digit. Med."
+  ],
+  "abstract": "<jats:title>Abstract</jats:title>\n                  <jats:p>As wearable technologies are being increasingly used for clinical research and healthcare, it is critical to understand their accuracy and determine how measurement errors may affect research conclusions and impact healthcare decision-making. Accuracy of wearable technologies has been a hotly debated topic in both the research and popular science literature. Currently, wearable technology companies are responsible for assessing and reporting the accuracy of their products, but little information about the evaluation method is made publicly available. Heart rate measurements from wearables are derived from photoplethysmography (PPG), an optical method for measuring changes in blood volume under the skin. Potential inaccuracies in PPG stem from three major areas, includes (1) diverse skin types, (2) motion artifacts, and (3) signal crossover. To date, no study has systematically explored the accuracy of wearables across the full range of skin tones. Here, we explored heart rate and PPG data from consumer- and research-grade wearables under multiple circumstances to test whether and to what extent these inaccuracies exist. We saw no statistically significant difference in accuracy across skin tones, but we saw significant differences between devices, and between activity types, notably, that absolute error during activity was, on average, 30% higher than during rest. Our conclusions indicate that different wearables are all reasonably accurate at resting and prolonged elevated heart rate, but that differences exist between devices in responding to changes in activity. This has implications for researchers, clinicians, and consumers in drawing study conclusions, combining study results, and making health-related decisions using these devices.</jats:p>",
+  "DOI": "10.1038/s41746-020-0226-6",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2020,
+        2,
+        10
+      ]
+    ],
+    "date-time": "2020-02-10T06:02:57Z",
+    "timestamp": 1581314577000
+  },
+  "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 661,
+  "title": [
+    "Investigating sources of inaccuracy in wearable optical heart rate sensors"
+  ],
+  "prefix": "10.1038",
+  "volume": "3",
+  "author": [
+    {
+      "given": "Brinnae",
+      "family": "Bent",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Benjamin A.",
+      "family": "Goldstein",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "ORCID": "https://orcid.org/0000-0001-5622-7659",
+      "authenticated-orcid": false,
+      "given": "Warren A.",
+      "family": "Kibbe",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "ORCID": "https://orcid.org/0000-0002-3241-8183",
+      "authenticated-orcid": false,
+      "given": "Jessilyn P.",
+      "family": "Dunn",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "297",
+  "published-online": {
+    "date-parts": [
+      [
+        2020,
+        2,
+        10
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "226_CR1",
+      "unstructured": "Chronic Diseases in America | CDC. https://www.cdc.gov/chronicdisease/resources/infographic/chronic-diseases.htm (2019)."
+    },
+    {
+      "key": "226_CR2",
+      "unstructured": "Health Care Cost and Utilization Report 2017 (2019)."
+    },
+    {
+      "key": "226_CR3",
+      "unstructured": "Older Americans Drive Growth of Wearables. eMarketer https://www.emarketer.com/content/older-americans-drive-growth-of-wearables (2018)."
+    },
+    {
+      "key": "226_CR4",
+      "doi-asserted-by": "publisher",
+      "first-page": "3",
+      "DOI": "10.1111/nyas.13117",
+      "volume": "1375",
+      "author": "B Munos",
+      "year": "2016",
+      "unstructured": "Munos, B. et al. Mobile health: the power of wearables, sensors, and apps to transform clinical trials. Ann. N. Y. Acad. Sci. 1375, 3\u201318 (2016).",
+      "journal-title": "Ann. N. Y. Acad. Sci."
+    },
+    {
+      "key": "226_CR5",
+      "doi-asserted-by": "publisher",
+      "first-page": "28",
+      "DOI": "10.1016/j.cobme.2019.01.001",
+      "volume": "9",
+      "author": "DR Witt",
+      "year": "2019",
+      "unstructured": "Witt, D. R., Kellogg, R. A., Snyder, M. P. & Dunn, J. Windows into human health through wearables data analytics. Curr. Opin. Biomed. Eng. 9, 28\u201346 (2019).",
+      "journal-title": "Curr. Opin. Biomed. Eng."
+    },
+    {
+      "key": "226_CR6",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Goldsack J, et al. Verification, Analytical Validation, and Clinical Validation (V3): The Foundation of Determining Fit-for-Purpose for Biometric Monitoring Technologies (BioMeTs). Preprint at https://preprints.jmir.org/preprint/17264 (2020).",
+      "DOI": "10.2196/preprints.17264"
+    },
+    {
+      "key": "226_CR7",
+      "unstructured": "Ruth Hailu. Fitbits, other wearables may not accurately track heart rates in people of color. STAT News. https://www.statnews.com/2019/07/24/fitbit-accuracy-dark-skin/ (2019)."
+    },
+    {
+      "key": "226_CR8",
+      "unstructured": "Jo, E., Lewis, K., Directo, D., Kim, M. J. & Dolezal, B. A. Validation of biofeedback wearables for photoplethysmographic heart rate tracking. J. Sports Sci. Med. 15, 540\u2013547 (2016)."
+    },
+    {
+      "key": "226_CR9",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.2196/10338",
+      "volume": "6",
+      "author": "RK Reddy",
+      "year": "2018",
+      "unstructured": "Reddy, R. K. et al. Accuracy of wrist-worn activity monitors during common daily physical activities and types of structured exercise: evaluation study. JMIR mHealth uHealth 6, e10338 (2018).",
+      "journal-title": "JMIR mHealth uHealth"
+    },
+    {
+      "key": "226_CR10",
+      "doi-asserted-by": "publisher",
+      "first-page": "10",
+      "DOI": "10.1186/s13102-018-0098-0",
+      "volume": "10",
+      "author": "F Sartor",
+      "year": "2018",
+      "unstructured": "Sartor, F. et al. Wrist-worn optical and chest strap heart rate comparison in a heterogeneous sample of healthy individuals and in coronary artery disease patients. BMC Sports Sci. Med. Rehabil. 10, 10 (2018).",
+      "journal-title": "BMC Sports Sci. Med. Rehabil."
+    },
+    {
+      "key": "226_CR11",
+      "doi-asserted-by": "publisher",
+      "first-page": "3",
+      "DOI": "10.3390/jpm7020003",
+      "volume": "7",
+      "author": "A Shcherbina",
+      "year": "2017",
+      "unstructured": "Shcherbina, A. et al. Accuracy in wrist-worn, sensor-based measurements of heart rate and energy expenditure in a diverse cohort. J. Pers. Med. 7, 3 (2017).",
+      "journal-title": "J. Pers. Med."
+    },
+    {
+      "key": "226_CR12",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1371/journal.pone.0154420",
+      "volume": "11",
+      "author": "MP Wallen",
+      "year": "2016",
+      "unstructured": "Wallen, M. P., Gomersall, S. R., Keating, S. E., Wisl\u00f8ff, U. & Coombes, J. S. Accuracy of heart rate watches: implications for weight management. PLoS ONE 11, e0154420 (2016).",
+      "journal-title": "PLoS ONE"
+    },
+    {
+      "key": "226_CR13",
+      "doi-asserted-by": "publisher",
+      "first-page": "715",
+      "DOI": "10.1097/00000542-200504000-00004",
+      "volume": "102",
+      "author": "PE Bickler",
+      "year": "2005",
+      "unstructured": "Bickler, P. E., Feiner, J. R. & Severinghaus, J. W. Effects of skin pigmentation on pulse oximeter accuracy at low saturation. Anesthesiology 102, 715\u20139 (2005).",
+      "journal-title": "Anesthesiology"
+    },
+    {
+      "key": "226_CR14",
+      "unstructured": "Apple Support. Your heart rate. What it means, and where on Apple Watch you\u2019ll find it\u2014Apple Support. https://support.apple.com/en-us/HT204666 (2019)."
+    },
+    {
+      "key": "226_CR15",
+      "unstructured": "Apple Support. Get the most accurate measurements using your Apple Watch\u2014Apple Support. https://support.apple.com/en-us/HT207941#heartrate (2019)."
+    },
+    {
+      "key": "226_CR16",
+      "unstructured": "Fitbit. Purepulse Technology. https://www.fitbit.com/technology (2019)."
+    },
+    {
+      "key": "226_CR17",
+      "unstructured": "Garmin. What Can Cause the Heart Rate Sensor from My Watch to Be Inaccurate? https://support.garmin.com/en-US/?faq=rxsywTpox9AHVzOXFxni59 (2019)."
+    },
+    {
+      "key": "226_CR18",
+      "unstructured": "Garmin. Garmin | Accuracy Disclaimer. https://www.garmin.com/en-US/legal/atdisclaimer/ (2019)."
+    },
+    {
+      "key": "226_CR19",
+      "unstructured": "Empatica Support. E4 data\u2014Empatica Support. https://support.empatica.com/hc/en-us/articles/360029469772-E4-data-HR-csv-explanation (2019)."
+    },
+    {
+      "key": "226_CR20",
+      "unstructured": "Biovotion. Everion data quality\u2014Biovotion AG. https://biovotion.zendesk.com/hc/en-us/articles/212369329-Everion-data-quality- (2019)."
+    },
+    {
+      "key": "226_CR21",
+      "unstructured": "Biovotion. The accuracy of Heart Rate\u2014Biovotion AG. https://biovotion.zendesk.com/hc/en-us/articles/213794685-The-accuracy-of-Heart-Rate (2019)."
+    },
+    {
+      "key": "226_CR22",
+      "unstructured": "Biovotion. What impacts and affects my vital sign readings?\u2014Biovotion AG. https://biovotion.zendesk.com/hc/en-us/articles/360025102213-What-impacts-and-affects-my-vital-sign-readings- (2019)."
+    },
+    {
+      "key": "226_CR23",
+      "doi-asserted-by": "publisher",
+      "first-page": "1452",
+      "DOI": "10.1046/j.0022-202x.2001.01577.x",
+      "volume": "117",
+      "author": "G Zonios",
+      "year": "2001",
+      "unstructured": "Zonios, G., Bykowski, J. & Kollias, N. Skin melanin, hemoglobin, and light scattering properties can be quantitatively assessed in vivo using diffuse reflectance spectroscopy. J. Invest. Dermatol. 117, 1452\u20131457 (2001).",
+      "journal-title": "J. Invest. Dermatol."
+    },
+    {
+      "key": "226_CR24",
+      "doi-asserted-by": "publisher",
+      "first-page": "014016",
+      "DOI": "10.1117/1.2829772",
+      "volume": "13",
+      "author": "S-H Tseng",
+      "year": "2008",
+      "unstructured": "Tseng, S.-H., Grant, A. & Durkin, A. J. In vivo determination of skin near-infrared optical properties using diffuse optical spectroscopy. J. Biomed. Opt. 13, 014016 (2008).",
+      "journal-title": "J. Biomed. Opt."
+    },
+    {
+      "key": "226_CR25",
+      "doi-asserted-by": "publisher",
+      "first-page": "313",
+      "DOI": "10.1007/s10877-013-9436-7",
+      "volume": "27",
+      "author": "BA Fallow",
+      "year": "2013",
+      "unstructured": "Fallow, B. A., Tarumi, T. & Tanaka, H. Influence of skin type and wavelength on light wave reflectance. J. Clin. Monit. Comput. 27, 313\u2013317 (2013).",
+      "journal-title": "J. Clin. Monit. Comput."
+    },
+    {
+      "key": "226_CR26",
+      "doi-asserted-by": "publisher",
+      "first-page": "339",
+      "DOI": "10.4103/0019-5154.135476",
+      "volume": "59",
+      "author": "A Treesirichod",
+      "year": "2014",
+      "unstructured": "Treesirichod, A., Chansakulporn, S. & Wattanapan, P. Correlation between skin color evaluation by skin color scale chart and narrowband reflectance spectrophotometer. Indian J. Dermatol. 59, 339\u2013342 (2014).",
+      "journal-title": "Indian J. Dermatol."
+    },
+    {
+      "key": "226_CR27",
+      "doi-asserted-by": "publisher",
+      "first-page": "287",
+      "DOI": "10.1378/chest.96.2.287",
+      "volume": "96",
+      "author": "AL Ries",
+      "year": "1989",
+      "unstructured": "Ries, A. L., Prewitt, L. M. & Johnson, J. J. Skin color and ear oximetry. Chest 96, 287\u2013290 (1989).",
+      "journal-title": "Chest"
+    },
+    {
+      "key": "226_CR28",
+      "doi-asserted-by": "publisher",
+      "first-page": "0909011",
+      "DOI": "10.1117/1.JBO.17.9.090901",
+      "volume": "17",
+      "author": "T Lister",
+      "year": "2012",
+      "unstructured": "Lister, T., Wright, P. A. & Chappell, P. H. Optical properties of human skin. J. Biomed. Opt. 17, 0909011 (2012).",
+      "journal-title": "J. Biomed. Opt."
+    },
+    {
+      "key": "226_CR29",
+      "doi-asserted-by": "publisher",
+      "first-page": "1292",
+      "DOI": "10.1177/1541931213601804",
+      "volume": "61",
+      "author": "DT Weiler",
+      "year": "2017",
+      "unstructured": "Weiler, D. T., Villajuan, S. O., Edkins, L., Cleary, S. & Saleem, J. J. Wearable heart rate monitor technology accuracy in research: a comparative study between PPG and ECG technology. Proc. Hum. Factors Ergon. Soc. Annu. Meet. 61, 1292\u20131296 (2017).",
+      "journal-title": "Proc. Hum. Factors Ergon. Soc. Annu. Meet."
+    },
+    {
+      "key": "226_CR30",
+      "doi-asserted-by": "publisher",
+      "first-page": "231",
+      "DOI": "10.2147/MDER.S47319",
+      "volume": "7",
+      "author": "M Nitzan",
+      "year": "2014",
+      "unstructured": "Nitzan, M., Romem, A. & Koppel, R. Pulse oximetry: fundamentals and technology update. Med. Devices Evid. Res. 7, 231 (2014).",
+      "journal-title": "Med. Devices Evid. Res."
+    },
+    {
+      "key": "226_CR31",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Yan, L., Hu, S., Alzahrani, A., Alharbi, S. & Blanos, P. A Multi-wavelength opto-electronic patch sensor to effectively detect physiological changes against human skin types. Biosensors 7, 22 (2017).",
+      "DOI": "10.3390/bios7020022"
+    },
+    {
+      "key": "226_CR32",
+      "unstructured": "Everion. Biovotion Instruction for Consumer (2018)."
+    },
+    {
+      "key": "226_CR33",
+      "first-page": "195",
+      "volume": "4",
+      "author": "D Castaneda",
+      "year": "2018",
+      "unstructured": "Castaneda, D., Esparza, A., Ghamari, M., Soltanpur, C. & Nazeran, H. A review on wearable photoplethysmography sensors and their potential future applications in health care. Int. J. Biosens. Bioelectron. 4, 195\u2013202 (2018).",
+      "journal-title": "Int. J. Biosens. Bioelectron."
+    },
+    {
+      "key": "226_CR34",
+      "doi-asserted-by": "publisher",
+      "unstructured": "Lemay, M. et al. Chapter 2.3. Application of Optical Heart Rate Monitoring. https://doi.org/10.1016/B978-0-12-418662-0.00023-4 (2014).",
+      "DOI": "10.1016/B978-0-12-418662-0.00023-4"
+    },
+    {
+      "key": "226_CR35",
+      "doi-asserted-by": "publisher",
+      "first-page": "673",
+      "DOI": "10.3390/s19030673",
+      "volume": "19",
+      "author": "Y Zhang",
+      "year": "2019",
+      "unstructured": "Zhang, Y. et al. Motion artifact reduction for wrist-worn photoplethysmograph sensors based on different wavelengths. Sensors 19, 673 (2019).",
+      "journal-title": "Sensors"
+    },
+    {
+      "key": "226_CR36",
+      "doi-asserted-by": "publisher",
+      "unstructured": "Tautan, A.-M., Young, A., Wentink, E. & Wieringa, F. Characterization and reduction of motion artifacts in photoplethysmographic signals from a wrist-worn device. in 2015 37th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC) 6146\u20136149. https://doi.org/10.1109/EMBC.2015.7319795 (IEEE, 2015).",
+      "DOI": "10.1109/EMBC.2015.7319795"
+    },
+    {
+      "key": "226_CR37",
+      "doi-asserted-by": "publisher",
+      "first-page": "282",
+      "DOI": "10.3390/electronics3020282",
+      "volume": "3",
+      "author": "T Tamura",
+      "year": "2014",
+      "unstructured": "Tamura, T. et al. Wearable photoplethysmographic sensors\u2014past and present. Electronics 3, 282\u2013302 (2014).",
+      "journal-title": "Electronics"
+    },
+    {
+      "key": "226_CR38",
+      "doi-asserted-by": "publisher",
+      "unstructured": "Zong, C. & Jafari, R. Robust heart rate estimation using wrist-based PPG signals in the presence of intense physical activities. in 2015 37th Annual International Conference of the IEEE Engineering in Medicine and Biology Society (EMBC) 8078\u20138082. https://doi.org/10.1109/EMBC.2015.7320268 (IEEE, 2015).",
+      "DOI": "10.1109/EMBC.2015.7320268"
+    },
+    {
+      "key": "226_CR39",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1371/journal.pone.0221284",
+      "volume": "14",
+      "author": "VM Reis",
+      "year": "2019",
+      "unstructured": "Reis, V. M. et al. Are wearable heart rate measurements accurate to estimate aerobic energy cost during low-intensity resistance exercise? PLoS ONE 14, e0221284 (2019).",
+      "journal-title": "PLoS ONE"
+    },
+    {
+      "key": "226_CR40",
+      "unstructured": "Valencell Team. Valencell | Optical Heart Rate Monitoring: What You Need to Know. https://valencell.com/blog/2015/10/optical-heart-rate-monitoring-what-you-need-to-know/ (2015)."
+    },
+    {
+      "key": "226_CR41",
+      "doi-asserted-by": "publisher",
+      "first-page": "83",
+      "DOI": "10.1007/s10484-018-9422-4",
+      "volume": "44",
+      "author": "M Six Dijkstra",
+      "year": "2019",
+      "unstructured": "Six Dijkstra, M. et al. Exploring a 1-minute paced deep-breathing measurement of heart rate variability as part of a workers\u2019 health assessment. Appl. Psychophysiol. Biofeedback 44, 83\u201396 (2019).",
+      "journal-title": "Appl. Psychophysiol. Biofeedback"
+    },
+    {
+      "key": "226_CR42",
+      "unstructured": "Mayo Clinic. Mayo Clinic Staff. Exercise intensity: how to measure it\u2014Mayo Clinic. https://www.mayoclinic.org/healthy-lifestyle/fitness/in-depth/exercise-intensity/art-20046887 (2019)."
+    },
+    {
+      "key": "226_CR43",
+      "doi-asserted-by": "publisher",
+      "first-page": "258",
+      "DOI": "10.3389/fpubh.2017.00258",
+      "volume": "5",
+      "author": "F Shaffer",
+      "year": "2017",
+      "unstructured": "Shaffer, F. & Ginsberg, J. P. An overview of heart rate variability metrics and norms. Front. Public Health 5, 258 (2017).",
+      "journal-title": "Front. Public Health"
+    },
+    {
+      "key": "226_CR44",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.2196/10828",
+      "volume": "7",
+      "author": "BW Nelson",
+      "year": "2019",
+      "unstructured": "Nelson, B. W. & Allen, N. B. Accuracy of consumer wearable heart rate measurement during an ecologically valid 24-hour period: intraindividual validation study. JMIR mHealth uHealth 7, e10828 (2019).",
+      "journal-title": "JMIR mHealth uHealth"
+    },
+    {
+      "key": "226_CR45",
+      "doi-asserted-by": "publisher",
+      "first-page": "104",
+      "DOI": "10.1001/jamacardio.2016.3340",
+      "volume": "2",
+      "author": "R Wang",
+      "year": "2017",
+      "unstructured": "Wang, R. et al. Accuracy of wrist-worn heart rate monitors. JAMA Cardiol. 2, 104 (2017).",
+      "journal-title": "JAMA Cardiol."
+    },
+    {
+      "key": "226_CR46",
+      "first-page": "1",
+      "volume": "2016",
+      "author": "EAPJ Prawiro",
+      "year": "2016",
+      "unstructured": "Prawiro, E. A. P. J., Yeh, C.-I., Chou, N.-K., Lee, M.-W. & Lin, Y.-H. Integrated wearable system for monitoring heart rate and step during physical activity. Mob. Inf. Syst. 2016, 1\u201310 (2016).",
+      "journal-title": "Mob. Inf. Syst."
+    },
+    {
+      "key": "226_CR47",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Weiss, D. et al. Innovative technologies and social inequalities in health: a scoping review of the literature. PLoS ONE 13 (2018).",
+      "DOI": "10.1371/journal.pone.0195447"
+    },
+    {
+      "key": "226_CR48",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Silonie Sachdeva. Fitzpatrick Skin Typing: Applications in Dermatology. Indian J. Dermatol Venereol Leprol. 75, 93\u201396 (2009).",
+      "DOI": "10.4103/0378-6323.45238"
+    },
+    {
+      "key": "226_CR49",
+      "doi-asserted-by": "publisher",
+      "first-page": "869",
+      "DOI": "10.1001/archderm.1988.01670060015008",
+      "volume": "124",
+      "author": "TB Fitzpatrick",
+      "year": "1988",
+      "unstructured": "Fitzpatrick, T. B. The validity and practicality of sun-reactive skin types I through VI. Arch. Dermatol. 124, 869\u2013871 (1988).",
+      "journal-title": "Arch. Dermatol."
+    },
+    {
+      "key": "226_CR50",
+      "unstructured": "CTA Standard. Physical Activity Monitoring for Heart Rate CTA-2065 (2018)."
+    },
+    {
+      "key": "226_CR51",
+      "unstructured": "YouTube. Erin Klassen. Triangle breathing, 1 min\u2014YouTube. https://www.youtube.com/watch?v=u9Q8D6n-3qw (2015)."
+    },
+    {
+      "key": "226_CR52",
+      "unstructured": "Adams, C. & Pinkas, D. Internet X.509 Public Key Infrastructure Time-Stamp Protocol (TSP). https://dl.acm.org/doi/book/10.17487/RFC3161."
+    },
+    {
+      "key": "226_CR53",
+      "unstructured": "ISO\u2014ISO 8601 Date and time format. https://www.iso.org/iso-8601-date-and-time-format.html (2019)."
+    },
+    {
+      "key": "226_CR54",
+      "unstructured": "Kevin Dooley. The Why and How of Syncing Clocks on Network Devices. https://www.auvik.com/franklymsp/blog/syncing-clocks-network-devices/ (2017)."
+    },
+    {
+      "key": "226_CR55",
+      "unstructured": "John Martellaro. What Time is it? Your iPad & iOS 5 Finally Knows\u2014The Mac Observer. https://www.macobserver.com/tmo/article/what_time_is_it_your_ipad_ios_5_finally_knows (2011)."
+    },
+    {
+      "key": "226_CR56",
+      "unstructured": "TechTarget. What is Network Time Protocol (NTP)?\u2014Definition from WhatIs.com. https://searchnetworking.techtarget.com/definition/Network-Time-Protocol (2019)."
+    },
+    {
+      "key": "226_CR57",
+      "unstructured": "Todd Johnson. Devices and Timestamps: Seriously Though, WTF? | Airship. https://www.airship.com/blog/devices-and-timestamps-seriously-though-wtf/ (2016)."
+    },
+    {
+      "key": "226_CR58",
+      "doi-asserted-by": "publisher",
+      "first-page": "191",
+      "DOI": "10.1055/s-0038-1625405",
+      "volume": "46",
+      "author": "VDA Corino",
+      "year": "2007",
+      "unstructured": "Corino, V. D. A., Matteucci, M. & Mainardi, L. T. Analysis of heart rate variability to predict patient age in a healthy population. Methods Inf. Med. 46, 191\u20135 (2007).",
+      "journal-title": "Methods Inf. Med."
+    },
+    {
+      "key": "226_CR59",
+      "doi-asserted-by": "publisher",
+      "unstructured": "McCarthy, C., Pradhan, N., Redpath, C. & Adler, A. Validation of the Empatica E4 wristband. in 2016 IEEE EMBS International Student Conference (ISC) 1\u20134. https://doi.org/10.1109/EMBSISC.2016.7508621 (IEEE, 2016).",
+      "DOI": "10.1109/EMBSISC.2016.7508621"
+    },
+    {
+      "key": "226_CR60",
+      "unstructured": "Hugh et al. Consumer-Grade Wrist-worn Ppg Sensors Can Be Used to Detect Differences in Heart Rate Variability among A Heterogenous Prediabetic Population (IEEE International Conference on Biomedical and Health Informatics, 2018)."
+    }
+  ],
+  "container-title": [
+    "npj Digital Medicine"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "https://www.nature.com/articles/s41746-020-0226-6.pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://www.nature.com/articles/s41746-020-0226-6",
+      "content-type": "text/html",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://www.nature.com/articles/s41746-020-0226-6.pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2022,
+        12,
+        6
+      ]
+    ],
+    "date-time": "2022-12-06T20:53:39Z",
+    "timestamp": 1670360019000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://www.nature.com/articles/s41746-020-0226-6"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2020,
+        2,
+        10
+      ]
+    ]
+  },
+  "references-count": 60,
+  "journal-issue": {
+    "issue": "1",
+    "published-online": {
+      "date-parts": [
+        [
+          2020,
+          12
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "226"
+  ],
+  "URL": "https://doi.org/10.1038/s41746-020-0226-6",
+  "relation": {},
+  "ISSN": [
+    "2398-6352"
+  ],
+  "issn-type": [
+    {
+      "value": "2398-6352",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2020,
+        2,
+        10
+      ]
+    ]
+  },
+  "assertion": [
+    {
+      "value": "1 October 2019",
+      "order": 1,
+      "name": "received",
+      "label": "Received",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "value": "17 January 2020",
+      "order": 2,
+      "name": "accepted",
+      "label": "Accepted",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "value": "10 February 2020",
+      "order": 3,
+      "name": "first_online",
+      "label": "First Online",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "value": "The authors declare no competing interests.",
+      "order": 1,
+      "name": "Ethics",
+      "group": {
+        "name": "EthicsHeading",
+        "label": "Competing interests"
+      }
+    }
+  ],
+  "article-number": "18"
+}

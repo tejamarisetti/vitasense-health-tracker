@@ -1,0 +1,332 @@
+Source: https://api.crossref.org/works/10.1109/JBHI.2014.2338351
+Title: Signal Quality Indices for the Electrocardiogram and Photoplethysmogram: Derivation and Applications to Wireless Monitoring
+Authors: Christina Orphanidou, Timothy Bonnici, Peter Charlton, David Clifton, David Vallance, Lionel Tarassenko
+Journal: IEEE Journal of Biomedical and Health Informatics
+Volume: 
+Issue: 
+Page: 1-1
+Year: 2014
+DOI: 10.1109/jbhi.2014.2338351
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        20
+      ]
+    ],
+    "date-time": "2026-10-20T00:29:10Z",
+    "timestamp": 1792456150123,
+    "version": "4.5.0"
+  },
+  "reference-count": 22,
+  "publisher": "Institute of Electrical and Electronics Engineers (IEEE)",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2014,
+            1,
+            1
+          ]
+        ],
+        "date-time": "2014-01-01T00:00:00Z",
+        "timestamp": 1388534400000
+      },
+      "content-version": "vor",
+      "delay-in-days": 0,
+      "URL": "https://ieeexplore.ieee.org/Xplorehelp/downloads/license-information/OAPA.html"
+    }
+  ],
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "IEEE J. Biomed. Health Inform."
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2014
+      ]
+    ]
+  },
+  "DOI": "10.1109/jbhi.2014.2338351",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2014,
+        7,
+        23
+      ]
+    ],
+    "date-time": "2014-07-23T16:10:21Z",
+    "timestamp": 1406131821000
+  },
+  "page": "1-1",
+  "source": "Crossref",
+  "is-referenced-by-count": 214,
+  "title": [
+    "Signal Quality Indices for the Electrocardiogram and Photoplethysmogram: Derivation and Applications to Wireless Monitoring"
+  ],
+  "prefix": "10.1109",
+  "author": [
+    {
+      "given": "Christina",
+      "family": "Orphanidou",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Timothy",
+      "family": "Bonnici",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Peter",
+      "family": "Charlton",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "David",
+      "family": "Clifton",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "David",
+      "family": "Vallance",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Lionel",
+      "family": "Tarassenko",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "263",
+  "reference": [
+    {
+      "key": "ref10",
+      "year": "0"
+    },
+    {
+      "key": "ref11",
+      "year": "0"
+    },
+    {
+      "key": "ref12",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.resuscitation.2009.12.008"
+    },
+    {
+      "key": "ref13",
+      "article-title": "National Early Warning Score (NEWS)",
+      "year": "2012"
+    },
+    {
+      "key": "ref14",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1155/2010/926305"
+    },
+    {
+      "key": "ref15",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.2013.2246160"
+    },
+    {
+      "key": "ref16",
+      "first-page": "273",
+      "article-title": "Improving the quality of ECGs collected using mobile phones: The physionet/computing in cardiology challenge 2011",
+      "volume": "38",
+      "author": "silva",
+      "year": "2011",
+      "journal-title": "Comput Cardiol"
+    },
+    {
+      "key": "ref17",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.1986.325695"
+    },
+    {
+      "key": "ref18",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10439-007-9368-9"
+    },
+    {
+      "key": "ref19",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/IEMBS.2005.1616032"
+    },
+    {
+      "key": "ref4",
+      "article-title": "Sentinel event alert issue 50: Medical device alarm safety in hospitals",
+      "year": "2013"
+    },
+    {
+      "key": "ref3",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00003246-199704000-00010"
+    },
+    {
+      "key": "ref6",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/RBME.2013.2243724"
+    },
+    {
+      "key": "ref5",
+      "article-title": "Alarm safety resource site: Guidance and tools to help healthcare facilities improve alarm safety",
+      "year": "2013"
+    },
+    {
+      "key": "ref8",
+      "article-title": "Reducing the computational demands of medical monitoring classifiers by examining less data",
+      "author": "shih",
+      "year": "2010"
+    },
+    {
+      "key": "ref7",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/BIBE.2012.6399672"
+    },
+    {
+      "key": "ref2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1186/cc9208"
+    },
+    {
+      "key": "ref1",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1146/annurev-med-051210-114650"
+    },
+    {
+      "key": "ref9",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/BSN.2012.31"
+    },
+    {
+      "key": "ref20",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1088/0967-3334/33/9/1491"
+    },
+    {
+      "key": "ref22",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.bspc.2012.06.001"
+    },
+    {
+      "key": "ref21",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/10.930904"
+    }
+  ],
+  "container-title": [
+    "IEEE Journal of Biomedical and Health Informatics"
+  ],
+  "original-title": [],
+  "link": [
+    {
+      "URL": "http://xplorestaging.ieee.org/ielx7/6221020/7104199/06862843.pdf?arnumber=6862843",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2022,
+        1,
+        12
+      ]
+    ],
+    "date-time": "2022-01-12T11:28:57Z",
+    "timestamp": 1641986937000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "http://ieeexplore.ieee.org/document/6862843/"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2014
+      ]
+    ]
+  },
+  "references-count": 22,
+  "URL": "https://doi.org/10.1109/jbhi.2014.2338351",
+  "relation": {},
+  "ISSN": [
+    "2168-2194",
+    "2168-2208"
+  ],
+  "issn-type": [
+    {
+      "value": "2168-2194",
+      "type": "print"
+    },
+    {
+      "value": "2168-2208",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2014
+      ]
+    ]
+  }
+}

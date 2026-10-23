@@ -1,0 +1,1296 @@
+Source: https://api.crossref.org/works/10.1088/0967-3334/37/8/e5
+Title: False alarm reduction in critical care
+Authors: Gari D Clifford, Ikaro Silva, Benjamin Moody, Qiao Li, Danesh Kella, Abdullah Chahin, Tristan Kooistra, Diane Perry, Roger G Mark
+Journal: Physiological Measurement
+Volume: 37
+Issue: 8
+Page: E5-E23
+Year: 2016
+DOI: 10.1088/0967-3334/37/8/e5
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        9,
+        5
+      ]
+    ],
+    "date-time": "2026-09-05T14:13:24Z",
+    "timestamp": 1788617604275,
+    "version": "build-2803163510"
+  },
+  "reference-count": 77,
+  "publisher": "IOP Publishing",
+  "issue": "8",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2016,
+            7,
+            25
+          ]
+        ],
+        "date-time": "2016-07-25T00:00:00Z",
+        "timestamp": 1469404800000
+      },
+      "content-version": "vor",
+      "delay-in-days": 0,
+      "URL": "https://publishingsupport.iopscience.iop.org/iop-standard/v1"
+    },
+    {
+      "start": {
+        "date-parts": [
+          [
+            2016,
+            7,
+            25
+          ]
+        ],
+        "date-time": "2016-07-25T00:00:00Z",
+        "timestamp": 1469404800000
+      },
+      "content-version": "tdm",
+      "delay-in-days": 0,
+      "URL": "https://iopscience.iop.org/info/page/text-and-data-mining"
+    }
+  ],
+  "funder": [
+    {
+      "DOI": "10.13039/100000002",
+      "name": "National Institutes of Health",
+      "doi-asserted-by": "crossref",
+      "award": [
+        "R01-GM104987"
+      ],
+      "award-info": [
+        {
+          "award-number": [
+            "R01-GM104987"
+          ]
+        }
+      ],
+      "id": [
+        {
+          "id": "10.13039/100000002",
+          "id-type": "DOI",
+          "asserted-by": "crossref"
+        }
+      ]
+    }
+  ],
+  "content-domain": {
+    "domain": [
+      "iopscience.iop.org"
+    ],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "Physiol. Meas."
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2016,
+        8,
+        1
+      ]
+    ]
+  },
+  "abstract": "<jats:title>Abstract</jats:title>\n                  <jats:p>High false alarm rates in the ICU decrease quality of care by slowing staff response times while increasing patient delirium through noise pollution. The 2015 PhysioNet/Computing in Cardiology Challenge provides a set of 1250 multi-parameter ICU data segments associated with critical arrhythmia alarms, and challenges the general research community to address the issue of false alarm suppression using all available signals. Each data segment was 5\u2009minutes long (for real time analysis), ending at the time of the alarm. For retrospective analysis, we provided a further 30\u2009seconds of data after the alarm was triggered.</jats:p>\n                  <jats:p>A total of 750 data segments were made available for training and 500 were held back for testing. Each alarm was reviewed by expert annotators, at least two of whom agreed that the alarm was either true or false. Challenge participants were invited to submit a complete, working algorithm to distinguish true from false alarms, and received a score based on their program\u2019s performance on the hidden test set. This score was based on the percentage of alarms correct, but with a penalty that weights the suppression of true alarms five times more heavily than acceptance of false alarms.</jats:p>\n                  <jats:p>We provided three example entries based on well-known, open source signal processing algorithms, to serve as a basis for comparison and as a starting point for participants to develop their own code. A total of 38 teams submitted a total of 215 entries in this year\u2019s Challenge.</jats:p>\n                  <jats:p>\n                    This editorial reviews the background issues for this challenge, the design of the challenge itself, the key achievements, and the follow-up research generated as a result of the Challenge, published in the concurrent special issue of\n                    <jats:italic>Physiological Measurement</jats:italic>\n                    . Additionally we make some recommendations for future changes in the field of patient monitoring as a result of the Challenge.\n                  </jats:p>",
+  "DOI": "10.1088/0967-3334/37/8/e5",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2016,
+        7,
+        25
+      ]
+    ],
+    "date-time": "2016-07-25T08:14:03Z",
+    "timestamp": 1469434443000
+  },
+  "page": "E5-E23",
+  "update-policy": "https://doi.org/10.1088/crossmark-policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 36,
+  "title": [
+    "False alarm reduction in critical care"
+  ],
+  "prefix": "10.1088",
+  "volume": "37",
+  "author": [
+    {
+      "given": "Gari D",
+      "family": "Clifford",
+      "sequence": "first",
+      "affiliation": [
+        {
+          "name": "Emory University"
+        },
+        {
+          "name": "Georgia Institute of Technology"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Ikaro",
+      "family": "Silva",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Massachusetts Institute of Technology"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Benjamin",
+      "family": "Moody",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Massachusetts Institute of Technology"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Qiao",
+      "family": "Li",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Emory University"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Danesh",
+      "family": "Kella",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Emory University"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Abdullah",
+      "family": "Chahin",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Harvard University"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Tristan",
+      "family": "Kooistra",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Harvard University"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Diane",
+      "family": "Perry",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Harvard University"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Roger G",
+      "family": "Mark",
+      "sequence": "additional",
+      "affiliation": [
+        {
+          "name": "Massachusetts Institute of Technology"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "266",
+  "published-online": {
+    "date-parts": [
+      [
+        2016,
+        7,
+        25
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "pmeaaa2fabbib001",
+      "doi-asserted-by": "publisher",
+      "first-page": "442",
+      "DOI": "10.1016/j.jbi.2008.03.003",
+      "type": "journal-article",
+      "article-title": "Reducing false alarm rates for critical arrhythmias using the arterial blood pressure waveform",
+      "volume": "41",
+      "author": "Aboukhalil",
+      "year": "2008",
+      "journal-title": "J. Biomed. Inf."
+    },
+    {
+      "key": "pmeaaa2fabbib002",
+      "doi-asserted-by": "publisher",
+      "first-page": "249",
+      "DOI": "10.1088/0967-3334/17/4/002",
+      "type": "journal-article",
+      "article-title": "Assessing ECG signal quality on a coronary care unit",
+      "volume": "17",
+      "author": "Allen",
+      "year": "1996",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib003",
+      "doi-asserted-by": "publisher",
+      "first-page": "1186",
+      "DOI": "10.1088/0967-3334/37/8/1186",
+      "type": "journal-article",
+      "article-title": "Suppression of false arrhythmia alarms in the ICU: a machine learning approach",
+      "volume": "37",
+      "author": "Ansari",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib004",
+      "first-page": "1181",
+      "type": "conference-proceedings",
+      "article-title": "Multi-modal integrated approach towards reducing false arrhythmia alarms during continuous patient monitoring: the PhysiOnet challenge 2015",
+      "author": "Ansari",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib005",
+      "first-page": "935",
+      "type": "conference-proceedings",
+      "article-title": "Photoplethysmography-based ambulatory heartbeat monitoring embedded into a dedicated bracelet",
+      "author": "Arberet",
+      "year": "2013"
+    },
+    {
+      "key": "pmeaaa2fabbib006",
+      "doi-asserted-by": "publisher",
+      "first-page": "1340",
+      "DOI": "10.1007/s10439-014-0993-9",
+      "type": "journal-article",
+      "article-title": "A comparison of single channel fetal ECG extraction methods",
+      "volume": "42",
+      "author": "Behar",
+      "year": "2014a",
+      "journal-title": "Ann. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib007",
+      "doi-asserted-by": "publisher",
+      "first-page": "1569",
+      "DOI": "10.1088/0967-3334/35/8/1569",
+      "type": "journal-article",
+      "article-title": "Combining and benchmarking methods of foetal ECG extraction without maternal or scalp electrode data",
+      "volume": "35",
+      "author": "Behar",
+      "year": "2014b",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib008",
+      "doi-asserted-by": "publisher",
+      "first-page": "1660",
+      "DOI": "10.1109/TBME.2013.2240452",
+      "type": "journal-article",
+      "article-title": "ECG signal quality during arrhythmia and its application to false alarm reduction",
+      "volume": "60",
+      "author": "Behar",
+      "year": "2013",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib009",
+      "doi-asserted-by": "publisher",
+      "first-page": "399",
+      "DOI": "10.1016/S0010-4825(01)00009-9",
+      "type": "journal-article",
+      "article-title": "The use of the hilbert transform in ECG signal analysis",
+      "volume": "31",
+      "author": "Benitez",
+      "year": "2001",
+      "journal-title": "Comput. Biol. Med."
+    },
+    {
+      "key": "pmeaaa2fabbib010",
+      "doi-asserted-by": "publisher",
+      "first-page": "289",
+      "DOI": "10.1093/sleep/24.3.289",
+      "type": "journal-article",
+      "article-title": "Impact of reduced reverberation time on sound-induced arousals during sleep",
+      "volume": "24",
+      "author": "Berg",
+      "year": "2001",
+      "journal-title": "Sleep"
+    },
+    {
+      "key": "pmeaaa2fabbib011",
+      "doi-asserted-by": "publisher",
+      "first-page": "123",
+      "DOI": "10.1088/0967-3334/34/2/123",
+      "type": "journal-article",
+      "article-title": "Robust inter-beat interval estimation in cardiac vibration signals",
+      "volume": "34",
+      "author": "Br\u00fcser",
+      "year": "2013",
+      "journal-title": "Physiol. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib012",
+      "doi-asserted-by": "publisher",
+      "first-page": "184",
+      "DOI": "10.1186/cc1021",
+      "type": "journal-article",
+      "article-title": "Alarms in the intensive care unit: how can the number of false alarms be reduced?",
+      "volume": "5",
+      "author": "Chambrin",
+      "year": "2001",
+      "journal-title": "Crit. Care"
+    },
+    {
+      "key": "pmeaaa2fabbib013",
+      "doi-asserted-by": "publisher",
+      "first-page": "1360",
+      "DOI": "10.1007/s001340051082",
+      "type": "journal-article",
+      "article-title": "Multicentric study of monitoring alarms in the adult intensive care unit (ICU): a descriptive analysis",
+      "volume": "25",
+      "author": "Chambrin",
+      "year": "1999",
+      "journal-title": "Intensive Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib014",
+      "article-title": "Signal processing methods for heart rate variability",
+      "author": "Clifford",
+      "year": "2002",
+      "type": "other"
+    },
+    {
+      "key": "pmeaaa2fabbib015",
+      "doi-asserted-by": "publisher",
+      "first-page": "1419",
+      "DOI": "10.1088/0967-3334/33/9/1419",
+      "type": "journal-article",
+      "article-title": "Signal quality indices and data fusion for determining clinical acceptability of electrocardiograms",
+      "volume": "33",
+      "author": "Clifford",
+      "year": "2012",
+      "journal-title": "Physiol. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib016",
+      "first-page": "273",
+      "type": "conference-proceedings",
+      "article-title": "The PhysioNet/Computing in Cardiology Challenge 2015: reducing false arrhythmia alarms in the ICU",
+      "author": "Clifford",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib017",
+      "first-page": "749",
+      "type": "conference-proceedings",
+      "article-title": "Suppression of false arrhythmia alarms using ECG and pulsatile waveforms",
+      "author": "Couto",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib018",
+      "doi-asserted-by": "publisher",
+      "first-page": "1217",
+      "DOI": "10.1378/chest.105.4.1217",
+      "type": "journal-article",
+      "article-title": "Name that tone. The proliferation of alarms in the intensive care unit",
+      "volume": "105",
+      "author": "Cropp",
+      "year": "1994",
+      "journal-title": "Chest"
+    },
+    {
+      "key": "pmeaaa2fabbib019",
+      "doi-asserted-by": "publisher",
+      "first-page": "1370",
+      "DOI": "10.1088/0967-3334/37/8/1370",
+      "type": "journal-article",
+      "article-title": "Assessing ECG signal quality indices to discriminate ECGs with artefacts from pathologically different arrhythmic ECGs",
+      "volume": "37",
+      "author": "Daluwatte",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib020",
+      "doi-asserted-by": "publisher",
+      "first-page": "316",
+      "DOI": "10.1097/00075198-200208000-00008",
+      "type": "journal-article",
+      "article-title": "The hostile environment of the intensive care unit",
+      "volume": "8",
+      "author": "Donchin",
+      "year": "2002",
+      "journal-title": "Curr. Opin. Crit. Care"
+    },
+    {
+      "key": "pmeaaa2fabbib021",
+      "first-page": "293",
+      "type": "conference-proceedings",
+      "article-title": "Decreasing the false alarm rate of arrhythmias in intensive care using a machine learning approach",
+      "author": "Eerik\u00e4inen",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib022",
+      "doi-asserted-by": "publisher",
+      "first-page": "1204",
+      "DOI": "10.1088/0967-3334/37/8/1204",
+      "type": "journal-article",
+      "article-title": "Reduction of false arrhythmia alarms using signal selection and machine learning",
+      "volume": "37",
+      "author": "Eerik\u00e4inen",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib023",
+      "first-page": "37",
+      "type": "journal-article",
+      "article-title": "A single scan algorithm for QRS-detection and feature extraction",
+      "volume": "6",
+      "author": "Engelse",
+      "year": "1979",
+      "journal-title": "Comput. Cardiol."
+    },
+    {
+      "key": "pmeaaa2fabbib024",
+      "first-page": "277",
+      "type": "conference-proceedings",
+      "article-title": "A multimodal approach to reduce false arrhythmia alarms in the intensive care unit",
+      "author": "Fallet",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib025",
+      "doi-asserted-by": "publisher",
+      "first-page": "1217",
+      "DOI": "10.1088/0967-3334/37/8/1217",
+      "type": "journal-article",
+      "article-title": "False arrhythmia alarms reduction in the intensive care unit: a multimodal approach",
+      "volume": "37",
+      "author": "Fallet",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib026",
+      "doi-asserted-by": "publisher",
+      "first-page": "e215",
+      "DOI": "10.1161/01.CIR.101.23.e215",
+      "type": "journal-article",
+      "article-title": "Physiobank, physiotoolkit, and PhysioNet components of a new research resource for complex physiologic signals",
+      "volume": "101",
+      "author": "Goldberger",
+      "year": "2000",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "pmeaaa2fabbib027",
+      "doi-asserted-by": "publisher",
+      "first-page": "197",
+      "DOI": "10.1016/0013-4694(90)90015-C",
+      "type": "journal-article",
+      "article-title": "Changes in eeg mean frequency and spectral purity during spontaneous alpha blocking",
+      "volume": "76",
+      "author": "Goncharova",
+      "year": "1990",
+      "journal-title": "Electroencephalogr. Clin. Neurophysiol."
+    },
+    {
+      "key": "pmeaaa2fabbib028",
+      "doi-asserted-by": "publisher",
+      "first-page": "267",
+      "DOI": "10.1016/j.ijcard.2003.11.006",
+      "type": "journal-article",
+      "article-title": "Influence of intensive coronary care acoustics on the quality of care and physiological state of patients",
+      "volume": "98",
+      "author": "Hagerman",
+      "year": "2005",
+      "journal-title": "Int. J. Cardiol."
+    },
+    {
+      "key": "pmeaaa2fabbib029",
+      "doi-asserted-by": "publisher",
+      "first-page": "101",
+      "DOI": "10.1109/CIC.2002.1166717",
+      "type": "conference-proceedings",
+      "article-title": "Open source ECG analysis",
+      "author": "Hamilton",
+      "year": "2002"
+    },
+    {
+      "key": "pmeaaa2fabbib030",
+      "doi-asserted-by": "publisher",
+      "first-page": "1157",
+      "DOI": "10.1109/TBME.1986.325695",
+      "type": "journal-article",
+      "article-title": "A real-time QRS detection algorithm",
+      "volume": "33",
+      "author": "Hamilton",
+      "year": "1986",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib031",
+      "doi-asserted-by": "publisher",
+      "first-page": "1233",
+      "DOI": "10.1088/0967-3334/37/8/1233",
+      "type": "journal-article",
+      "article-title": "Reducing false alarms in the ICU by quantifying self-similarity of multimodal biosignals",
+      "volume": "37",
+      "author": "Hoog Antink",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib032",
+      "first-page": "285",
+      "type": "conference-proceedings",
+      "article-title": "Reducing false arrhythmia alarms using robust interval estimation and machine learning",
+      "author": "Hoog Antink",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib033",
+      "doi-asserted-by": "publisher",
+      "first-page": "1006",
+      "DOI": "10.1097/CCM.0b013e31820eab8e",
+      "type": "journal-article",
+      "article-title": "Clinician blood pressure documentation of stable intensive care patients: an intelligent archiving agent has a higher association with future hypotension",
+      "volume": "39",
+      "author": "Hug",
+      "year": "2011",
+      "journal-title": "Crit. Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib034",
+      "doi-asserted-by": "publisher",
+      "first-page": "1525",
+      "DOI": "10.1213/01.ane.0000204385.01983.61",
+      "type": "journal-article",
+      "article-title": "Alarm algorithms in critical care monitoring",
+      "volume": "102",
+      "author": "Imhoff",
+      "year": "2006",
+      "journal-title": "Anesth. Analg."
+    },
+    {
+      "key": "pmeaaa2fabbib035",
+      "first-page": "600",
+      "type": "journal-article",
+      "article-title": "Neonatal response to control of noise inside the incubator",
+      "volume": "27",
+      "author": "Johnson",
+      "year": "2001",
+      "journal-title": "Pediatric Nursing"
+    },
+    {
+      "key": "pmeaaa2fabbib036",
+      "first-page": "733",
+      "type": "conference-proceedings",
+      "article-title": "Enhancing accuracy of arrhythmia classification by combining logical and machine learning techniques",
+      "author": "Kalidas",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib037",
+      "doi-asserted-by": "publisher",
+      "first-page": "1253",
+      "DOI": "10.1088/0967-3334/37/8/1253",
+      "type": "journal-article",
+      "article-title": "Cardiac arrhythmia classification using multi-modal signal analysis",
+      "volume": "37",
+      "author": "Kalidas",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib038",
+      "doi-asserted-by": "publisher",
+      "first-page": "e0140123",
+      "DOI": "10.1371/journal.pone.0140123",
+      "type": "journal-article",
+      "article-title": "Superiority of classification tree versus cluster, fuzzy and discriminant models in a heartbeat classification system",
+      "volume": "10",
+      "author": "Krasteva",
+      "year": "2015a",
+      "journal-title": "PloS One"
+    },
+    {
+      "key": "pmeaaa2fabbib039",
+      "first-page": "737",
+      "type": "conference-proceedings",
+      "article-title": "Validation of arrhythmia detection library on bedside monitor data for triggering alarms in intensive care",
+      "author": "Krasteva",
+      "year": "2015b"
+    },
+    {
+      "key": "pmeaaa2fabbib040",
+      "doi-asserted-by": "publisher",
+      "first-page": "1273",
+      "DOI": "10.1088/0967-3334/37/8/1273",
+      "type": "journal-article",
+      "article-title": "Real-time arrhythmia detection with supplementary ECG quality and pulse wave monitoring for reduction of false alarms in ICUs",
+      "volume": "37",
+      "author": "Krasteva",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib041",
+      "first-page": "349",
+      "type": "conference-proceedings",
+      "article-title": "Classification of supraventricular and ventricular beats by qrs template matching and decision tree",
+      "author": "Krasteva",
+      "year": "2014"
+    },
+    {
+      "key": "pmeaaa2fabbib042",
+      "doi-asserted-by": "publisher",
+      "first-page": "981",
+      "DOI": "10.1097/00003246-199406000-00017",
+      "type": "journal-article",
+      "article-title": "Crying wolf: false alarms in a pediatric intensive care unit",
+      "volume": "22",
+      "author": "Lawless",
+      "year": "1994",
+      "journal-title": "Crit. Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib043",
+      "doi-asserted-by": "publisher",
+      "first-page": "1491",
+      "DOI": "10.1088/0967-3334/33/9/1491",
+      "type": "journal-article",
+      "article-title": "Dynamic time warping and machine learning for signal quality assessment of pulsatile signals",
+      "volume": "33",
+      "author": "Li",
+      "year": "2012",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib044",
+      "doi-asserted-by": "publisher",
+      "first-page": "15",
+      "DOI": "10.1088/0967-3334/29/1/002",
+      "type": "journal-article",
+      "article-title": "Robust heart rate estimation from multiple asynchronous noisy sources using signal quality indices and a kalman filter",
+      "volume": "29",
+      "author": "Li",
+      "year": "2008",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib045",
+      "doi-asserted-by": "publisher",
+      "first-page": "1607",
+      "DOI": "10.1109/TBME.2013.2275000",
+      "type": "journal-article",
+      "article-title": "Ventricular fibrillation and tachycardia classification using a machine learning approach",
+      "volume": "61",
+      "author": "Li",
+      "year": "2014a",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib046",
+      "doi-asserted-by": "publisher",
+      "first-page": "435",
+      "DOI": "10.1016/j.cmpb.2014.09.002",
+      "type": "journal-article",
+      "article-title": "A machine learning approach to multi-level ECG signal quality classification",
+      "volume": "117",
+      "author": "Li",
+      "year": "2014b",
+      "journal-title": "Comput. Methods Programs Biomed."
+    },
+    {
+      "key": "pmeaaa2fabbib047",
+      "first-page": "741",
+      "type": "conference-proceedings",
+      "article-title": "Reduction of false alarms in intensive care unit using multi-feature fusion method",
+      "author": "Liu",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib048",
+      "doi-asserted-by": "publisher",
+      "first-page": "1298",
+      "DOI": "10.1088/0967-3334/37/8/1298",
+      "type": "journal-article",
+      "article-title": "Life-threatening false alarms rejection in ICU: using rule-based and multi-channel information fusion method",
+      "volume": "37",
+      "author": "Liu",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib049",
+      "doi-asserted-by": "publisher",
+      "first-page": "1211",
+      "DOI": "10.1378/chest.105.4.1211",
+      "type": "journal-article",
+      "article-title": "Adverse environmental conditions in the respiratory and medical ICU settings",
+      "volume": "105",
+      "author": "Meyer",
+      "year": "1994",
+      "journal-title": "Chest"
+    },
+    {
+      "key": "pmeaaa2fabbib050",
+      "doi-asserted-by": "publisher",
+      "first-page": "113",
+      "DOI": "10.1097/00003246-200301000-00018",
+      "type": "journal-article",
+      "article-title": "Noise, stress, and annoyance in a pediatric intensive care unit",
+      "volume": "31",
+      "author": "Morrison",
+      "year": "2003",
+      "journal-title": "Crit. Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib051",
+      "doi-asserted-by": "publisher",
+      "first-page": "479",
+      "DOI": "10.1111/acem.12134",
+      "type": "journal-article",
+      "article-title": "National growth in intensive care unit admissions from emergency departments in the United States from 2002 to 2009",
+      "volume": "20",
+      "author": "Mullins",
+      "year": "2013",
+      "journal-title": "Acad. Emergency Med."
+    },
+    {
+      "key": "pmeaaa2fabbib052",
+      "doi-asserted-by": "publisher",
+      "first-page": "1282",
+      "DOI": "10.1007/s001340050500",
+      "type": "journal-article",
+      "article-title": "Stressors in ICU: patients\u2019 evaluation",
+      "volume": "23",
+      "author": "Novaes",
+      "year": "1997",
+      "journal-title": "Intensive Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib053",
+      "doi-asserted-by": "publisher",
+      "first-page": "538",
+      "DOI": "10.1007/BF02442378",
+      "type": "journal-article",
+      "article-title": "Delineation of the QRS complex using the envelope of the ECG",
+      "volume": "21",
+      "author": "Nyg\u00e5rds",
+      "year": "1983",
+      "journal-title": "Med. Biol. Eng. Comput."
+    },
+    {
+      "key": "pmeaaa2fabbib054",
+      "first-page": "731",
+      "type": "conference-proceedings",
+      "article-title": "Open source java-based ECG analysis software and android app for atrial fibrillation screening",
+      "author": "Oster",
+      "year": "2013"
+    },
+    {
+      "key": "pmeaaa2fabbib055",
+      "doi-asserted-by": "publisher",
+      "first-page": "230",
+      "DOI": "10.1109/TBME.1985.325532",
+      "type": "journal-article",
+      "article-title": "A real-time qrs detection algorithm",
+      "volume": "32",
+      "author": "Pan",
+      "year": "1985",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib056",
+      "doi-asserted-by": "publisher",
+      "first-page": "20",
+      "DOI": "10.1016/j.cmpb.2006.01.005",
+      "type": "journal-article",
+      "article-title": "Discovering dangerous patterns in long-term ambulatory ECG recordings using a fast QRS detection algorithm and explorative data analysis",
+      "volume": "82",
+      "author": "Paoletti",
+      "year": "2006",
+      "journal-title": "Comput. Methods Programs Biomed."
+    },
+    {
+      "key": "pmeaaa2fabbib057",
+      "doi-asserted-by": "publisher",
+      "first-page": "197",
+      "DOI": "10.1007/s00134-003-2030-6",
+      "type": "journal-article",
+      "article-title": "Sleep in the intensive care unit",
+      "volume": "30",
+      "author": "Parthasarathy",
+      "year": "2004",
+      "journal-title": "Intensive Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib058",
+      "first-page": "281",
+      "type": "conference-proceedings",
+      "article-title": "False alarms in intensive care unit monitors: detection of life-threatening arrhythmias using elementary algebra, descriptive statistics and fuzzy logic",
+      "author": "Ple\u0161singer",
+      "year": "2015"
+    },
+    {
+      "key": "pmeaaa2fabbib059",
+      "doi-asserted-by": "publisher",
+      "first-page": "1313",
+      "DOI": "10.1088/0967-3334/37/8/1313",
+      "type": "journal-article",
+      "article-title": "Taming of the monitors: reducing false alarms in intensive care units",
+      "volume": "37",
+      "author": "Ple\u0161singer",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib060",
+      "doi-asserted-by": "publisher",
+      "first-page": "1326",
+      "DOI": "10.1088/0967-3334/37/8/1326",
+      "type": "journal-article",
+      "article-title": "Detection of false arrhythmia alarms with emphasis on ventricular tachycardia",
+      "volume": "37",
+      "author": "Rodrigues",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib061",
+      "doi-asserted-by": "publisher",
+      "first-page": "1135",
+      "DOI": "10.1088/0967-3334/33/7/1135",
+      "type": "journal-article",
+      "article-title": "Low-complexity r-peak detection for ambulatory fetal monitoring",
+      "volume": "33",
+      "author": "Rooijakkers",
+      "year": "2012",
+      "journal-title": "Physiol. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib062",
+      "doi-asserted-by": "publisher",
+      "first-page": "1340",
+      "DOI": "10.1088/0967-3334/37/8/1340",
+      "type": "journal-article",
+      "article-title": "Reducing false arrhythmia alarms in the ICU using multimodal signals and robust QRS detection",
+      "volume": "37",
+      "author": "Sadr",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib063",
+      "doi-asserted-by": "publisher",
+      "first-page": "952",
+      "DOI": "10.1097/CCM.0b013e31820a92c6",
+      "type": "journal-article",
+      "article-title": "Multiparameter intelligent monitoring in intensive care II (MIMIC-II): a public-access intensive care unit database",
+      "volume": "39",
+      "author": "Saeed",
+      "year": "2011",
+      "journal-title": "Crit. Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib077",
+      "doi-asserted-by": "publisher",
+      "first-page": "e27",
+      "DOI": "10.5334/jors.bi",
+      "type": "journal-article",
+      "article-title": "An open-source toolbox for analysing and processing PhysioNet databases in MATLAB and Octave",
+      "volume": "2",
+      "author": "Silva",
+      "year": "2014",
+      "journal-title": "J. Open Res. Softw."
+    },
+    {
+      "key": "pmeaaa2fabbib064",
+      "doi-asserted-by": "publisher",
+      "first-page": "577",
+      "DOI": "10.1111/j.1651-2227.2000.tb00342.x",
+      "type": "journal-article",
+      "article-title": "Altering the NICU and measuring infants\u2019 responses",
+      "volume": "89",
+      "author": "Slevin",
+      "year": "2000",
+      "journal-title": "Acta Paediatrica"
+    },
+    {
+      "key": "pmeaaa2fabbib065",
+      "author": "S\u00f6rnmo",
+      "year": "2005",
+      "type": "book"
+    },
+    {
+      "key": "pmeaaa2fabbib066",
+      "first-page": "13",
+      "type": "conference-proceedings",
+      "article-title": "A signal abnormality index for arterial blood pressure waveforms",
+      "author": "Sun",
+      "year": "2006"
+    },
+    {
+      "key": "pmeaaa2fabbib067",
+      "doi-asserted-by": "publisher",
+      "first-page": "237",
+      "DOI": "10.1067/mhl.2001.116592",
+      "type": "journal-article",
+      "article-title": "Interactive relationships between hospital patients\u2019 noise induced stress and other stress with sleep",
+      "volume": "30",
+      "author": "Topf",
+      "year": "2001",
+      "journal-title": "Heart Lung"
+    },
+    {
+      "key": "pmeaaa2fabbib068",
+      "doi-asserted-by": "publisher",
+      "first-page": "614",
+      "DOI": "10.1097/00003246-199704000-00010",
+      "type": "journal-article",
+      "article-title": "Poor prognosis for existing monitors in the intensive care unit",
+      "volume": "25",
+      "author": "Tsien",
+      "year": "1997",
+      "journal-title": "Crit. Care Med."
+    },
+    {
+      "key": "pmeaaa2fabbib069",
+      "doi-asserted-by": "publisher",
+      "first-page": "1383",
+      "DOI": "10.1088/0967-3334/37/8/1383",
+      "type": "journal-article",
+      "article-title": "False alarms during patient monitoring in clinical intensive care units are highly related to poor quality of the monitored electrocardiogram signals",
+      "volume": "37",
+      "author": "Tsimenidis",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    },
+    {
+      "key": "pmeaaa2fabbib070",
+      "first-page": "725",
+      "type": "conference-proceedings",
+      "article-title": "Adaptive mathematical morphology for qrs fiducial points detection in the ECG",
+      "author": "Yazdani",
+      "year": "2014"
+    },
+    {
+      "key": "pmeaaa2fabbib071",
+      "doi-asserted-by": "publisher",
+      "first-page": "2892",
+      "DOI": "10.1007/s10439-015-1344-1",
+      "type": "journal-article",
+      "article-title": "Fusing continuous-valued medical labels using a Bayesian model",
+      "volume": "43",
+      "author": "Zhu",
+      "year": "2015",
+      "journal-title": "Ann. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib072",
+      "doi-asserted-by": "publisher",
+      "first-page": "871",
+      "DOI": "10.1007/s10439-013-0964-6",
+      "type": "journal-article",
+      "article-title": "Crowd-sourced annotation of ECG signals using contextual information",
+      "volume": "42",
+      "author": "Zhu",
+      "year": "2014",
+      "journal-title": "Ann. Biomed. Eng."
+    },
+    {
+      "key": "pmeaaa2fabbib073",
+      "first-page": "259",
+      "type": "conference-proceedings",
+      "article-title": "An open-source algorithm to detect onset of arterial blood pressure pulses",
+      "author": "Zong",
+      "year": "2003a"
+    },
+    {
+      "key": "pmeaaa2fabbib074",
+      "first-page": "737",
+      "type": "journal-article",
+      "article-title": "A robust open-source algorithm to detect onset and duration of QRS complexes",
+      "volume": "30",
+      "author": "Zong",
+      "year": "2003b",
+      "journal-title": "Comput. Cardiol."
+    },
+    {
+      "key": "pmeaaa2fabbib075",
+      "doi-asserted-by": "publisher",
+      "first-page": "698",
+      "DOI": "10.1007/BF02347553",
+      "type": "journal-article",
+      "article-title": "Reduction of false arterial blood pressure alarms using signal quality assessment and relationships between the electrocardiogram and arterial blood pressure",
+      "volume": "42",
+      "author": "Zong",
+      "year": "2004",
+      "journal-title": "Med. Biol. Eng. Comput."
+    },
+    {
+      "key": "pmeaaa2fabbib076",
+      "doi-asserted-by": "publisher",
+      "first-page": "1355",
+      "DOI": "10.1088/0967-3334/37/8/1355",
+      "type": "journal-article",
+      "article-title": "A practical algorithm to reduce false critical ECG alarms using arterial blood pressure and/or photoplethysmogram waveforms",
+      "volume": "37",
+      "author": "Zong",
+      "year": "2016",
+      "journal-title": "Phys. Meas."
+    }
+  ],
+  "container-title": [
+    "Physiological Measurement"
+  ],
+  "original-title": [],
+  "link": [
+    {
+      "URL": "http://stacks.iop.org/0967-3334/37/i=8/a=E5/pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "http://stacks.iop.org/0967-3334/37/i=8/a=E5?key=crossref.f5ba3a3536ce16ab916f9cf00af34b2b",
+      "content-type": "text/html",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/37/8/E5",
+      "content-type": "text/html",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/37/8/E5/pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/37/8/E5/pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "syndication"
+    },
+    {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/37/8/E5/pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2026,
+        9,
+        5
+      ]
+    ],
+    "date-time": "2026-09-05T13:50:47Z",
+    "timestamp": 1788616247000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/37/8/E5"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2016,
+        7,
+        25
+      ]
+    ]
+  },
+  "references-count": 77,
+  "journal-issue": {
+    "issue": "8",
+    "published-online": {
+      "date-parts": [
+        [
+          2016,
+          7,
+          25
+        ]
+      ]
+    },
+    "published-print": {
+      "date-parts": [
+        [
+          2016,
+          8,
+          1
+        ]
+      ]
+    }
+  },
+  "URL": "https://doi.org/10.1088/0967-3334/37/8/e5",
+  "relation": {},
+  "ISSN": [
+    "0967-3334",
+    "1361-6579"
+  ],
+  "issn-type": [
+    {
+      "value": "0967-3334",
+      "type": "print"
+    },
+    {
+      "value": "1361-6579",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2016,
+        7,
+        25
+      ]
+    ]
+  },
+  "assertion": [
+    {
+      "value": "False alarm reduction in critical care",
+      "name": "article_title",
+      "label": "Article Title"
+    },
+    {
+      "value": "Physiological Measurement",
+      "name": "journal_title",
+      "label": "Journal Title"
+    },
+    {
+      "value": "paper",
+      "name": "article_type",
+      "label": "Article Type"
+    },
+    {
+      "value": "\u00a9 2016 Institute of Physics and Engineering in Medicine. All rights, including for text and data mining, AI training, and similar technologies, are reserved.",
+      "name": "copyright_information",
+      "label": "Copyright Information"
+    },
+    {
+      "value": "2016-06-23",
+      "name": "date_received",
+      "label": "Date Received",
+      "group": {
+        "name": "publication_dates",
+        "label": "Publication dates"
+      }
+    },
+    {
+      "value": "2016-06-23",
+      "name": "date_accepted",
+      "label": "Date Accepted",
+      "group": {
+        "name": "publication_dates",
+        "label": "Publication dates"
+      }
+    },
+    {
+      "value": "2016-07-25",
+      "name": "date_epub",
+      "label": "Online publication date",
+      "group": {
+        "name": "publication_dates",
+        "label": "Publication dates"
+      }
+    }
+  ]
+}

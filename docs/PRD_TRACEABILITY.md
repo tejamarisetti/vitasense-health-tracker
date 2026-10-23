@@ -10,9 +10,9 @@
 ## 1. Summary of Functional Requirements Status
 
 - **Total Functional Requirements:** 13
-- **Implemented (5):** FR-01, FR-02, FR-04, FR-10, FR-11
+- **Implemented (7):** FR-01, FR-02, FR-03, FR-04, FR-05, FR-10, FR-11
 - **Implemented as Demo Ruleset, Not Evaluated (2):** FR-06, FR-07
-- **Partial (6):** FR-03, FR-05, FR-08, FR-09, FR-12, FR-13
+- **Partial (4):** FR-08, FR-09, FR-12, FR-13
 - **Not Started (0):** None
 
 ---
@@ -72,17 +72,17 @@
   - Support the initial agreed health measures only. Candidate measures may include heart rate, SpO₂, temperature, activity, and other values when data and units are defined; do not display unavailable values as real.
   - Validate numeric types, required fields, units, timestamps, and reasonable configurable ranges.
   - Permit authorized users to inspect, correct, or delete their own entries; preserve appropriate audit events if required.
-* **Status:** **Partial**
+* **Status:** **Implemented**
 * **Implementation Files:**
   - [vitasense/api/measurements.py](file:///d:/projects/health%20tracker/vitasense/api/measurements.py)
   - [vitasense/api/db.py](file:///d:/projects/health%20tracker/vitasense/api/db.py)
   - [src/pages/TrendsPage.tsx](file:///d:/projects/health%20tracker/src/pages/TrendsPage.tsx)
 * **Automated Test References:**
   - [tests/test_phase2_auth_measurements.py:L126-L230](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L126-L230) (`test_measurement_ingestion_and_user_isolation`, `test_measurement_server_side_validation_errors`, `test_user_cannot_read_another_users_measurements`)
+  - [tests/test_phase2_auth_measurements.py:L229-L300](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L229-L300) (`test_measurement_edit_and_correction_fr03`)
   - [tests/test_phase2_auth_measurements.py:L219](file:///d:/projects/health%20tracker/tests/test_phase2_auth_measurements.py#L219) (`delete_measurement` isolation verification)
 * **Evidence / Notes:**
-  - **Implemented:** Ingestion (`POST /api/measurements`), validation, range checking, inspection (`GET /api/measurements`, `GET /api/measurements/{id}`), and individual measurement deletion (`DELETE /api/measurements/{id}`, lines 572-593) of supported measures (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`) with row-level user isolation.
-  - **Missing Evidence (Partial):** Individual measurement editing or correction (`PUT /api/measurements/{id}` or `PATCH /api/measurements/{id}`) is not implemented. Users can inspect entries and delete entries, but cannot correct recorded values in place.
+  - **Implemented:** Ingestion (`POST /api/measurements`), validation, range checking, inspection (`GET /api/measurements`, `GET /api/measurements/{id}`), individual measurement correction/editing (`PUT /api/measurements/{id}` and `PATCH /api/measurements/{id}` with re-evaluation of trust scoring and component checks), and individual measurement deletion (`DELETE /api/measurements/{id}`) of supported measures (`heart_rate`, `spo2`, `respiratory_rate`, `hrv`) with strict row-level user isolation. In UI, `TrendsPage.tsx` provides both an "Edit" modal and "Delete" button for each record in the Telemetry stream.
 
 ---
 
@@ -115,15 +115,14 @@
   - Show empty states when there are no records and provide a clear action to add data or load demo data.
   - Provide quick links to symptom assessment, add measurement, history, and trends.
   - Demo/simulated values must be visibly marked as demo data.
-* **Status:** **Partial**
+* **Status:** **Implemented**
 * **Implementation Files:**
   - [src/pages/OverviewPage.tsx](file:///d:/projects/health%20tracker/src/pages/OverviewPage.tsx)
   - [src/components/Waveform.tsx](file:///d:/projects/health%20tracker/src/components/Waveform.tsx)
 * **Automated Test References:**
   - Verified via frontend build `npm.cmd run build` (0 TypeScript / JSX errors)
 * **Evidence / Notes:**
-  - **Implemented:** Displays latest available readings with timestamp and source ("Demo wearable"), trend preview card, recent alerts summary, animated waveform, trust indicators, and quick links to Symptom Lab (`Assess Symptoms (FR-06)`), AI Companion, and Trends. Demo data is clearly tagged with "Streaming demo data".
-  - **Missing Evidence (Partial):** Overview dashboard uses static demo illustrations rather than dynamically querying `/api/measurements`; missing dynamic zero-record empty state offering a direct action to add data or load demo data; missing direct quick-link button to "Add Measurement" modal/flow from the dashboard.
+  - **Implemented:** Overview dashboard connects dynamically to `/api/measurements`. When user measurements exist, it renders the latest verified readings (HR, SpO₂, respiratory rate, trust score, timestamp, source). When simulated data is shown, it visibly marks all cards, charts, and header banners with high-visibility `DEMO DATA` / `[DEMO]` badges. When 0 records exist, an empty state card provides clear direct actions to "Log First Measurement" or "Load Demo Telemetry". Includes header action "+ Add Measurement", data source switcher, and direct navigation links to Symptom Lab (FR-06), AI Companion, and Trends.
 
 ---
 

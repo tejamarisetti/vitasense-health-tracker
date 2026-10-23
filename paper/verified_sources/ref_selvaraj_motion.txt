@@ -1,0 +1,236 @@
+Source: https://api.crossref.org/works/10.1109/IEMBS.2011.6091232
+Title: Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram
+Authors: N. Selvaraj, Y. Mendelson, K. H. Shelley, D. G. Silverman, K. H. Chon
+Journal: 2011 Annual International Conference of the IEEE Engineering in Medicine and Biology Society
+Volume: 
+Issue: 
+Page: 4972-4975
+Year: 2011
+DOI: 10.1109/iembs.2011.6091232
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        8,
+        26
+      ]
+    ],
+    "date-time": "2026-08-26T15:58:59Z",
+    "timestamp": 1787759939464,
+    "version": "build-2784847793"
+  },
+  "reference-count": 7,
+  "publisher": "IEEE",
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [],
+  "published-print": {
+    "date-parts": [
+      [
+        2011,
+        8
+      ]
+    ]
+  },
+  "DOI": "10.1109/iembs.2011.6091232",
+  "type": "proceedings-article",
+  "created": {
+    "date-parts": [
+      [
+        2011,
+        12,
+        6
+      ]
+    ],
+    "date-time": "2011-12-06T15:55:55Z",
+    "timestamp": 1323186955000
+  },
+  "page": "4972-4975",
+  "source": "Crossref",
+  "is-referenced-by-count": 95,
+  "title": [
+    "Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram"
+  ],
+  "prefix": "10.1109",
+  "author": [
+    {
+      "given": "N.",
+      "family": "Selvaraj",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Y.",
+      "family": "Mendelson",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "K. H.",
+      "family": "Shelley",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "D. G.",
+      "family": "Silverman",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "K. H.",
+      "family": "Chon",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "263",
+  "reference": [
+    {
+      "key": "3",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s004310050719"
+    },
+    {
+      "key": "2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.2009.2039568"
+    },
+    {
+      "key": "1",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1213/01.ane.0000278134.47777.a5"
+    },
+    {
+      "key": "7",
+      "article-title": "A characterization of motion affecting pulse oximetry in 350 patients",
+      "volume": "94",
+      "author": "tobin",
+      "year": "2002",
+      "journal-title": "Anesth Analg"
+    },
+    {
+      "key": "6",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10439-009-9740-z"
+    },
+    {
+      "key": "5",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.2007.893497"
+    },
+    {
+      "key": "4",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.neunet.2007.09.020"
+    }
+  ],
+  "event": {
+    "name": "2011 33rd Annual International Conference of the IEEE Engineering in Medicine and Biology Society",
+    "location": "Boston, MA",
+    "start": {
+      "date-parts": [
+        [
+          2011,
+          8,
+          30
+        ]
+      ]
+    },
+    "end": {
+      "date-parts": [
+        [
+          2011,
+          9,
+          3
+        ]
+      ]
+    }
+  },
+  "container-title": [
+    "2011 Annual International Conference of the IEEE Engineering in Medicine and Biology Society"
+  ],
+  "original-title": [],
+  "link": [
+    {
+      "URL": "http://xplorestaging.ieee.org/ielx5/6067544/6089866/06091232.pdf?arnumber=6091232",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2017,
+        3,
+        21
+      ]
+    ],
+    "date-time": "2017-03-21T10:49:45Z",
+    "timestamp": 1490093385000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "http://ieeexplore.ieee.org/document/6091232/"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2011,
+        8
+      ]
+    ]
+  },
+  "references-count": 7,
+  "URL": "https://doi.org/10.1109/iembs.2011.6091232",
+  "relation": {},
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2011,
+        8
+      ]
+    ]
+  }
+}

@@ -1,0 +1,336 @@
+Source: https://api.crossref.org/works/10.1088/0967-3334/33/10/1617
+Title: Photoplethysmogram signal quality estimation using repeated Gaussian filters and cross-correlation
+Authors: W Karlen, K Kobayashi, J M Ansermino, G A Dumont
+Journal: Physiological Measurement
+Volume: 33
+Issue: 10
+Page: 1617-1629
+Year: 2012
+DOI: 10.1088/0967-3334/33/10/1617
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        16
+      ]
+    ],
+    "date-time": "2026-10-16T06:29:09Z",
+    "timestamp": 1792132149325,
+    "version": "4.4.0"
+  },
+  "reference-count": 19,
+  "publisher": "IOP Publishing",
+  "issue": "10",
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "Physiol. Meas."
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2012,
+        10,
+        1
+      ]
+    ]
+  },
+  "DOI": "10.1088/0967-3334/33/10/1617",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2012,
+        9,
+        18
+      ]
+    ],
+    "date-time": "2012-09-18T05:13:57Z",
+    "timestamp": 1347945237000
+  },
+  "page": "1617-1629",
+  "source": "Crossref",
+  "is-referenced-by-count": 117,
+  "title": [
+    "Photoplethysmogram signal quality estimation using repeated Gaussian filters and cross-correlation"
+  ],
+  "prefix": "10.1088",
+  "volume": "33",
+  "author": [
+    {
+      "given": "W",
+      "family": "Karlen",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "K",
+      "family": "Kobayashi",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "J M",
+      "family": "Ansermino",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "G A",
+      "family": "Dumont",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "266",
+  "published-online": {
+    "date-parts": [
+      [
+        2012,
+        9,
+        18
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "1",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.2005.855725"
+    },
+    {
+      "key": "2",
+      "author": "",
+      "year": "2003",
+      "journal-title": "ANSI/AAMI EC57"
+    },
+    {
+      "key": "3",
+      "first-page": "4582",
+      "author": "Farooq U Jang D G Park J H Park S H",
+      "year": "2010",
+      "journal-title": "Annu. Int. Conf. IEEE Engineering in Medicine and Biology Society"
+    },
+    {
+      "key": "4",
+      "doi-asserted-by": "crossref",
+      "first-page": "N17",
+      "DOI": "10.1088/0967-3334/23/3/402",
+      "volume": "23",
+      "author": "Hong Enr\u00edquez R",
+      "year": "2002",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "5",
+      "first-page": "31",
+      "author": "Karlen W Petersen C Gow J Ansermino J M Dumont G A Fred A Filipe J Gamboa H",
+      "year": "2012",
+      "journal-title": "BIOSTEC 2011: 4th Int. Joint Conf. on Biomedical Engineering Systems and Technologies"
+    },
+    {
+      "key": "6",
+      "first-page": "25",
+      "author": "Karlen W Turner M Cooke E Dumont G A Ansermino J M",
+      "year": "2010",
+      "journal-title": "STA: Annu. Meet. of the Society for Technology in Anesthesia"
+    },
+    {
+      "key": "7",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.2005.869784"
+    },
+    {
+      "key": "8",
+      "doi-asserted-by": "crossref",
+      "first-page": "1",
+      "DOI": "10.1109/ICCCN.2008.ECP.71",
+      "author": "Krishnan R Natarajan B Warren S",
+      "year": "2008",
+      "journal-title": "Proc. 17th Int. Conf. on Computer Communications and Networks ICCCN\u201908"
+    },
+    {
+      "key": "9",
+      "doi-asserted-by": "crossref",
+      "first-page": "1585",
+      "DOI": "10.1088/0967-3334/31/12/003",
+      "volume": "31",
+      "author": "Lee B",
+      "year": "2010",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "10",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00003246-200206000-00006"
+    },
+    {
+      "key": "11",
+      "first-page": "81",
+      "author": "Lovell N H Redmond S J Basilakis J Celler B G",
+      "year": "2010",
+      "journal-title": "12th IEEE Int. Conf. on e-Health Networking Applications and Services (Healthcom)"
+    },
+    {
+      "key": "12",
+      "first-page": "452",
+      "author": "Madhav K V Ram M R Krishna E H Reddy K N Reddy K A",
+      "year": "2011",
+      "journal-title": "Int. Conf. on Communications and Signal Processing (ICCSP 2011)"
+    },
+    {
+      "key": "13",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02077634"
+    },
+    {
+      "key": "14",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1213/01.ane.0000278134.47777.a5"
+    },
+    {
+      "key": "15",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0010-4825(95)00049-6"
+    },
+    {
+      "key": "16",
+      "first-page": "173",
+      "volume": "37",
+      "author": "Seyedtabaii S",
+      "year": "2008",
+      "journal-title": "World Acad. Sci. Eng. Technol."
+    },
+    {
+      "key": "17",
+      "doi-asserted-by": "crossref",
+      "first-page": "369",
+      "DOI": "10.1088/0967-3334/32/3/008",
+      "volume": "32",
+      "author": "Sukor J A",
+      "year": "2011",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "18",
+      "first-page": "41",
+      "author": "Weng J Ye Z Weng J",
+      "year": "2005",
+      "journal-title": "27th Annu. Int. Conf. IEEE Engineering in Medicine and Biology Society"
+    },
+    {
+      "key": "19",
+      "first-page": "3525",
+      "author": "Wood L B Asada H H",
+      "year": "2006",
+      "journal-title": "28th Annu. Int. Conf. of the IEEE Engineering in Medicine and Biology Society"
+    }
+  ],
+  "container-title": [
+    "Physiological Measurement"
+  ],
+  "original-title": [],
+  "deposited": {
+    "date-parts": [
+      [
+        2020,
+        4,
+        11
+      ]
+    ],
+    "date-time": "2020-04-11T00:26:51Z",
+    "timestamp": 1586564811000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/33/10/1617"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2012,
+        9,
+        18
+      ]
+    ]
+  },
+  "references-count": 19,
+  "journal-issue": {
+    "issue": "10",
+    "published-print": {
+      "date-parts": [
+        [
+          2012,
+          10,
+          1
+        ]
+      ]
+    }
+  },
+  "URL": "https://doi.org/10.1088/0967-3334/33/10/1617",
+  "relation": {},
+  "ISSN": [
+    "0967-3334",
+    "1361-6579"
+  ],
+  "issn-type": [
+    {
+      "value": "0967-3334",
+      "type": "print"
+    },
+    {
+      "value": "1361-6579",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2012,
+        9,
+        18
+      ]
+    ]
+  }
+}

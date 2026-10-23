@@ -1,0 +1,654 @@
+Source: https://api.crossref.org/works/10.1007/s41666-021-00113-8
+Title: Conformal Prediction in Clinical Medical Sciences
+Authors: Janette Vazquez, Julio C. Facelli
+Journal: Journal of Healthcare Informatics Research
+Volume: 6
+Issue: 3
+Page: 241-252
+Year: 2022
+DOI: 10.1007/s41666-021-00113-8
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        19
+      ]
+    ],
+    "date-time": "2026-10-19T22:03:04Z",
+    "timestamp": 1792447384558,
+    "version": "4.5.0"
+  },
+  "reference-count": 39,
+  "publisher": "Springer Science and Business Media LLC",
+  "issue": "3",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2022,
+            1,
+            28
+          ]
+        ],
+        "date-time": "2022-01-28T00:00:00Z",
+        "timestamp": 1643328000000
+      },
+      "content-version": "tdm",
+      "delay-in-days": 0,
+      "URL": "https://creativecommons.org/licenses/by/4.0"
+    },
+    {
+      "start": {
+        "date-parts": [
+          [
+            2022,
+            1,
+            28
+          ]
+        ],
+        "date-time": "2022-01-28T00:00:00Z",
+        "timestamp": 1643328000000
+      },
+      "content-version": "vor",
+      "delay-in-days": 0,
+      "URL": "https://creativecommons.org/licenses/by/4.0"
+    }
+  ],
+  "content-domain": {
+    "domain": [
+      "link.springer.com"
+    ],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "J Healthc Inform Res"
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2022,
+        9
+      ]
+    ]
+  },
+  "abstract": "<jats:title>Abstract</jats:title>\n                  <jats:p>The use of machine learning (ML) and artificial intelligence (AI) applications in medicine has attracted a great deal of attention in the medical literature, but little is known about how to use Conformal Predictions (CP) to assess the accuracy of individual predictions in clinical applications. We performed a comprehensive search in SCOPUS\u00ae to find papers reporting the use of CP in clinical applications. We identified 14 papers reporting the use of CP for clinical applications, and we briefly describe the methods and results reported in these papers. The literature reviewed shows that CP methods can be used in clinical applications to provide important insight into the accuracy of individual predictions. Unfortunately, the review also shows that most of the studies have been performed in isolation, without input from practicing clinicians, not providing comparisons among different approaches and not considering important socio-technical considerations leading to clinical adoption.</jats:p>",
+  "DOI": "10.1007/s41666-021-00113-8",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2022,
+        1,
+        28
+      ]
+    ],
+    "date-time": "2022-01-28T10:03:38Z",
+    "timestamp": 1643364218000
+  },
+  "page": "241-252",
+  "update-policy": "https://doi.org/10.1007/springer_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 72,
+  "title": [
+    "Conformal Prediction in Clinical Medical Sciences"
+  ],
+  "prefix": "10.1007",
+  "volume": "6",
+  "author": [
+    {
+      "given": "Janette",
+      "family": "Vazquez",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "ORCID": "https://orcid.org/0000-0003-1449-477X",
+      "authenticated-orcid": false,
+      "given": "Julio C.",
+      "family": "Facelli",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "297",
+  "published-online": {
+    "date-parts": [
+      [
+        2022,
+        1,
+        28
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "issue": "14",
+      "key": "113_CR1",
+      "doi-asserted-by": "publisher",
+      "first-page": "1351",
+      "DOI": "10.1001/jama.2019.10306",
+      "volume": "322",
+      "author": "NH Shah",
+      "year": "2019",
+      "unstructured": "Shah NH, Milstein A, Bagley P, Steven C (2019) Making machine learning models clinically useful. JAMA 322(14):1351\u20131352",
+      "journal-title": "JAMA"
+    },
+    {
+      "issue": "4",
+      "key": "113_CR2",
+      "doi-asserted-by": "publisher",
+      "first-page": "305",
+      "DOI": "10.1001/jama.2019.20866",
+      "volume": "323",
+      "author": "AL Beam",
+      "year": "2020",
+      "unstructured": "Beam AL, Manrai AK, Ghassemi M (2020) Challenges to the reproducibility of machine learning models in health care. JAMA 323(4):305\u2013306",
+      "journal-title": "JAMA"
+    },
+    {
+      "issue": "12",
+      "key": "113_CR3",
+      "doi-asserted-by": "publisher",
+      "first-page": "1655",
+      "DOI": "10.1093/jamia/ocz088",
+      "volume": "26",
+      "author": "VX Liu",
+      "year": "2019",
+      "unstructured": "Liu VX et al (2019) The number needed to benefit: estimating the value of predictive analytics in healthcare. J Am Med Inform Assoc 26(12):1655\u20131659",
+      "journal-title": "J Am Med Inform Assoc"
+    },
+    {
+      "issue": "11",
+      "key": "113_CR4",
+      "doi-asserted-by": "publisher",
+      "first-page": "1107",
+      "DOI": "10.1001/jama.2018.11029",
+      "volume": "320",
+      "author": "WW Stead",
+      "year": "2018",
+      "unstructured": "Stead WW (2018) Clinical implications and challenges of artificial intelligence and deep learning. JAMA 320(11):1107\u20131108",
+      "journal-title": "JAMA"
+    },
+    {
+      "issue": "12",
+      "key": "113_CR5",
+      "doi-asserted-by": "publisher",
+      "first-page": "1651",
+      "DOI": "10.1093/jamia/ocz130",
+      "volume": "26",
+      "author": "B Van Calster",
+      "year": "2019",
+      "unstructured": "Van Calster B et al (2019) Predictive analytics in health care: how can we know it works? J Am Med Inform Assoc 26(12):1651\u20131654",
+      "journal-title": "J Am Med Inform Assoc"
+    },
+    {
+      "issue": "4",
+      "key": "113_CR6",
+      "doi-asserted-by": "publisher",
+      "first-page": "668",
+      "DOI": "10.1093/jamia/ocw053",
+      "volume": "23",
+      "author": "LJ Frey",
+      "year": "2016",
+      "unstructured": "Frey LJ, Bernstam EV, Denny JC (2016) Precision medicine informatics. J Am Med Inform Assoc 23(4):668\u2013670",
+      "journal-title": "J Am Med Inform Assoc"
+    },
+    {
+      "issue": "8",
+      "key": "113_CR7",
+      "doi-asserted-by": "publisher",
+      "first-page": "711",
+      "DOI": "10.1056/NEJMp1608282",
+      "volume": "375",
+      "author": "DJ Hunter",
+      "year": "2016",
+      "unstructured": "Hunter DJ (2016) Uncertainty in the era of precision medicine. New England J Med 375(8):711\u2013713",
+      "journal-title": "New England J Med"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR8",
+      "doi-asserted-by": "publisher",
+      "first-page": "128",
+      "DOI": "10.1097/EDE.0b013e3181c30fb2",
+      "volume": "21",
+      "author": "EW Steyerberg",
+      "year": "2010",
+      "unstructured": "Steyerberg EW et al (2010) Assessing the performance of prediction models: a framework for traditional and novel measures. Epidemiology 21(1):128\u2013138",
+      "journal-title": "Epidemiology"
+    },
+    {
+      "issue": "14",
+      "key": "113_CR9",
+      "doi-asserted-by": "publisher",
+      "first-page": "1347",
+      "DOI": "10.1056/NEJMra1814259",
+      "volume": "380",
+      "author": "A Rajkomar",
+      "year": "2019",
+      "unstructured": "Rajkomar A, Dean J, Kohane I (2019) Machine learning in medicine. New England J Med 380(14):1347\u20131358",
+      "journal-title": "New England J Med"
+    },
+    {
+      "issue": "9",
+      "key": "113_CR10",
+      "doi-asserted-by": "publisher",
+      "first-page": "874",
+      "DOI": "10.1056/NEJMms2004740",
+      "volume": "383",
+      "author": "DA Vyas",
+      "year": "2020",
+      "unstructured": "Vyas DA, Eisenstein LG, Jones DS (2020) Hidden in plain sight \u2014 reconsidering the use of race correction in clinical algorithms. New England J Med 383(9):874\u2013882",
+      "journal-title": "New England J Med"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR11",
+      "doi-asserted-by": "publisher",
+      "first-page": "81",
+      "DOI": "10.1038/s41746-020-0288-5",
+      "volume": "3",
+      "author": "D Cirillo",
+      "year": "2020",
+      "unstructured": "Cirillo D et al (2020) Sex and gender differences and biases in artificial intelligence for biomedicine and healthcare. npj Digital Med 3(1):81",
+      "journal-title": "npj Digital Med"
+    },
+    {
+      "key": "113_CR12",
+      "first-page": "371",
+      "volume": "9",
+      "author": "G Shafer",
+      "year": "2008",
+      "unstructured": "Shafer G, Vovk V (2008) A Tutorial on Conformal Prediction. J Mach Learn Res 9:371\u2013421",
+      "journal-title": "J Mach Learn Res"
+    },
+    {
+      "key": "113_CR13",
+      "unstructured": "Conformal Prediction for Reliable Machine Learning, in Conformal Prediction for Reliable Machine Learning (2014) V.N. Balasubramanian, S.-S. Ho, and V. Vovk, Editors. , Morgan Kaufmann: Boston. p. i."
+    },
+    {
+      "key": "113_CR14",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Pereira T, et al. (2020) Targeting the uncertainty of predictions at patient-level using an ensemble of classifiers coupled with calibration methods, Venn-ABERS, and Conformal Predictors: a case study in AD. J Biomed Inform. 101.",
+      "DOI": "10.1016/j.jbi.2019.103350"
+    },
+    {
+      "key": "113_CR15",
+      "unstructured": "Zeni G, Fontana M, Vantini S (2020) Conformal Prediction: a unified review of theory and new challenges. arXiv.org"
+    },
+    {
+      "key": "113_CR16",
+      "volume-title": "Pattern recognition and density estimation under the general i.i.d. assumption. in Computational Learning Theory",
+      "author": "I Nouretdinov",
+      "year": "2001",
+      "unstructured": "Nouretdinov I et al (2001) Pattern recognition and density estimation under the general i.i.d. assumption. in Computational Learning Theory. Springer, Berlin"
+    },
+    {
+      "key": "113_CR17",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Papadopoulos H (2008) Inductive Conformal Prediction: theory and application to neural networks",
+      "DOI": "10.5772/6078"
+    },
+    {
+      "key": "113_CR18",
+      "unstructured": "Vovk V, Gammerman A, Shafer G (2005) Algorithmic learning in a random world"
+    },
+    {
+      "key": "113_CR19",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Balasubramanian V, Ho SS, and Vovk V (2014) Conformal Prediction for reliable machine learning: theory, adaptations and applications. Conformal Prediction for Reliable Machine Learning: Theory, Adaptations and Applications",
+      "DOI": "10.1016/B978-0-12-398537-8.00009-2"
+    },
+    {
+      "key": "113_CR20",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Pereira T, et al. (2017) Towards trustworthy predictions of conversion from mild cognitive impairment to dementia: a conformal prediction approach, in Advances in Intelligent Systems and Computing. p. 155-163",
+      "DOI": "10.1007/978-3-319-60816-7_19"
+    },
+    {
+      "issue": "2-3",
+      "key": "113_CR21",
+      "first-page": "127",
+      "volume": "17",
+      "author": "H Papadopoulos",
+      "year": "2009",
+      "unstructured": "Papadopoulos H, Gammerman A, Vovk V (2009) Reliable diagnosis of acute abdominal pain with conformal prediction. Eng Intell Syst 17(2-3):127\u2013137",
+      "journal-title": "Eng Intell Syst"
+    },
+    {
+      "key": "113_CR22",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Papadopoulos H, Gammerman A, Vovk V (2009) Confidence predictions for the diagnosis of acute abdominal pain, in IFIP International Federation for Information Processing. p. 175-184",
+      "DOI": "10.1007/978-1-4419-0221-4_22"
+    },
+    {
+      "issue": "6",
+      "key": "113_CR23",
+      "doi-asserted-by": "publisher",
+      "first-page": "1209",
+      "DOI": "10.1007/s00521-016-2590-3",
+      "volume": "28",
+      "author": "H Papadopoulos",
+      "year": "2017",
+      "unstructured": "Papadopoulos H, Kyriacou E, Nicolaides A (2017) Unbiased confidence measures for stroke risk estimation based on ultrasound carotid image analysis. Neural Comput Appl 28(6):1209\u20131223",
+      "journal-title": "Neural Comput Appl"
+    },
+    {
+      "key": "113_CR24",
+      "doi-asserted-by": "publisher",
+      "first-page": "1",
+      "DOI": "10.14257/ijast.2016.96.01",
+      "volume": "96",
+      "author": "L Alnemer",
+      "year": "2016",
+      "unstructured": "Alnemer L, Rajab L, Aljarah I (2016) Conformal Prediction technique to predict breast cancer survivability. Int J Advanced Sci Technol 96:1\u201310",
+      "journal-title": "Int J Advanced Sci Technol"
+    },
+    {
+      "issue": "3",
+      "key": "113_CR25",
+      "doi-asserted-by": "publisher",
+      "first-page": "245",
+      "DOI": "10.1007/s13748-012-0021-y",
+      "volume": "1",
+      "author": "D Devetyarov",
+      "year": "2012",
+      "unstructured": "Devetyarov D et al (2012) Conformal predictors in early diagnostics of ovarian and breast cancers. Progress Artificial Intell 1(3):245\u2013257",
+      "journal-title": "Progress Artificial Intell"
+    },
+    {
+      "key": "113_CR26",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Lambrou A, Papadopoulos H, Gammerman A (2009) Evolutionary conformal prediction for breast cancer diagnosis. in Final Program and Abstract Book - 9th International Conference on Information Technology and Applications in Biomedicine, ITAB 2009",
+      "DOI": "10.1109/ITAB.2009.5394447"
+    },
+    {
+      "key": "113_CR27",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Lambrou A, et al. (2010) Assessment of stroke risk based on morphological ultrasound image analysis with conformal prediction, in IFIP Advances in Information and Communication Technology. p. 146-153",
+      "DOI": "10.1007/978-3-642-16239-8_21"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR28",
+      "doi-asserted-by": "publisher",
+      "first-page": "93",
+      "DOI": "10.1109/TITB.2010.2091144",
+      "volume": "15",
+      "author": "A Lambrou",
+      "year": "2011",
+      "unstructured": "Lambrou A, Papadopoulos H, Gammerman A (2011) Reliable confidence measures for medical diagnosis with evolutionary algorithms. IEEE Trans Inform Technol Biomed 15(1):93\u201399",
+      "journal-title": "IEEE Trans Inform Technol Biomed"
+    },
+    {
+      "key": "113_CR29",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Luo Y, Bsoul AAR, Najarian K (2011) Confidence-based classification with dynamic conformal prediction and its applications in biomedicine. in Proceedings of the Annual International Conference of the IEEE Engineering in Medicine and Biology Society, EMBS",
+      "DOI": "10.1109/IEMBS.2011.6090116"
+    },
+    {
+      "issue": "2-3",
+      "key": "113_CR30",
+      "doi-asserted-by": "publisher",
+      "first-page": "215",
+      "DOI": "10.1016/j.artmed.2008.07.018",
+      "volume": "45",
+      "author": "FM Schleif",
+      "year": "2009",
+      "unstructured": "Schleif FM et al (2009) Cancer informatics by prototype networks in mass spectrometry. Artificial Intell Med 45(2-3):215\u2013228",
+      "journal-title": "Artificial Intell Med"
+    },
+    {
+      "key": "113_CR31",
+      "unstructured": "Balasubramanian V, et al. (2009) Support vector machine based conformal predictors for risk of complications following a coronary Drug Eluting Stent procedure. in 2009 36th Annual Computers in Cardiology Conference (CinC)"
+    },
+    {
+      "key": "113_CR32",
+      "unstructured": "Bellotti T, Zhiyuan L, Gammerman A (2006) Reliable classification of childhood acute leukaemia from gene expression data using confidence machines. in 2006 IEEE International Conference on Granular Computing"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR33",
+      "doi-asserted-by": "publisher",
+      "first-page": "55",
+      "DOI": "10.1016/j.jalz.2005.06.003",
+      "volume": "1",
+      "author": "SG Mueller",
+      "year": "2005",
+      "unstructured": "Mueller SG et al (2005) Ways toward an early diagnosis in Alzheimer\u2019s disease: the Alzheimer\u2019s Disease Neuroimaging Initiative (ADNI). Alzheimer's & Dementia 1(1):55\u201366",
+      "journal-title": "Alzheimer's & Dementia"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR34",
+      "doi-asserted-by": "publisher",
+      "first-page": "299",
+      "DOI": "10.1186/1756-0500-4-299",
+      "volume": "4",
+      "author": "J Maroco",
+      "year": "2011",
+      "unstructured": "Maroco J et al (2011) Data mining methods in the prediction of dementia: a real-data comparison of the accuracy, sensitivity and specificity of linear discriminant analysis, logistic regression, neural networks, support vector machines, classification trees and random forests. BMC Res Notes 4(1):299",
+      "journal-title": "BMC Res Notes"
+    },
+    {
+      "key": "113_CR35",
+      "unstructured": "Vovk V and Petej I (2012) Venn-Abers predictors. arXiv:1211.0025."
+    },
+    {
+      "issue": "3",
+      "key": "113_CR36",
+      "first-page": "263",
+      "volume": "22",
+      "author": "A Nicolaides",
+      "year": "2003",
+      "unstructured": "Nicolaides A et al (2003) The asymptomatic carotid stenosis and risk of stroke (ACSRS) study. Aims and results of quality control. Int Angiol 22(3):263\u2013272",
+      "journal-title": "Int Angiol"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR37",
+      "doi-asserted-by": "publisher",
+      "first-page": "61",
+      "DOI": "10.1055/s-0038-1673355",
+      "volume": "32",
+      "author": "MC Daly",
+      "year": "2019",
+      "unstructured": "Daly MC, Paquette IM (2019) Surveillance, epidemiology, and end results (SEER) and SEER-medicare databases: use in clinical research for improving colorectal cancer outcomes. Clin Colon Rectal Surg 32(1):61\u201368",
+      "journal-title": "Clin Colon Rectal Surg"
+    },
+    {
+      "issue": "23",
+      "key": "113_CR38",
+      "doi-asserted-by": "publisher",
+      "first-page": "E215",
+      "DOI": "10.1161/01.CIR.101.23.e215",
+      "volume": "101",
+      "author": "AL Goldberger",
+      "year": "2000",
+      "unstructured": "Goldberger AL et al (2000) PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals. Circulation 101(23):E215\u2013E220",
+      "journal-title": "Circulation"
+    },
+    {
+      "issue": "1",
+      "key": "113_CR39",
+      "doi-asserted-by": "publisher",
+      "first-page": "21",
+      "DOI": "10.1007/s11063-004-3255-2",
+      "volume": "21",
+      "author": "B Hammer",
+      "year": "2005",
+      "unstructured": "Hammer B, Strickert M, Villmann T (2005) Supervised neural gas with general similarity measure. Neural Process Lett 21(1):21\u201344",
+      "journal-title": "Neural Process Lett"
+    }
+  ],
+  "container-title": [
+    "Journal of Healthcare Informatics Research"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "https://link.springer.com/content/pdf/10.1007/s41666-021-00113-8.pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://link.springer.com/article/10.1007/s41666-021-00113-8/fulltext.html",
+      "content-type": "text/html",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://link.springer.com/content/pdf/10.1007/s41666-021-00113-8.pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2022,
+        7,
+        24
+      ]
+    ],
+    "date-time": "2022-07-24T16:05:55Z",
+    "timestamp": 1658678755000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://link.springer.com/10.1007/s41666-021-00113-8"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2022,
+        1,
+        28
+      ]
+    ]
+  },
+  "references-count": 39,
+  "journal-issue": {
+    "issue": "3",
+    "published-print": {
+      "date-parts": [
+        [
+          2022,
+          9
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "113"
+  ],
+  "URL": "https://doi.org/10.1007/s41666-021-00113-8",
+  "relation": {},
+  "ISSN": [
+    "2509-4971",
+    "2509-498X"
+  ],
+  "issn-type": [
+    {
+      "value": "2509-4971",
+      "type": "print"
+    },
+    {
+      "value": "2509-498X",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2022,
+        1,
+        28
+      ]
+    ]
+  },
+  "assertion": [
+    {
+      "value": "29 April 2021",
+      "order": 1,
+      "name": "received",
+      "label": "Received",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "value": "30 November 2021",
+      "order": 2,
+      "name": "revised",
+      "label": "Revised",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "value": "28 December 2021",
+      "order": 3,
+      "name": "accepted",
+      "label": "Accepted",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "value": "28 January 2022",
+      "order": 4,
+      "name": "first_online",
+      "label": "First Online",
+      "group": {
+        "name": "ArticleHistory",
+        "label": "Article History"
+      }
+    },
+    {
+      "order": 1,
+      "name": "Ethics",
+      "group": {
+        "name": "EthicsHeading",
+        "label": "Declarations"
+      }
+    },
+    {
+      "value": "The authors declare no competing interests.",
+      "order": 2,
+      "name": "Ethics",
+      "group": {
+        "name": "EthicsHeading",
+        "label": "Conflict of Interest"
+      }
+    }
+  ]
+}

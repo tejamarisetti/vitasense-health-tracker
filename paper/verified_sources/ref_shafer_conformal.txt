@@ -1,0 +1,202 @@
+Source: https://www.jmlr.org/papers/v9/shafer08a.html
+
+<html>
+<head>
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131826476-1"></script>
+    <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-131826476-1');
+    </script>
+
+    <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+
+  <!-- favicon -->
+  <link rel="icon" href="/img/favicon.ico">
+  <link rel="icon" type="image/png" href="/img/favicon-16x16.png">
+  <link rel="icon" type="image/png" href="/img/favicon-32x32.png">
+
+<title>A Tutorial on Conformal Prediction</title>
+
+
+<link rel="alternate" type="application/rss+xml" href="/jmlr.xml" title="JMLR RSS">
+<link rel="stylesheet" type="text/css" href="/style.css">
+<style type="text/css">
+. {font-family:verdana,helvetica,sans-serif}
+a {text-decoration:none;color:#3030a0}
+
+#fixed {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 8em;
+    height: 100%;
+}
+body > #fixed {
+    position: fixed;
+}
+#content {
+    margin-top: 1em;
+    margin-left: 10em;
+    margin-right: 0.5em;
+}
+img.jmlr {
+    width: 7em;
+}
+img.rss {
+    width: 2em;
+}
+
+ul li {
+    margin-bottom: 0.5em;
+}
+</style>
+
+
+ <!-- MathJax -->
+<script type="text/x-mathjax-config">
+    MathJax.Hub.Config({tex2jax: {inlineMath: [['$','$']]}});
+</script>
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+</script>
+
+<!-- Google Scholar Meta -->
+<meta name="citation_title" content="A Tutorial on Conformal Prediction">
+<meta name="citation_author" content="Glenn Shafer">
+<meta name="citation_author" content="Vladimir Vovk">
+<meta name="citation_journal_title" content="Journal of Machine Learning Research">
+<meta name="citation_volume" content="9">
+<meta name="citation_issue" content="12">
+<meta name="citation_firstpage" content="371">
+<meta name="citation_lastpage" content="421">
+<meta name="citation_pdf_url" content="http://jmlr.org/papers/volume9/shafer08a/shafer08a.pdf">
+<meta name="citation_publication_date" content="2008">
+<meta name="citation_public_url" content="http://jmlr.org/papers/v9/shafer08a.html">
+<meta name="citation_abstract_html_url" content="http://jmlr.org/papers/v9/shafer08a.html">
+<meta name="citation_issn" content="1533-7928">
+
+
+
+
+</head>
+<body>
+
+  <div id="fixed">
+  <br>
+  <a align="right" href="/" target=_top><img align="right" class="jmlr" src="/img/jmlr.jpg" border="0"></a> 
+  <p><br><br>
+  <p align="right"> <A href="/"> Home Page </A> 
+
+  <p align="right"> <A href="/papers"> Papers </A> 
+
+  <p align="right" > <A href="/author-info.html">  Submissions  </A> 
+    
+
+  <p align="right"> <A href="/news.html"> News </A> 
+
+  <!--<p align="right"> <A href="/scope.html"> Scope </A>-->
+
+  <p align="right" > <A href="/editorial-board.html"> Editorial Board </A> 
+
+    
+
+    <p align="right" > <A href="/special_issues/"> Special Issues </A> 
+
+        
+    
+  <p align="right"> <A href="/mloss">Open Source Software</A>
+
+  <p align="right"> <A href="https://proceedings.mlr.press/"> Proceedings (PMLR)</A>
+
+  <p align="right"> <A href="https://data.mlr.press/"> Data (DMLR) </A>
+      
+  <p align="right"> <A href="/tmlr"> Transactions (TMLR) </A>
+
+  <p align="right"> <A href="/search-jmlr.html"> Search </A>
+
+  <p align="right"> <A href="/stats.html">Statistics</A>
+
+  <p align="right"> <A href="/manudb"> Login </A></p>
+
+   <p align="right"> <A href="/faq.html">Frequently Asked Questions </A></p>
+                                     
+  <p align="right"> <A href="/contact.html"> Contact Us </A></p>
+
+  <br><br>
+  <p align="right"> <A href="/jmlr.xml"> 
+  <img src="/img/RSS.gif" class="rss" alt="RSS Feed">
+  </A>
+
+
+
+  </div>
+
+<div id="content">
+    
+<h2> A Tutorial on Conformal Prediction </h2>
+
+<p><b><i>Glenn Shafer, Vladimir Vovk</i></b>; 9(12):371&minus;421, 2008.</p>
+
+
+<h3>Abstract</h3>
+<p class="abstract">
+
+<p>
+Conformal prediction uses past experience to determine precise levels
+of confidence in new predictions.  Given an error probability
+&#949;, together with a method that makes a prediction <i>&#375;</i>
+of a label <i>y</i>, it produces a set of labels, typically containing
+<i>&#375;</i>, that also contains <i>y</i> with probability 1 &#150; &#949;.
+Conformal prediction can be applied to any method for producing
+<i>&#375;</i>: a nearest-neighbor method, a support-vector machine, ridge
+regression, etc.
+</p>
+<p>      
+Conformal prediction is designed for an on-line setting in which
+labels are predicted successively, each one being revealed before the
+next is predicted.  The most novel and valuable feature of conformal
+prediction is that if the successive examples are sampled
+independently from the same distribution, then the successive
+predictions will be right 1 &#150; &#949; of the time, even though they
+are based on an accumulating data set rather than on independent data
+sets.
+</p>
+<p>
+In addition to the model under which successive examples are sampled
+independently, other on-line compression models can also use conformal
+prediction.  The widely used Gaussian linear model is one of these.
+</p>
+<p>
+This tutorial presents a self-contained account of the theory of
+conformal prediction and works through several numerical examples.  A
+more comprehensive treatment of the topic is provided in
+<i>Algorithmic Learning in a Random World</i>, by Vladimir Vovk,
+Alex Gammerman, and Glenn Shafer (Springer, 2005).
+</p>
+
+</p>
+
+
+
+<font color="gray"><p>[abs]</font>[<a id="pdf" target="_blank" href="/papers/volume9/shafer08a/shafer08a.pdf">pdf</a>][<a id="bib" href="/papers/v9/shafer08a.bib">bib</a>]
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+
+
+
+                      
+    <table width="100%"> <tr>
+    <td
+    align="right"><font size="-1">&copy <a target="_top"
+    href="https://www.jmlr.org">JMLR</a> 2008. 
+(<a href="https://github.com/JmlrOrg/v9/tree/main/shafer08a">edit</a>, <a href="http://jmlr.org/beta/papers/v9/shafer08a.html">beta</a>)
+</td> </tr> </table>
+    
+
+</div>
+<!-- for mastodon verification -->
+<a style="font-size: 0" rel="me" href="https://sigmoid.social/@jmlr">Mastodon</a>
+</body>
+</html>

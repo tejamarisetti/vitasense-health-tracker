@@ -1,0 +1,477 @@
+Source: https://api.crossref.org/works/10.1016/j.jelectrocard.2012.07.015
+Title: Signal quality and data fusion for false alarm reduction in the intensive care unit
+Authors: Qiao Li, Gari D. Clifford
+Journal: Journal of Electrocardiology
+Volume: 45
+Issue: 6
+Page: 596-603
+Year: 2012
+DOI: 10.1016/j.jelectrocard.2012.07.015
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        9,
+        5
+      ]
+    ],
+    "date-time": "2026-09-05T07:13:17Z",
+    "timestamp": 1788592397887,
+    "version": "build-2803163510"
+  },
+  "reference-count": 25,
+  "publisher": "Elsevier BV",
+  "issue": "6",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2012,
+            11,
+            1
+          ]
+        ],
+        "date-time": "2012-11-01T00:00:00Z",
+        "timestamp": 1351728000000
+      },
+      "content-version": "tdm",
+      "delay-in-days": 0,
+      "URL": "https://www.elsevier.com/tdm/userlicense/1.0/"
+    },
+    {
+      "start": {
+        "date-parts": [
+          [
+            2012,
+            11,
+            1
+          ]
+        ],
+        "date-time": "2012-11-01T00:00:00Z",
+        "timestamp": 1351728000000
+      },
+      "content-version": "tdm",
+      "delay-in-days": 0,
+      "URL": "https://www.elsevier.com/legal/tdmrep-license"
+    }
+  ],
+  "content-domain": {
+    "domain": [
+      "clinicalkey.com",
+      "clinicalkey.com.au",
+      "clinicalkey.es",
+      "clinicalkey.fr",
+      "clinicalkey.jp",
+      "elsevier.com",
+      "sciencedirect.com"
+    ],
+    "crossmark-restriction": true
+  },
+  "short-container-title": [
+    "Journal of Electrocardiology"
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2012,
+        11
+      ]
+    ]
+  },
+  "DOI": "10.1016/j.jelectrocard.2012.07.015",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2012,
+        9,
+        7
+      ]
+    ],
+    "date-time": "2012-09-07T05:01:23Z",
+    "timestamp": 1346994083000
+  },
+  "page": "596-603",
+  "update-policy": "https://doi.org/10.1016/elsevier_cm_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 102,
+  "title": [
+    "Signal quality and data fusion for false alarm reduction in the intensive care unit"
+  ],
+  "prefix": "10.1016",
+  "volume": "45",
+  "author": [
+    {
+      "given": "Qiao",
+      "family": "Li",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Gari D.",
+      "family": "Clifford",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "78",
+  "reference": [
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0005",
+      "doi-asserted-by": "crossref",
+      "first-page": "442",
+      "DOI": "10.1016/j.jbi.2008.03.003",
+      "article-title": "Reducing false alarm rates for critical arrhythmias using the arterial blood pressure waveform",
+      "volume": "41",
+      "author": "Aboukhalil",
+      "year": "2008",
+      "journal-title": "J Biomed Inform"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0010",
+      "doi-asserted-by": "crossref",
+      "first-page": "981",
+      "DOI": "10.1097/00003246-199406000-00017",
+      "article-title": "Crying wolf: false alarms in a pediatric intensive care unit",
+      "volume": "22",
+      "author": "Lawless",
+      "year": "1994",
+      "journal-title": "Crit Care Med"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0015",
+      "doi-asserted-by": "crossref",
+      "first-page": "1382",
+      "DOI": "10.1213/ane.0b013e31819ed484",
+      "article-title": "The crying wolf: still crying?",
+      "volume": "108",
+      "author": "Imhoff",
+      "year": "2009",
+      "journal-title": "Anesth Analg"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0020",
+      "doi-asserted-by": "crossref",
+      "first-page": "1525",
+      "DOI": "10.1213/01.ane.0000204385.01983.61",
+      "article-title": "Alarm algorithms in critical care monitoring",
+      "volume": "106",
+      "author": "Imhoff",
+      "year": "2006",
+      "journal-title": "Anesth Analg"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0025",
+      "doi-asserted-by": "crossref",
+      "first-page": "139",
+      "DOI": "10.1016/0169-2607(91)90039-V",
+      "article-title": "The median filter as a preprocessor for a patient monitor limit alarm system in intensive care",
+      "volume": "34",
+      "author": "M\u00e4kivirta",
+      "year": "1991",
+      "journal-title": "Comput Methods Programs Biomed"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0030",
+      "article-title": "Reducing false alarms of intensive care online-monitoring systems: an evaluation of two signal extraction algorithms",
+      "author": "Borowski",
+      "year": "2011",
+      "journal-title": "Comput Methods Programs Biomed"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0035",
+      "doi-asserted-by": "crossref",
+      "first-page": "219",
+      "DOI": "10.1016/j.artmed.2009.08.002",
+      "article-title": "Addressing the flaws of current critical alarms: a fuzzy constraint satisfaction approach",
+      "volume": "47",
+      "author": "Otero",
+      "year": "2009",
+      "journal-title": "Artif Intell Med"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0040",
+      "first-page": "829",
+      "article-title": "Using the blood pressure waveform to reduce critical false ECG alarms",
+      "volume": "33",
+      "author": "Clifford",
+      "year": "2006",
+      "journal-title": "Comput Cardiol"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0045",
+      "first-page": "2185",
+      "article-title": "Suppression of false arrhythmia alarms from ICU monitors using heart rate estimation based on combined arterial blood pressure and ECG analysis",
+      "author": "Li",
+      "year": "2008",
+      "journal-title": "Int Conf Bioinformatics Biomed Eng (iCBBE) Shanghai, China"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0050",
+      "unstructured": "Deshmane AV. False arrhythmia alarm suppression using ECG, ABP, and photoplethysmogram (MS thesis). MIT, USA, 2009."
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0055",
+      "doi-asserted-by": "crossref",
+      "first-page": "698",
+      "DOI": "10.1007/BF02347553",
+      "article-title": "Reduction of false arterial blood pressure alarms using signal quality assessment and relationships between the electrocardiogram and arterial blood pressure",
+      "volume": "42",
+      "author": "Zong",
+      "year": "2004",
+      "journal-title": "Med Biol Eng Comput"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0060",
+      "doi-asserted-by": "crossref",
+      "first-page": "15",
+      "DOI": "10.1088/0967-3334/29/1/002",
+      "article-title": "Robust heart rate estimation from multiple asynchronous noisy sources using signal quality indices and a Kalman filter",
+      "volume": "29",
+      "author": "Li",
+      "year": "2008",
+      "journal-title": "Physiol Meas"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0065",
+      "doi-asserted-by": "crossref",
+      "first-page": "2748",
+      "DOI": "10.1109/TBME.2010.2093898",
+      "article-title": "Life-threatening arrhythmia verification in ICU patients using the joint cardiovascular dynamical model and a Bayesian filter",
+      "volume": "58",
+      "author": "Sayadi",
+      "year": "2011",
+      "journal-title": "IEEE Trans Biomed Eng"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0070",
+      "doi-asserted-by": "crossref",
+      "first-page": "1491",
+      "DOI": "10.1088/0967-3334/33/9/1491",
+      "article-title": "Dynamic time warping and machine learning for signal quality assessment of pulsatile signals",
+      "volume": "33",
+      "author": "Li",
+      "year": "2012",
+      "journal-title": "Physiol Meas"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0075",
+      "doi-asserted-by": "crossref",
+      "first-page": "13",
+      "DOI": "10.1186/1475-925X-8-13",
+      "article-title": "Artificial arterial blood pressure artifact models and an evaluation of a robust blood pressure and heart rate estimator",
+      "volume": "8",
+      "author": "Li",
+      "year": "2009",
+      "journal-title": "Biomed Eng Online"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0080",
+      "doi-asserted-by": "crossref",
+      "first-page": "952",
+      "DOI": "10.1097/CCM.0b013e31820a92c6",
+      "article-title": "Multiparameter intelligent monitoring in intensive care II: a public-access intensive care unit database",
+      "volume": "39",
+      "author": "Saeed",
+      "year": "2011",
+      "journal-title": "Crit Care Med"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0085",
+      "doi-asserted-by": "crossref",
+      "first-page": "e215",
+      "DOI": "10.1161/01.CIR.101.23.e215",
+      "article-title": "PhysioBank, PhysioToolkit, and PhysioNet: components of a new research resource for complex physiologic signals",
+      "volume": "101",
+      "author": "Goldberger",
+      "year": "2000",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0090",
+      "unstructured": "The MIMIC II Database. Available online at: http://www.physionet.org/physiobank/database/mimic2db/."
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0095",
+      "first-page": "13",
+      "article-title": "A signal abnormality index for arterial blood pressure waveforms",
+      "volume": "33",
+      "author": "Sun",
+      "year": "2006",
+      "journal-title": "Comput Cardiol"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0100",
+      "series-title": "Genetic algorithms in search, optimization, and machine learning",
+      "author": "Goldberg",
+      "year": "1989"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0105",
+      "doi-asserted-by": "crossref",
+      "first-page": "267",
+      "DOI": "10.1002/cem.1180060506",
+      "article-title": "Genetic algorithms as a strategy for feature selection",
+      "volume": "6",
+      "author": "Leardi",
+      "year": "1992",
+      "journal-title": "J Chemometrics"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0110",
+      "first-page": "652",
+      "article-title": "The relevance vector machine",
+      "volume": "12",
+      "author": "Tipping",
+      "year": "2000"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0115",
+      "first-page": "211",
+      "article-title": "Sparse Bayesian learning and the relevance vector machine",
+      "volume": "1",
+      "author": "Tipping",
+      "year": "2001",
+      "journal-title": "J Machine Learning Research"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0120",
+      "series-title": "Pattern recognition and machine learning",
+      "author": "Bishop",
+      "year": "2006"
+    },
+    {
+      "key": "10.1016/j.jelectrocard.2012.07.015_bb0125",
+      "unstructured": "Tipping ME. SparseBayse Software version 1.1; Available online at: http://www.miketipping.com."
+    }
+  ],
+  "container-title": [
+    "Journal of Electrocardiology"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "https://api.elsevier.com/content/article/PII:S0022073612002944?httpAccept=text/xml",
+      "content-type": "text/xml",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    },
+    {
+      "URL": "https://api.elsevier.com/content/article/PII:S0022073612002944?httpAccept=text/plain",
+      "content-type": "text/plain",
+      "content-version": "vor",
+      "intended-application": "text-mining"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2025,
+        9,
+        19
+      ]
+    ],
+    "date-time": "2025-09-19T12:23:23Z",
+    "timestamp": 1758284603000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://linkinghub.elsevier.com/retrieve/pii/S0022073612002944"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2012,
+        11
+      ]
+    ]
+  },
+  "references-count": 25,
+  "journal-issue": {
+    "issue": "6",
+    "published-print": {
+      "date-parts": [
+        [
+          2012,
+          11
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "S0022073612002944"
+  ],
+  "URL": "https://doi.org/10.1016/j.jelectrocard.2012.07.015",
+  "relation": {},
+  "ISSN": [
+    "0022-0736"
+  ],
+  "issn-type": [
+    {
+      "value": "0022-0736",
+      "type": "print"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2012,
+        11
+      ]
+    ]
+  },
+  "assertion": [
+    {
+      "value": "Elsevier",
+      "name": "publisher",
+      "label": "This article is maintained by"
+    },
+    {
+      "value": "Signal quality and data fusion for false alarm reduction in the intensive care unit",
+      "name": "articletitle",
+      "label": "Article Title"
+    },
+    {
+      "value": "Journal of Electrocardiology",
+      "name": "journaltitle",
+      "label": "Journal Title"
+    },
+    {
+      "value": "https://doi.org/10.1016/j.jelectrocard.2012.07.015",
+      "name": "articlelink",
+      "label": "CrossRef DOI link to publisher maintained version"
+    },
+    {
+      "value": "article",
+      "name": "content_type",
+      "label": "Content Type"
+    },
+    {
+      "value": "Copyright \u00a9 2012 Elsevier Inc. All rights reserved.",
+      "name": "copyright",
+      "label": "Copyright"
+    }
+  ]
+}

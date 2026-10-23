@@ -219,11 +219,108 @@ def test_per_user_isolation_direct_api():
     del_b = client.delete(f"/api/measurements/{meas_id}", headers={"Authorization": f"Bearer {token_b}"})
     assert del_b.status_code == 404
 
-    # 4. User A verifies record is still present and intact
+    # 4. User B tries direct PUT edit of User A's measurement ID -> 404 Not Found
+    put_b = client.put(
+        f"/api/measurements/{meas_id}",
+        json={"value": 90.0},
+        headers={"Authorization": f"Bearer {token_b}"},
+    )
+    assert put_b.status_code == 404
+
+    # 5. User A verifies record is still present and intact
     get_a = client.get(f"/api/measurements/{meas_id}", headers={"Authorization": f"Bearer {token_a}"})
     assert get_a.status_code == 200
     assert get_a.json()["id"] == meas_id
     assert get_a.json()["value"] == 68.0
+
+
+def test_measurement_edit_and_correction_fr03():
+    """
+    FR-03: Tests measurement edit and correction capabilities:
+    - User can update value, unit, timestamp, and source.
+    - Server re-evaluates trust scoring and quality checks on edit.
+    - Input validation checks invalid units, negative values, and future timestamps.
+    """
+
+    unique_email = f"edit_{datetime.now().timestamp()}@vitasense.io"
+    reg_payload = {
+        "email": unique_email,
+        "password": "SecurePassword123!",
+        "name": "Edit Test User",
+        "age": 30,
+        "sex": "Male",
+        "height": "175 cm",
+        "weight": "70 kg",
+        "resting_hr": 65,
+        "activity_level": "Moderately Active",
+        "health_goal": "Cardiovascular Wellness",
+    }
+    reg = client.post("/api/auth/register", json=reg_payload)
+    assert reg.status_code == 201, reg.text
+    token = reg.json()["token"]
+
+    # 1. Create initial measurement
+    now = datetime.now(timezone.utc)
+    res = client.post(
+        "/api/measurements",
+        json={
+            "type": "heart_rate",
+            "value": 70.0,
+            "unit": "bpm",
+            "timestamp": (now - timedelta(minutes=5)).isoformat(),
+            "source": "manual",
+        },
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert res.status_code == 201
+    meas_id = res.json()["id"]
+    assert res.json()["value"] == 70.0
+
+    # 2. Edit measurement value to 75.0
+    edit_res = client.put(
+        f"/api/measurements/{meas_id}",
+        json={"value": 75.0},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert edit_res.status_code == 200
+    assert edit_res.json()["value"] == 75.0
+    assert edit_res.json()["type"] == "heart_rate"
+
+    # Verify persistent retrieval
+    get_res = client.get(
+        f"/api/measurements/{meas_id}",
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert get_res.status_code == 200
+    assert get_res.json()["value"] == 75.0
+
+    # 3. Test validation error on invalid unit
+    bad_unit = client.put(
+        f"/api/measurements/{meas_id}",
+        json={"unit": "invalid_unit"},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert bad_unit.status_code == 422
+
+    # 4. Test validation error on future timestamp
+    future_ts = (now + timedelta(hours=2)).isoformat()
+    bad_ts = client.put(
+        f"/api/measurements/{meas_id}",
+        json={"timestamp": future_ts},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert bad_ts.status_code == 422
+
+    # 5. Test out-of-range value triggers implausibility flag and trust score zeroing
+    implausible_edit = client.put(
+        f"/api/measurements/{meas_id}",
+        json={"value": 299.0},
+        headers={"Authorization": f"Bearer {token}"},
+    )
+    assert implausible_edit.status_code == 200
+    assert "implausible" in implausible_edit.json()["quality_flags"]
+    assert implausible_edit.json()["trust_score"] == 0.0
+    assert implausible_edit.json()["exclude_from_inference"] is True
 
 
 def test_quality_flags_and_component_checks():

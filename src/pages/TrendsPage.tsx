@@ -18,6 +18,14 @@ export function TrendsPage() {
   const [addSource, setAddSource] = useState<'manual' | 'import' | 'demo'>('manual');
   const [addError, setAddError] = useState<string | null>(null);
 
+  // FR-03 Edit Measurement State
+  const [editingMeasurement, setEditingMeasurement] = useState<MeasurementRecord | null>(null);
+  const [editValue, setEditValue] = useState<number>(72);
+  const [editUnit, setEditUnit] = useState<string>('bpm');
+  const [editSource, setEditSource] = useState<'manual' | 'import' | 'demo'>('manual');
+  const [editTimestamp, setEditTimestamp] = useState<string>('');
+  const [editError, setEditError] = useState<string | null>(null);
+
   // Phase 3 FR-10 History State
   const [historyItems, setHistoryItems] = useState<HistoryItem[]>([]);
   const [historyLoading, setHistoryLoading] = useState(false);
@@ -174,6 +182,72 @@ export function TrendsPage() {
     else if (t === 'spo2') setAddUnit('%');
     else if (t === 'respiratory_rate') setAddUnit('brpm');
     else if (t === 'hrv') setAddUnit('ms');
+  };
+
+  const openEditModal = (m: MeasurementRecord) => {
+    setEditingMeasurement(m);
+    setEditValue(m.value);
+    setEditUnit(m.unit);
+    setEditSource(m.source);
+    setEditTimestamp(m.timestamp);
+    setEditError(null);
+  };
+
+  const handleEditMeasurementSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    if (!editingMeasurement) return;
+    setEditError(null);
+    const token = getAuthToken();
+    if (!token) {
+      setEditError('Authentication token missing. Please log in.');
+      return;
+    }
+    try {
+      const res = await fetch(`/api/measurements/${editingMeasurement.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          value: Number(editValue),
+          unit: editUnit,
+          source: editSource,
+          timestamp: editTimestamp,
+        }),
+      });
+      if (res.ok) {
+        setEditingMeasurement(null);
+        showToast(`✓ Corrected measurement #${editingMeasurement.id} (${editValue} ${editUnit}). Quality flags & trust score re-evaluated.`);
+        fetchMeasurements();
+      } else {
+        const err = await res.json();
+        setEditError(err.detail || 'Validation failed. Please verify input bounds.');
+      }
+    } catch (err) {
+      setEditError('Network error updating measurement.');
+    }
+  };
+
+  const handleDeleteMeasurement = async (id: number) => {
+    if (!window.confirm(`Delete measurement record #${id}?`)) return;
+    const token = getAuthToken();
+    if (!token) return;
+    try {
+      const res = await fetch(`/api/measurements/${id}`, {
+        method: 'DELETE',
+        headers: { Authorization: `Bearer ${token}` },
+      });
+      if (res.ok) {
+        showToast(`✓ Measurement #${id} deleted.`);
+        fetchMeasurements();
+      } else {
+        const err = await res.json();
+        showToast(`⚠️ Error: ${err.detail || 'Delete failed'}`);
+      }
+    } catch (err) {
+      showToast('⚠️ Network error deleting measurement.');
+    }
   };
 
   const generateReportData = () => {
@@ -608,9 +682,35 @@ export function TrendsPage() {
                           )}
                         </td>
                         <td>
-                          <span style={{ color: 'var(--aqua)', fontSize: '10px' }}>
-                            {isExpanded ? 'Hide Checks ▲' : 'Inspect Checks ▼'}
-                          </span>
+                          <div style={{ display: 'flex', gap: '6px', alignItems: 'center' }}>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                openEditModal(m);
+                              }}
+                              className="button button-soft"
+                              style={{ fontSize: '10px', padding: '3px 8px', minHeight: '24px' }}
+                              title="Edit this measurement (FR-03)"
+                            >
+                              Edit
+                            </button>
+                            <button
+                              type="button"
+                              onClick={(e) => {
+                                e.stopPropagation();
+                                handleDeleteMeasurement(m.id);
+                              }}
+                              className="button button-quiet"
+                              style={{ fontSize: '10px', padding: '3px 8px', minHeight: '24px', color: '#f87171' }}
+                              title="Delete this measurement (FR-03)"
+                            >
+                              Delete
+                            </button>
+                            <span style={{ color: 'var(--aqua)', fontSize: '10px', marginLeft: '4px' }}>
+                              {isExpanded ? '▲' : '▼'}
+                            </span>
+                          </div>
                         </td>
                       </tr>
 
@@ -922,6 +1022,164 @@ export function TrendsPage() {
                 </button>
                 <button type="submit" className="button button-primary">
                   Submit & Validate
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      )}
+
+      {/* FR-03 Edit Measurement Modal */}
+      {editingMeasurement && (
+        <div className="export-dialog-backdrop" onClick={() => setEditingMeasurement(null)}>
+          <div className="export-dialog" onClick={(e) => e.stopPropagation()} style={{ maxWidth: '480px' }}>
+            <div className="export-dialog-header">
+              <div>
+                <span className="app-kicker">MEASUREMENT CORRECTION (FR-03)</span>
+                <h3>Edit Measurement #{editingMeasurement.id}</h3>
+                <p>Correct recorded values, timestamp, or source tag. Quality scores will re-evaluate automatically.</p>
+              </div>
+              <button
+                className="export-dialog-close"
+                onClick={() => setEditingMeasurement(null)}
+                aria-label="Close"
+              >
+                ✕
+              </button>
+            </div>
+
+            {editError && (
+              <div
+                style={{
+                  padding: '10px 14px',
+                  borderRadius: '8px',
+                  background: 'rgba(239, 68, 68, 0.1)',
+                  border: '1px solid #ef4444',
+                  color: '#f87171',
+                  fontSize: '12px',
+                  marginBottom: '16px',
+                }}
+              >
+                ⚠️ {editError}
+              </div>
+            )}
+
+            <form onSubmit={handleEditMeasurementSubmit}>
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                  Metric Type (Fixed)
+                </label>
+                <input
+                  type="text"
+                  disabled
+                  value={editingMeasurement.type.replace('_', ' ').toUpperCase()}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--line)',
+                    background: 'var(--panel)',
+                    color: 'var(--muted)',
+                    cursor: 'not-allowed',
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', gap: '12px', marginBottom: '14px' }}>
+                <div>
+                  <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                    Corrected Value
+                  </label>
+                  <input
+                    type="number"
+                    step="0.1"
+                    value={editValue}
+                    onChange={(e) => setEditValue(Number(e.target.value))}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--line-strong)',
+                      background: 'var(--panel-2)',
+                      color: 'var(--text)',
+                    }}
+                  />
+                </div>
+                <div>
+                  <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                    Unit
+                  </label>
+                  <input
+                    type="text"
+                    value={editUnit}
+                    onChange={(e) => setEditUnit(e.target.value)}
+                    required
+                    style={{
+                      width: '100%',
+                      padding: '10px 12px',
+                      borderRadius: '8px',
+                      border: '1px solid var(--line-strong)',
+                      background: 'var(--panel-2)',
+                      color: 'var(--text)',
+                    }}
+                  />
+                </div>
+              </div>
+
+              <div style={{ marginBottom: '14px' }}>
+                <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                  Timestamp (ISO)
+                </label>
+                <input
+                  type="text"
+                  value={editTimestamp}
+                  onChange={(e) => setEditTimestamp(e.target.value)}
+                  required
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--line-strong)',
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                    fontSize: '11px',
+                  }}
+                />
+              </div>
+
+              <div style={{ marginBottom: '20px' }}>
+                <label style={{ fontSize: '11px', color: 'var(--muted)', display: 'block', marginBottom: '6px' }}>
+                  Source Tag
+                </label>
+                <select
+                  value={editSource}
+                  onChange={(e) => setEditSource(e.target.value as any)}
+                  style={{
+                    width: '100%',
+                    padding: '10px 12px',
+                    borderRadius: '8px',
+                    border: '1px solid var(--line-strong)',
+                    background: 'var(--panel-2)',
+                    color: 'var(--text)',
+                  }}
+                >
+                  <option value="manual">Manual Entry</option>
+                  <option value="import">Imported Dataset</option>
+                  <option value="demo">Demo Wearable</option>
+                </select>
+              </div>
+
+              <div style={{ display: 'flex', justifyContent: 'flex-end', gap: '10px' }}>
+                <button
+                  type="button"
+                  className="button button-quiet"
+                  onClick={() => setEditingMeasurement(null)}
+                >
+                  Cancel
+                </button>
+                <button type="submit" className="button button-primary">
+                  Save Changes
                 </button>
               </div>
             </form>

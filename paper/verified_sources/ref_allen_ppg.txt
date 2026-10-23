@@ -1,0 +1,2220 @@
+Source: https://api.crossref.org/works/10.1088/0967-3334/28/3/R01
+Title: Photoplethysmography and its application in clinical physiological measurement
+Authors: John Allen
+Journal: Physiological Measurement
+Volume: 28
+Issue: 3
+Page: R1-R39
+Year: 2007
+DOI: 10.1088/0967-3334/28/3/r01
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        23
+      ]
+    ],
+    "date-time": "2026-10-23T01:40:16Z",
+    "timestamp": 1792719616129,
+    "version": "4.5.0"
+  },
+  "reference-count": 269,
+  "publisher": "IOP Publishing",
+  "issue": "3",
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "Physiol. Meas."
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2007,
+        3,
+        1
+      ]
+    ]
+  },
+  "DOI": "10.1088/0967-3334/28/3/r01",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2007,
+        2,
+        20
+      ]
+    ],
+    "date-time": "2007-02-20T23:19:45Z",
+    "timestamp": 1172013585000
+  },
+  "page": "R1-R39",
+  "source": "Crossref",
+  "is-referenced-by-count": 3483,
+  "title": [
+    "Photoplethysmography and its application in clinical physiological measurement"
+  ],
+  "prefix": "10.1088",
+  "volume": "28",
+  "author": [
+    {
+      "given": "John",
+      "family": "Allen",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "266",
+  "published-online": {
+    "date-parts": [
+      [
+        2007,
+        2,
+        20
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "1",
+      "first-page": "434",
+      "volume": "86",
+      "author": "Abramowitz H B",
+      "year": "1979",
+      "journal-title": "Surgery"
+    },
+    {
+      "key": "2",
+      "first-page": "47",
+      "volume": "185",
+      "author": "Agache P G",
+      "year": "1994",
+      "journal-title": "Acta. Derm. Venereol. Suppl. (Stockholm)"
+    },
+    {
+      "key": "3",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF00952248"
+    },
+    {
+      "key": "4",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1114/1.1527046"
+    },
+    {
+      "key": "5",
+      "author": "Allen J",
+      "year": "2002"
+    },
+    {
+      "key": "6",
+      "doi-asserted-by": "crossref",
+      "first-page": "365",
+      "DOI": "10.1088/0967-3334/23/2/312",
+      "volume": "23",
+      "author": "Allen J",
+      "year": "2002",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "7",
+      "doi-asserted-by": "crossref",
+      "first-page": "13",
+      "DOI": "10.1088/0967-3334/14/1/003",
+      "volume": "14",
+      "author": "Allen J",
+      "year": "1993",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "8",
+      "doi-asserted-by": "crossref",
+      "first-page": "29",
+      "DOI": "10.1088/0967-3334/16/1/003",
+      "volume": "16",
+      "author": "Allen J",
+      "year": "1995",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "9",
+      "doi-asserted-by": "crossref",
+      "first-page": "109",
+      "DOI": "10.3109/03091909609008388",
+      "volume": "20",
+      "author": "Allen J",
+      "year": "1996",
+      "journal-title": "J. Med. Eng. Tech.",
+      "ISSN": "https://id.crossref.org/issn/0309-1902",
+      "issn-type": "print"
+    },
+    {
+      "key": "10",
+      "doi-asserted-by": "crossref",
+      "first-page": "287",
+      "DOI": "10.1088/0967-3334/20/3/306",
+      "volume": "20",
+      "author": "Allen J",
+      "year": "1999",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "11",
+      "doi-asserted-by": "crossref",
+      "first-page": "369",
+      "DOI": "10.1088/0967-3334/21/3/303",
+      "volume": "21",
+      "author": "Allen J",
+      "year": "2000",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "12",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1049/ip-smt:20000846"
+    },
+    {
+      "key": "13",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1038/sj.jhh.1001478"
+    },
+    {
+      "key": "14",
+      "doi-asserted-by": "crossref",
+      "first-page": "297",
+      "DOI": "10.1088/0967-3334/24/2/306",
+      "volume": "24",
+      "author": "Allen J",
+      "year": "2003",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "15",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/CIC.2004.1442980"
+    },
+    {
+      "key": "16",
+      "doi-asserted-by": "crossref",
+      "first-page": "811",
+      "DOI": "10.1088/0967-3334/26/5/018",
+      "volume": "26",
+      "author": "Allen J",
+      "year": "2005",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "17",
+      "doi-asserted-by": "crossref",
+      "first-page": "80",
+      "DOI": "10.1177/002029400603900303",
+      "volume": "39",
+      "author": "Allen J",
+      "year": "2006",
+      "journal-title": "Meas. Control",
+      "ISSN": "https://id.crossref.org/issn/0020-2940",
+      "issn-type": "print"
+    },
+    {
+      "key": "18",
+      "doi-asserted-by": "crossref",
+      "first-page": "137",
+      "DOI": "10.1088/0143-0815/10/2/003",
+      "volume": "10",
+      "author": "Almond N E",
+      "year": "1989",
+      "journal-title": "Clin. Phys. Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0143-0815",
+      "issn-type": "print"
+    },
+    {
+      "key": "19",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/1523-1747.ep12479191"
+    },
+    {
+      "key": "20",
+      "first-page": "90",
+      "author": "Aoyagi T Kiahi M Yamaguchi K Watanabe S",
+      "year": "1974",
+      "journal-title": "Abstracts of the 13th Annual Meeting of the Japanese Society of Medical Electronics and Biological Engineering"
+    },
+    {
+      "key": "21",
+      "first-page": "51",
+      "volume": "94",
+      "author": "Aoyagi T",
+      "year": "2002",
+      "journal-title": "Anesth. Analg."
+    },
+    {
+      "key": "22",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1093/brain/awg158"
+    },
+    {
+      "key": "23",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1093/brain/awh236"
+    },
+    {
+      "key": "24",
+      "doi-asserted-by": "crossref",
+      "first-page": "50",
+      "DOI": "10.1161/01.CIR.68.1.50",
+      "volume": "68",
+      "author": "Avolio A P",
+      "year": "1983",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "25",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1042/CS20030303"
+    },
+    {
+      "key": "26",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02344874"
+    },
+    {
+      "key": "27",
+      "first-page": "I20",
+      "volume": "83",
+      "author": "Barnes R W",
+      "year": "1991",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "28",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0022-4804(77)90150-0"
+    },
+    {
+      "key": "29",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0002-9610(77)90339-7"
+    },
+    {
+      "key": "30",
+      "doi-asserted-by": "crossref",
+      "first-page": "561",
+      "DOI": "10.1111/j.1475-097X.1993.tb00472.x",
+      "volume": "13",
+      "author": "Barron S A",
+      "year": "1993",
+      "journal-title": "Clin. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0144-5979",
+      "issn-type": "print"
+    },
+    {
+      "key": "31",
+      "doi-asserted-by": "crossref",
+      "first-page": "673",
+      "DOI": "10.1177/000331979804901103",
+      "volume": "49",
+      "author": "Belcaro G",
+      "year": "1998",
+      "journal-title": "Angiology"
+    },
+    {
+      "key": "32",
+      "doi-asserted-by": "crossref",
+      "first-page": "345",
+      "DOI": "10.1042/cs0900345",
+      "volume": "90",
+      "author": "Bernardi L",
+      "year": "1996",
+      "journal-title": "Clin. Sci.",
+      "ISSN": "https://id.crossref.org/issn/0143-5221",
+      "issn-type": "print"
+    },
+    {
+      "key": "33",
+      "doi-asserted-by": "crossref",
+      "first-page": "5",
+      "DOI": "10.1109/10.900243",
+      "volume": "48",
+      "author": "Bhattacharya J",
+      "year": "2001",
+      "journal-title": "IEEE BME"
+    },
+    {
+      "key": "34",
+      "author": "Bland M",
+      "year": "1995",
+      "journal-title": "An Introduction to Medical Statistics"
+    },
+    {
+      "key": "35",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF00383370"
+    },
+    {
+      "key": "36",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0895-7061(99)00192-2"
+    },
+    {
+      "key": "37",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0140-6736(00)95580-6"
+    },
+    {
+      "key": "38",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10508-005-9001-7"
+    },
+    {
+      "key": "39",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1469-8986.1965.tb03243.x"
+    },
+    {
+      "key": "40",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1006/mvre.1994.1020"
+    },
+    {
+      "key": "41",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02345963"
+    },
+    {
+      "key": "42",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02446270"
+    },
+    {
+      "key": "43",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/01.mat.0000199892.82612.8e"
+    },
+    {
+      "key": "44",
+      "doi-asserted-by": "crossref",
+      "first-page": "437",
+      "DOI": "10.1152/ajplegacy.1939.127.3.437",
+      "volume": "127",
+      "author": "Burton A C",
+      "year": "1939",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "45",
+      "doi-asserted-by": "crossref",
+      "first-page": "565",
+      "DOI": "10.1152/ajplegacy.1940.129.3.565",
+      "volume": "129",
+      "author": "Burton A C",
+      "year": "1940",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "46",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.hrthm.2004.07.002"
+    },
+    {
+      "key": "47",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0741-5214(96)70101-5"
+    },
+    {
+      "key": "48",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0141-5425(93)90047-3"
+    },
+    {
+      "key": "49",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0140-6736(92)93147-F"
+    },
+    {
+      "key": "50",
+      "first-page": "125",
+      "volume": "1",
+      "author": "Challoner A V J",
+      "year": "1979",
+      "journal-title": "Non-Invasive Physiological Measurements"
+    },
+    {
+      "key": "51",
+      "doi-asserted-by": "crossref",
+      "first-page": "317",
+      "DOI": "10.1088/0031-9155/19/3/003",
+      "volume": "19",
+      "author": "Challoner A V",
+      "year": "1974",
+      "journal-title": "Phys. Med. Biol.",
+      "ISSN": "https://id.crossref.org/issn/0031-9155",
+      "issn-type": "print"
+    },
+    {
+      "key": "52",
+      "author": "Chan D Hayes M Smith P R",
+      "year": "2003"
+    },
+    {
+      "key": "53",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02345755"
+    },
+    {
+      "key": "54",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0735-1097(99)00441-6"
+    },
+    {
+      "key": "55",
+      "doi-asserted-by": "crossref",
+      "first-page": "374",
+      "DOI": "10.1159/000179253",
+      "volume": "17",
+      "author": "Christ F",
+      "year": "1997",
+      "journal-title": "Int. J. Microcirc. Clin. Exp.",
+      "ISSN": "https://id.crossref.org/issn/0167-6865",
+      "issn-type": "print"
+    },
+    {
+      "key": "56",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.ejvs.2004.06.016"
+    },
+    {
+      "key": "57",
+      "doi-asserted-by": "crossref",
+      "first-page": "503",
+      "DOI": "10.1161/01.HYP.26.3.503",
+      "volume": "26",
+      "author": "Cohn J N",
+      "year": "1995",
+      "journal-title": "Hypertension"
+    },
+    {
+      "key": "58",
+      "doi-asserted-by": "crossref",
+      "first-page": "33",
+      "DOI": "10.1177/000331978503600106",
+      "volume": "36",
+      "author": "Cooke E D",
+      "year": "1985",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    },
+    {
+      "key": "59",
+      "doi-asserted-by": "crossref",
+      "first-page": "593",
+      "DOI": "10.1088/0031-9155/24/3/010",
+      "volume": "24",
+      "author": "Corte M D",
+      "year": "1979",
+      "journal-title": "Phys. Med. Biol.",
+      "ISSN": "https://id.crossref.org/issn/0031-9155",
+      "issn-type": "print"
+    },
+    {
+      "key": "60",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/10.55667"
+    },
+    {
+      "key": "61",
+      "doi-asserted-by": "crossref",
+      "first-page": "613",
+      "DOI": "10.1152/jappl.1967.23.5.613",
+      "volume": "23",
+      "author": "D'Agrosa L S",
+      "year": "1967",
+      "journal-title": "Appl. Physiol.: Resp. Environ. Exercise Physiol."
+    },
+    {
+      "key": "62",
+      "doi-asserted-by": "crossref",
+      "first-page": "244",
+      "DOI": "10.1177/000331977302400407",
+      "volume": "24",
+      "author": "Dawber T R",
+      "year": "1973",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    },
+    {
+      "key": "63",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02447713"
+    },
+    {
+      "key": "64",
+      "doi-asserted-by": "crossref",
+      "first-page": "646",
+      "DOI": "10.1049/ip-a-1.1982.0102",
+      "volume": "129",
+      "author": "de Trafford J C",
+      "year": "1982",
+      "journal-title": "IEE Proc.",
+      "ISSN": "https://id.crossref.org/issn/0143-702X",
+      "issn-type": "print"
+    },
+    {
+      "key": "65",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0002-8703(41)90966-3"
+    },
+    {
+      "key": "66",
+      "doi-asserted-by": "crossref",
+      "first-page": "425",
+      "DOI": "10.1088/0967-3334/22/3/301",
+      "volume": "22",
+      "author": "Drinnan M J",
+      "year": "2001",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "67",
+      "author": "Duck F A",
+      "year": "1990",
+      "journal-title": "Physical Properties of Tissue"
+    },
+    {
+      "key": "68",
+      "first-page": "607",
+      "volume": "96",
+      "author": "Dutch J",
+      "year": "1983",
+      "journal-title": "N. Z. Med. J.",
+      "ISSN": "https://id.crossref.org/issn/0028-8446",
+      "issn-type": "print"
+    },
+    {
+      "key": "69",
+      "doi-asserted-by": "crossref",
+      "first-page": "353",
+      "DOI": "10.1088/0967-3334/27/4/003",
+      "volume": "27",
+      "author": "Dyszkiewicz A",
+      "year": "2006",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "70",
+      "author": "Echiadis A Crabtree V P Smith P R",
+      "year": "2005"
+    },
+    {
+      "key": "71",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0002-8703(71)90229-8"
+    },
+    {
+      "key": "72",
+      "doi-asserted-by": "crossref",
+      "first-page": "N17",
+      "DOI": "10.1088/0967-3334/23/3/402",
+      "volume": "23",
+      "author": "Enr\u00edquez R H",
+      "year": "2002",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "73",
+      "doi-asserted-by": "crossref",
+      "first-page": "865",
+      "DOI": "10.1088/0967-3334/26/5/022",
+      "volume": "26",
+      "author": "Erts R",
+      "year": "2005",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "74",
+      "first-page": "29",
+      "volume": "22",
+      "author": "Evans M L",
+      "year": "1988",
+      "journal-title": "Med. Instrum."
+    },
+    {
+      "key": "75",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02483691"
+    },
+    {
+      "key": "76",
+      "doi-asserted-by": "crossref",
+      "first-page": "97",
+      "DOI": "10.3233/THC-2006-14205",
+      "volume": "14",
+      "author": "Foo J Y",
+      "year": "2006",
+      "journal-title": "Technol. Health Care",
+      "ISSN": "https://id.crossref.org/issn/0928-7329",
+      "issn-type": "print"
+    },
+    {
+      "key": "77",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-006-9024-1"
+    },
+    {
+      "key": "78",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-006-9019-y"
+    },
+    {
+      "key": "79",
+      "doi-asserted-by": "crossref",
+      "first-page": "685",
+      "DOI": "10.1088/0967-3334/27/8/003",
+      "volume": "27",
+      "author": "Foo J Y",
+      "year": "2006",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "80",
+      "doi-asserted-by": "crossref",
+      "first-page": "1049",
+      "DOI": "10.1088/0967-3334/26/6/014",
+      "volume": "26",
+      "author": "Foo J Y",
+      "year": "2005",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "81",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s11517-005-0008-y"
+    },
+    {
+      "key": "82",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1378/chest.128.4.3013"
+    },
+    {
+      "key": "83",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1038/sj.jhh.1001846"
+    },
+    {
+      "key": "84",
+      "doi-asserted-by": "crossref",
+      "first-page": "317",
+      "DOI": "10.1088/0967-3334/26/3/015",
+      "volume": "26",
+      "author": "Foo J Y",
+      "year": "2005",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "85",
+      "doi-asserted-by": "crossref",
+      "first-page": "267",
+      "DOI": "10.1016/0741-5214(94)90015-9",
+      "volume": "20",
+      "author": "Fronek A",
+      "year": "1994",
+      "journal-title": "J. Vasc. Surg."
+    },
+    {
+      "key": "86",
+      "doi-asserted-by": "crossref",
+      "first-page": "538",
+      "DOI": "10.1177/000331978003100805",
+      "volume": "31",
+      "author": "Gergoudis R",
+      "year": "1980",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    },
+    {
+      "key": "87",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02442745"
+    },
+    {
+      "key": "88",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.ejcts.2004.05.025"
+    },
+    {
+      "key": "89",
+      "doi-asserted-by": "crossref",
+      "first-page": "33",
+      "DOI": "10.1088/0143-0815/5/1/006",
+      "volume": "5",
+      "author": "Gizdulich P",
+      "year": "1984",
+      "journal-title": "Clin. Phys. Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0143-0815",
+      "issn-type": "print"
+    },
+    {
+      "key": "90",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1023/A:1011493521730"
+    },
+    {
+      "key": "91",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s001250051679"
+    },
+    {
+      "key": "92",
+      "doi-asserted-by": "crossref",
+      "first-page": "285",
+      "DOI": "10.1016/S0021-9258(18)70815-6",
+      "volume": "227",
+      "author": "Gordy E",
+      "year": "1957",
+      "journal-title": "J. Biol. Chem.",
+      "ISSN": "https://id.crossref.org/issn/0021-9258",
+      "issn-type": "print"
+    },
+    {
+      "key": "93",
+      "first-page": "268",
+      "volume": "9",
+      "author": "Grohmann G",
+      "year": "1996",
+      "journal-title": "Perfusion"
+    },
+    {
+      "key": "94",
+      "first-page": "300",
+      "volume": "9",
+      "author": "Grohmann G",
+      "year": "1996",
+      "journal-title": "Perfusion"
+    },
+    {
+      "key": "95",
+      "first-page": "324",
+      "volume": "16",
+      "author": "Grossmann K",
+      "year": "1987",
+      "journal-title": "VASA"
+    },
+    {
+      "key": "96",
+      "doi-asserted-by": "crossref",
+      "first-page": "542",
+      "DOI": "10.1177/000331979404500608",
+      "volume": "45",
+      "author": "Guillot B",
+      "year": "1994",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    },
+    {
+      "key": "97",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1006/mvre.1998.2130"
+    },
+    {
+      "key": "98",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00000542-198711000-00057"
+    },
+    {
+      "key": "99",
+      "first-page": "194",
+      "volume": "56",
+      "author": "Hanzlik P J",
+      "year": "1936",
+      "journal-title": "J. Pharmac. Exp. Ther."
+    },
+    {
+      "key": "100",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1042/CS19990061"
+    },
+    {
+      "key": "101",
+      "doi-asserted-by": "crossref",
+      "first-page": "365",
+      "DOI": "10.1088/0143-0815/10/4/009",
+      "volume": "10",
+      "author": "Harness J B",
+      "year": "1989",
+      "journal-title": "Clin. Phys. Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0143-0815",
+      "issn-type": "print"
+    },
+    {
+      "key": "102",
+      "doi-asserted-by": "crossref",
+      "first-page": "196",
+      "DOI": "10.3109/03091909609008998",
+      "volume": "20",
+      "author": "Harris N D",
+      "year": "1996",
+      "journal-title": "J. Med. Eng. Technol.",
+      "ISSN": "https://id.crossref.org/issn/0309-1902",
+      "issn-type": "print"
+    },
+    {
+      "key": "103",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.amjhyper.2004.11.009"
+    },
+    {
+      "key": "104",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/10.915711"
+    },
+    {
+      "key": "105",
+      "first-page": "88",
+      "volume": "9",
+      "author": "Heck A F",
+      "year": "1975",
+      "journal-title": "Med. Instrum."
+    },
+    {
+      "key": "106",
+      "first-page": "I12",
+      "volume": "83",
+      "author": "Hertzer N R",
+      "year": "1991",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "107",
+      "doi-asserted-by": "crossref",
+      "first-page": "290",
+      "DOI": "10.3181/00379727-37-9543P",
+      "volume": "37",
+      "author": "Hertzman A B",
+      "year": "1937",
+      "journal-title": "Proc. Soc. Exp. Biol. Med.",
+      "ISSN": "https://id.crossref.org/issn/0037-9727",
+      "issn-type": "print"
+    },
+    {
+      "key": "108",
+      "doi-asserted-by": "crossref",
+      "first-page": "529",
+      "DOI": "10.3181/00379727-37-9630",
+      "volume": "37",
+      "author": "Hertzman A B",
+      "year": "1937",
+      "journal-title": "Proc. Soc. Exp. Biol. Med.",
+      "ISSN": "https://id.crossref.org/issn/0037-9727",
+      "issn-type": "print"
+    },
+    {
+      "key": "109",
+      "doi-asserted-by": "crossref",
+      "first-page": "328",
+      "DOI": "10.1152/ajplegacy.1938.124.2.328",
+      "volume": "124",
+      "author": "Hertzman A B",
+      "year": "1938",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "110",
+      "doi-asserted-by": "crossref",
+      "first-page": "177",
+      "DOI": "10.1152/ajplegacy.1940.130.1.177",
+      "volume": "130",
+      "author": "Hertzman A B",
+      "year": "1940",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "111",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0002-8703(40)90534-8"
+    },
+    {
+      "key": "112",
+      "first-page": "710",
+      "volume": "34",
+      "author": "Hertzman A B",
+      "year": "1963",
+      "journal-title": "Aerospace Med."
+    },
+    {
+      "key": "113",
+      "doi-asserted-by": "crossref",
+      "first-page": "234",
+      "DOI": "10.1152/jappl.1948.1.3.234",
+      "volume": "1",
+      "author": "Hertzman A B",
+      "year": "1948",
+      "journal-title": "J. Appl. Physiol."
+    },
+    {
+      "key": "114",
+      "doi-asserted-by": "crossref",
+      "first-page": "669",
+      "DOI": "10.1152/ajplegacy.1942.136.4.669",
+      "volume": "136",
+      "author": "Hertzman A B",
+      "year": "1942",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "115",
+      "doi-asserted-by": "crossref",
+      "first-page": "680",
+      "DOI": "10.1152/ajplegacy.1942.136.4.680",
+      "volume": "136",
+      "author": "Hertzman A B",
+      "year": "1942",
+      "journal-title": "Am J. Physiol",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "116",
+      "doi-asserted-by": "crossref",
+      "first-page": "692",
+      "DOI": "10.1152/ajplegacy.1942.136.4.692",
+      "volume": "136",
+      "author": "Hertzman A B",
+      "year": "1942",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "117",
+      "first-page": "334",
+      "volume": "119",
+      "author": "Hertzman A B",
+      "year": "1937",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "118",
+      "first-page": "215",
+      "volume": "6",
+      "author": "Hirai M",
+      "year": "1977",
+      "journal-title": "VASA"
+    },
+    {
+      "key": "119",
+      "doi-asserted-by": "crossref",
+      "first-page": "110",
+      "DOI": "10.1117/12.463573",
+      "volume": "4683",
+      "author": "Huelsbusch M Blazek V Clough A V Chen C-T",
+      "year": "2002",
+      "journal-title": "Proc. SPIE: Medical Imaging: Physiology and Function from Multidimensional Images"
+    },
+    {
+      "key": "120",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1038/233339a0"
+    },
+    {
+      "key": "121",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0008-6363(98)00067-4"
+    },
+    {
+      "key": "122",
+      "first-page": "35",
+      "volume": "41",
+      "author": "Incze A",
+      "year": "2003",
+      "journal-title": "Rom. J. Int. Med."
+    },
+    {
+      "key": "123",
+      "author": "Insall R L",
+      "year": "1991"
+    },
+    {
+      "key": "124",
+      "doi-asserted-by": "crossref",
+      "first-page": "319",
+      "DOI": "10.1088/0143-0815/9/4/003",
+      "volume": "9",
+      "author": "Jago J R",
+      "year": "1988",
+      "journal-title": "Clin. Phys. Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0143-0815",
+      "issn-type": "print"
+    },
+    {
+      "key": "125",
+      "first-page": "604",
+      "volume": "58",
+      "author": "Jaron D",
+      "year": "1987",
+      "journal-title": "Aviat. Space Environ. Med.",
+      "ISSN": "https://id.crossref.org/issn/0095-6562",
+      "issn-type": "print"
+    },
+    {
+      "key": "126",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02128146"
+    },
+    {
+      "key": "127",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02348427"
+    },
+    {
+      "key": "128",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02513264"
+    },
+    {
+      "key": "129",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02513265"
+    },
+    {
+      "key": "130",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1023/A:1009912831366"
+    },
+    {
+      "key": "131",
+      "doi-asserted-by": "crossref",
+      "first-page": "79",
+      "DOI": "10.1088/0305-4624/18/2/305",
+      "volume": "18",
+      "author": "Jones D P",
+      "year": "1987",
+      "journal-title": "Phys. Technol.",
+      "ISSN": "https://id.crossref.org/issn/0305-4624",
+      "issn-type": "print"
+    },
+    {
+      "key": "132",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1054/bjps.2000.3359"
+    },
+    {
+      "key": "133",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.ejvs.2005.05.012"
+    },
+    {
+      "key": "134",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10439-005-8982-7"
+    },
+    {
+      "key": "135",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0169-2607(89)90159-4"
+    },
+    {
+      "key": "136",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0002-9610(76)90445-1"
+    },
+    {
+      "key": "137",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02446261"
+    },
+    {
+      "key": "138",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF01618369"
+    },
+    {
+      "key": "139",
+      "author": "Kester R C",
+      "year": "1981",
+      "journal-title": "A Practice of Vascular Surgery"
+    },
+    {
+      "key": "140",
+      "doi-asserted-by": "crossref",
+      "first-page": "521",
+      "DOI": "10.1042/cs0820521",
+      "volume": "82",
+      "author": "Khan F",
+      "year": "1992",
+      "journal-title": "Clin. Sci.",
+      "ISSN": "https://id.crossref.org/issn/0143-5221",
+      "issn-type": "print"
+    },
+    {
+      "key": "141",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02351014"
+    },
+    {
+      "key": "142",
+      "doi-asserted-by": "crossref",
+      "first-page": "203",
+      "DOI": "10.1088/0967-3334/27/2/010",
+      "volume": "27",
+      "author": "Kim J S",
+      "year": "2006",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "143",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0167-8760(97)00087-1"
+    },
+    {
+      "key": "144",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0022-510X(03)00208-9"
+    },
+    {
+      "key": "145",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0950-821X(89)80005-2"
+    },
+    {
+      "key": "146",
+      "doi-asserted-by": "crossref",
+      "first-page": "R1",
+      "DOI": "10.1088/0967-3334/27/1/R01",
+      "volume": "27",
+      "author": "Kyriacou P A",
+      "year": "2006",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "147",
+      "doi-asserted-by": "crossref",
+      "first-page": "533",
+      "DOI": "10.1088/0967-3334/23/3/305",
+      "volume": "23",
+      "author": "Kyriacou P A",
+      "year": "2002",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "148",
+      "first-page": "861",
+      "author": "Lane I F",
+      "year": "1984",
+      "journal-title": "Hosp. Update",
+      "ISSN": "https://id.crossref.org/issn/0305-4136",
+      "issn-type": "print"
+    },
+    {
+      "key": "149",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1023/A:1016942504084"
+    },
+    {
+      "key": "150",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02345134"
+    },
+    {
+      "key": "151",
+      "first-page": "233",
+      "volume": "148",
+      "author": "Lee B Y",
+      "year": "1979",
+      "journal-title": "Surg. Gynecol. Obstet.",
+      "ISSN": "https://id.crossref.org/issn/0039-6087",
+      "issn-type": "print"
+    },
+    {
+      "key": "152",
+      "author": "Lee B Y",
+      "year": "1981",
+      "journal-title": "Handbook of Non-Invasive Diagnostic Techniques in Vascular Surgery"
+    },
+    {
+      "key": "153",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-005-9007-7"
+    },
+    {
+      "key": "154",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1053/ajkd.2002.34885"
+    },
+    {
+      "key": "155",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1046/j.1475-097X.2003.00469.x"
+    },
+    {
+      "key": "156",
+      "doi-asserted-by": "crossref",
+      "first-page": "48",
+      "DOI": "10.1007/BF02446295",
+      "volume": "29",
+      "author": "Lindberg L-G",
+      "year": "1991",
+      "journal-title": "Med. Biol. Eng. Comput.",
+      "ISSN": "https://id.crossref.org/issn/0140-0118",
+      "issn-type": "print"
+    },
+    {
+      "key": "157",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1117/12.60688"
+    },
+    {
+      "key": "158",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02457833"
+    },
+    {
+      "key": "159",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-006-9015-2"
+    },
+    {
+      "key": "160",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02518879"
+    },
+    {
+      "key": "161",
+      "doi-asserted-by": "crossref",
+      "first-page": "581",
+      "DOI": "10.1088/0967-3334/23/3/309",
+      "volume": "23",
+      "author": "Loukogeorgakis S",
+      "year": "2002",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "162",
+      "doi-asserted-by": "crossref",
+      "first-page": "79",
+      "DOI": "10.1111/j.1600-0773.1986.tb02551.x",
+      "volume": "59",
+      "author": "Lund F",
+      "year": "1986",
+      "journal-title": "Acta Pharmacol. Toxicol."
+    },
+    {
+      "key": "163",
+      "doi-asserted-by": "crossref",
+      "first-page": "731",
+      "DOI": "10.1097/00000658-198112000-00012",
+      "volume": "194",
+      "author": "Lynch T G",
+      "year": "1981",
+      "journal-title": "Ann. Surg."
+    },
+    {
+      "key": "164",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1067/mva.1992.37088"
+    },
+    {
+      "key": "165",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1053/svas.2002.30451"
+    },
+    {
+      "key": "166",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.2466/PMS.94.2.607-622"
+    },
+    {
+      "key": "167",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF01778576"
+    },
+    {
+      "key": "168",
+      "doi-asserted-by": "crossref",
+      "first-page": "28",
+      "DOI": "10.1123/japa.10.1.28",
+      "volume": "10",
+      "author": "McGuigan M R M",
+      "year": "2002",
+      "journal-title": "J. Aging Phys. Activity"
+    },
+    {
+      "key": "169",
+      "doi-asserted-by": "crossref",
+      "first-page": "1392",
+      "DOI": "10.1161/01.HYP.33.6.1392",
+      "volume": "33",
+      "author": "McVeigh G E",
+      "year": "1999",
+      "journal-title": "Hypertension"
+    },
+    {
+      "key": "170",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/10.7286"
+    },
+    {
+      "key": "171",
+      "doi-asserted-by": "crossref",
+      "first-page": "275",
+      "DOI": "10.1111/j.1475-097X.1996.tb00574.x",
+      "volume": "16",
+      "author": "Midttun M",
+      "year": "1996",
+      "journal-title": "Clin. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0144-5979",
+      "issn-type": "print"
+    },
+    {
+      "key": "172",
+      "doi-asserted-by": "crossref",
+      "first-page": "952",
+      "DOI": "10.1161/01.HYP.36.6.952",
+      "volume": "36",
+      "author": "Millasseau S C",
+      "year": "2000",
+      "journal-title": "Hypertension"
+    },
+    {
+      "key": "173",
+      "doi-asserted-by": "crossref",
+      "first-page": "371",
+      "DOI": "10.1042/cs1030371",
+      "volume": "103",
+      "author": "Millasseau S C",
+      "year": "2002",
+      "journal-title": "Clin. Sci.",
+      "ISSN": "https://id.crossref.org/issn/0143-5221",
+      "issn-type": "print"
+    },
+    {
+      "key": "174",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/01.hjh.0000239277.05068.87"
+    },
+    {
+      "key": "175",
+      "first-page": "594",
+      "volume": "24",
+      "author": "Miwa Z",
+      "year": "2002",
+      "journal-title": "Pediatr. Dent.",
+      "ISSN": "https://id.crossref.org/issn/0164-1263",
+      "issn-type": "print"
+    },
+    {
+      "key": "176",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00005373-199908000-00010"
+    },
+    {
+      "key": "177",
+      "first-page": "6",
+      "volume": "57",
+      "author": "Molitor H",
+      "year": "1936",
+      "journal-title": "J. Pharmacol. Exp. Ther.",
+      "ISSN": "https://id.crossref.org/issn/0022-3565",
+      "issn-type": "print"
+    },
+    {
+      "key": "178",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02534102"
+    },
+    {
+      "key": "179",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02077634"
+    },
+    {
+      "key": "180",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/1350-4533(95)00066-6"
+    },
+    {
+      "key": "181",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-005-4300-z"
+    },
+    {
+      "key": "182",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0141-5425(92)90005-6"
+    },
+    {
+      "key": "183",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0141-5425(91)90127-S"
+    },
+    {
+      "key": "184",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s11517-006-0070-0"
+    },
+    {
+      "key": "185",
+      "doi-asserted-by": "crossref",
+      "first-page": "E126",
+      "DOI": "10.1161/01.CIR.102.20.e126",
+      "volume": "102",
+      "author": "Nicolaides A N",
+      "year": "2000",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "186",
+      "first-page": "65",
+      "volume": "2",
+      "author": "Nielsen P E",
+      "year": "1973",
+      "journal-title": "VASA"
+    },
+    {
+      "key": "187",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1093/bja/57.5.531"
+    },
+    {
+      "key": "188",
+      "doi-asserted-by": "crossref",
+      "first-page": "205",
+      "DOI": "10.1088/0143-0815/2/3/004",
+      "volume": "2",
+      "author": "Nijboer J A",
+      "year": "1981",
+      "journal-title": "Clin. Phys. Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0143-0815",
+      "issn-type": "print"
+    },
+    {
+      "key": "189",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-006-9050-z"
+    },
+    {
+      "key": "190",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1023/A:1011424732717"
+    },
+    {
+      "key": "191",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02348428"
+    },
+    {
+      "key": "192",
+      "doi-asserted-by": "crossref",
+      "first-page": "925",
+      "DOI": "10.1088/0967-3334/24/4/009",
+      "volume": "24",
+      "author": "Nilsson L",
+      "year": "2003",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "193",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1399-6576.2005.00721.x"
+    },
+    {
+      "key": "194",
+      "doi-asserted-by": "crossref",
+      "first-page": "93",
+      "DOI": "10.1088/0967-3334/19/1/008",
+      "volume": "19",
+      "author": "Nitzan M",
+      "year": "1998",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "195",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0169-4332(96)00387-X"
+    },
+    {
+      "key": "196",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02345149"
+    },
+    {
+      "key": "197",
+      "doi-asserted-by": "crossref",
+      "first-page": "269",
+      "DOI": "10.1515/JBCPP.1994.5.3-4.269",
+      "volume": "5",
+      "author": "Nitzan M",
+      "year": "1994",
+      "journal-title": "J. Basic Clin. Physiol. Pharmacol.",
+      "ISSN": "https://id.crossref.org/issn/0792-6855",
+      "issn-type": "print"
+    },
+    {
+      "key": "198",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1117/1.2236285"
+    },
+    {
+      "key": "199",
+      "doi-asserted-by": "crossref",
+      "first-page": "85",
+      "DOI": "10.1088/0967-3334/23/1/308",
+      "volume": "23",
+      "author": "Nitzan M",
+      "year": "2002",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "200",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/TBME.2005.846710"
+    },
+    {
+      "key": "201",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1117/12.231366"
+    },
+    {
+      "key": "202",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s101030050073"
+    },
+    {
+      "key": "203",
+      "first-page": "413",
+      "volume": "132",
+      "author": "Ochoa W",
+      "year": "1980",
+      "journal-title": "J. Exp. Med."
+    },
+    {
+      "key": "204",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02441621"
+    },
+    {
+      "key": "205",
+      "first-page": "95",
+      "volume": "5",
+      "author": "Oliva I",
+      "year": "1976",
+      "journal-title": "VASA"
+    },
+    {
+      "key": "206",
+      "doi-asserted-by": "crossref",
+      "first-page": "610",
+      "DOI": "10.1177/000331978303400906",
+      "volume": "34",
+      "author": "Oliva I",
+      "year": "1983",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    },
+    {
+      "key": "207",
+      "doi-asserted-by": "crossref",
+      "first-page": "S147",
+      "DOI": "10.1097/00004872-199602000-00001",
+      "volume": "14",
+      "author": "O'Rourke M F",
+      "year": "1996",
+      "journal-title": "J. Hypertens. Suppl.",
+      "ISSN": "https://id.crossref.org/issn/0952-1178",
+      "issn-type": "print"
+    },
+    {
+      "key": "208",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1067/mva.1985.avs0020678"
+    },
+    {
+      "key": "209",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1253/circj.70.304"
+    },
+    {
+      "key": "210",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1152/japplphysiol.00657.2005"
+    },
+    {
+      "key": "211",
+      "first-page": "104",
+      "author": "Pe\u00f1\u00e1z J",
+      "year": "1973",
+      "journal-title": "Digest 10th Int Conf. Med. Biol. Eng."
+    },
+    {
+      "key": "212",
+      "first-page": "135",
+      "volume": "2",
+      "author": "Pe\u00f1\u00e1z J",
+      "year": "1978",
+      "journal-title": "Automedica",
+      "ISSN": "https://id.crossref.org/issn/0095-0963",
+      "issn-type": "print"
+    },
+    {
+      "key": "213",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02510971"
+    },
+    {
+      "key": "214",
+      "doi-asserted-by": "crossref",
+      "first-page": "269",
+      "DOI": "10.1042/cs0870269",
+      "volume": "87",
+      "author": "Pitson D",
+      "year": "1994",
+      "journal-title": "Clin. Sci.",
+      "ISSN": "https://id.crossref.org/issn/0143-5221",
+      "issn-type": "print"
+    },
+    {
+      "key": "215",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1183/09031936.95.08101669"
+    },
+    {
+      "key": "216",
+      "first-page": "H1852",
+      "volume": "269",
+      "author": "Porret C A",
+      "year": "1995",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "217",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1743-6109.2005.20106.x"
+    },
+    {
+      "key": "218",
+      "doi-asserted-by": "crossref",
+      "first-page": "573",
+      "DOI": "10.1109/TBME.1981.324830",
+      "volume": "28",
+      "author": "Rasmussen B",
+      "year": "1981",
+      "journal-title": "IEEE Trans. Biomed. Eng.",
+      "ISSN": "https://id.crossref.org/issn/0018-9294",
+      "issn-type": "print"
+    },
+    {
+      "key": "219",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1046/j.1475-0961.2003.00516.x"
+    },
+    {
+      "key": "220",
+      "doi-asserted-by": "crossref",
+      "first-page": "143",
+      "DOI": "10.1042/cs1030143",
+      "volume": "103",
+      "author": "Remmen J J",
+      "year": "2002",
+      "journal-title": "Clin. Sci.",
+      "ISSN": "https://id.crossref.org/issn/0143-5221",
+      "issn-type": "print"
+    },
+    {
+      "key": "221",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/10.930904"
+    },
+    {
+      "key": "222",
+      "doi-asserted-by": "crossref",
+      "first-page": "101",
+      "DOI": "10.1177/014233128200400205",
+      "volume": "4",
+      "author": "Roberts V C",
+      "year": "1982",
+      "journal-title": "Trans. Inst. Meas. Control.",
+      "ISSN": "https://id.crossref.org/issn/0142-3312",
+      "issn-type": "print"
+    },
+    {
+      "key": "223",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00003246-200208000-00027"
+    },
+    {
+      "key": "224",
+      "first-page": "73",
+      "volume": "41",
+      "author": "Ruiz-Vega H",
+      "year": "1998",
+      "journal-title": "Proc. West Pharmacol. Soc.",
+      "ISSN": "https://id.crossref.org/issn/0083-8969",
+      "issn-type": "print"
+    },
+    {
+      "key": "225",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.jvs.2005.10.039"
+    },
+    {
+      "key": "226",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1365-201X.2005.01412.x"
+    },
+    {
+      "key": "227",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1159/000056362"
+    },
+    {
+      "key": "228",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1093/bja/aei154"
+    },
+    {
+      "key": "229",
+      "doi-asserted-by": "crossref",
+      "first-page": "1018",
+      "DOI": "10.1097/00000542-199206000-00024",
+      "volume": "76",
+      "author": "Severinghaus J W",
+      "year": "1992",
+      "journal-title": "Anesthesiology"
+    },
+    {
+      "key": "230",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/10.52332"
+    },
+    {
+      "key": "231",
+      "doi-asserted-by": "crossref",
+      "first-page": "795",
+      "DOI": "10.1109/TBME.1986.325906",
+      "volume": "33",
+      "author": "Shimazu H",
+      "year": "1986",
+      "journal-title": "IEEE Trans. Biomed. Eng.",
+      "ISSN": "https://id.crossref.org/issn/0018-9294",
+      "issn-type": "print"
+    },
+    {
+      "key": "232",
+      "first-page": "R1173",
+      "volume": "273",
+      "author": "Shusterman V",
+      "year": "1997",
+      "journal-title": "Am. J. Physiol.",
+      "ISSN": "https://id.crossref.org/issn/0002-9513",
+      "issn-type": "print"
+    },
+    {
+      "key": "233",
+      "first-page": "425",
+      "volume": "11",
+      "author": "Simonson E",
+      "year": "1956",
+      "journal-title": "Geriatrics",
+      "ISSN": "https://id.crossref.org/issn/0016-867X",
+      "issn-type": "print"
+    },
+    {
+      "key": "234",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/0002-8703(55)90322-7"
+    },
+    {
+      "key": "235",
+      "first-page": "72",
+      "volume": "133",
+      "author": "Sophromadze Z",
+      "year": "2006",
+      "journal-title": "Georgian Med. News",
+      "ISSN": "https://id.crossref.org/issn/1512-0112",
+      "issn-type": "print"
+    },
+    {
+      "key": "236",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1364/AO.44.001850"
+    },
+    {
+      "key": "237",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/01.SAP.0000060183.42582.C0"
+    },
+    {
+      "key": "238",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1469-8986.1974.tb00824.x"
+    },
+    {
+      "key": "239",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.jvs.2004.11.023"
+    },
+    {
+      "key": "240",
+      "doi-asserted-by": "crossref",
+      "first-page": "134",
+      "DOI": "10.1177/000331979204300207",
+      "volume": "43",
+      "author": "Suichies H E",
+      "year": "1992",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    },
+    {
+      "key": "241",
+      "doi-asserted-by": "crossref",
+      "first-page": "151",
+      "DOI": "10.1088/0031-9155/34/2/001",
+      "volume": "34",
+      "author": "Swain I D",
+      "year": "1989",
+      "journal-title": "Phys. Med. Biol.",
+      "ISSN": "https://id.crossref.org/issn/0031-9155",
+      "issn-type": "print"
+    },
+    {
+      "key": "242",
+      "author": "Taha B",
+      "year": "1991",
+      "journal-title": "Prevention of Pressure Sores"
+    },
+    {
+      "key": "243",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1023/A:1016936206694"
+    },
+    {
+      "key": "244",
+      "doi-asserted-by": "crossref",
+      "first-page": "365",
+      "DOI": "10.1161/01.HYP.32.2.365",
+      "volume": "32",
+      "author": "Takazawa K",
+      "year": "1998",
+      "journal-title": "Hypertension"
+    },
+    {
+      "key": "245",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1042/CS20030302"
+    },
+    {
+      "key": "246",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/S0167-8760(03)00056-4"
+    },
+    {
+      "key": "247",
+      "doi-asserted-by": "crossref",
+      "first-page": "675",
+      "DOI": "10.1088/0967-3334/27/8/002",
+      "volume": "27",
+      "author": "Teng X F",
+      "year": "2006",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "248",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1067/mva.1986.avs0030456"
+    },
+    {
+      "key": "249",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.amjhyper.2005.03.739"
+    },
+    {
+      "key": "250",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/1523-1747.ep12522619"
+    },
+    {
+      "key": "251",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.ejvs.2004.01.031"
+    },
+    {
+      "key": "252",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/1350-4533(95)00008-B"
+    },
+    {
+      "key": "253",
+      "doi-asserted-by": "crossref",
+      "DOI": "10.1887/0750304677",
+      "author": "Webster J G",
+      "year": "1997",
+      "journal-title": "Design of Pulse Oximeters"
+    },
+    {
+      "key": "254",
+      "author": "Weinman J",
+      "year": "1967",
+      "journal-title": "Manual of Psycho-Physiological Methods"
+    },
+    {
+      "key": "255",
+      "first-page": "121",
+      "volume": "2",
+      "author": "Weinman J",
+      "year": "1972",
+      "journal-title": "T-I-T J. Life Sci.",
+      "ISSN": "https://id.crossref.org/issn/0039-8160",
+      "issn-type": "print"
+    },
+    {
+      "key": "256",
+      "first-page": "92",
+      "volume": "43",
+      "author": "Weng J",
+      "year": "1998",
+      "journal-title": "Biomed. Tech."
+    },
+    {
+      "key": "257",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1093/europace/eul017"
+    },
+    {
+      "key": "258",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10439-005-5763-2"
+    },
+    {
+      "key": "259",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1161/hq0102.101770"
+    },
+    {
+      "key": "260",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1186/1743-0003-2-3"
+    },
+    {
+      "key": "261",
+      "doi-asserted-by": "crossref",
+      "first-page": "676",
+      "DOI": "10.1002/bjs.1800560910",
+      "volume": "56",
+      "author": "Yao S T",
+      "year": "1969",
+      "journal-title": "Br. J. Surg.",
+      "ISSN": "https://id.crossref.org/issn/0007-1323",
+      "issn-type": "print"
+    },
+    {
+      "key": "262",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1089/tmj.2005.11.660"
+    },
+    {
+      "key": "263",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF02442476"
+    },
+    {
+      "key": "264",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1197/jamia.M1925"
+    },
+    {
+      "key": "265",
+      "doi-asserted-by": "crossref",
+      "first-page": "649",
+      "DOI": "10.1088/0967-3334/27/7/008",
+      "volume": "27",
+      "author": "Zhang X Y",
+      "year": "2006",
+      "journal-title": "Physiol. Meas.",
+      "ISSN": "https://id.crossref.org/issn/0967-3334",
+      "issn-type": "print"
+    },
+    {
+      "key": "266",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1109/CIC.2005.1588100"
+    },
+    {
+      "key": "267",
+      "first-page": "289",
+      "volume": "33",
+      "author": "Zheng D",
+      "year": "2006",
+      "journal-title": "Comput. Cardiol.",
+      "ISSN": "https://id.crossref.org/issn/0276-6574",
+      "issn-type": "print"
+    },
+    {
+      "key": "268",
+      "first-page": "3184",
+      "volume": "4",
+      "author": "Zheng D C Zhang Y T",
+      "year": "2003",
+      "journal-title": "Proc. 25th Annual International Conf. of the IEEE EMBC"
+    },
+    {
+      "key": "269",
+      "doi-asserted-by": "crossref",
+      "first-page": "591",
+      "DOI": "10.1177/000331976701801001",
+      "volume": "18",
+      "author": "Zweifler A J",
+      "year": "1967",
+      "journal-title": "Angiology",
+      "ISSN": "https://id.crossref.org/issn/0003-3197",
+      "issn-type": "print"
+    }
+  ],
+  "container-title": [
+    "Physiological Measurement"
+  ],
+  "original-title": [],
+  "deposited": {
+    "date-parts": [
+      [
+        2021,
+        8,
+        8
+      ]
+    ],
+    "date-time": "2021-08-08T20:06:14Z",
+    "timestamp": 1628453174000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://iopscience.iop.org/article/10.1088/0967-3334/28/3/R01"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2007,
+        2,
+        20
+      ]
+    ]
+  },
+  "references-count": 269,
+  "journal-issue": {
+    "issue": "3",
+    "published-print": {
+      "date-parts": [
+        [
+          2007,
+          3,
+          1
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "S0967-3334(07)14869-3"
+  ],
+  "URL": "https://doi.org/10.1088/0967-3334/28/3/r01",
+  "relation": {},
+  "ISSN": [
+    "0967-3334",
+    "1361-6579"
+  ],
+  "issn-type": [
+    {
+      "value": "0967-3334",
+      "type": "print"
+    },
+    {
+      "value": "1361-6579",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2007,
+        2,
+        20
+      ]
+    ]
+  }
+}

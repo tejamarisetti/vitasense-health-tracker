@@ -1,0 +1,528 @@
+Source: https://api.crossref.org/works/10.3390/bioengineering3040021
+Title: Optimal Signal Quality Index for Photoplethysmogram Signals
+Authors: Mohamed Elgendi
+Journal: Bioengineering
+Volume: 3
+Issue: 4
+Page: 21
+Year: 2016
+DOI: 10.3390/bioengineering3040021
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        23
+      ]
+    ],
+    "date-time": "2026-10-23T02:36:01Z",
+    "timestamp": 1792722961559,
+    "version": "4.5.0"
+  },
+  "reference-count": 37,
+  "publisher": "MDPI AG",
+  "issue": "4",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2016,
+            9,
+            22
+          ]
+        ],
+        "date-time": "2016-09-22T00:00:00Z",
+        "timestamp": 1474502400000
+      },
+      "content-version": "vor",
+      "delay-in-days": 0,
+      "URL": "https://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "Bioengineering"
+  ],
+  "abstract": "<jats:p>A photoplethysmogram (PPG) is a noninvasive circulatory signal related to the pulsatile volume of blood in tissue and is typically collected by pulse oximeters. PPG signals collected via mobile devices are prone to artifacts that negatively impact measurement accuracy, which can lead to a significant number of misleading diagnoses. Given the rapidly increased use of mobile devices to collect PPG signals, developing an optimal signal quality index (SQI) is essential to classify the signal quality from these devices. Eight SQIs were developed and tested based on: perfusion, kurtosis, skewness, relative power, non-stationarity, zero crossing, entropy, and the matching of systolic wave detectors. Two independent annotators annotated all PPG data (106 recordings, 60 s each) and a third expert conducted the adjudication of differences. The independent annotators labeled each PPG signal with one of the following labels: excellent, acceptable or unfit for diagnosis. All indices were compared using Mahalanobis distance, linear discriminant analysis, quadratic discriminant analysis, and support vector machine with leave-one-out cross-validation. The skewness index outperformed the other seven indices in differentiating between excellent PPG and acceptable, acceptable combined with unfit, and unfit recordings, with overall     F 1     scores of 86.0%, 87.2%, and 79.1%, respectively.</jats:p>",
+  "DOI": "10.3390/bioengineering3040021",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2016,
+        9,
+        22
+      ]
+    ],
+    "date-time": "2016-09-22T09:59:55Z",
+    "timestamp": 1474538395000
+  },
+  "page": "21",
+  "update-policy": "https://doi.org/10.3390/mdpi_crossmark_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 316,
+  "title": [
+    "Optimal Signal Quality Index for Photoplethysmogram Signals"
+  ],
+  "prefix": "10.3390",
+  "volume": "3",
+  "author": [
+    {
+      "ORCID": "https://orcid.org/0000-0003-1831-0202",
+      "authenticated-orcid": false,
+      "given": "Mohamed",
+      "family": "Elgendi",
+      "sequence": "first",
+      "affiliation": [
+        {
+          "name": "Department of Obstetrics & Gynecology, University of British Columbia, Vancouver, BC V6Z 2K5, Canada"
+        },
+        {
+          "name": "Department of Electrical and Computer Engineering, University of British Columbia, Vancouver, BC V6T 1Z4, Canada"
+        }
+      ],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "1968",
+  "published-online": {
+    "date-parts": [
+      [
+        2016,
+        9,
+        22
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "ref_1",
+      "doi-asserted-by": "crossref",
+      "first-page": "185",
+      "DOI": "10.1117/12.482947",
+      "article-title": "Multiple diagnosis based on photoplethysmography: Hematocrit, SpO2, pulse, and respiration",
+      "volume": "4916",
+      "author": "Yoon",
+      "year": "2002",
+      "journal-title": "Proc. SPIE"
+    },
+    {
+      "key": "ref_2",
+      "doi-asserted-by": "crossref",
+      "first-page": "23",
+      "DOI": "10.1007/s10877-007-9103-y",
+      "article-title": "Can photoplethysmography variability serve as an alternative approach to obtain heart rate variability information?",
+      "volume": "22",
+      "author": "Lu",
+      "year": "2008",
+      "journal-title": "J. Clin. Monit. Comput."
+    },
+    {
+      "key": "ref_3",
+      "doi-asserted-by": "crossref",
+      "first-page": "14",
+      "DOI": "10.2174/157340312801215782",
+      "article-title": "On the analysis of fingertip photoplethysmogram signals",
+      "volume": "8",
+      "author": "Elgendi",
+      "year": "2012",
+      "journal-title": "Curr. Cardiol. Rev."
+    },
+    {
+      "key": "ref_4",
+      "doi-asserted-by": "crossref",
+      "first-page": "S31",
+      "DOI": "10.1213/01.ane.0000269512.82836.c9",
+      "article-title": "Photoplethysmography: Beyond the calculation of arterial oxygen saturation and heart rate",
+      "volume": "105",
+      "author": "Shelley",
+      "year": "2007",
+      "journal-title": "Anesth. Analg."
+    },
+    {
+      "key": "ref_5",
+      "doi-asserted-by": "crossref",
+      "first-page": "215",
+      "DOI": "10.2174/157340312803217184",
+      "article-title": "Standard terminologies for photoplethysmogram signals",
+      "volume": "8",
+      "author": "Elgendi",
+      "year": "2012",
+      "journal-title": "Curr. Cardiol. Rev."
+    },
+    {
+      "key": "ref_6",
+      "doi-asserted-by": "crossref",
+      "first-page": "139",
+      "DOI": "10.1186/1475-925X-13-139",
+      "article-title": "Detection of a and b waves in the acceleration photoplethysmogram",
+      "volume": "13",
+      "author": "Elgendi",
+      "year": "2014",
+      "journal-title": "BioMed. Eng. OnLine"
+    },
+    {
+      "key": "ref_7",
+      "doi-asserted-by": "crossref",
+      "first-page": "S78",
+      "DOI": "10.1213/01.ane.0000278134.47777.a5",
+      "article-title": "The effect of motion on pulse oximetry and its clinical significance",
+      "volume": "105",
+      "author": "Petterson",
+      "year": "2007",
+      "journal-title": "Anesth. Analg."
+    },
+    {
+      "key": "ref_8",
+      "first-page": "42",
+      "article-title": "Classification of wave contour by first and second derivative of plethysmogram",
+      "volume": "7",
+      "author": "Seki",
+      "year": "1977",
+      "journal-title": "Pulse Wave"
+    },
+    {
+      "key": "ref_9",
+      "first-page": "207",
+      "article-title": "Clinical usefulness of the second derivative of a plethysmogram (acceleration plethysmogram)",
+      "volume": "23",
+      "author": "Takazawa",
+      "year": "1993",
+      "journal-title": "Cardiology"
+    },
+    {
+      "key": "ref_10",
+      "doi-asserted-by": "crossref",
+      "first-page": "365",
+      "DOI": "10.1161/01.HYP.32.2.365",
+      "article-title": "Assessment of vasoactive agents and vascular aging by the second derivative of photoplethysmogram waveform",
+      "volume": "32",
+      "author": "Takazawa",
+      "year": "1998",
+      "journal-title": "Hypertension"
+    },
+    {
+      "key": "ref_11",
+      "doi-asserted-by": "crossref",
+      "first-page": "165",
+      "DOI": "10.1016/S0895-7061(99)00192-2",
+      "article-title": "Assessment of vascular aging and atherosclerosis in hypertensive subjects: Second derivative of photoplethysmogram versus pulse wave velocity",
+      "volume": "13",
+      "author": "Bortolotto",
+      "year": "2000",
+      "journal-title": "Am. J. Hypertens."
+    },
+    {
+      "key": "ref_12",
+      "doi-asserted-by": "crossref",
+      "first-page": "503",
+      "DOI": "10.1016/j.cmpb.2015.09.021",
+      "article-title": "Frequency analysis of photoplethysmogram and its derivatives",
+      "volume": "122",
+      "author": "Elgendi",
+      "year": "2015",
+      "journal-title": "Comput. Methods Programs Biomed."
+    },
+    {
+      "key": "ref_13",
+      "doi-asserted-by": "crossref",
+      "first-page": "12776",
+      "DOI": "10.3390/ijerph121012776",
+      "article-title": "Towards investigating global warming impact on human health using derivatives of photoplethysmogram signals",
+      "volume": "12",
+      "author": "Elgendi",
+      "year": "2015",
+      "journal-title": "Int. J. Environ. Res. Public Health"
+    },
+    {
+      "key": "ref_14",
+      "first-page": "48",
+      "article-title": "The effects of motion artifact and low perfusion on the performance of a new generation of pulse oximeters in volunteers undergoing hypoxemia",
+      "volume": "47",
+      "author": "Gehring",
+      "year": "2002",
+      "journal-title": "Respir. Care"
+    },
+    {
+      "key": "ref_15",
+      "doi-asserted-by": "crossref",
+      "first-page": "1189",
+      "DOI": "10.1213/ane.0b013e318167ab1f",
+      "article-title": "Does the pleth variability index indicate the respiratory-induced variation in the plethysmogram and arterial pressure waveforms?",
+      "volume": "106",
+      "author": "Cannesson",
+      "year": "2008",
+      "journal-title": "Anesth. Analg."
+    },
+    {
+      "key": "ref_16",
+      "doi-asserted-by": "crossref",
+      "first-page": "69",
+      "DOI": "10.1007/s10877-012-9335-3",
+      "article-title": "Ability of the Masimo pulse CO-Oximeter to detect changes in hemoglobin",
+      "volume": "26",
+      "author": "Colquhoun",
+      "year": "2012",
+      "journal-title": "J. Clin. Monit. Comput."
+    },
+    {
+      "key": "ref_17",
+      "unstructured": "Shan, C. (2015). Motion Robust Vital Signal Monitoring. (20150250425 A1), U.S. Patent."
+    },
+    {
+      "key": "ref_18",
+      "doi-asserted-by": "crossref",
+      "first-page": "1867",
+      "DOI": "10.1109/TBME.2009.2039568",
+      "article-title": "Two-stage approach for detection and reduction of motion artifacts in photoplethysmographic data",
+      "volume": "57",
+      "author": "Krishnan",
+      "year": "2010",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_19",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Selvaraj, N., Mendelson, Y., Shelley, K., Silverman, D., and Chon, K. (September, January 30). Statistical approach for the detection of motion/noise artifacts in Photoplethysmogram. Proceedings of the 2011 33th Annual International Conference of the IEEE Engineering in Medicine and Biology Society, Boston, MA, USA.",
+      "DOI": "10.1109/IEMBS.2011.6091232"
+    },
+    {
+      "key": "ref_20",
+      "doi-asserted-by": "crossref",
+      "first-page": "1419",
+      "DOI": "10.1088/0967-3334/33/9/1419",
+      "article-title": "Signal quality indices and data fusion for determining clinical acceptability of electrocardiograms",
+      "volume": "33",
+      "author": "Clifford",
+      "year": "2012",
+      "journal-title": "Physiol. Meas."
+    },
+    {
+      "key": "ref_21",
+      "doi-asserted-by": "crossref",
+      "first-page": "139",
+      "DOI": "10.1017/S1049023X12001847",
+      "article-title": "Physiological responses of medical team members to a simulated emergency in tropical field conditions",
+      "volume": "28",
+      "author": "Brearley",
+      "year": "2013",
+      "journal-title": "Prehosp. Dis. Med."
+    },
+    {
+      "key": "ref_22",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Elgendi, M., Norton, I., Brearley, M., Abbott, D., and Schuurmans, D. (2013). Systolic peak detection in acceleration photoplethysmograms measured from emergency responders in tropical conditions. PLoS ONE, 8.",
+      "DOI": "10.1371/journal.pone.0076585"
+    },
+    {
+      "key": "ref_23",
+      "doi-asserted-by": "crossref",
+      "first-page": "37",
+      "DOI": "10.1177/001316446002000104",
+      "article-title": "A Coefficient of Agreement for Nominal Scales",
+      "volume": "20",
+      "author": "Cohen",
+      "year": "1960",
+      "journal-title": "Educ. Psychol. Meas."
+    },
+    {
+      "key": "ref_24",
+      "doi-asserted-by": "crossref",
+      "first-page": "1780",
+      "DOI": "10.1109/TBME.2007.893497",
+      "article-title": "Describing the nonstationarity level of neurological signals based on quantifications of time-frequency representation",
+      "volume": "54",
+      "author": "Tong",
+      "year": "2007",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_25",
+      "doi-asserted-by": "crossref",
+      "first-page": "713",
+      "DOI": "10.1109/18.119732",
+      "article-title": "Entropy-based algorithms for best basis selection",
+      "volume": "38",
+      "author": "Coifman",
+      "year": "1992",
+      "journal-title": "IEEE Trans. Inf. Theory"
+    },
+    {
+      "key": "ref_26",
+      "unstructured": "Chen, C.H. (1988). Signal Processing Handbook, CRC Press."
+    },
+    {
+      "key": "ref_27",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Vaseghi, S.V. (2008). Advanced Digital Signal Processing and Noise Reduction, John Wiley & Sons.",
+      "DOI": "10.1002/9780470740156"
+    },
+    {
+      "key": "ref_28",
+      "doi-asserted-by": "crossref",
+      "first-page": "125",
+      "DOI": "10.1016/j.cmpb.2014.08.001",
+      "article-title": "Detection of c, d, and e waves in the acceleration photoplethysmogram",
+      "volume": "117",
+      "author": "Elgendi",
+      "year": "2014",
+      "journal-title": "Comput. Methods Programs Biomed."
+    },
+    {
+      "key": "ref_29",
+      "doi-asserted-by": "crossref",
+      "first-page": "76",
+      "DOI": "10.1016/j.bspc.2009.06.002",
+      "article-title": "On an automatic delineator for arterial blood pressure waveforms",
+      "volume": "5",
+      "author": "Li",
+      "year": "2010",
+      "journal-title": "Biomed. Signal Process. Control"
+    },
+    {
+      "key": "ref_30",
+      "unstructured": "Billauer, E. Peakdet: Peak Detection Using MATLAB, 2012. Available online: http://billauer.co.il/peakdet.html."
+    },
+    {
+      "key": "ref_31",
+      "unstructured": "Bonferroni, C. (1936). Teoria Statistica Delle Classi e Calcolo Delle Probabilit\u00e0, Libreria internazionale Seeber."
+    },
+    {
+      "key": "ref_32",
+      "first-page": "65",
+      "article-title": "A simple sequentially rejective multiple test procedure",
+      "volume": "6",
+      "author": "Holm",
+      "year": "1979",
+      "journal-title": "Scand. J. Stat."
+    },
+    {
+      "key": "ref_33",
+      "unstructured": "Chen, C., Liaw, A., and Breiman, L. (2004). Using Random Forest to Learn Imbalanced Data, University of California."
+    },
+    {
+      "key": "ref_34",
+      "first-page": "832",
+      "article-title": "Signal-Quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring",
+      "volume": "19",
+      "author": "Orphanidou",
+      "year": "2015",
+      "journal-title": "IEEE J. Biomed. Health Inform."
+    },
+    {
+      "key": "ref_35",
+      "doi-asserted-by": "crossref",
+      "first-page": "1491",
+      "DOI": "10.1088/0967-3334/33/9/1491",
+      "article-title": "Dynamic time warping and machine learning for signal quality assessment of pulsatile signals",
+      "volume": "33",
+      "author": "Li",
+      "year": "2012",
+      "journal-title": "Physiol. Meas."
+    },
+    {
+      "key": "ref_36",
+      "doi-asserted-by": "crossref",
+      "first-page": "1660",
+      "DOI": "10.1109/TBME.2013.2240452",
+      "article-title": "ECG signal quality during arrhythmia and its application to false alarm reduction",
+      "volume": "60",
+      "author": "Behar",
+      "year": "2013",
+      "journal-title": "IEEE Trans. Biomed. Eng."
+    },
+    {
+      "key": "ref_37",
+      "unstructured": "Silva, I., Moody, G.B., and Celi, L. (2011, January 18\u201321). Improving the quality of ECGs collected using mobile phones: The Physionet/Computing in Cardiology Challenge 2011. Proceedings of the 2011 Computing in Cardiology, Hangzhou, China."
+    }
+  ],
+  "container-title": [
+    "Bioengineering"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "https://www.mdpi.com/2306-5354/3/4/21/pdf",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2025,
+        10,
+        11
+      ]
+    ],
+    "date-time": "2025-10-11T19:31:33Z",
+    "timestamp": 1760211093000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://www.mdpi.com/2306-5354/3/4/21"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2016,
+        9,
+        22
+      ]
+    ]
+  },
+  "references-count": 37,
+  "journal-issue": {
+    "issue": "4",
+    "published-online": {
+      "date-parts": [
+        [
+          2016,
+          12
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "bioengineering3040021"
+  ],
+  "URL": "https://doi.org/10.3390/bioengineering3040021",
+  "relation": {},
+  "ISSN": [
+    "2306-5354"
+  ],
+  "issn-type": [
+    {
+      "value": "2306-5354",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2016,
+        9,
+        22
+      ]
+    ]
+  }
+}

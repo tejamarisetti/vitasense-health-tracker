@@ -1,0 +1,481 @@
+Source: https://api.crossref.org/works/10.1371/journal.pone.0110274
+Title: Insights into the Problem of Alarm Fatigue with Physiologic Monitor Devices: A Comprehensive Observational Study of Consecutive Intensive Care Unit Patients
+Authors: Barbara J. Drew, Patricia Harris, Jessica K. Zègre-Hemsey, Tina Mammone, Daniel Schindler, Rebeca Salas-Boni, Yong Bai, Adelita Tinoco, Quan Ding, Xiao Hu
+Journal: PLoS ONE
+Volume: 9
+Issue: 10
+Page: e110274
+Year: 2014
+DOI: 10.1371/journal.pone.0110274
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        22
+      ]
+    ],
+    "date-time": "2026-10-22T03:15:46Z",
+    "timestamp": 1792638946408,
+    "version": "4.5.0"
+  },
+  "reference-count": 21,
+  "publisher": "Public Library of Science (PLoS)",
+  "issue": "10",
+  "license": [
+    {
+      "start": {
+        "date-parts": [
+          [
+            2014,
+            10,
+            22
+          ]
+        ],
+        "date-time": "2014-10-22T00:00:00Z",
+        "timestamp": 1413936000000
+      },
+      "content-version": "unspecified",
+      "delay-in-days": 0,
+      "URL": "http://creativecommons.org/licenses/by/4.0/"
+    }
+  ],
+  "content-domain": {
+    "domain": [
+      "www.plosone.org"
+    ],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "PLoS ONE"
+  ],
+  "DOI": "10.1371/journal.pone.0110274",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2014,
+        10,
+        22
+      ]
+    ],
+    "date-time": "2014-10-22T13:54:18Z",
+    "timestamp": 1413986058000
+  },
+  "page": "e110274",
+  "update-policy": "https://doi.org/10.1371/journal.pone.corrections_policy",
+  "source": "Crossref",
+  "is-referenced-by-count": 371,
+  "title": [
+    "Insights into the Problem of Alarm Fatigue with Physiologic Monitor Devices: A Comprehensive Observational Study of Consecutive Intensive Care Unit Patients"
+  ],
+  "prefix": "10.1371",
+  "volume": "9",
+  "author": [
+    {
+      "given": "Barbara J.",
+      "family": "Drew",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Patricia",
+      "family": "Harris",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Jessica K.",
+      "family": "Z\u00e8gre-Hemsey",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Tina",
+      "family": "Mammone",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Daniel",
+      "family": "Schindler",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Rebeca",
+      "family": "Salas-Boni",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Yong",
+      "family": "Bai",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Adelita",
+      "family": "Tinoco",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Quan",
+      "family": "Ding",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    },
+    {
+      "given": "Xiao",
+      "family": "Hu",
+      "sequence": "additional",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "340",
+  "published-online": {
+    "date-parts": [
+      [
+        2014,
+        10,
+        22
+      ]
+    ]
+  },
+  "reference": [
+    {
+      "key": "ref1",
+      "unstructured": "Kowalczyk L (2010) MGH death spurs review of patient monitors. Available: <ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" ext-link-type=\"uri\" xlink:href=\"http://www.boston.com/news/health/articles/2010/02/21/mgh_death_spurs_review_of_patient_monitors/?page=1Accessed\" xlink:type=\"simple\">http://www.boston.com/news/health/articles/2010/02/21/mgh_death_spurs_review_of_patient_monitors/?page=1 Accessed</ext-link> 29 July, 2014."
+    },
+    {
+      "key": "ref2",
+      "unstructured": "Association for the Advancement of Medical Instrumentation, Center for Radiological Devices &amp; Health, U S A Food &amp; Drug Administration (2011) A siren call to action: priority issues from the medical device alarms summit. Available: <ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" ext-link-type=\"uri\" xlink:href=\"http://www.aami.org/htsi/alarms/pdfs/2011_Alarms_Summit_publication.pdf\" xlink:type=\"simple\">http://www.aami.org/htsi/alarms/pdfs/2011_Alarms_Summit_publication.pdf</ext-link> Accessed 29 July, 2014."
+    },
+    {
+      "key": "ref3",
+      "doi-asserted-by": "crossref",
+      "first-page": "588",
+      "DOI": "10.1016/j.jelectrocard.2012.08.050",
+      "article-title": "Clinical alarm hazards: a \u201ctop ten\u201d health technology safety concern",
+      "volume": "45",
+      "author": "JP Keller Jr",
+      "year": "2012",
+      "journal-title": "J Electrocardiol"
+    },
+    {
+      "key": "ref4",
+      "unstructured": "The Joint Commission (2014) The Joint Commission announces 2014 National Patient Safety Goal. Available: <ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" ext-link-type=\"uri\" xlink:href=\"http://www.jointcommission.org/assets/1/18/JCP0713_Announce_New_NSPG.pdf\" xlink:type=\"simple\">http://www.jointcommission.org/assets/1/18/JCP0713_Announce_New_NSPG.pdf</ext-link> Accessed 29 July, 2014."
+    },
+    {
+      "key": "ref5",
+      "doi-asserted-by": "crossref",
+      "first-page": "e247",
+      "DOI": "10.1016/j.jacc.2006.07.010",
+      "article-title": "ACC/AHA/ESC 2006 guidelines for management of patients with ventricular arrhythmias and the prevention of sudden cardiac death: a report of the American College of Cardiology/American Heart Association Task Force and the European Society of Cardiology Committee for Practice Guidelines",
+      "volume": "48",
+      "author": "DP Zipes",
+      "year": "2006",
+      "journal-title": "J Am Coll Cardiol"
+    },
+    {
+      "key": "ref6",
+      "doi-asserted-by": "crossref",
+      "first-page": "912",
+      "DOI": "10.1016/S0735-1097(99)00354-X",
+      "article-title": "ACC/AHA guidelines for ambulatory electrocardiography: a report of the American College of Cardiology/American Heart Association Task Force on Practice Guidelines for Ambulatory Electrocardiography",
+      "volume": "34",
+      "author": "MH Crawford",
+      "year": "1999",
+      "journal-title": "J Am Coll Cardiol"
+    },
+    {
+      "key": "ref7",
+      "doi-asserted-by": "crossref",
+      "first-page": "442",
+      "DOI": "10.1016/j.jbi.2008.03.003",
+      "article-title": "Reducing false alarm rates for critical arrhythmias using the arterial blood pressure waveform",
+      "volume": "41",
+      "year": "2008",
+      "journal-title": "Biomed Inform"
+    },
+    {
+      "key": "ref8",
+      "unstructured": "Clifford GD, Scott DJ, Villarroel M (2012) User guide and documentation for the MIMIC II Database. Available: <ext-link xmlns:xlink=\"http://www.w3.org/1999/xlink\" ext-link-type=\"uri\" xlink:href=\"http://mimic.physionet.org/UserGuide/UserGuide.pdf\" xlink:type=\"simple\">http://mimic.physionet.org/UserGuide/UserGuide.pdf</ext-link> Accessed 6 September, 2014."
+    },
+    {
+      "key": "ref9",
+      "doi-asserted-by": "crossref",
+      "first-page": "406",
+      "DOI": "10.1056/NEJM198908103210629",
+      "article-title": "Preliminary report: effect of encainide and flecainide on mortality in a randomized trial of arrhythmia suppression after myocardial infarction",
+      "volume": "321",
+      "year": "1989",
+      "journal-title": "N Engl J Med"
+    },
+    {
+      "key": "ref10",
+      "first-page": "1",
+      "article-title": "Prevention of torsade de pointes in hospital settings. A Scientific Statement from the American Heart Association and the American College of Cardiology Foundation",
+      "volume": "121",
+      "author": "BJ Drew",
+      "year": "2010",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "ref11",
+      "doi-asserted-by": "crossref",
+      "first-page": "451",
+      "DOI": "10.1097/CCM.0b013e3181cb0888",
+      "article-title": "Intensive care unit alarms-How many do we need?",
+      "volume": "38",
+      "author": "S Siebig",
+      "year": "2010",
+      "journal-title": "Crit Care Med"
+    },
+    {
+      "key": "ref12",
+      "doi-asserted-by": "crossref",
+      "first-page": "265",
+      "DOI": "10.1097/NCQ.0b013e31827993bc",
+      "article-title": "Daily electrode change and effect on cardiac monitor alarms: an evidence-based practice approach",
+      "volume": "28",
+      "author": "MM Cvach",
+      "year": "2012",
+      "journal-title": "J Nurs Care Qual"
+    },
+    {
+      "key": "ref13",
+      "doi-asserted-by": "crossref",
+      "first-page": "1844",
+      "DOI": "10.1111/j.1365-2648.2009.05048.x",
+      "article-title": "Alarm limit settings for early warning systems to identify at-risk patients",
+      "volume": "65",
+      "author": "LPA Burgess",
+      "year": "2009",
+      "journal-title": "J Advanced Nursing"
+    },
+    {
+      "key": "ref14",
+      "first-page": "2002/(R)2007",
+      "article-title": "American National Standard: cardiac monitors, heart rate meters, and alarms",
+      "volume": "EC13",
+      "year": "2008"
+    },
+    {
+      "key": "ref15",
+      "first-page": "E13",
+      "article-title": "Novel approach to cardiac alarm management on telemetry units. J Cardiovasc Nurs",
+      "volume": "29",
+      "author": "D Whalen",
+      "year": "2014",
+      "journal-title": "Sep-Oct"
+    },
+    {
+      "key": "ref16",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Helfenbein E, Firoozabadi R, Chien S, Carlson E, Babaeizadeh S (2014) Development of three methods for extracting respiration from the surface ECG: a review. J Electrocardiol Aug 4 [Epub ahead of print].",
+      "DOI": "10.1016/j.jelectrocard.2014.07.020"
+    },
+    {
+      "key": "ref17",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Welch J (2011) An evidence-based approach to reduce nuisance alarms and alarm fatigue. Biomed Instrum Technol Spring; Suppl: 46\u201352.",
+      "DOI": "10.2345/0899-8205-45.s1.46"
+    },
+    {
+      "key": "ref18",
+      "first-page": "174",
+      "article-title": "Bedside diagnosis of myocardial ischemia with ST segment monitoring technology: measurement issues for real-time clinical decision-making and trial designs",
+      "volume": "30",
+      "author": "BJ Drew",
+      "year": "1998",
+      "journal-title": "J Electrocardiol"
+    },
+    {
+      "key": "ref19",
+      "doi-asserted-by": "crossref",
+      "first-page": "2020",
+      "DOI": "10.1161/CIR.0b013e31826e1058",
+      "article-title": "Third universal definition of myocardial infarction",
+      "volume": "126",
+      "author": "K Thygesen",
+      "year": "2012",
+      "journal-title": "Circulation"
+    },
+    {
+      "key": "ref20",
+      "doi-asserted-by": "crossref",
+      "first-page": "141",
+      "DOI": "10.1016/j.jelectrocard.2004.04.002",
+      "article-title": "Twelve-lead electrocardiogram: the advantages of an orderly frontal lead display including lead \u2013aVR",
+      "volume": "37",
+      "author": "EB Sgarbosa",
+      "year": "2004",
+      "journal-title": "J Electrocardiol"
+    },
+    {
+      "key": "ref21",
+      "doi-asserted-by": "crossref",
+      "first-page": "1546",
+      "DOI": "10.1213/ane.0b013e31819bdfbb",
+      "article-title": "Improving alarm performance in the medical intensive care unit using delays and clinical context",
+      "volume": "108",
+      "author": "M G\u00f6rges",
+      "year": "2009",
+      "journal-title": "Anesth Analg"
+    }
+  ],
+  "container-title": [
+    "PLoS ONE"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "http://dx.plos.org/10.1371/journal.pone.0110274",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2020,
+        5,
+        9
+      ]
+    ],
+    "date-time": "2020-05-09T03:35:53Z",
+    "timestamp": 1588995353000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "https://dx.plos.org/10.1371/journal.pone.0110274"
+    }
+  },
+  "subtitle": [],
+  "editor": [
+    {
+      "given": "Larisa G.",
+      "family": "Tereshchenko",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "editor"
+        }
+      ]
+    }
+  ],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2014,
+        10,
+        22
+      ]
+    ]
+  },
+  "references-count": 21,
+  "journal-issue": {
+    "issue": "10",
+    "published-online": {
+      "date-parts": [
+        [
+          2014,
+          10,
+          22
+        ]
+      ]
+    }
+  },
+  "URL": "https://doi.org/10.1371/journal.pone.0110274",
+  "relation": {},
+  "ISSN": [
+    "1932-6203"
+  ],
+  "issn-type": [
+    {
+      "value": "1932-6203",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2014,
+        10,
+        22
+      ]
+    ]
+  }
+}

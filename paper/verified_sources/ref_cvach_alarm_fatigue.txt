@@ -1,0 +1,568 @@
+Source: https://api.crossref.org/works/10.2345/0899-8205-46.4.268
+Title: <i>Monitor Alarm Fatigue</i>
+                    : An Integrative Review
+Authors: Maria Cvach
+Journal: Biomedical Instrumentation &amp; Technology
+Volume: 46
+Issue: 4
+Page: 268-277
+Year: 2012
+DOI: 10.2345/0899-8205-46.4.268
+
+--- RAW JSON ---
+{
+  "indexed": {
+    "date-parts": [
+      [
+        2026,
+        10,
+        22
+      ]
+    ],
+    "date-time": "2026-10-22T14:27:17Z",
+    "timestamp": 1792679237696,
+    "version": "4.5.0"
+  },
+  "reference-count": 64,
+  "publisher": "Association for the Advancement of Medical Instrumentation (AAMI)",
+  "issue": "4",
+  "content-domain": {
+    "domain": [],
+    "crossmark-restriction": false
+  },
+  "short-container-title": [
+    "Biomedical Instrumentation &amp; Technology"
+  ],
+  "published-print": {
+    "date-parts": [
+      [
+        2012,
+        7
+      ]
+    ]
+  },
+  "DOI": "10.2345/0899-8205-46.4.268",
+  "type": "journal-article",
+  "created": {
+    "date-parts": [
+      [
+        2012,
+        7,
+        30
+      ]
+    ],
+    "date-time": "2012-07-30T08:25:34Z",
+    "timestamp": 1343636734000
+  },
+  "page": "268-277",
+  "source": "Crossref",
+  "is-referenced-by-count": 573,
+  "title": [
+    "<i>Monitor Alarm Fatigue</i>\n                    : An Integrative Review"
+  ],
+  "prefix": "10.2345",
+  "volume": "46",
+  "author": [
+    {
+      "given": "Maria",
+      "family": "Cvach",
+      "sequence": "first",
+      "affiliation": [],
+      "role": [
+        {
+          "vocabulary": "crossref",
+          "role": "author"
+        }
+      ]
+    }
+  ],
+  "member": "1193",
+  "reference": [
+    {
+      "key": "e_1_3_1_2_2",
+      "unstructured": "Cvach\n\t\t\t\t\t\t\tM.\n\t\t\t\t\tThe Johns Hopkins Hospital Quality Improvement Alarm Data. \n\t\t\t\t\t2011."
+    },
+    {
+      "issue": "11",
+      "key": "e_1_3_1_3_2",
+      "first-page": "358",
+      "article-title": "Top 10 Health Technology Hazards for 2012",
+      "volume": "40",
+      "author": "ECRI Institute",
+      "year": "2011",
+      "unstructured": "ECRI Institute. Top 10 Health Technology Hazards for 2012. Health Devices. 2011; 40( 11): 358\u2013 73.",
+      "journal-title": "Health Devices"
+    },
+    {
+      "issue": "11",
+      "key": "e_1_3_1_4_2",
+      "first-page": "404",
+      "article-title": "Top 10 Health Technology Hazards for 2011",
+      "volume": "39",
+      "author": "ECRI Institute",
+      "year": "2010",
+      "unstructured": "ECRI Institute. Top 10 Health Technology Hazards for 2011. Health Devices. 2010; 39 ( 11): 404\u2013 16.",
+      "journal-title": "Health Devices"
+    },
+    {
+      "key": "e_1_3_1_5_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00003246-199406000-00017"
+    },
+    {
+      "key": "e_1_3_1_6_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00003246-199704000-00010"
+    },
+    {
+      "key": "e_1_3_1_7_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s001340051082"
+    },
+    {
+      "key": "e_1_3_1_8_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.ajem.2005.05.015"
+    },
+    {
+      "key": "e_1_3_1_9_2",
+      "doi-asserted-by": "crossref",
+      "unstructured": "Drews\n\t\t\t\t\t\t\tFA Musters\n\t\t\t\t\t\t\tA Markham\n\t\t\t\t\t\t\tB Samore\n\t\t\t\t\t\t\tMH.\n\t\t\t\t\tError-Producing Conditions in the Intensive Care Unit. \n\t\t\t\t\tProceedings of the Human Factors and Ergonomics Society 51st Annual Meeting. \n\t\t\t\t\t2007; \n\t\t\t\t\t702\u2013\n\t\t\t\t\t6.",
+      "DOI": "10.1177/154193120705101121"
+    },
+    {
+      "key": "e_1_3_1_10_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/CCM.0b013e3181cb0888"
+    },
+    {
+      "key": "e_1_3_1_11_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1213/ANE.0b013e3181fcc504"
+    },
+    {
+      "key": "e_1_3_1_12_2",
+      "unstructured": "Breznitz\n\t\t\t\t\t\t\tS. Cry Wolf: The Psychology of False Alarms . \n\t\t\t\t\tNew Jersey: \n\t\t\t\t\tLawrence Erlbaum Hillsdale 1984."
+    },
+    {
+      "key": "e_1_3_1_13_2",
+      "unstructured": "ACCE Health Technology Foundation. \n\t\t\t\t\t2006 Impact of Clinical Alarms on Patient Safety. \n\t\t\t\t\tAvailable at: http://thehtf.org/documents/White%20Paper.pdf. Accessed March 11 2012."
+    },
+    {
+      "key": "e_1_3_1_14_2",
+      "unstructured": "ECRI Institute. \n\t\t\t\t\tThe Hazards of Alarm Overload: Keeping Excessive Physiological Monitoring Alarms From Impeding Care. \n\t\t\t\t\tHealth Devices. Available at: www.ecri.org. Accessed July 14 2011."
+    },
+    {
+      "key": "e_1_3_1_15_2",
+      "article-title": "MGH Death Spurs Review of Patient Monitors",
+      "author": "Kowalczk L.",
+      "year": "2010",
+      "unstructured": "Kowalczk L. MGH Death Spurs Review of Patient Monitors. The Boston Globe. Feb. 21, 2010. Available at: www.boston.com/news/health/articles/2010/02/21/mgh_death_spurs_review_of_patient_monitors. Accessed Aug. 17, 2010.",
+      "journal-title": "The Boston Globe"
+    },
+    {
+      "key": "e_1_3_1_16_2",
+      "article-title": "Alarm Fatigue Linked to Patient Death",
+      "author": "Kowalczyk L.",
+      "year": "2010",
+      "unstructured": "Kowalczyk L. Alarm Fatigue Linked to Patient Death. The Boston Globe. April 3, 2010. Available at: www.boston.com/news/local/massachusetts/articles/2010/04/03/alarm_fatigue_linked_to_heart_patients_death_at_mass_general. Accessed July 18, 2011.",
+      "journal-title": "The Boston Globe"
+    },
+    {
+      "key": "e_1_3_1_17_2",
+      "article-title": "Alarming Monitor Problems: Preventing Medical Errors",
+      "author": "Food and Drug Administration",
+      "year": "2011",
+      "unstructured": "Food and Drug Administration. Alarming Monitor Problems: Preventing Medical Errors. FDA Patient Safety News. January 2011. Available at: www.accessdata.fda.gov/scripts/cdrh/cfdocs/psn/transcript.cfm?show=106#7. Accessed July 27, 2011.",
+      "journal-title": "FDA Patient Safety News"
+    },
+    {
+      "key": "e_1_3_1_18_2",
+      "unstructured": "Food and Drug Administration. \n\t\t\t\t\tManufacturer and User Device Experience (MAUDE) Database: Alarm Related Death Events 3/1/10\u20136/30/10."
+    },
+    {
+      "key": "e_1_3_1_19_2",
+      "unstructured": "Newhouse\n\t\t\t\t\t\t\tR Dearholt\n\t\t\t\t\t\t\tS Poe\n\t\t\t\t\t\t\tS Pugh\n\t\t\t\t\t\t\tL White\n\t\t\t\t\t\t\tK.\n\t\t\t\t\tJohns Hopkins Nursing Evidence-Based Practice Model and Guidelines. \n\t\t\t\t\tSigma Theta Tau International; \n\t\t\t\t\t2007."
+    },
+    {
+      "key": "e_1_3_1_20_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.4037/ajcc2008.17.1.36"
+    },
+    {
+      "key": "e_1_3_1_21_2",
+      "unstructured": "Health Technology Foundation. \n\t\t\t\t\tNational Clinical Alarms Summary: Perceptions Issues Improvements and Priorities of Healthcare Professionals. Presented at the AAMI Medical Device Alarm Summit. Oct. 4\u20135 2011; Herndon VA."
+    },
+    {
+      "key": "e_1_3_1_22_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10111-004-0162-2"
+    },
+    {
+      "key": "e_1_3_1_23_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1080/001401300421743"
+    },
+    {
+      "key": "e_1_3_1_24_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1080/00140130701237345"
+    },
+    {
+      "key": "e_1_3_1_25_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/BF03017788"
+    },
+    {
+      "key": "e_1_3_1_26_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.apergo.2006.03.004"
+    },
+    {
+      "key": "e_1_3_1_27_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1046/j.1365-2648.2001.01854.x"
+    },
+    {
+      "key": "e_1_3_1_28_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-007-9096-6"
+    },
+    {
+      "key": "e_1_3_1_29_2",
+      "first-page": "62",
+      "article-title": "Point-Counterpoint: IEC 62D Medical Monitor Standards Will Make Alarms Worse",
+      "volume": "60",
+      "author": "Block FE",
+      "year": "2011",
+      "unstructured": "Block FE Jr . Point-Counterpoint: IEC 62D Medical Monitor Standards Will Make Alarms Worse. Horizons (BI&T suppl). Spring 2011; 60: 62\u2013 3.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_30_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1213/01.ane.0000286148.58823.6c"
+    },
+    {
+      "key": "e_1_3_1_31_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1518/001872007X215719"
+    },
+    {
+      "key": "e_1_3_1_32_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1365-2044.2005.04502.x"
+    },
+    {
+      "issue": "2",
+      "key": "e_1_3_1_33_2",
+      "article-title": "Pilot Study: Designing Medical Alarm Sounds for Semantic Association and Ease of Learning",
+      "volume": "12",
+      "author": "Kanagachandra G",
+      "year": "2007",
+      "unstructured": "Kanagachandra G , Beatty P. Pilot Study: Designing Medical Alarm Sounds for Semantic Association and Ease of Learning. The Internet Journal of Anesthesiology. 2007; 12( 2).",
+      "journal-title": "The Internet Journal of Anesthesiology"
+    },
+    {
+      "key": "e_1_3_1_34_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.7205/MILMED.171.4.306"
+    },
+    {
+      "key": "e_1_3_1_35_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1121/1.2118327"
+    },
+    {
+      "key": "e_1_3_1_36_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1121/1.2822661"
+    },
+    {
+      "key": "e_1_3_1_37_2",
+      "unstructured": "West\n\t\t\t\t\t\t\tJ Busch-Vishniac\n\t\t\t\t\t\t\tI MacLeod\n\t\t\t\t\t\t\tM Kracht\n\t\t\t\t\t\t\tJ Orellano\n\t\t\t\t\t\t\tD Dunn\n\t\t\t\t\t\t\tJ.\n\t\t\t\t\tCharacterizing Noise in Hospitals. \n\t\t\t\t\tAbstract presented at Inter-Noise. Dec. 3\u20136 2006; Honolulu Hawaii."
+    },
+    {
+      "key": "e_1_3_1_38_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00004669-200510000-00023"
+    },
+    {
+      "key": "e_1_3_1_39_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1213/ane.0b013e31819bdfbb"
+    },
+    {
+      "key": "e_1_3_1_40_2",
+      "article-title": "Reducing False Alarms of Intensive Care Online- Monitoring Systems: An Evaluation of Two Signal Extraction Algorithms",
+      "author": "Borowski M",
+      "unstructured": "Borowski M , Siebig S , Wrede C , Imhoff M. Reducing False Alarms of Intensive Care Online- Monitoring Systems: An Evaluation of Two Signal Extraction Algorithms. Computational and Mathematical Methods in Medicine. doi:10.1155/2011/143480.",
+      "journal-title": "Computational and Mathematical Methods in Medicine"
+    },
+    {
+      "key": "e_1_3_1_41_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1007/s10877-008-9159-3"
+    },
+    {
+      "issue": "4",
+      "key": "e_1_3_1_42_2",
+      "first-page": "212",
+      "article-title": "Do We Need a Systematic Activation of Alarm Soundings for Blood Pressure Monitoring for the Safety of ICU Patients?",
+      "volume": "18",
+      "author": "Biot L",
+      "year": "2003",
+      "unstructured": "Biot L , Holzapfel L , Becq G , Melot C , Beconnier P. Do We Need a Systematic Activation of Alarm Soundings for Blood Pressure Monitoring for the Safety of ICU Patients? Journal of Critical Care Nurse. 2003; 18( 4): 212\u2013 16.",
+      "journal-title": "Journal of Critical Care Nurse"
+    },
+    {
+      "key": "e_1_3_1_43_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1111/j.1365-2648.2009.05048.x"
+    },
+    {
+      "key": "e_1_3_1_44_2",
+      "first-page": "29",
+      "article-title": "Physiologic Monitoring Alarm Load on Medical/Surgical Floors of a Community Hospital",
+      "author": "Gross B",
+      "year": "2011",
+      "unstructured": "Gross B , Dahl D , Nielsen L. Physiologic Monitoring Alarm Load on Medical/Surgical Floors of a Community Hospital. Horizons (BI&T suppl). Spring 2011; 29\u2013 36.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_45_2",
+      "unstructured": "King\n\t\t\t\t\t\t\tA Roderer\n\t\t\t\t\t\t\tA Arney\n\t\t\t\t\t\t\tD Chen\n\t\t\t\t\t\t\tS Forino-Mullen\n\t\t\t\t\t\t\tM Giannareas\n\t\t\t\t\t\t\tA et al. \n\t\t\t\t\tGSA: A Framework for Rapid Prototyping of Smart Alarm Systems. \n\t\t\t\t\tProceedings of the 1st ACM International Health Informatics Symposium. 2010."
+    },
+    {
+      "key": "e_1_3_1_46_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.artmed.2009.08.002"
+    },
+    {
+      "key": "e_1_3_1_47_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.4037/ajcc1997.6.4.318"
+    },
+    {
+      "issue": "1",
+      "key": "e_1_3_1_48_2",
+      "first-page": "16",
+      "article-title": "Arrhythmia Detection and Response in a Monitoring Technician and Pocket Paging System",
+      "volume": "13",
+      "author": "Zwieg F",
+      "year": "1998",
+      "unstructured": "Zwieg F , Karfonta T , Jeske L , Kollauf C , White S , Drazewski R , Leske J. Arrhythmia Detection and Response in a Monitoring Technician and Pocket Paging System. Progress in Cardiovascular Nursing. 1998; 13( 1): 16\u2013 22, 33.",
+      "journal-title": "Progress in Cardiovascular Nursing"
+    },
+    {
+      "key": "e_1_3_1_49_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1186/cc1021"
+    },
+    {
+      "issue": "1",
+      "key": "e_1_3_1_50_2",
+      "first-page": "28",
+      "article-title": "Alarm Fatigue: Standardizing Progressive Care Nurse's Utilization of Physiological Monitors and Decreasing Nuisance Alarms",
+      "volume": "19",
+      "author": "Graham K",
+      "year": "2010",
+      "unstructured": "Graham K , Cvach M. Alarm Fatigue: Standardizing Progressive Care Nurse's Utilization of Physiological Monitors and Decreasing Nuisance Alarms. American Journal of Critical Care Nursing. 2010; 19( 1): 28\u2013 35.",
+      "journal-title": "American Journal of Critical Care Nursing"
+    },
+    {
+      "key": "e_1_3_1_51_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1097/00002727-200510000-00003"
+    },
+    {
+      "key": "e_1_3_1_52_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1093/bja/ael114"
+    },
+    {
+      "key": "e_1_3_1_53_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.ccell.2006.01.002"
+    },
+    {
+      "issue": "1",
+      "key": "e_1_3_1_54_2",
+      "first-page": "5",
+      "article-title": "Alarm Notification for Physiologic Monitoring: Could You Benefit From a New Strategy?",
+      "volume": "36",
+      "year": "2007",
+      "unstructured": "Alarm Notification for Physiologic Monitoring: Could You Benefit From a New Strategy? Health Devices. 2007; 36( 1): 5\u2013 21.",
+      "journal-title": "Health Devices"
+    },
+    {
+      "key": "e_1_3_1_55_2",
+      "first-page": "72",
+      "article-title": "Beyond Sound: Using Systems Integration to Advance Alarm Functionality",
+      "author": "Dyell D.",
+      "year": "2011",
+      "unstructured": "Dyell D. Beyond Sound: Using Systems Integration to Advance Alarm Functionality. Horizons (BI&T suppl). Spring 2011; 72\u2013 75.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_56_2",
+      "article-title": "Reducing Alarm Hazards: Selection and Implementation of Alarm Notification Systems",
+      "author": "Gee T",
+      "year": "2011",
+      "unstructured": "Gee T , Moorman B. Reducing Alarm Hazards: Selection and Implementation of Alarm Notification Systems. Patient Safety & Quality Healthcare. March/April 2011. Available at: www.psqh.com/marchapril-2011/799-reducing-alarm-hazards.html. Accessed Oct. 10, 2011.",
+      "journal-title": "Patient Safety & Quality Healthcare"
+    },
+    {
+      "key": "e_1_3_1_57_2",
+      "first-page": "76",
+      "article-title": "Functional Basics of Third-Party Alarm Notification Systems",
+      "author": "Moorman B",
+      "year": "2011",
+      "unstructured": "Moorman B , Gee T. Functional Basics of Third-Party Alarm Notification Systems. Horizons (BI&T suppl). Spring 2011; 76\u2013 82.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_58_2",
+      "first-page": "67",
+      "article-title": "Complementing Medical Device Alarms with Animated Guidance",
+      "author": "Wiklund M",
+      "year": "2011",
+      "unstructured": "Wiklund M , Kendler J. Complementing Medical Device Alarms with Animated Guidance. Horizons (BI&T suppl). Spring 2011; 67\u2013 71.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_59_2",
+      "unstructured": "Cvach\n\t\t\t\t\t\t\tM Dang\n\t\t\t\t\t\t\tD Foster\n\t\t\t\t\t\t\tJ Irechukwu\n\t\t\t\t\t\t\tJ.\n\t\t\t\t\tClinical Alarms and the Impact on Patient Care. Initiatives in Safe Patient Care. \n\t\t\t\t\tSax Healthcare Communications. \n\t\t\t\t\t2009. \n\t\t\t\t\tAvailable at: www.initiatives-patientsafety.org/Initiatives2%20.pdf. Accessed July 14 2011."
+    },
+    {
+      "key": "e_1_3_1_60_2",
+      "author": "AAMI",
+      "year": "2011",
+      "unstructured": "AAMI. Clinical Alarms. 2011 Summit. October 4\u20135, 2011; Herndon, VA. Available at: www.aami.org/alarms/index.html.",
+      "journal-title": "Clinical Alarms. 2011 Summit"
+    },
+    {
+      "issue": "3",
+      "key": "e_1_3_1_61_2",
+      "first-page": "73",
+      "article-title": "Hazards of Alarm Overload: Keeping Excessive Physiologic Monitoring Alarms From Impeding Care",
+      "volume": "36",
+      "year": "2007",
+      "unstructured": "Hazards of Alarm Overload: Keeping Excessive Physiologic Monitoring Alarms From Impeding Care. Health Devices. 2007; 36( 3): 73\u2013 83.",
+      "journal-title": "Health Devices"
+    },
+    {
+      "key": "e_1_3_1_62_2",
+      "first-page": "8",
+      "article-title": "Alarm Safety: A Collaborative Effort",
+      "author": "Logan M.",
+      "year": "2011",
+      "unstructured": "Logan M. Alarm Safety: A Collaborative Effort. Horizons (BI&T suppl). Spring 2011; 8\u2013 15.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_63_2",
+      "first-page": "17",
+      "article-title": "Why Clinical Alarms Are a 'Top Ten' Hazard: How You Can Help Reduce the Risk",
+      "author": "Keller JP",
+      "year": "2011",
+      "unstructured": "Keller JP , Diefes R , Graham K , Meyers M , Pelczarski K. Why Clinical Alarms Are a 'Top Ten' Hazard: How You Can Help Reduce the Risk. Horizons (BI&T suppl). Spring 2011; 17\u2013 23.",
+      "journal-title": "Horizons (BI&T suppl)"
+    },
+    {
+      "key": "e_1_3_1_64_2",
+      "doi-asserted-by": "publisher",
+      "DOI": "10.1016/j.jbi.2008.03.003"
+    },
+    {
+      "key": "e_1_3_1_65_2",
+      "unstructured": "Cvach\n\t\t\t\t\t\t\tM.\n\t\t\t\t\tThe Johns Hopkins Hospital Quality Improvement Data. \n\t\t\t\t\tPresented at the Medical Device Alarm Summit. Oct 5 2011. Herndon VA."
+    }
+  ],
+  "container-title": [
+    "Biomedical Instrumentation &amp; Technology"
+  ],
+  "original-title": [],
+  "language": "en",
+  "link": [
+    {
+      "URL": "http://meridian.allenpress.com/bit/article-pdf/46/4/268/2313898/0899-8205-46_4_268.pdf",
+      "content-type": "application/pdf",
+      "content-version": "vor",
+      "intended-application": "syndication"
+    },
+    {
+      "URL": "http://meridian.allenpress.com/bit/article-pdf/46/4/268/2313898/0899-8205-46_4_268.pdf",
+      "content-type": "unspecified",
+      "content-version": "vor",
+      "intended-application": "similarity-checking"
+    }
+  ],
+  "deposited": {
+    "date-parts": [
+      [
+        2023,
+        2,
+        7
+      ]
+    ],
+    "date-time": "2023-02-07T16:26:54Z",
+    "timestamp": 1675787214000
+  },
+  "score": 1,
+  "resource": {
+    "primary": {
+      "URL": "http://array.aami.org/doi/10.2345/0899-8205-46.4.268"
+    }
+  },
+  "subtitle": [],
+  "short-title": [],
+  "issued": {
+    "date-parts": [
+      [
+        2012,
+        7
+      ]
+    ]
+  },
+  "references-count": 64,
+  "journal-issue": {
+    "issue": "4",
+    "published-print": {
+      "date-parts": [
+        [
+          2012,
+          7
+        ]
+      ]
+    }
+  },
+  "alternative-id": [
+    "10.2345/0899-8205-46.4.268"
+  ],
+  "URL": "https://doi.org/10.2345/0899-8205-46.4.268",
+  "relation": {},
+  "ISSN": [
+    "0899-8205",
+    "1943-5967"
+  ],
+  "issn-type": [
+    {
+      "value": "0899-8205",
+      "type": "print"
+    },
+    {
+      "value": "1943-5967",
+      "type": "electronic"
+    }
+  ],
+  "subject": [],
+  "published": {
+    "date-parts": [
+      [
+        2012,
+        7
+      ]
+    ]
+  }
+}

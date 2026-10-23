@@ -100,6 +100,41 @@ class ComponentCheck(BaseModel):
     details: str
 
 
+class MeasurementUpdate(BaseModel):
+    value: Optional[float] = None
+    unit: Optional[str] = None
+    timestamp: Optional[str] = None
+    source: Optional[Literal["manual", "import", "demo"]] = None
+
+    @field_validator("value")
+    @classmethod
+    def validate_value(cls, v):
+        if v is not None:
+            if math.isnan(v) or math.isinf(v):
+                raise ValueError("Measurement value must be a finite number.")
+            if v < 0:
+                raise ValueError("Measurement value cannot be negative.")
+        return v
+
+    @field_validator("timestamp")
+    @classmethod
+    def validate_timestamp(cls, ts_str):
+        if ts_str is not None:
+            try:
+                dt = datetime.fromisoformat(ts_str.replace("Z", "+00:00"))
+                if dt.tzinfo is None:
+                    dt = dt.replace(tzinfo=timezone.utc)
+                max_future = datetime.now(timezone.utc) + timedelta(minutes=2)
+                if dt > max_future:
+                    raise ValueError("Measurement timestamp cannot be in the future.")
+                return dt.isoformat()
+            except ValueError as e:
+                if "future" in str(e):
+                    raise
+                raise ValueError(f"Invalid ISO timestamp format: {ts_str}")
+        return ts_str
+
+
 class MeasurementResponse(BaseModel):
     id: int
     user_id: int
@@ -567,6 +602,94 @@ def get_measurement_by_id(
             exclude_from_inference=exclude_inf,
             limitation_note=limit_note,
         )
+
+
+@router.put("/{measurement_id}", response_model=MeasurementResponse)
+@router.patch("/{measurement_id}", response_model=MeasurementResponse)
+def update_measurement(
+    measurement_id: int,
+    payload: MeasurementUpdate,
+    current_user: dict = Depends(get_current_user),
+):
+    """
+    FR-03: Permits authorized users to correct/edit their own measurement entry.
+    Enforces strict per-user isolation: returns 404 if record doesn't belong to current user.
+    Re-assesses trust score and data quality flags upon modification.
+    """
+    user_id = current_user["id"]
+    with get_db_connection() as conn:
+        row = conn.execute(
+            "SELECT * FROM measurements WHERE id = ? AND user_id = ?",
+            (measurement_id, user_id),
+        ).fetchone()
+
+        if not row:
+            raise HTTPException(
+                status_code=status.HTTP_404_NOT_FOUND,
+                detail=f"Measurement {measurement_id} not found.",
+            )
+
+        new_value = payload.value if payload.value is not None else float(row["value"])
+        new_unit = payload.unit if payload.unit is not None else row["unit"]
+        new_timestamp = payload.timestamp if payload.timestamp is not None else row["timestamp"]
+        new_source = payload.source if payload.source is not None else row["source"]
+        m_type = row["type"]
+
+        # Validate unit consistency if updated
+        type_info = PHYSIOLOGICAL_LIMITS.get(m_type)
+        if type_info and new_unit not in type_info["valid_units"]:
+            raise HTTPException(
+                status_code=status.HTTP_422_UNPROCESSABLE_ENTITY,
+                detail=f"Invalid unit '{new_unit}' for type '{m_type}'. Expected: {type_info['valid_units']}",
+            )
+
+        # Re-assess data quality & component checks
+        trust_score, flags, checks = assess_measurement_quality(
+            user_id=user_id,
+            m_type=m_type,
+            value=new_value,
+            unit=new_unit,
+            ts_iso=new_timestamp,
+            conn=conn,
+        )
+
+        conn.execute(
+            """
+            UPDATE measurements
+            SET value = ?, unit = ?, timestamp = ?, source = ?,
+                trust_score = ?, quality_flags = ?, component_checks = ?
+            WHERE id = ? AND user_id = ?
+            """,
+            (
+                new_value,
+                new_unit,
+                new_timestamp,
+                new_source,
+                trust_score,
+                json.dumps(flags),
+                json.dumps(checks),
+                measurement_id,
+                user_id,
+            ),
+        )
+
+    exclude_inf, limit_note = determine_inference_exclusion(trust_score, flags)
+
+    return MeasurementResponse(
+        id=measurement_id,
+        user_id=user_id,
+        type=m_type,
+        value=new_value,
+        unit=new_unit,
+        timestamp=new_timestamp,
+        source=new_source,
+        trust_score=trust_score,
+        quality_flags=flags,
+        component_checks=checks,
+        created_at=row["created_at"],
+        exclude_from_inference=exclude_inf,
+        limitation_note=limit_note,
+    )
 
 
 @router.delete("/{measurement_id}", status_code=status.HTTP_200_OK)
