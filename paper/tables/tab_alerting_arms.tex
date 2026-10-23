@@ -3,9 +3,9 @@
 \label{tab:alerting_arms}
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.14}
-\setlength{\tabcolsep}{3.0pt}
-\begin{tabular}{|l|p{4.15cm}|c|}
+\renewcommand{\arraystretch}{1.0}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{|p{2.95cm}|p{4.1cm}|c|}
 \hline
 \textbf{Alerting Arm} & \textbf{Decision Rule \& Tuning Grid} & \textbf{Hold-off $R$} \\
 \hline
@@ -25,7 +25,7 @@
 (Motion Ablated) & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
 \hline
 \textbf{Arm 4: Conformal} & Arm 2 $\land\; \neg \text{Abstain}(t)$ & 60\,s \\
-(added post hoc) & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
+\scriptsize (pre-specified in Amend.~3, impl.~after other arms' results seen) & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
 \hline
 \end{tabular}
 \end{table}

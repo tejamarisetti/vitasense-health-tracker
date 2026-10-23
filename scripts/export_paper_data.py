@@ -69,7 +69,8 @@ def generate_figures():
         "Arm 3a (+Kinematic)": {"color": "#2ca02c", "marker": "^", "label": "Arm 3a: +Kinematic"},
         "Arm 3b (+Trust Score)": {"color": "#9467bd", "marker": "D", "label": "Arm 3b: +Trust"},
         "Arm 3b-noMotion": {"color": "#ff7f0e", "marker": "v", "label": "Arm 3b: noMotion"},
-        "Arm 4 (added post hoc)": {"color": "#0284c7", "marker": "P", "label": "Arm 4: Post hoc"},
+        "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)": {"color": "#0284c7", "marker": "P", "label": "Arm 4: Pre-spec. (Amend. 3, impl. after other arms)"},
+        "Arm 4 (added post hoc)": {"color": "#0284c7", "marker": "P", "label": "Arm 4: Pre-spec. (Amend. 3, impl. after other arms)"},
     }
 
     cond_alphas = {
@@ -372,7 +373,7 @@ Arm 3b & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P \in \
 \hline
 Arm 3b-noMot & \raggedright $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$; $P \in \{10, 20, 30\}$\,s & 60\,s \\
 \hline
-Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in \{0.5, 1.0\}$; $\theta_{\text{unc}} \in \{0.20, 0.30\}$; $P \in \{10, 20, 30\}$\,s & 60\,s \\
+Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\theta_{\text{unc}} \in \{0.20, 0.30\}$; $P \in \{10, 20, 30\}$\,s & 60\,s \\
 \hline
 \end{tabular}
 \end{table}
@@ -383,7 +384,8 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
     # 4. Combined Metrics Table
     df_comb = pd.read_csv(OUT_DIR / "combined_metrics.csv")
     df_comb["Arm"] = df_comb["Arm"].replace({
-        "Arm 4 (Conformal Abstention)": "Arm 4 (added post hoc)",
+        "Arm 4 (Conformal Abstention)": "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)",
+        "Arm 4 (added post hoc)": "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)",
     })
     cond_order = [
         "Condition 0 (No-Fault)",
@@ -397,7 +399,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
         "Arm 3a (+Kinematic)",
         "Arm 3b (+Trust Score)",
         "Arm 3b-noMotion",
-        "Arm 4 (added post hoc)",
+        "Arm 4 (pre-specified in Amendment 3, implemented after the other arms' results were seen)",
     ]
     df_comb["_cond_k"] = df_comb["Condition"].map(lambda c: cond_order.index(c) if c in cond_order else 99)
     df_comb["_arm_k"] = df_comb["Arm"].map(lambda a: arm_order.index(a) if a in arm_order else 99)
@@ -410,7 +412,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
         r"\label{tab:combined_metrics}",
         r"\centering",
         r"\scriptsize",
-        r"\begin{tabular}{|l|l|c|c|c|c|c|c|}",
+        r"\begin{tabular}{|l|p{4.7cm}|c|c|c|c|c|c|}",
         r"\hline",
         r"\textbf{Condition} & \textbf{Alerting Arm} & \textbf{Recall (\%)} & \textbf{FA/hr} & \textbf{True Alerts} & \textbf{False Alerts} & \textbf{Precision (\%)} & \textbf{$F_1$ Score} \\",
         r"\hline",
@@ -591,9 +593,9 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
 \label{tab:alerting_arms}
 \centering
 \footnotesize
-\renewcommand{\arraystretch}{1.14}
-\setlength{\tabcolsep}{3.0pt}
-\begin{tabular}{|l|p{4.15cm}|c|}
+\renewcommand{\arraystretch}{1.0}
+\setlength{\tabcolsep}{2.0pt}
+\begin{tabular}{|p{2.95cm}|p{4.1cm}|c|}
 \hline
 \textbf{Alerting Arm} & \textbf{Decision Rule \& Tuning Grid} & \textbf{Hold-off $R$} \\
 \hline
@@ -613,7 +615,7 @@ Arm 4 (post hoc) & \raggedright $\alpha \in \{0.05, 0.10, 0.15\}$; $\lambda \in 
 (Motion Ablated) & $\theta_{\text{trust}} \in \{0.60, 0.70, 0.80\}$, $P \in \{10, 20, 30\}$\,s & \\
 \hline
 \textbf{Arm 4: Conformal} & Arm 2 $\land\; \neg \text{Abstain}(t)$ & 60\,s \\
-(added post hoc) & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
+\scriptsize (pre-specified in Amend.~3, impl.~after other arms' results seen) & $\alpha \in \{0.05, 0.10\}$, $\lambda \in \{0.5, 1.0\}$, $\theta_{\text{unc}} \in \{0.2, 0.3\}$ & \\
 \hline
 \end{tabular}
 \end{table}
@@ -643,7 +645,7 @@ Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids fo
 \hline
 Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
 \hline
-Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
+Arm 4 Implementation [Draft Amend.~5] & 2026-10-22: Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
 \hline
 \end{tabular}
 \end{table}
@@ -673,7 +675,7 @@ Noise Coupling & Estimator tracking errors and motion artifacts interact directl
 \hline
 Grid Boundaries & Tuning selected boundaries ($\tau_{\text{pop}} = 100$, $k = 2.0$, $P = 10$\,s / $30$\,s), reflecting trade-offs. \\
 \hline
-Arm 4 Status & Arm 4 inductive conformal abstention evaluated post hoc with $\alpha = 0.15$ (unratified). Academic benchmark only. \\
+Arm 4 Status & Arm 4 pre-specified in Amendment 3, implemented after other arms' results seen ($\alpha \in \{0.05, 0.10\}$, selected $\alpha = 0.10$). Academic benchmark only. \\
 \hline
 \end{tabular}
 \end{table}
@@ -716,7 +718,7 @@ F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D accelerati
 \caption{Methodological Limitations \& Protocol Amendments (from git log)}
 \label{tab:limitations_and_amendments}
 \centering
-\renewcommand{\arraystretch}{0.96}
+\renewcommand{\arraystretch}{0.92}
 \resizebox{\columnwidth}{!}{%
 \begin{tabular}{|l|p{5.4cm}|}
 \hline
@@ -746,7 +748,7 @@ Grid Widening [\texttt{a9ce657}] & 2026-10-19: Widened parameter search grids fo
 \hline
 Fallback Selection [\texttt{f92ca8d}] & 2026-10-19: Arm 2 recall ceiling ($\approx 80.4\%$) triggered max-recall fallback rule in 100\% of folds. \\
 \hline
-Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abstention evaluated with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
+Arm 4 Implementation [Draft Amend.~5] & 2026-10-22: Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen with $\alpha \in \{0.05, 0.10\}$ (selected $\alpha = 0.10$ across all 15 folds). \\
 \hline
 \end{tabular}%
 }
@@ -765,9 +767,9 @@ Arm 4 Post Hoc [Draft Amend.~5] & 2026-10-22: Post hoc inductive conformal abste
 \caption{Paired Statistical Comparison \& Subgroup Stratification}
 \label{tab:statistical_and_strata}
 \centering
-\footnotesize
-\renewcommand{\arraystretch}{1.0}
-\setlength{\tabcolsep}{3.5pt}
+\scriptsize
+\renewcommand{\arraystretch}{0.96}
+\setlength{\tabcolsep}{3.2pt}
 \begin{tabular}{|l|c|c|c|c|}
 \hline
 \multicolumn{5}{|c|}{\textbf{Part A: Paired Difference ($\Delta = \text{Arm 3b} - \text{Arm 3a}$)}} \\
