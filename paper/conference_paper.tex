@@ -73,7 +73,7 @@ To mitigate spurious alarms, modern digital health architectures deploy signal q
 
 This paper reports a pre-specified fault-injection benchmark for wearable heart-rate alerting. Our contributions are:
 \begin{enumerate}
-    \item \textbf{Open Benchmarking Framework:} A reproducible pipeline formalizing seven fault types plus a clean condition (clean, gaps, stale values, duplicates, spikes, drift, scaling errors, and raw optical noise) evaluated across $35.94$ total recording hours ($31.27$ non-event exposure hours) of multi-activity ambulatory recordings.
+    \item \textbf{Open Benchmarking Framework:} A reproducible pipeline formalizing seven fault types plus a clean condition (gaps, stale values, duplicates, spikes, drift, scaling errors, and raw optical noise) evaluated across $35.94$ total recording hours ($31.27$ non-event exposure hours) of multi-activity ambulatory recordings.
     \item \textbf{Causal Leave-One-Subject-Out (LOSO) Evaluation:} Six distinct alerting arms evaluated under strict data quarantine, separating training folds from held-out evaluation subjects.
     \item \textbf{Rigorous Negative Finding:} Empirical evaluation of pre-specified estimation hypothesis $H_1$, demonstrating that kinematic motion gating delivers 65.9\%--74.2\% false alert reduction relative to the ungated personal baseline, whereas multi-attribute software trust scoring provides no statistically detectable incremental benefit ($p \ge 0.28$).
 \end{enumerate}
@@ -235,7 +235,7 @@ The experimental evaluation harness and replay platform were implemented as a mo
 We benchmark six causal alerting arms without future peeking: Arm~1 (Fixed Population), Arm~2 (Personal Baseline), Arm~3a (+Kinematic Gating), Arm~3b (+Trust Score), Arm~3b-noMotion (Trust Ablation), and Arm~4 (Conformal Abstention). Decision rules, thresholds, and tuning grids are in Table~\ref{tab:alerting_arms}.
 
 \textbf{Causal Baseline and Shrinkage (Arms 2--4):}
-The personal alert threshold $\tau_i(t)$ is dynamically tracked over causal stillness windows ($\text{ENMO}_{10\text{s}} \le \theta_{\text{rest}}$) as:
+The personal alert threshold $\tau_i(t)$ is dynamically tracked over causal stillness windows ($\text{ENMO}_{10\text{s}} \le \theta_{\text{rest}}$, default $\theta_{\text{rest}} = 0.05$\,g) as:
 \begin{equation}
 \tau_i(t) = \max\left(\tau_{\text{floor}},\, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t)\right)
 \label{eq:causal_baseline}
@@ -246,7 +246,7 @@ w(t) &= \frac{n(t)\Delta t / 3600}{n(t)\Delta t / 3600 + \kappa} \label{eq:shrin
 \hat{\mu}_i(t) &= w(t)\bar{x}_i(t) + (1 - w(t))\mu_{\text{pop}} \label{eq:shrinkage_mu} \\
 \hat{\sigma}_i(t) &= w(t)s_i(t) + (1 - w(t))\sigma_{\text{pop}} \label{eq:shrinkage_sigma}
 \end{align}
-with window count $n(t)$, step size $\Delta t = 2$\,s, and half-life $\kappa \in \{0.5, 1, 2\}$\,h.
+with window count $n(t)$, step size $\Delta t = 2$\,s, and shrinkage time constant $\kappa \in \{0.5, 1, 2\}$\,h.
 
 \textbf{Multi-Attribute Signal Trust (Arms 3b \& 4):}
 Following \texttt{vitasense.quality.trust\_score}, composite quality $S_{\text{trust}}(t) \in [0, 1]$ is evaluated as:
@@ -335,13 +335,13 @@ In Protocol Amendment~3, the primary research question was formulated as an esti
 \input{tables/tab_combined_metrics.tex}
 \textbf{Kinematic motion gating drives alert accuracy:} Kinematic stillness gating accounted for the largest share of false-alert suppression: relative to ungated Arm 2, Arm 3a reduced false alerts per hour by 74.2\% in clean data ($1.47$ vs $5.69$\,FA/h) and by 67.9\% in Regime B ($2.30$ vs $7.16$\,FA/h) (Table~\ref{tab:combined_metrics}). Furthermore, the no-motion trust ablation (Arm 3b-noMotion) alone reduced clean false alerts by about half ($5.69$ to $2.91$\,FA/h).
 
-\textbf{Recall degradation under optical corruption (F7):} Under intense motion-coupled optical noise, Arm 3b recall degraded to 58.0\% compared to 64.3\% in Arm 3a; two subjects drive the F7 recall difference (exploratory). In fault-disaggregated analysis of Regime B, stale sensor values (F2) in Arm~1 and scale errors (F6) in Arm~2 produced the highest false alert rates (up to $20.2$ and $36.6$\,FA/h, respectively); while kinematic gating suppressed stale-freeze false alerts, F2 episodes represent small exposure slices ($<1.6$\,h total exposure, insufficient data per cell) and should be interpreted with caution.
+\textbf{Recall degradation under optical corruption (F7):} Under intense motion-coupled optical noise, Arm 3b recall degraded to 58.0\% compared to 64.3\% in Arm 3a; two subjects drive the F7 recall difference (exploratory).
 
 \subsection{Edge-of-Grid Analysis and Fallback Rule Invocation}
 Hyperparameter tuning consistently selected parameter boundary values. Most notably, \textbf{Arm 2 never attained the $\ge 85\%$ recall target on any training fold in any condition} (maximum training recall achieved was $\approx 80.4\%$). Consequently, the fallback selection rule (maximizing training recall) was invoked in 100\% (15/15) of folds for Arm 2 across all regimes, selecting $k = 2.0$ and $P = 10$\,s. For Arm 1, tuning selected $\tau_{\text{pop}} = 100$\,bpm and $P = 30$\,s across all folds.
 
 \subsection{Arm 4 Conformal Abstention Evaluation (Pre-specified in Amendment 3, Implemented After Other Arms' Results Were Seen)}
-To benchmark distribution-free selective alerting, Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen (Draft Amendment~5). Inductive conformal calibration was performed on resting training windows with miscoverage parameter $\alpha$ tuned over $\{0.05, 0.10\}$ ($\alpha = 0.10$, $\lambda = 0.5$, $\theta_{\text{unc}} = 0.30$, and $P = 10$\,s selected across all 15 LOSO training folds). Across all evaluated regimes, Arm 4 achieved the lowest clean false-alert frequency observed in the benchmark: $0.70$\,FA/h in clean data (a 52.4\% reduction over Arm 3a and an 87.7\% reduction over Arm 2), $0.67$\,FA/h in Regime A, and $0.35$\,FA/h under F7 optical noise (Table~\ref{tab:combined_metrics}). Precision reached 83.7\% in clean telemetry and 88.2\% under F7 noise ($F_1 = 0.776$ clean, $0.673$ F7) on the alert-count basis (Table~\ref{tab:combined_metrics}); Arm~4's clean $F_1$ differs from Arm~3a (0.772) by 0.004 with no confidence interval and is not claimed as an improvement. However, conservative abstention came at the expense of sensitivity: episode recall dropped from 80.4\% to 72.3\% (81/112 episodes) in clean data, and to 54.5\% (61/112 episodes) in F7 noise, demonstrating the fundamental trade-off between strict false-alert suppression and event sensitivity under non-stationary ambulatory noise.
+To benchmark distribution-free selective alerting, Arm 4 was pre-specified in Amendment 3, implemented after the other arms' results were seen. Inductive conformal calibration was performed on resting training windows with miscoverage parameter $\alpha$ tuned over $\{0.05, 0.10\}$ ($\alpha = 0.10$, $\lambda = 0.5$, $\theta_{\text{unc}} = 0.30$, and $P = 10$\,s selected across all 15 LOSO training folds). Across all evaluated regimes, Arm 4 achieved the lowest clean false-alert frequency observed in the benchmark: $0.70$\,FA/h in clean data (a 52.4\% reduction over Arm 3a and an 87.7\% reduction over Arm 2), $0.67$\,FA/h in Regime A, and $0.35$\,FA/h under F7 optical noise (Table~\ref{tab:combined_metrics}). Precision reached 83.7\% in clean telemetry and 88.2\% under F7 noise ($F_1 = 0.776$ clean, $0.673$ F7) on the alert-count basis (Table~\ref{tab:combined_metrics}); Arm~4's clean $F_1$ differs from Arm~3a (0.772) by 0.004 with no confidence interval and is not claimed as an improvement. However, conservative abstention came at the expense of sensitivity: episode recall dropped from 80.4\% to 72.3\% (81/112 episodes) in clean data, and to 54.5\% (61/112 episodes) in F7 noise, demonstrating the fundamental trade-off between strict false-alert suppression and event sensitivity under non-stationary ambulatory noise.
 
 \section{Limitations}
 \begin{itemize}
@@ -378,7 +378,7 @@ M.~Elgendi, ``Optimal signal quality index for photoplethysmogram signals,'' \em
 P.~H.~Charlton \emph{et al.}, ``The 2023 wearable photoplethysmography roadmap,'' \emph{Physiol. Meas.}, vol.~44, no.~11, p.~111001, 2023, DOI: 10.1088/1361-6579/acead2.
 
 \bibitem{ref_vazquez_conformal}
-J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{J. Healthc. Inform. Res.}, 2022, DOI: 10.1007/s41666-021-00113-8.
+J.~Vazquez and J.~C.~Facelli, ``Conformal prediction in clinical medical sciences,'' \emph{J. Healthc. Inform. Res.}, vol.~6, no.~3, pp.~241--252, 2022, DOI: 10.1007/s41666-021-00113-8.
 
 \bibitem{ref_uci_dalia}
 ``PPG-DaLiA,'' UCI Machine Learning Repository, DOI: 10.24432/C53890.
@@ -396,7 +396,7 @@ Z.~Zhang, Z.~Pi, and B.~Liu, ``TROIKA: A general framework for heart rate monito
 W.~Karlen, K.~Kobayashi, J.~M.~Ansermino, and G.~A.~Dumont, ``Photoplethysmogram signal quality estimation using repeated Gaussian filters and cross-correlation,'' \emph{Physiol. Meas.}, vol.~33, no.~10, pp.~1617--1629, 2012, DOI: 10.1088/0967-3334/33/10/1617.
 
 \bibitem{ref_orphanidou_sqi}
-C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, 2014, DOI: 10.1109/JBHI.2014.2338351.
+C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, vol.~19, no.~3, pp.~832--838, 2015, DOI: 10.1109/JBHI.2014.2338351.
 
 \bibitem{ref_li_clifford_fusion}
 Q.~Li and G.~D.~Clifford, ``Signal quality and data fusion for false alarm reduction in the intensive care unit,'' \emph{J. Electrocardiol.}, vol.~45, no.~6, pp.~596--603, 2012, DOI: 10.1016/j.jelectrocard.2012.07.015.

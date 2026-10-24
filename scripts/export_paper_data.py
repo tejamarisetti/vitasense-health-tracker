@@ -141,8 +141,8 @@ def generate_figures():
 
     cond_labels_short = [
         "F7: Optical (+5dB)",
-        "Regime B (~25-30%)",
-        "Regime A (~10%)",
+        r"Regime B ($\approx$25--30%)",
+        r"Regime A ($\approx$10%)",
         "Condition 0: Clean",
     ]
     cond_keys = [
@@ -435,8 +435,14 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     ]
     cur_cond = ""
     counts_rows = []
+    cond_labels_comb = {
+        "Condition 0 (No-Fault)": "Condition 0 (No-Fault)",
+        "Regime A (Low Duty ~10%)": r"Regime A (Low Duty $\approx 10\%$)",
+        "Regime B (Nominal ~25-30%)": r"Regime B (Nominal $\approx 25\text{--}30\%$)",
+        "F7 (High-Motion BVP Noise)": "F7 (High-Motion BVP Noise)",
+    }
     for _, r in df_comb.iterrows():
-        raw_cond = str(r["Condition"]).replace("%", r"\%")
+        raw_cond = cond_labels_comb.get(r["Condition"], str(r["Condition"]).replace("%", r"\%"))
         cond_str = raw_cond if r["Condition"] != cur_cond else ""
         if r["Condition"] != cur_cond and cur_cond != "":
             lines.append(r"\hline")
@@ -483,8 +489,8 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     cur_cond = ""
     cond_short = {
         "Condition 0 (No-Fault)": "Cond 0 (Clean)",
-        "Regime A (Low Duty ~10%)": r"Reg A (~10\%)",
-        "Regime B (Nominal ~25-30%)": r"Reg B (~30\%)",
+        "Regime A (Low Duty ~10%)": r"Reg A ($\approx$10\%)",
+        "Regime B (Nominal ~25-30%)": r"Reg B ($\approx$30\%)",
         "F7 (High-Motion BVP Noise)": "F7 (Optical)",
     }
     strata_short = {
@@ -530,8 +536,8 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     ]
     cond_short_map = {
         "Condition 0 (No-Fault)": "Condition 0 (Clean)",
-        "Regime A (Low Duty ~10%)": r"Regime A (~10\%)",
-        "Regime B (Nominal ~25-30%)": r"Regime B (~25--30\%)",
+        "Regime A (Low Duty ~10%)": r"Regime A ($\approx$10\%)",
+        "Regime B (Nominal ~25-30%)": r"Regime B ($\approx$25--30\%)",
         "F7 (High-Motion BVP Noise)": "F7 (Optical Noise)",
     }
     for _, r in df_paired.iterrows():
@@ -764,7 +770,7 @@ F7 Noise & Additive Gaussian noise continuously modulated by wrist 3D accelerati
 \hline
 \texttt{f92ca8d} & 2026-10-19 & Fallback rule invoked for Arm 2 in 100\% of folds. \\
 \hline
-(no commit) & 2026-10-22 & draft Amendment 5, no commit: Arm 4 (conformal) pre-specified Amend. 3, impl. after other arms ($\alpha = 0.10$). \\
+(no commit) & 2026-10-22 & Draft Amendment 5 (unratified, not committed): Arm 4 pre-specified in Amendment 3, implemented after other arms' results ($\alpha = 0.10$). \\
 \hline
 \end{tabular}
 \end{table}
