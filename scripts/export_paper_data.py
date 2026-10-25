@@ -61,7 +61,7 @@ def generate_figures():
     # Fig 1: Recall vs FA/hr per Arm and Condition
     # -------------------------------------------------------------------------
     df_comb = pd.read_csv(OUT_DIR / "combined_metrics.csv")
-    fig, ax = plt.subplots(figsize=(4.3, 2.15))
+    fig, ax = plt.subplots(figsize=(3.45, 1.95))
 
     arm_styles = {
         "Arm 1 (Fixed)": {"color": "#1f77b4", "marker": "o", "label": "Arm 1: Fixed Pop"},
@@ -113,7 +113,7 @@ def generate_figures():
                 alpha=cond_alphas.get(row["Condition"], 0.8),
                 edgecolors="black" if row["Condition"] == "Condition 0 (No-Fault)" else "none",
                 linewidth=0.8,
-                s=58,
+                s=54,
                 zorder=3,
             )
 
@@ -121,12 +121,13 @@ def generate_figures():
         plt.Line2D([0], [0], color=s["color"], marker=s["marker"], linestyle="--", label=s["label"])
         for s in arm_styles.values()
     ]
-    ax.legend(handles=custom_handles, loc="lower center", bbox_to_anchor=(0.5, 1.02), ncol=3, framealpha=0.92, frameon=True, fontsize=7.2)
+    ax.legend(handles=custom_handles, loc="lower right", ncol=2, framealpha=0.92, frameon=True, fontsize=7.2, labelspacing=0.35, columnspacing=0.6)
 
     ax.set_xlabel("Clean False Alerts per Hour [FA/h]", fontweight="bold", fontsize=9.0)
     ax.set_ylabel("Event Recall [%]", fontweight="bold", fontsize=9.0)
     ax.set_xlim(0.0, 8.0)
     ax.set_ylim(50, 100)
+    ax.tick_params(labelsize=8.0)
     ax.grid(True, linestyle=":", alpha=0.6)
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_recall_vs_fahr.pdf", dpi=300, bbox_inches="tight")
@@ -137,12 +138,12 @@ def generate_figures():
     # Fig 2: Forest Plot of Paired Differences (3b minus 3a) with 95% CIs
     # -------------------------------------------------------------------------
     df_paired = pd.read_csv(OUT_DIR / "paired_3b_vs_3a.csv")
-    fig, ax = plt.subplots(figsize=(4.3, 2.15))
+    fig, ax = plt.subplots(figsize=(3.45, 1.95))
 
     cond_labels_short = [
         "F7: Optical (+5dB)",
-        r"Regime B ($\approx$25--30%)",
-        r"Regime A ($\approx$10%)",
+        "Regime B (\u224825\u201330%)",
+        "Regime A (\u224810%)",
         "Condition 0: Clean",
     ]
     cond_keys = [
@@ -178,28 +179,29 @@ def generate_figures():
         color="#1f77b4",
         ecolor="#222222",
         elinewidth=1.8,
-        capsize=4.5,
-        capthick=1.6,
-        markersize=7.5,
+        capsize=4.0,
+        capthick=1.5,
+        markersize=6.5,
         zorder=3,
     )
 
     for i, (m, p) in enumerate(zip(means, p_vals)):
         ax.text(
-            4.3,
+            2.3,
             i,
             f"Diff: {m:+.2f} (p={fmt_p(p)})",
             va="center",
-            ha="right",
-            fontsize=7.5,
+            ha="left",
+            fontsize=7.2,
             fontweight="bold",
             color="#111111",
         )
 
     ax.set_yticks(y_pos)
-    ax.set_yticklabels(cond_labels_short, fontweight="medium")
-    ax.set_xlabel(r"Mean Diff in FA/hr ($\Delta = \mathrm{3b} - \mathrm{3a}$) [FA/h]", fontweight="bold", fontsize=9.5)
-    ax.set_xlim(-2.2, 4.6)
+    ax.set_yticklabels(cond_labels_short, fontweight="medium", fontsize=8.0)
+    ax.tick_params(axis="x", labelsize=8.0)
+    ax.set_xlabel(r"Mean Diff in FA/hr ($\Delta = \mathrm{3b} - \mathrm{3a}$) [FA/h]", fontweight="bold", fontsize=9.0)
+    ax.set_xlim(-2.2, 4.8)
     ax.grid(True, linestyle=":", alpha=0.55, axis="x")
     fig.tight_layout()
     fig.savefig(FIG_DIR / "fig_forest_plot_3b_vs_3a.pdf", dpi=300, bbox_inches="tight")
@@ -490,7 +492,7 @@ Arm 4 & \raggedright $\alpha \in \{0.05, 0.10\}$; $\lambda \in \{0.5, 1.0\}$; $\
     cond_short = {
         "Condition 0 (No-Fault)": "Cond 0 (Clean)",
         "Regime A (Low Duty ~10%)": r"Reg A ($\approx$10\%)",
-        "Regime B (Nominal ~25-30%)": r"Reg B ($\approx$30\%)",
+        "Regime B (Nominal ~25-30%)": r"Reg B ($\approx$25--30\%)",
         "F7 (High-Motion BVP Noise)": "F7 (Optical)",
     }
     strata_short = {
@@ -874,6 +876,9 @@ def generate_provenance_csv():
     print("=" * 80)
 
     rows = [
+        # Introduction Quote
+        {"Claim_Or_Number": "Alarm fatigue quote (<15 words)", "Value": "Monitor Alarm Fatigue: An Integrative Review", "Location": "Sec. I", "Generating_Script": "paper/verified_sources/ref_cvach_alarm_fatigue.txt", "Output_File": "paper/verified_sources/ref_cvach_alarm_fatigue.txt", "Status": "VERIFIED"},
+
         # Dataset
         {"Claim_Or_Number": "Subject Count N=15", "Value": "15", "Location": "Sec. III, Tab. I", "Generating_Script": "scripts/prepare_benchmark_ground_truth.py", "Output_File": "data/processed/benchmark_ground_truth.pkl", "Status": "VERIFIED"},
         {"Claim_Or_Number": "Total Recording Time", "Value": "35.94 hours", "Location": "Sec. III, Tab. I", "Generating_Script": "scripts/export_paper_data.py", "Output_File": "results/paper/fault_disaggregated.csv", "Status": "VERIFIED"},

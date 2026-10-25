@@ -67,7 +67,7 @@ wearable sensors, photoplethysmography, heart-rate alerting, data quality, fault
 \end{IEEEkeywords}
 
 \section{Introduction}
-Ambulatory continuous monitoring with consumer and medical-grade wearables offers substantial potential for early arrhythmia detection. However, wrist photoplethysmography (PPG) is acutely sensitive to motion artifacts, optical decoupling, transmission dropouts, and flatline sensor freezes. When raw optical or derived telemetry signals degrade, alerting algorithms frequently emit spurious notifications. In wearable monitoring and clinical telemetry alike, frequent false alerts risk causing user annoyance and alert fatigue, which can compromise long-term adherence.
+Ambulatory continuous monitoring with consumer and medical-grade wearables offers substantial potential for early arrhythmia detection. However, wrist photoplethysmography (PPG) is acutely sensitive to motion artifacts, optical decoupling, transmission dropouts, and flatline sensor freezes. When raw optical or derived telemetry signals degrade, alerting algorithms frequently emit spurious notifications. In wearable monitoring and clinical telemetry alike, frequent false alerts contribute to monitor alarm fatigue \cite{ref_cvach_alarm_fatigue}.
 
 To mitigate spurious alarms, modern digital health architectures deploy signal quality indices (SQIs) and multi-component trust heuristics that penalize missing samples, flag frozen values, and bound rate-of-change dynamics. Despite their widespread adoption, the isolated incremental utility of multi-component software trust scores over straightforward kinematic stillness gating (e.g., Euclidean Norm Minus One, ENMO) has rarely been benchmarked under controlled cross-validation. The core protocol was version-tagged before the alerting experiments; later amendments are listed in Table~\ref{tab:amendments}; no external public registry was used.
 
@@ -235,7 +235,7 @@ The experimental evaluation harness and replay platform were implemented as a mo
 We benchmark six causal alerting arms without future peeking: Arm~1 (Fixed Population), Arm~2 (Personal Baseline), Arm~3a (+Kinematic Gating), Arm~3b (+Trust Score), Arm~3b-noMotion (Trust Ablation), and Arm~4 (Conformal Abstention). Decision rules, thresholds, and tuning grids are in Table~\ref{tab:alerting_arms}.
 
 \textbf{Causal Baseline and Shrinkage (Arms 2--4):}
-The personal alert threshold $\tau_i(t)$ is dynamically tracked over causal stillness windows ($\text{ENMO}_{10\text{s}} \le \theta_{\text{rest}}$, default $\theta_{\text{rest}} = 0.05$\,g) as:
+The personal alert threshold $\tau_i(t)$ is dynamically tracked over causal stillness windows ($\text{ENMO}_{10\text{s}} \le \theta_{\text{cal}}$, fixed at $\theta_{\text{cal}} = 0.05$\,g) as:
 \begin{equation}
 \tau_i(t) = \max\left(\tau_{\text{floor}},\, \hat{\mu}_i(t) + k \cdot \hat{\sigma}_i(t)\right)
 \label{eq:causal_baseline}
@@ -295,25 +295,19 @@ To ensure rigorous cross-arm comparability, all arms feed instantaneous binary t
 \end{algorithm}
 \begin{figure*}[t]
 \centering
-\begin{minipage}{0.32\textwidth}
+\begin{minipage}{0.485\textwidth}
   \centering
   \includegraphics[width=\linewidth]{figures/fig_recall_vs_fahr.pdf}\par
   \smallskip
   {\footnotesize (a) Event Recall vs. Clean False Alerts/hr\par}
 \end{minipage}\hfill
-\begin{minipage}{0.32\textwidth}
+\begin{minipage}{0.485\textwidth}
   \centering
   \includegraphics[width=\linewidth]{figures/fig_forest_plot_3b_vs_3a.pdf}\par
   \smallskip
-  {\footnotesize (b) Paired Differences ($\Delta = \text{3b} - \text{3a}$)\par}
-\end{minipage}\hfill
-\begin{minipage}{0.32\textwidth}
-  \centering
-  \includegraphics[width=\linewidth]{figures/fig_persubject_fahr.pdf}\par
-  \smallskip
-  {\footnotesize (c) Per-Subject False Alerts/hr (Clean)\par}
+  {\footnotesize (b) Paired Differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$)\par}
 \end{minipage}
-\caption{Empirical benchmark findings across arms and conditions: (a) event recall versus clean false alerts per hour across evaluated arms and noise regimes, (b) paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% bootstrap confidence intervals, and (c) per-subject clean false alerts per hour in Condition 0.}
+\caption{Empirical benchmark findings across arms and conditions: (a) event recall versus clean false alerts per hour across evaluated arms and noise regimes, and (b) paired differences ($\Delta = \text{Arm 3b} - \text{Arm 3a}$) with 95\% bootstrap confidence intervals. Per-subject clean false alerts per hour are archived in \texttt{per\_subject\_metrics.csv}.}
 \label{fig:results_all}
 \end{figure*}
 
@@ -364,7 +358,7 @@ In this pre-specified and version-tagged fault-injection benchmark, kinematic mo
 \section*{Regulatory, Data, and Code Availability}
 \textbf{Regulatory Status (Not a Medical Device):} VitaSense AI software, alerting algorithms, and benchmark suite are academic research artifacts. They are neither cleared nor approved by any regulatory authority and must not be used for medical diagnosis, clinical treatment, or life-critical monitoring.
 
-\textbf{Data and Code Availability:} PPG-DaLiA is openly accessible via UCI \cite{ref_reiss_dalia, ref_uci_dalia}; PhysioNet Wearable is under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are to be released with the final version; alert counts are in alert\_counts.csv (included in the supplementary files).
+\textbf{Data and Code Availability:} PPG-DaLiA is openly accessible via UCI \cite{ref_reiss_dalia, ref_uci_dalia}; PhysioNet Wearable is under ODC-By v1.0 \cite{ref_physionet_wearable}. Benchmark code, execution scripts, and numerical provenance logs are to be released with the final version; alert counts are archived in \texttt{alert\_counts.csv} (included in the supplementary files).
 
 \begin{thebibliography}{14}
 
@@ -396,7 +390,7 @@ Z.~Zhang, Z.~Pi, and B.~Liu, ``TROIKA: A general framework for heart rate monito
 W.~Karlen, K.~Kobayashi, J.~M.~Ansermino, and G.~A.~Dumont, ``Photoplethysmogram signal quality estimation using repeated Gaussian filters and cross-correlation,'' \emph{Physiol. Meas.}, vol.~33, no.~10, pp.~1617--1629, 2012, DOI: 10.1088/0967-3334/33/10/1617.
 
 \bibitem{ref_orphanidou_sqi}
-C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, vol.~19, no.~3, pp.~832--838, 2015, DOI: 10.1109/JBHI.2014.2338351.
+C.~Orphanidou, T.~Bonnici, P.~Charlton, D.~Clifton, D.~Vallance, and L.~Tarassenko, ``Signal quality indices for the electrocardiogram and photoplethysmogram: Derivation and applications to wireless monitoring,'' \emph{IEEE J. Biomed. Health Inform.}, pp.~1--1, 2014, DOI: 10.1109/JBHI.2014.2338351.
 
 \bibitem{ref_li_clifford_fusion}
 Q.~Li and G.~D.~Clifford, ``Signal quality and data fusion for false alarm reduction in the intensive care unit,'' \emph{J. Electrocardiol.}, vol.~45, no.~6, pp.~596--603, 2012, DOI: 10.1016/j.jelectrocard.2012.07.015.
