@@ -75,3 +75,5 @@ docs/PRD_EXTRACTED_TEXT.txt
 # Caches
 .cache/
 *.cache
+scratch/
+
