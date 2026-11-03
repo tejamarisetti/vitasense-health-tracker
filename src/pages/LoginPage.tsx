@@ -3,6 +3,7 @@ import { Logo } from '../components/Logo';
 import { Icon } from '../components/Icons';
 import { SocialAuthModal } from '../components/SocialAuthModal';
 import { UserProfile, saveUserProfile, setAuthToken } from '../types';
+import { apiEndpoint } from '../api';
 
 interface LoginPageProps {
   go: (page: string) => void;
@@ -27,7 +28,7 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
     setAuthError(null);
     setIsLoading(true);
     try {
-      const res = await fetch('/api/auth/demo', {
+      const res = await fetch(apiEndpoint('/api/auth/demo'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
       });
@@ -75,7 +76,7 @@ export function LoginPage({ go, theme, setTheme, onLoginSuccess }: LoginPageProp
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/auth/login', {
+      const res = await fetch(apiEndpoint('/api/auth/login'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ email: loginEmail, password: loginPass }),

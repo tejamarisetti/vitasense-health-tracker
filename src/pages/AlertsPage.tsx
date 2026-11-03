@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { UserAlert, getAuthToken } from '../types';
@@ -58,7 +59,7 @@ export function AlertsPage({ go }: AlertsPageProps) {
 
     setLoading(true);
     try {
-      const res = await fetch(`/api/alerts?status=${activeTab}`, {
+      const res = await fetch(apiEndpoint(`/api/alerts?status=${activeTab}`), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -91,7 +92,7 @@ export function AlertsPage({ go }: AlertsPageProps) {
     }
 
     try {
-      const res = await fetch(`/api/alerts/${id}/acknowledge`, {
+      const res = await fetch(apiEndpoint(`/api/alerts/${id}/acknowledge`), {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -120,7 +121,7 @@ export function AlertsPage({ go }: AlertsPageProps) {
     }
 
     try {
-      const res = await fetch(`/api/alerts/${id}/dismiss`, {
+      const res = await fetch(apiEndpoint(`/api/alerts/${id}/dismiss`), {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -147,7 +148,7 @@ export function AlertsPage({ go }: AlertsPageProps) {
 
     setCreateSubmitting(true);
     try {
-      const res = await fetch('/api/alerts', {
+      const res = await fetch(apiEndpoint('/api/alerts'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

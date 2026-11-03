@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '../components/Icons';
 import { Orb } from '../components/Orb';
@@ -83,7 +84,7 @@ export function CompanionPage() {
   ]);
 
   useEffect(() => {
-    fetch('/api/assistant/health')
+    fetch(apiEndpoint('/api/assistant/health'))
       .then((r) => r.json())
       .then((data) => {
         if (data.status === 'ok') {
@@ -139,7 +140,7 @@ export function CompanionPage() {
     setIsLoading(true);
 
     try {
-      const res = await fetch('/api/assistant', {
+      const res = await fetch(apiEndpoint('/api/assistant'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

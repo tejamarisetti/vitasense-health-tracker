@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useEffect, useState } from 'react';
 import { Icon } from '../components/Icons';
 import { getAuthToken, clearAuthToken } from '../types';
@@ -38,7 +39,7 @@ export function SettingsPage({ go, theme = 'dark', setTheme }: SettingsPageProps
   const isLoggedIn = !!getAuthToken();
 
   useEffect(() => {
-    fetch('/api/assistant/health')
+    fetch(apiEndpoint('/api/assistant/health'))
       .then((r) => r.json())
       .then((data) => setHealth(data))
       .catch(() => setHealth({ status: 'fallback', engine: 'rule_fallback', category: 'connection error' }));
@@ -50,7 +51,7 @@ export function SettingsPage({ go, theme = 'dark', setTheme }: SettingsPageProps
     setContactSubmitting(true);
 
     try {
-      const res = await fetch('/api/contact', {
+      const res = await fetch(apiEndpoint('/api/contact'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -101,7 +102,7 @@ export function SettingsPage({ go, theme = 'dark', setTheme }: SettingsPageProps
     setExportLoading(true);
     setAccountActionMessage(null);
     try {
-      const res = await fetch('/api/auth/export', {
+      const res = await fetch(apiEndpoint('/api/auth/export'), {
         headers: { Authorization: `Bearer ${token}` },
       });
 
@@ -137,7 +138,7 @@ export function SettingsPage({ go, theme = 'dark', setTheme }: SettingsPageProps
 
     setDeleteLoading(true);
     try {
-      const res = await fetch('/api/auth/account', {
+      const res = await fetch(apiEndpoint('/api/auth/account'), {
         method: 'DELETE',
         headers: {
           'Content-Type': 'application/json',

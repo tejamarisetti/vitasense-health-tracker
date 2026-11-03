@@ -3,6 +3,7 @@ import { Logo } from '../components/Logo';
 import { Icon } from '../components/Icons';
 import { SocialAuthModal } from '../components/SocialAuthModal';
 import { UserProfile, saveUserProfile, setAuthToken } from '../types';
+import { apiEndpoint } from '../api';
 
 interface CreateAccountPageProps {
   go: (page: string) => void;
@@ -53,6 +54,9 @@ export function CreateAccountPage({
   const [isSubmitting, setIsSubmitting] = useState(false);
 
   const handleQuickDemoFill = () => {
+    setName('Demo User');
+    setEmail('demo.user@example.com');
+    setPassword('DemoPass123!');
     setAge(29);
     setSex('Other');
     setHeight('175 cm');
@@ -96,7 +100,7 @@ export function CreateAccountPage({
     };
 
     try {
-      const res = await fetch('/api/auth/register', {
+      const res = await fetch(apiEndpoint('/api/auth/register'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

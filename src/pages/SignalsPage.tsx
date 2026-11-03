@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect, useRef } from 'react';
 import { Icon } from '../components/Icons';
 
@@ -59,7 +60,7 @@ export function SignalsPage() {
 
   // Fetch subjects list on mount
   useEffect(() => {
-    fetch('/api/replay/subjects')
+    fetch(apiEndpoint('/api/replay/subjects'))
       .then((r) => r.json())
       .then((data: SubjectInfo[]) => {
         if (Array.isArray(data) && data.length > 0) {

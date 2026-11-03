@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { getAuthToken } from '../types';
@@ -89,7 +90,7 @@ export function AssessmentPage({ go }: AssessmentPageProps) {
     const token = getAuthToken();
     if (!token) return;
     try {
-      const res = await fetch('/api/assessment/history', {
+      const res = await fetch(apiEndpoint('/api/assessment/history'), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -148,7 +149,7 @@ export function AssessmentPage({ go }: AssessmentPageProps) {
         headers['Authorization'] = `Bearer ${token}`;
       }
 
-      const res = await fetch('/api/assessment/submit', {
+      const res = await fetch(apiEndpoint('/api/assessment/submit'), {
         method: 'POST',
         headers,
         body: JSON.stringify(answers),

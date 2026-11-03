@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState } from 'react';
 import { Icon } from './Icons';
 import { UserProfile, saveUserProfile, getAuthToken, clearAuthToken } from '../types';
@@ -46,7 +47,7 @@ export function ProfileModal({
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch('/api/auth/profile', {
+        await fetch(apiEndpoint('/api/auth/profile'), {
           method: 'PUT',
           headers: {
             'Content-Type': 'application/json',
@@ -78,7 +79,7 @@ export function ProfileModal({
     const token = getAuthToken();
     if (token) {
       try {
-        await fetch('/api/auth/logout', {
+        await fetch(apiEndpoint('/api/auth/logout'), {
           method: 'POST',
           headers: { Authorization: `Bearer ${token}` },
         });

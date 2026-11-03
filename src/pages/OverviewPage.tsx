@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { MetricCard } from '../components/MetricCard';
@@ -32,7 +33,7 @@ export function OverviewPage({ go }: OverviewPageProps) {
     if (!token) return;
     setLoading(true);
     try {
-      const res = await fetch('/api/measurements?limit=50', {
+      const res = await fetch(apiEndpoint('/api/measurements?limit=50'), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -94,7 +95,7 @@ export function OverviewPage({ go }: OverviewPageProps) {
       return;
     }
     try {
-      const res = await fetch('/api/measurements', {
+      const res = await fetch(apiEndpoint('/api/measurements'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -129,7 +130,7 @@ export function OverviewPage({ go }: OverviewPageProps) {
       return;
     }
     try {
-      const res = await fetch('/api/measurements/demo/reset', {
+      const res = await fetch(apiEndpoint('/api/measurements/demo/reset'), {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });

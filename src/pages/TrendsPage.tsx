@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 import { loadUserProfile, getAuthToken, MeasurementRecord, HistoryItem } from '../types';
@@ -49,7 +50,7 @@ export function TrendsPage() {
     if (!token) return;
     setLoadingMeas(true);
     try {
-      const res = await fetch('/api/measurements?limit=50', {
+      const res = await fetch(apiEndpoint('/api/measurements?limit=50'), {
         headers: { Authorization: `Bearer ${token}` },
       });
       if (res.ok) {
@@ -57,11 +58,11 @@ export function TrendsPage() {
         setMeasurements(data);
         // If empty, auto-seed demo data for immediate visual experience
         if (data.length === 0) {
-          await fetch('/api/measurements/demo/reset', {
+          await fetch(apiEndpoint('/api/measurements/demo/reset'), {
             method: 'POST',
             headers: { Authorization: `Bearer ${token}` },
           });
-          const reRes = await fetch('/api/measurements?limit=50', {
+          const reRes = await fetch(apiEndpoint('/api/measurements?limit=50'), {
             headers: { Authorization: `Bearer ${token}` },
           });
           if (reRes.ok) {
@@ -120,7 +121,7 @@ export function TrendsPage() {
       return;
     }
     try {
-      const res = await fetch('/api/measurements/demo/reset', {
+      const res = await fetch(apiEndpoint('/api/measurements/demo/reset'), {
         method: 'POST',
         headers: { Authorization: `Bearer ${token}` },
       });
@@ -147,7 +148,7 @@ export function TrendsPage() {
     }
 
     try {
-      const res = await fetch('/api/measurements', {
+      const res = await fetch(apiEndpoint('/api/measurements'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -203,7 +204,7 @@ export function TrendsPage() {
       return;
     }
     try {
-      const res = await fetch(`/api/measurements/${editingMeasurement.id}`, {
+      const res = await fetch(apiEndpoint(`/api/measurements/${editingMeasurement.id}`), {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -234,7 +235,7 @@ export function TrendsPage() {
     const token = getAuthToken();
     if (!token) return;
     try {
-      const res = await fetch(`/api/measurements/${id}`, {
+      const res = await fetch(apiEndpoint(`/api/measurements/${id}`), {
         method: 'DELETE',
         headers: { Authorization: `Bearer ${token}` },
       });

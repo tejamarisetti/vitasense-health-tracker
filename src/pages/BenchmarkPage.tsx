@@ -1,3 +1,4 @@
+import { apiEndpoint } from '../api';
 import React, { useState, useEffect } from 'react';
 import { Icon } from '../components/Icons';
 
@@ -50,7 +51,7 @@ export function BenchmarkPage() {
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    fetch('/api/benchmark/summary')
+    fetch(apiEndpoint('/api/benchmark/summary'))
       .then((r) => r.json())
       .then((data) => {
         setSummaryData(data);
