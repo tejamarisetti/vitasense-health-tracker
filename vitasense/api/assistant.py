@@ -266,13 +266,18 @@ def query_gemini_llm(user_message: str, ctx: AssistantContext) -> Tuple[Optional
 
     prompt = f"{system_instruction}\nTelemetry Context:\n{context_str}\n\nUser Question: {user_message}"
 
-    candidate_models = ["gemini-flash-latest", "gemini-robotics-er-2-preview"]
+    candidate_models = [
+        "gemini-3.8-flash",
+        "gemini-3.5-flash",
+        "gemini-flash-latest",
+        "gemini-robotics-er-2-preview",
+    ]
     last_reason = "model unavailable"
 
     import httpx
-    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
+    headers = {"Content-Type": "application/json"}
     for model in candidate_models:
-        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent"
+        url = f"https://generativelanguage.googleapis.com/v1beta/models/{model}:generateContent?key={api_key}"
         try:
             resp = httpx.post(
                 url,
@@ -322,8 +327,8 @@ def check_assistant_health() -> Dict[str, Any]:
         }
 
     import httpx
-    url = "https://generativelanguage.googleapis.com/v1beta/models/gemini-flash-latest:generateContent"
-    headers = {"x-goog-api-key": api_key, "Content-Type": "application/json"}
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={api_key}"
+    headers = {"Content-Type": "application/json"}
     try:
         r = httpx.post(
             url,
