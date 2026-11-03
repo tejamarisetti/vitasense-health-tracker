@@ -1,0 +1,158 @@
+{
+  "cohort_checksum_sha256": "d04649e677e5f5ce47f5974aaebd88b34cce5c6bbea2d37e1c61c6c75ed0d2a9",
+  "n_subjects": 15,
+  "step_sec": 2.0,
+  "window_sec": 8.0,
+  "subjects": {
+    "S1": {
+      "n_windows": 4603,
+      "valid_windows": 4603,
+      "pct_valid": 100.0,
+      "sha256": "202aaad4308b07ebe5ea838820f57b894567ca6625f406147cb6dcc859e58a73",
+      "file": "S1_ppg_cache.npz",
+      "shape": [
+        4603
+      ]
+    },
+    "S2": {
+      "n_windows": 4099,
+      "valid_windows": 4097,
+      "pct_valid": 99.95120761161259,
+      "sha256": "998d428d00a0ccc3b1edb3a33099db09a124c204533fa098c1d4b5a2d9a08651",
+      "file": "S2_ppg_cache.npz",
+      "shape": [
+        4099
+      ]
+    },
+    "S3": {
+      "n_windows": 4367,
+      "valid_windows": 4367,
+      "pct_valid": 100.0,
+      "sha256": "5e1473abe57ed6f633860433de6dc85bc5078acc7fcc4490bb55d0167382503a",
+      "file": "S3_ppg_cache.npz",
+      "shape": [
+        4367
+      ]
+    },
+    "S4": {
+      "n_windows": 4572,
+      "valid_windows": 4572,
+      "pct_valid": 100.0,
+      "sha256": "0b46b965cff5d50109d3300ae2f94971b604c63e330caf61d6c3d2da6bfdf3ca",
+      "file": "S4_ppg_cache.npz",
+      "shape": [
+        4572
+      ]
+    },
+    "S5": {
+      "n_windows": 4649,
+      "valid_windows": 4649,
+      "pct_valid": 100.0,
+      "sha256": "6b1cb88d7d4c46912d8938a258ff282d46e957cdf6cf930c825001eb75ad8ff3",
+      "file": "S5_ppg_cache.npz",
+      "shape": [
+        4649
+      ]
+    },
+    "S6": {
+      "n_windows": 2622,
+      "valid_windows": 2622,
+      "pct_valid": 100.0,
+      "sha256": "d1c377558d516bf7a03a76307b15659cffaf6a188293a9a410bde74b7a554221",
+      "file": "S6_ppg_cache.npz",
+      "shape": [
+        2622
+      ]
+    },
+    "S7": {
+      "n_windows": 4668,
+      "valid_windows": 4668,
+      "pct_valid": 100.0,
+      "sha256": "ca0ace26c0c9468ba8b381f7ada59c3209d6d0d9069b2cf302e44ef564f14055",
+      "file": "S7_ppg_cache.npz",
+      "shape": [
+        4668
+      ]
+    },
+    "S8": {
+      "n_windows": 4037,
+      "valid_windows": 4036,
+      "pct_valid": 99.97522913054249,
+      "sha256": "241fe89e8bb9bf0b05e5d5a608b0b0ac44e492c389bde5be7d055b2d031015f7",
+      "file": "S8_ppg_cache.npz",
+      "shape": [
+        4037
+      ]
+    },
+    "S9": {
+      "n_windows": 4277,
+      "valid_windows": 4271,
+      "pct_valid": 99.85971475333177,
+      "sha256": "20c7986cd0fdadcaab90d4265e9377c7dc696a8d85b0975485cdd51bd80d4b83",
+      "file": "S9_ppg_cache.npz",
+      "shape": [
+        4277
+      ]
+    },
+    "S10": {
+      "n_windows": 5321,
+      "valid_windows": 5318,
+      "pct_valid": 99.94361962037212,
+      "sha256": "b70e09fc1dc325d23600eb6b35b9891863dff1d6efab4264187129d41ae0d5c2",
+      "file": "S10_ppg_cache.npz",
+      "shape": [
+        5321
+      ]
+    },
+    "S11": {
+      "n_windows": 4521,
+      "valid_windows": 4520,
+      "pct_valid": 99.97788099977882,
+      "sha256": "10e09e7839be74c749c4bcc5cd2ce1df7c5bc9f1fb5b76040accbe6c1da15ef7",
+      "file": "S11_ppg_cache.npz",
+      "shape": [
+        4521
+      ]
+    },
+    "S12": {
+      "n_windows": 3954,
+      "valid_windows": 3954,
+      "pct_valid": 100.0,
+      "sha256": "8ce2a7cf66bee7abdeb7ebf202a489b4eaf234b77d265be7a7af7c675666dcb3",
+      "file": "S12_ppg_cache.npz",
+      "shape": [
+        3954
+      ]
+    },
+    "S13": {
+      "n_windows": 4565,
+      "valid_windows": 4564,
+      "pct_valid": 99.97809419496167,
+      "sha256": "b4cc36afe12a79477d5d83554799adc8403c9c3da51eeb5e016ba26847cdd9b3",
+      "file": "S13_ppg_cache.npz",
+      "shape": [
+        4565
+      ]
+    },
+    "S14": {
+      "n_windows": 4476,
+      "valid_windows": 4476,
+      "pct_valid": 100.0,
+      "sha256": "8ca30b9eb26236c7e5c3ea16da6d462b4923c391b6a4033269124e1364789ad5",
+      "file": "S14_ppg_cache.npz",
+      "shape": [
+        4476
+      ]
+    },
+    "S15": {
+      "n_windows": 3966,
+      "valid_windows": 3965,
+      "pct_valid": 99.97478567826525,
+      "sha256": "f91df110c08d69b4dc2ee15a06cdf5c49b591d15ca5c3b4012fec7067c260eea",
+      "file": "S15_ppg_cache.npz",
+      "shape": [
+        3966
+      ]
+    }
+  }
+}

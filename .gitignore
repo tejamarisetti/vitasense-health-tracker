@@ -46,7 +46,10 @@ access_token
 # Datasets and Models
 data/raw/
 data/interim/
-data/processed/
+# data/processed/ is included for Render replay simulation (small npz caches < 5MB total)
+!data/processed/*.npz
+!data/processed/*.json
+
 models/*.joblib
 models/*.pkl
 models/*.pt
