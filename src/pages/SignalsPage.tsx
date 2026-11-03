@@ -74,7 +74,7 @@ export function SignalsPage() {
   useEffect(() => {
     setIsLoading(true);
     const url = `/api/replay/stream?subject=${selectedSubject}&fault=${selectedFault}&offset=0&limit=400`;
-    fetch(url)
+    fetch(apiEndpoint(url))
       .then((r) => r.json())
       .then((res: ReplayResponse) => {
         if (res && res.data) {
