@@ -267,10 +267,9 @@ def query_gemini_llm(user_message: str, ctx: AssistantContext) -> Tuple[Optional
     prompt = f"{system_instruction}\nTelemetry Context:\n{context_str}\n\nUser Question: {user_message}"
 
     candidate_models = [
-        "gemini-3.8-flash",
         "gemini-3.5-flash",
-        "gemini-flash-latest",
-        "gemini-robotics-er-2-preview",
+        "gemini-3.5-flash-lite",
+        "gemini-3.8-flash",
     ]
     last_reason = "model unavailable"
 
@@ -327,14 +326,14 @@ def check_assistant_health() -> Dict[str, Any]:
         }
 
     import httpx
-    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.8-flash:generateContent?key={api_key}"
+    url = f"https://generativelanguage.googleapis.com/v1beta/models/gemini-3.5-flash:generateContent?key={api_key}"
     headers = {"Content-Type": "application/json"}
     try:
         r = httpx.post(
             url,
             headers=headers,
             json={"contents": [{"parts": [{"text": "ping"}]}], "generationConfig": {"maxOutputTokens": 1}},
-            timeout=4.0,
+            timeout=8.0,
         )
         if r.status_code == 200:
             logger.info("Assistant health check: llm ok")
